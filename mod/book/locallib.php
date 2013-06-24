@@ -169,9 +169,8 @@ function book_add_fake_block($chapters, $chapter, $book, $cm, $edit) {
     $bc->attributes['class'] = 'block block_book_toc';
     $bc->content = $toc;
 
-    $regions = $PAGE->blocks->get_regions();
-    $firstregion = reset($regions);
-    $PAGE->blocks->add_fake_block($bc, $firstregion);
+    /* Academy Patch: Book TOC in right side block */
+    $PAGE->blocks->add_fake_block($bc, $PAGE->blocks->get_default_region());
 }
 
 /**
