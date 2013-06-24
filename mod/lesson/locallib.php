@@ -419,9 +419,8 @@ function lesson_displayleftif($lesson) {
 function lesson_add_fake_blocks($page, $cm, $lesson, $timer = null) {
     $bc = lesson_menu_block_contents($cm->id, $lesson);
     if (!empty($bc)) {
-        $regions = $page->blocks->get_regions();
-        $firstregion = reset($regions);
-        $page->blocks->add_fake_block($bc, $firstregion);
+        // Academy Patch: Enable Lesson Menu in right page column
+        $page->blocks->add_fake_block($bc, $page->blocks->get_default_region());
     }
 
     $bc = lesson_mediafile_block_contents($cm->id, $lesson);
