@@ -1,0 +1,17 @@
+
+# TinyMCE Templates
+Purpose: Settings to enable TinyMCE templates for easy insertion of Academy HTML snippets.
+Settings path: Site administration - Plugins - Text editors - Manage editors -  TinyMCE - General settings
+
+Dev: http://420-c73/dev-moodle25/admin/settings.php?section=editorsettingstinymce
+
+## Settings
+editor_tinymce | customtoolbar
+> fontselect,fontsizeselect,formatselect,|,undo,redo,|,search,replace,|,fullscreen
+>
+> bold,italic,underline,strikethrough,sub,sup,|,justifyleft,justifycenter,justifyright,|,cleanup,removeformat,pastetext,pasteword,|,forecolor,backcolor,|,ltr,rtl
+> 
+> bullist,numlist,outdent,indent,|,link,unlink,|,image,nonbreaking,charmap,table,template,|,code"
+
+editor_tinymce | customconfig
+> {"template_external_list_url" : "/include/tinymce/templates/template_list.php"}
