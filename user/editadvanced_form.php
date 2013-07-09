@@ -53,9 +53,10 @@ class user_editadvanced_form extends moodleform {
         }
         $mform->addElement('select', 'auth', get_string('chooseauthmethod','auth'), $auth_options);
         $mform->addHelpButton('auth', 'chooseauthmethod', 'auth');
-
+        $mform->setAdvanced('auth'); //TPB 20111028
         $mform->addElement('advcheckbox', 'suspended', get_string('suspended','auth'));
         $mform->addHelpButton('suspended', 'suspended', 'auth');
+        $mform->setAdvanced('suspended'); //TPB 20120124
 
         if (!empty($CFG->passwordpolicy)){
             $mform->addElement('static', 'passwordpolicyinfo', '', print_password_policy());

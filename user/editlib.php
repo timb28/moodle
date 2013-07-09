@@ -163,12 +163,14 @@ function useredit_shared_definition(&$mform, $editoroptions = null, $filemanager
     $choices['2'] = get_string('emaildisplaycourse');
     $mform->addElement('select', 'maildisplay', get_string('emaildisplay'), $choices);
     $mform->setDefault('maildisplay', 2);
+    $mform->setAdvanced('maildisplay'); //TPB 20111028
 
     $choices = array();
     $choices['0'] = get_string('textformat');
     $choices['1'] = get_string('htmlformat');
     $mform->addElement('select', 'mailformat', get_string('emailformat'), $choices);
     $mform->setDefault('mailformat', 1);
+    $mform->setAdvanced('mailformat'); //TPB 20111028
 
     if (!empty($CFG->allowusermailcharset)) {
         $choices = array();
@@ -188,12 +190,14 @@ function useredit_shared_definition(&$mform, $editoroptions = null, $filemanager
     $choices['2'] = get_string('emaildigestsubjects');
     $mform->addElement('select', 'maildigest', get_string('emaildigest'), $choices);
     $mform->setDefault('maildigest', 0);
+    $mform->setAdvanced('maildigest'); //TPB 20111028
 
     $choices = array();
     $choices['1'] = get_string('autosubscribeyes');
     $choices['0'] = get_string('autosubscribeno');
     $mform->addElement('select', 'autosubscribe', get_string('autosubscribe'), $choices);
     $mform->setDefault('autosubscribe', 1);
+    $mform->setAdvanced('autosubscribe'); //TPB 20111028
 
     if (!empty($CFG->forum_trackreadposts)) {
         $choices = array();
@@ -201,6 +205,7 @@ function useredit_shared_definition(&$mform, $editoroptions = null, $filemanager
         $choices['1'] = get_string('trackforumsyes');
         $mform->addElement('select', 'trackforums', get_string('trackforums'), $choices);
         $mform->setDefault('trackforums', 0);
+        $mform->setAdvanced('trackforums'); //TPB 20111028
     }
 
     $editors = editors_get_enabled();
@@ -215,6 +220,7 @@ function useredit_shared_definition(&$mform, $editoroptions = null, $filemanager
         $mform->setDefault('htmleditor', 1);
         $mform->setType('htmleditor', PARAM_INT);
     }
+    $mform->setAdvanced('htmleditor'); //TPB 20111028
 
     $mform->addElement('text', 'city', get_string('city'), 'maxlength="120" size="21"');
     $mform->setType('city', PARAM_TEXT);
@@ -238,10 +244,12 @@ function useredit_shared_definition(&$mform, $editoroptions = null, $filemanager
     } else {
         $mform->addElement('select', 'timezone', get_string('timezone'), $choices);
         $mform->setDefault('timezone', '99');
+        $mform->setAdvanced('timezone'); //TPB 20111031
     }
 
     $mform->addElement('select', 'lang', get_string('preferredlanguage'), get_string_manager()->get_list_of_translations());
     $mform->setDefault('lang', $CFG->lang);
+    $mform->setAdvanced('lang'); //TPB 20111031
 
     if (!empty($CFG->allowuserthemes)) {
         $choices = array();
@@ -258,6 +266,7 @@ function useredit_shared_definition(&$mform, $editoroptions = null, $filemanager
     $mform->addElement('editor', 'description_editor', get_string('userdescription'), null, $editoroptions);
     $mform->setType('description_editor', PARAM_CLEANHTML);
     $mform->addHelpButton('description_editor', 'userdescription');
+    $mform->setAdvanced('description_editor'); //TPB 20111028
 
     if (!empty($CFG->gdversion) and empty($USER->newadminuser)) {
         $mform->addElement('header', 'moodle_picture', get_string('pictureofuser'));
@@ -281,12 +290,15 @@ function useredit_shared_definition(&$mform, $editoroptions = null, $filemanager
 
     if (!empty($CFG->usetags) and empty($USER->newadminuser)) {
         $mform->addElement('header', 'moodle_interests', get_string('interests'));
+        $mform->setAdvanced('moodle_interests'); //TPB 20111028
+
         $mform->addElement('tags', 'interests', get_string('interestslist'), array('display' => 'noofficial'));
         $mform->addHelpButton('interests', 'interestslist');
     }
 
     /// Moodle optional fields
     $mform->addElement('header', 'moodle_optional', get_string('optional', 'form'));
+    $mform->setAdvanced('moodle_optional'); //TPB 20111028
 
     $mform->addElement('text', 'url', get_string('webpage'), 'maxlength="255" size="50"');
     $mform->setType('url', PARAM_URL);
