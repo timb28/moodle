@@ -33,5 +33,5 @@ echo "Updating Gap Select Question Type"
 (cd ../question/type/gapselect && git pull upstream master)
 
 ## Multiple Choice, Multiple Response
-echo "Updating Multiple Choice, Multiple Response Question Type"
+echo "Cloning Multiple Choice, Multiple Response Question Type"
 (cd ../question/type/oumultiresponse && git pull upstream master)
