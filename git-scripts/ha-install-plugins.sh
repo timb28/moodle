@@ -18,21 +18,19 @@ echo "Cloning Configurable Reports Block"
 echo "Cloning Game Module"
 (cd .. && git clone https://github.com/timb28/moodle-mod_game.git mod/game)
 (cd .. && echo /mod/game/ >> .git/info/exclude)
-(cd .. && cd mod/game)
-(cd .. && git remote add upstream https://github.com/bdaloukas/moodle-mod_game.git)
-(cd .. && git branch -a)
-(cd .. && git branch --track MOODLE_20_STABLE origin/MOODLE_20_STABLE)
-(cd .. && git checkout MOODLE_20_STABLE)
+(cd ../mod/game && git remote add upstream https://github.com/bdaloukas/moodle-mod_game.git)
+(cd ../mod/game && git branch -a)
+(cd ../mod/game && git branch --track MOODLE_20_STABLE origin/MOODLE_20_STABLE)
+(cd ../mod/game && git checkout MOODLE_20_STABLE)
  
 ## Questionnaire
 echo "Cloning Questionnaire Module"
 (cd .. && git clone https://github.com/timb28/moodle-mod_questionnaire.git mod/questionnaire)
 (cd .. && echo /mod/questionnaire/ >> .git/info/exclude)
-(cd .. && cd mod/questionnaire)
-(cd .. && git remote add upstream https://github.com/remotelearner/moodle-mod_questionnaire.git)
-(cd .. && git branch -a)
-(cd .. && git branch --track MOODLE_24_STABLE origin/MOODLE_24_STABLE)
-(cd .. && git checkout MOODLE_24_STABLE)
+(cd ../mod/questionnaire && git remote add upstream https://github.com/remotelearner/moodle-mod_questionnaire.git)
+(cd ../mod/questionnaire && git branch -a)
+(cd ../mod/questionnaire && git branch --track MOODLE_25_STABLE origin/MOODLE_25_STABLE)
+(cd ../mod/questionnaire && git checkout MOODLE_25_STABLE)
 
 ## Quiz Question Types
 
