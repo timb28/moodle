@@ -40,14 +40,6 @@ if ($ADMIN->fulltree) {
     $setting->set_updatedcallback('theme_reset_all_caches');
     $settings->add($setting);
 
-    // Logo file setting.
-    $name = 'theme_academy_clean/logo';
-    $title = get_string('logo','theme_academy_clean');
-    $description = get_string('logodesc', 'theme_academy_clean');
-    $setting = new admin_setting_configstoredfile($name, $title, $description, 'logo');
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $settings->add($setting);
-
     // Custom CSS file.
     $name = 'theme_academy_clean/customcss';
     $title = get_string('customcss', 'theme_academy_clean');

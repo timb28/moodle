@@ -40,7 +40,6 @@ Contact: academy@harcourts.net<br>
 Website: <a href="http://www.harcourtsacademy.com">www.harcourtsacademy.com</a>
 </p>
 <h3>Report a bug:</h3>
-<p><a href="academy_clean/README.txt">How to copy and customise this theme.</a></p>
 </div></div>';
 
 $string['configtitle'] = 'Academy Clean';
@@ -53,11 +52,6 @@ $string['footnotedesc'] = 'Whatever you add to this textarea will be displayed i
 
 $string['invert'] = 'Invert navbar';
 $string['invertdesc'] = 'Swaps text and background for the navbar at the top of the page between black and white.';
-
-$string['logo'] = 'Logo';
-$string['logodesc'] = 'Please upload your custom logo here if you want to add it to the header.<br>
-If the height of your logo is more than 75px add the following CSS rule to the Custom CSS box below.<br>
-a.logo {height: 100px;} or whatever height in pixels the logo is.';
 
 $string['pluginname'] = 'Academy Clean';
 

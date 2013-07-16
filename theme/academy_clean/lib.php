@@ -39,10 +39,6 @@
  */
 function theme_academy_clean_process_css($css, $theme) {
 
-    // Set the background image for the logo.
-    $logo = $theme->setting_file_url('logo', 'logo');
-    $css = theme_academy_clean_set_logo($css, $logo);
-
     // Set custom CSS.
     if (!empty($theme->settings->customcss)) {
         $customcss = $theme->settings->customcss;
@@ -50,25 +46,6 @@ function theme_academy_clean_process_css($css, $theme) {
         $customcss = null;
     }
     $css = theme_academy_clean_set_customcss($css, $customcss);
-
-    return $css;
-}
-
-/**
- * Adds the logo to CSS.
- *
- * @param string $css The CSS.
- * @param string $logo The URL of the logo.
- * @return string The parsed CSS
- */
-function theme_academy_clean_set_logo($css, $logo) {
-    $tag = '[[setting:logo]]';
-    $replacement = $logo;
-    if (is_null($replacement)) {
-        $replacement = '';
-    }
-
-    $css = str_replace($tag, $replacement, $css);
 
     return $css;
 }
@@ -87,7 +64,7 @@ function theme_academy_clean_set_logo($css, $logo) {
  */
 function theme_academy_clean_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
     if ($context->contextlevel == CONTEXT_SYSTEM and $filearea === 'logo') {
-        $theme = theme_config::load('clean');
+        $theme = theme_config::load('academy_clean');
         return $theme->setting_file_serve('logo', $args, $forcedownload, $options);
     } else {
         send_file_not_found();
@@ -132,11 +109,7 @@ function theme_academy_clean_get_html_for_settings(renderer_base $output, moodle
         $return->navbarclass .= ' navbar-inverse';
     }
 
-    if (!empty($page->theme->settings->logo)) {
-        $return->heading = html_writer::link($CFG->wwwroot, '', array('title' => get_string('home'), 'class' => 'logo'));
-    } else {
-        $return->heading = $output->page_heading();
-    }
+    $return->heading = $output->page_heading();
 
     $return->footnote = '';
     if (!empty($page->theme->settings->footnote)) {
@@ -153,15 +126,6 @@ function theme_academy_clean_get_html_for_settings(renderer_base $output, moodle
 function academy_clean_process_css($css, $theme) {
     debugging('Please call theme_'.__FUNCTION__.' instead of '.__FUNCTION__, DEBUG_DEVELOPER);
     return theme_academy_clean_process_css($css, $theme);
-}
-
-/**
- * Deprecated: Please call theme_academy_clean_set_logo instead.
- * @deprecated since 2.5.1
- */
-function academy_clean_set_logo($css, $logo) {
-    debugging('Please call theme_'.__FUNCTION__.' instead of '.__FUNCTION__, DEBUG_DEVELOPER);
-    return theme_academy_clean_set_logo($css, $logo);
 }
 
 /**
