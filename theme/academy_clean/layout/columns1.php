@@ -79,7 +79,6 @@ echo $OUTPUT->doctype() ?>
         <?php
         echo $html->footnote;
         echo $OUTPUT->login_info();
-        echo $OUTPUT->home_link();
         echo $OUTPUT->standard_footer_html();
         ?>
     </footer>

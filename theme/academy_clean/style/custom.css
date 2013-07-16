@@ -1,5 +1,10 @@
 /* Custom CSS
 -------------------------*/
+a:link {color: #09f; }
+a:visited {color: #05b;}
+a:hover {color: #002e63; text-decoration: underline; }
+a:active {color:#002e63; outline: none; }
+
 a.logo {
     background: url('academy_clean/pix/logo.png') no-repeat 0 0;
     display: block;
@@ -8,6 +13,35 @@ a.logo {
     margin: 0;
     padding: 0;
     width: 158px;
+}
+
+body {
+    background: url('academy_clean/pix/background.png') top left repeat fixed #203C62;
+    background-color: gray;
+}
+
+div#page {
+  background-color: white;
+  margin: 0 2em;
+  box-shadow: 0 0 35px rgba(0,0,0,0.8);
+}
+
+.navbar-inverse .navbar-inner, .navbar-inner {
+  background: url('academy_clean/pix/background.png') top left repeat fixed #203C62;
+  border: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.breadcrumb {
+  background: none;
+  border-radius: 0;
+  margin: 0;
+  padding: 1em 0;
+}
+
+.breadcrumb-button {
+  margin-top: 1em;
 }
 
 /* Custom CSS Settings
