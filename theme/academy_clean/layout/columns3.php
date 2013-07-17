@@ -60,7 +60,7 @@ echo $OUTPUT->doctype() ?>
                 <span class="icon-bar"></span>
             </a>
             <div class="nav-collapse collapse">
-                <?php echo $OUTPUT->custom_menu(); ?>
+              <div class="custom_narrow_menu"><?php echo $OUTPUT->custom_menu(); ?></div>
                 <ul class="nav pull-right">
                     <li><?php echo $OUTPUT->page_heading_menu(); ?></li>
                     <li class="navbar-text"><?php echo $OUTPUT->login_info() ?></li>
@@ -70,6 +70,10 @@ echo $OUTPUT->doctype() ?>
     </nav>
 </header>
 
+<header class="clearfix custom_wide_menu nav-collapse collapse">
+    <div class="navbar pull-right"><?php echo $OUTPUT->custom_menu(); ?></div>
+</header>
+  
 <div id="page" class="container-fluid">
 
     <header id="page-header" class="clearfix">
