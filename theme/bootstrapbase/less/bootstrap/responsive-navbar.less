@@ -162,6 +162,7 @@
   }
   .custom_narrow_menu {
     display: block;
+    text-align: right;
   }
   // Navbar button
   .navbar .btn-navbar {
@@ -197,10 +198,10 @@
     margin: 0 @gridGutterWidth1200;
     padding: 5px 0;
 
-    //.container-fluid {
-    //  padding-left: 0;
-    //  padding-right: 0;
-    //}
+    .container-fluid {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 
   // Required to make the collapsing navbar work on regular desktops
@@ -219,12 +220,21 @@
     background: #FFFFFF url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAZCAYAAAAIcL+IAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAxMC8xNC8xMQ5pWM4AAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzVxteM2AAAAP0lEQVQ4jWN88fj+fwYiAAsjIyMx6hhYGBmZiFVItInEKmQiUiHDALpxKIQj0VYTG+BDIXgYBjBmaBCOxLkRAAW7BFueY6hNAAAAAElFTkSuQmCC') repeat-x;
     box-shadow: 0 0 30px #000000;
     border-radius: 0 0 4px 4px;
-  }
-  .custom_wide_menu li {
-    height: 36px;
-    padding: 5px 0;
-    margin: 0 5px 0 0;
-    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAA9AQMAAABIqqGvAAAABlBMVEUPDw+vra3v6IsxAAAAAXRSTlMAQObYZgAAAAlwSFlzAAALEgAACxIB0t1+/AAAABlJREFUeF61wjENAAAAg7BJn3Q0cNB0zsMGg4IPgQBtpaEAAAAASUVORK5CYII=') no-repeat scroll 100% 50% transparent;
+
+    li {
+      height: 36px;
+      padding: 5px 0;
+      margin: 0 5px 0 0;
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAA9AQMAAABIqqGvAAAABlBMVEUPDw+vra3v6IsxAAAAAXRSTlMAQObYZgAAAAlwSFlzAAALEgAACxIB0t1+/AAAABlJREFUeF61wjENAAAAg7BJn3Q0cNB0zsMGg4IPgQBtpaEAAAAASUVORK5CYII=') no-repeat scroll 100% 50% transparent;
+    }
+    
+    .navbar .nav > li > a {
+      color: @linkColor;
+      &:hover,
+      &:focus {
+        color: @linkColorHover;
+      }
+    }
   }
 
 }

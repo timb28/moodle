@@ -1,6 +1,6 @@
 /* Custom CSS
 -------------------------*/
-a:link {color: #09f; transition: color .1s ease-out; }
+a:link { transition: color .1s ease-out; }
 a:visited {color: #05b;}
 a:hover {color: #002e63; text-decoration: underline; }
 a:active {color:#002e63; outline: none; }
