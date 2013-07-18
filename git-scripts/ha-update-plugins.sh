@@ -18,6 +18,10 @@ echo "Updating Game Module"
 echo "Updating Questionnaire Module"
 (cd ../mod/questionnaire/ && git pull upstream MOODLE_25_STABLE)
 
+## Themes
+echo "Updating Essential Theme"
+(cd ../theme/essential && git pull upstream MOODLE_25)
+
 ## Quiz Question Types
 
 ## Drag and Drop Image or Text

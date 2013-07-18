@@ -32,6 +32,17 @@ echo "Cloning Questionnaire Module"
 (cd ../mod/questionnaire && git branch --track MOODLE_25_STABLE origin/MOODLE_25_STABLE)
 (cd ../mod/questionnaire && git checkout MOODLE_25_STABLE)
 
+## Themes
+
+## Essential
+echo "Cloning Essential Theme"
+(cd .. && git clone https://github.com/timb28/moodle-theme_essential.git theme/essential)
+(cd .. && echo /theme/essential/ >> .git/info/exclude)
+(cd ../theme/essential/ && git remote add upstream https://github.com/moodleman/moodle-theme_essential.git)
+(cd ../theme/essential/ && git branch -a)
+(cd ../theme/essential/ && git branch --track MOODLE_25 origin/MOODLE_25)
+(cd ../theme/essential/ && git checkout MOODLE_25)
+
 ## Quiz Question Types
 
 ## OU Drag and Drop Images Quiz Question Type
