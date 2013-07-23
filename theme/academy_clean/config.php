@@ -73,7 +73,7 @@ $THEME->layouts = array(
     // Main course page.
     'course' => array(
         'file' => 'columns2.php',
-        'regions' => array('side-pre'),
+        'regions' => array('side-pre','center'),
         'defaultregion' => 'side-pre',
         'options' => array('langmenu'=>true),
     ),
@@ -85,7 +85,7 @@ $THEME->layouts = array(
     // part of course, typical for modules - default page layout if $cm specified in require_login()
     'incourse' => array(
         'file' => 'columns2.php',
-        'regions' => array('side-pre'),
+        'regions' => array('side-pre','center'),
         'defaultregion' => 'side-pre',
     ),
     // The site home page.

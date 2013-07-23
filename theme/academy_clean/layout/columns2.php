@@ -17,6 +17,8 @@
 // Get the HTML for the settings bits.
 $html = theme_academy_clean_get_html_for_settings($OUTPUT, $PAGE);
 
+$hascenterregion = $PAGE->blocks->region_has_content('center', $OUTPUT);
+
 $left = false; //Academy: Show blocks on the right side of the page. 
 echo $OUTPUT->doctype() ?>
 <html <?php echo $OUTPUT->htmlattributes(); ?>>
@@ -75,6 +77,18 @@ echo $OUTPUT->doctype() ?>
             echo $OUTPUT->main_content();
             echo $OUTPUT->course_content_footer();
             ?>
+
+                
+            <!-- START OF BOTTOM -->
+            <?php if ($hascenterregion) { ?>
+            <div id="page-center" class="row-fluid">
+                <div class="block-region">
+                    <?php echo $OUTPUT->blocks_for_region('center') ?>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <?php } // if $hascenterregion ?>
+
         </section>
         <?php
         $classextra = '';
