@@ -2295,7 +2295,7 @@ table#form td.submit:after,.form-buttons:after,.path-admin .buttons:after,#fitem
 .mdl-right>label{display:inline-block}
 input[type="radio"]+label,input[type="checkbox"]+label{display:inline;padding-left:.2em}
 input[type="radio"],input[type="checkbox"]{margin-top:-4px;margin-right:7px}
-.singleselect{display:inline-block}.singleselect form,.singleselect select{margin:0}
+.singleselect{text-align:center;margin:1em 0}.singleselect form,.singleselect select{margin:0}
 .form-item .form-label label{margin-bottom:0}
 .felement.ffilepicker{margin-top:5px}
 div#dateselector-calendar-panel{z-index:3100;}
@@ -2375,7 +2375,7 @@ table.flexible thead th,.generaltable thead th{vertical-align:bottom}
 table.flexible caption+thead tr:first-child th,.generaltable caption+thead tr:first-child th,table.flexible caption+thead tr:first-child td,.generaltable caption+thead tr:first-child td,table.flexible colgroup+thead tr:first-child th,.generaltable colgroup+thead tr:first-child th,table.flexible colgroup+thead tr:first-child td,.generaltable colgroup+thead tr:first-child td,table.flexible thead:first-child tr:first-child th,.generaltable thead:first-child tr:first-child th,table.flexible thead:first-child tr:first-child td,.generaltable thead:first-child tr:first-child td{border-top:0}
 table.flexible tbody+tbody,.generaltable tbody+tbody{border-top:2px solid #ddd}
 table.flexible .table,.generaltable .table{background-color:#fff}
-.singlebutton div{display:inline-block;margin-left:5px;margin-right:5px;margin-bottom:5px}
+.singlebutton div{text-align:center;margin:1em 0}
 #notice .buttons .singlebutton{display:inline-block}
 .continuebutton{text-align:center}
 .btn-lineup{margin:0 0 10px 5px}
