@@ -44,6 +44,9 @@ Website: <a href="http://www.harcourtsacademy.com">www.harcourtsacademy.com</a>
 
 $string['configtitle'] = 'Academy Clean';
 
+$string['piwiksiteid'] = 'Piwik Site ID';
+$string['piwiksiteiddesc'] = 'For tracking web site visitors. Enter zero to disable tracking.';
+
 $string['customcss'] = 'Custom CSS';
 $string['customcssdesc'] = 'Whatever CSS rules you add to this textarea will be reflected in every page, making for easier customization of this theme.';
 

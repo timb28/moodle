@@ -32,7 +32,15 @@ defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
 
-    // Invert Navbar to dark background.
+    // Piwik site ID
+    $name = 'theme_academy_clean/piwiksiteid';
+    $title = get_string('piwiksiteid', 'theme_academy_clean');
+    $description = get_string('piwiksiteiddesc', 'theme_academy_clean');
+    $setting = new admin_setting_configtext($name, $title, $description, 0, PARAM_INT, 2);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $settings->add($setting);
+  
+// Invert Navbar to dark background.
     $name = 'theme_academy_clean/invert';
     $title = get_string('invert', 'theme_academy_clean');
     $description = get_string('invertdesc', 'theme_academy_clean');

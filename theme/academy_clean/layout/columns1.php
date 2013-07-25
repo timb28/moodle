@@ -82,6 +82,7 @@ echo $OUTPUT->doctype() ?>
         <p class="helplink"><?php echo $OUTPUT->page_doc_link(); ?></p>
         <?php
         echo $html->footnote;
+        echo $html->piwik;
         echo $OUTPUT->login_info();
         echo $OUTPUT->standard_footer_html();
         ?>
