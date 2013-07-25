@@ -2309,7 +2309,7 @@ select{width:auto}
 .forumsearch input[type=text]{margin-bottom:0 !important}
 #page-mod-forum-discuss .discussioncontrol.displaymode{text-align:left}
 #page-mod-forum-discuss .discussioncontrols .discussioncontrol{float:left}
-#page-footer{margin-top:1em;padding:1em 0;border-top:2px solid #eee}
+#page-footer{margin-top:1em;padding:1em 0}
 .maincalendar .calendarmonth td,.maincalendar .calendarmonth th{border:1px dotted #ddd}
 .path-grade-report-grader h1{text-align:inherit}
 #page-mod-chat-gui_basic input#message{max-width:100%}

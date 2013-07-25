@@ -19,7 +19,6 @@ $html = theme_academy_clean_get_html_for_settings($OUTPUT, $PAGE);
 
 $hascenterregion = $PAGE->blocks->region_has_content('center', $OUTPUT);
 
-$left = false; //Academy: Show blocks on the right side of the page. 
 echo $OUTPUT->doctype() ?>
 <html <?php echo $OUTPUT->htmlattributes(); ?>>
 <head>
@@ -71,7 +70,7 @@ echo $OUTPUT->doctype() ?>
     </header>
 
     <div id="page-content" class="row-fluid">
-        <section id="region-main" class="span9<?php if ($left) { echo ' pull-right'; } ?>">
+        <section id="region-main" class="span9">
             <?php
             echo $OUTPUT->course_content_header();
             echo $OUTPUT->main_content();
@@ -91,26 +90,23 @@ echo $OUTPUT->doctype() ?>
 
         </section>
         <?php
-        $classextra = '';
-        if ($left) {
-            $classextra = ' desktop-first-column';
-        }
-        echo $OUTPUT->blocks('side-pre', 'span3'.$classextra);
+        echo $OUTPUT->blocks('side-pre', 'span3');
         ?>
     </div>
 
-    <footer id="page-footer">
-        <div id="course-footer"><?php echo $OUTPUT->course_footer(); ?></div>
-        <p class="helplink"><?php echo $OUTPUT->page_doc_link(); ?></p>
-        <?php
-        echo $html->footnote;
-        echo $OUTPUT->login_info();
-        echo $OUTPUT->standard_footer_html();
-        ?>
-    </footer>
-
-    <?php echo $OUTPUT->standard_end_of_body_html() ?>
-
 </div>
+
+<footer id="page-footer">
+    <div id="course-footer"><?php echo $OUTPUT->course_footer(); ?></div>
+    <p class="helplink"><?php echo $OUTPUT->page_doc_link(); ?></p>
+    <?php
+    echo $html->footnote;
+    echo $OUTPUT->login_info();
+    echo $OUTPUT->standard_footer_html();
+    ?>
+</footer>
+
+<?php echo $OUTPUT->standard_end_of_body_html() ?>
+
 </body>
 </html>
