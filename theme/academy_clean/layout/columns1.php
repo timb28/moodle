@@ -77,19 +77,20 @@ echo $OUTPUT->doctype() ?>
         </section>
     </div>
 
-    <footer id="page-footer">
-        <div id="course-footer"><?php echo $OUTPUT->course_footer(); ?></div>
-        <p class="helplink"><?php echo $OUTPUT->page_doc_link(); ?></p>
-        <?php
-        echo $html->footnote;
-        echo $html->piwik;
-        echo $OUTPUT->login_info();
-        echo $OUTPUT->standard_footer_html();
-        ?>
-    </footer>
-
-    <?php echo $OUTPUT->standard_end_of_body_html() ?>
-
 </div>
+  
+<footer id="page-footer">
+    <div id="course-footer"><?php echo $OUTPUT->course_footer(); ?></div>
+    <p class="helplink"><?php echo $OUTPUT->page_doc_link(); ?></p>
+    <?php
+    echo $html->footnote;
+    echo $html->piwik;
+    echo $OUTPUT->login_info();
+    echo $OUTPUT->standard_footer_html();
+    ?>
+</footer>
+
+<?php echo $OUTPUT->standard_end_of_body_html() ?>
+
 </body>
 </html>
