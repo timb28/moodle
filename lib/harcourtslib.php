@@ -153,7 +153,7 @@ function academy_h1_authorisation ($thisPageURL) {
         }
     }
 
-// Redirect to H1 Login if H1 Token or user country is missing
+    // Redirect to H1 Login if H1 Token or user country is missing
     if ($h1TokenValue == null || $userCountry == null) {
         redirect($h1MoodleAuthUrl); // Redirect to H1 script if no tokens or country
     }
