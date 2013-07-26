@@ -30,10 +30,13 @@ div#page {
 .navbar {
   margin-bottom: 0;
 }
-.navbar-inverse .navbar-inner, .navbar-inner {
+.navbar-fixed-top {
   background: url('academy_clean/pix/background.png') top left repeat fixed #203C62;
+}
+.navbar-inverse .navbar-inner, .navbar-inner {
   border: none;
   box-shadow: none;
+  background: transparent;
 }
 
 .navbar .nav>li>a, .custom_wide_menu li a {
