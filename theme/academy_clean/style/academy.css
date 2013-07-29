@@ -7,6 +7,67 @@
 **
 *********************************************************/
 
+a:link { transition: color .1s ease-out; }
+a:visited {color: #05b;}
+a:hover {color: #002e63; text-decoration: underline; }
+a:active {color:#002e63; outline: none; }
+
+a.logo {
+    background: url('academy_clean/pix/logo.png') no-repeat 0 0;
+    display: block;
+    float: left;
+    height: 42px;
+    margin: 0;
+    padding: 0;
+    width: 158px;
+}
+
+body {
+    background: url('academy_clean/pix/background.png') top left repeat fixed #203C62;
+    background-color: gray;
+}
+
+div#page {
+  padding-bottom: 20px;
+  background-color: white;
+  box-shadow: 0 0 35px rgba(0,0,0,0.8);
+}
+
+/* Nav Bar */
+.navbar {
+  margin-bottom: 0;
+}
+.navbar-fixed-top {
+  background: url('academy_clean/pix/background.png') top left repeat fixed #203C62;
+}
+.navbar-inverse .navbar-inner, .navbar-inner {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+.navbar .nav>li>a, .custom_wide_menu li a {
+  display: block;
+  width: auto;
+  margin: 0;
+  outline: 0;
+  padding: 5px 15px 5px 5px;
+  line-height: 1.8em;
+  text-shadow: none;
+}
+
+/* Breadcrumbs */
+.breadcrumb {
+  background: none;
+  border-radius: 0;
+  margin: 0;
+  padding: 1em 0;
+}
+
+.breadcrumb-button {
+  margin-top: 1em;
+}
+
 /* AV Gallery (Moodle Database)
 ---------------------------*/
 .path-mod-data-view .media-library-single-template {
