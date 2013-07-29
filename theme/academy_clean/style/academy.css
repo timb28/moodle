@@ -13,7 +13,7 @@ a:hover {color: #002e63; text-decoration: underline; }
 a:active {color:#002e63; outline: none; }
 
 a.logo {
-    background: url('academy_clean/pix/logo.png') no-repeat 0 0;
+    background: url([[pix:theme|logo]]) no-repeat 0 0;
     display: block;
     float: left;
     height: 42px;
@@ -23,7 +23,7 @@ a.logo {
 }
 
 body {
-    background: url('academy_clean/pix/background.png') top left repeat fixed #203C62;
+    background: url([[pix:theme|background]]) top left repeat fixed #203C62;
     background-color: gray;
 }
 
@@ -38,7 +38,7 @@ div#page {
   margin-bottom: 0;
 }
 .navbar-fixed-top {
-  background: url('academy_clean/pix/background.png') top left repeat fixed #203C62;
+  background: url([[pix:theme|background]]) top left repeat fixed #203C62;
 }
 .navbar-inverse .navbar-inner, .navbar-inner {
   border: none;
