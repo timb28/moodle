@@ -765,6 +765,25 @@ body#page-enrol-index div.box.generalbox.info {
     display: none;
 }
 
-/* Academy Theme Specific settings for Administrators to customise css.
+
+/* AV Gallery (Moodle Database)
 ---------------------------*/
-[[setting:customcss]]
+.guest.course-15.path-mod-data .groupselector,
+.guest.course-45.path-mod-data .groupselector {
+    display: none;
+}
+
+.guest.course-15.path-mod-data h2.main,
+.guest.course-45.path-mod-data h2.main {
+    display: none;
+}
+
+.guest.course-15.path-mod-data .nav-tabs,
+.guest.course-45.path-mod-data .nav-tabs {
+    display: none;
+}
+
+.guest.course-15.path-mod-data .paging,
+.guest.course-45.path-mod-data .paging {
+    display: none;
+}

@@ -17,6 +17,12 @@
 // Get the HTML for the settings bits.
 $html = theme_academy_clean_get_html_for_settings($OUTPUT, $PAGE);
 
+// Enable CSS to target pages presented to guest users.
+$roleclass = '';
+if (is_guest(get_context_instance(CONTEXT_COURSE, $COURSE->id), $USER)) {
+    $roleclass = 'guest';
+}
+
 echo $OUTPUT->doctype() ?>
 <html <?php echo $OUTPUT->htmlattributes(); ?>>
 <head>
@@ -26,7 +32,7 @@ echo $OUTPUT->doctype() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body <?php echo $OUTPUT->body_attributes(); ?>>
+<body <?php echo $OUTPUT->body_attributes($roleclass); ?>>
 
 <?php echo $OUTPUT->standard_top_of_body_html() ?>
 

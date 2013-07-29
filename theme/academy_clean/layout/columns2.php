@@ -19,6 +19,12 @@ $html = theme_academy_clean_get_html_for_settings($OUTPUT, $PAGE);
 
 $hascenterregion = $PAGE->blocks->region_has_content('center', $OUTPUT);
 
+// Enable CSS to target pages presented to guest users.
+$roleclass = '';
+if (is_guest(get_context_instance(CONTEXT_COURSE, $COURSE->id), $USER)) {
+    $roleclass = 'guest';
+}
+
 echo $OUTPUT->doctype() ?>
 <html <?php echo $OUTPUT->htmlattributes(); ?>>
 <head>
@@ -28,7 +34,7 @@ echo $OUTPUT->doctype() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body <?php echo $OUTPUT->body_attributes('two-column'); ?>>
+<body <?php echo $OUTPUT->body_attributes('two-column '.$roleclass); ?>>
 
 <?php echo $OUTPUT->standard_top_of_body_html() ?>
 
