@@ -848,3 +848,17 @@ body#page-enrol-index div.box.generalbox.info {
 .guest.course-45.path-mod-data .paging {
     display: none;
 }
+
+/* For guests, hide items on the course category page
+ * so that only the main content appears. */
+.guest.pagelayout-coursecategory .categorypicker {
+    display: none;
+}
+
+.guest.pagelayout-coursecategory .course_category_tree {
+    display:none;
+}
+
+.guest.pagelayout-coursecategory form#coursesearchnavbar {
+    display:none;
+}
