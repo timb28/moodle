@@ -438,26 +438,11 @@ Grader Report
 }
 
 /* Display SCORM content full width */
-body#page-mod-scorm-player div#region-post {
+body#page-mod-scorm-player #block-region-side-pre {
     display: none;
 }
-body#page-mod-scorm-player div#region-main-box {
-    width: 960px;
-}
-body#page-mod-scorm-player div#region-main-box div#region-post-box {
-    width: 960px;
-    left: 0;
-    margin: 0;
-}
-body#page-mod-scorm-player div#region-main-box div#region-post-box div#region-main-wrap {
-    width: 930px;
-    padding: 0 15px;
-    left: 0;
-    right: 0;
-}
-body#page-mod-scorm-player div#region-main-box div#region-post-box div#region-main-wrap div#region-main {
-    margin: 0;
-    padding: 0;
+body#page-mod-scorm-player #region-main {
+    width: 100%;
 }
 
 /* Quiz Edit page (no right side blocks) covers two page states: quizbank open and closed */
