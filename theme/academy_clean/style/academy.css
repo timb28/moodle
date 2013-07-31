@@ -738,57 +738,6 @@ td.crosswordarea {
     border: none;
 }
 
-/* Questionnaire Module */
-body#page-mod-questionnaire-view .surveyTitle, body#page-mod-questionnaire-view .surveySubtitle, body#page-mod-questionnaire-view .addInfo {
-    clear: both;
-    margin: 0 0 4px;
-    padding: 10px 0;
-}
-
-body#page-mod-questionnaire-view .generalbox {
-    border: 0;
-}
-
-body#page-mod-questionnaire-view .surveyPage {
-    background-color: #EEEEEE;
-    border-bottom: 0;
-    clear: right;
-    margin-bottom: 5px;
-    margin-top: 0;
-    margin-right: 7px;
-    padding: 7px;
-}
-
-body#page-mod-questionnaire-view td.qnInner, body#page-mod-questionnaire-preview td.qnInner, body#page-mod-questionnaire-report td.qnInner, body#page-mod-questionnaire-myreport td.qnInner, .reportQuestionTitle {
-    background: url([[pix:theme|fieldsetbg]]) repeat-x;
-    border: 0;
-}
-
-#page-mod-questionnaire-view .qn-question {
-    border-left: 1px dotted #CCCCCC;
-    margin-left: 35px;
-    padding-bottom: 2px;
-    padding-left: 5px;
-}
-
-#page-mod-questionnaire-view .qn-type {
-    border-bottom: 0;
-    border-left: 1px dotted #CCCCCC;
-    margin-left: 35px;
-    padding: 5px;
-}
-
-body#page-mod-questionnaire-view .message,
-body#page-mod-questionnaire-view .notifyproblem {
-    background-color: #ffcccc;
-    border-color: #FF0000;
-    border-style: solid;
-    border-width: 2px;
-    margin-bottom: 10px;
-    padding: 5px;
-    width: 699px;
-}
-
 /* Book module */
 .mod_book .book_toc_numbered ul ul {
     margin-left: 10px;
