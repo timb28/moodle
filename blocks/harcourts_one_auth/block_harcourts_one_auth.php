@@ -40,8 +40,8 @@ class block_harcourts_one_auth extends block_base {
     }
 
     public function specialization() {
-        // Harcourts One login required if the user is a guest
-        if (isguestuser()) {
+        // Harcourts One login required if the user is a not site admin
+        if (!is_siteadmin()) {
             global $PAGE;
             academy_h1_authorisation(rawurlencode($PAGE->url));
         }
