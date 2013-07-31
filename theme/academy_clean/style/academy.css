@@ -181,6 +181,10 @@ ol, li ol,
 .course-content ul.weeks .content .summary ol,
 .course-content ul.topics .content .summary ol {list-style: decimal outside none;}
 
+/* Remove bullet points next to download report links. */
+ul.export-actions { margin-top: 1em; }
+ul.export-actions li { list-style: none; }
+
 /* Course editing */
 /*  Hide duplicate activity icon as duplication content in a course with
     completion tracking turned on breaks the course. */
@@ -250,6 +254,8 @@ ol, li ol,
 }
 .path-mod-lesson .answeroption input { cursor: pointer; }
 .path-mod-lesson .answeroption label { cursor: pointer; }
+
+#page-mod-lesson-view .fheader { display: none; }
 
 /* Footer
 ---------------------------*/
