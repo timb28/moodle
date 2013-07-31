@@ -139,9 +139,9 @@ ul, ol {
 ul li {
     padding: 0;
 }
-li {
+/*li {
     line-height: 20px;
-}
+}*/
 
 body #k2Container.itemView .itemImageBlock {
     float: none;
