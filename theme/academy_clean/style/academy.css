@@ -359,7 +359,7 @@ Grader Report
     margin: 1em 0 2em;
     width: 720px;
 }
-#page-admin-index #region-main .generalbox { margin-bottom: 1em; }
+.generalbox { margin-bottom: 1em; }
 
 /* Front page
 ---------------------------*/
