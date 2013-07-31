@@ -255,6 +255,8 @@ ul.export-actions li { list-style: none; }
 .path-mod-lesson .answeroption input { cursor: pointer; }
 .path-mod-lesson .answeroption label { cursor: pointer; }
 
+#page-mod-lesson-view .branchbuttoncontainer.horizontal { padding: 2em 0; }
+
 #page-mod-lesson-view .fheader { display: none; }
 
 /* Footer
