@@ -28,6 +28,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 // Get the HTML for the settings bits.
 $html = theme_academy_clean_get_html_for_settings($OUTPUT, $PAGE);
 
