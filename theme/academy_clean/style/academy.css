@@ -167,7 +167,7 @@ li.activity p {
 .course-content ul.topics li.section .content {
     margin: 0;
     padding: 10px;
-    border-bottom: 1px solid #ddd;
+    /*border-bottom: 1px solid #ddd;*/
 }
 .path-course-view .jumpmenu {
     padding: 15px;
@@ -359,6 +359,7 @@ Grader Report
     margin: 1em 0 2em;
     width: 720px;
 }
+#page-admin-index #region-main .generalbox { margin-bottom: 1em; }
 
 /* Front page
 ---------------------------*/
