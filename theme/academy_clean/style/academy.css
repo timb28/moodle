@@ -80,7 +80,13 @@ div#page {
 
 /* AV Gallery (HTML Block)
 ---------------------------*/
-#region-content .block.block_html .content .no-overflow {
+#page-center .block {
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+#page-center .block.block_html .content .no-overflow {
     min-width: 100%; /* Firefox fix for overflow: auto issue. */
 }
 
