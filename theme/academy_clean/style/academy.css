@@ -629,9 +629,8 @@ li.resourcelibrary-other a { background: url([[pix:theme|icon-other]]) no-repeat
 /**
  * Course Completion
  */
-table#completion-progress td.completion-progresscell {
-    text-align: center;
-}
+table#completion-progress td.completion-progresscell { text-align: center; }
+#page-blocks-completionstatus-details #page-content table.generalbox b { padding-right: 1em; }
 
 /**
  * Academy added CSS
