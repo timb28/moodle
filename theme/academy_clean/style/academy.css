@@ -361,13 +361,8 @@ Grader Report
     border-top: 1px solid #ddd;
 }
 
-/* Settings */
-#adminsettings .form-item {
-    clear: both;
-    margin: 1em 0 2em;
-    width: 720px;
-}
-.generalbox { margin-bottom: 1em; }
+/* Admin Settings */
+#page-admin-index .generalbox { margin-bottom: 1em; }
 
 /* Front page
 ---------------------------*/
