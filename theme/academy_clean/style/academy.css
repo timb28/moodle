@@ -364,8 +364,16 @@ Grader Report
 /* Admin Settings */
 #page-admin-index .generalbox { margin-bottom: 1em; }
 
-/* Front page
----------------------------*/
+/* Front page */
+.coursebox>.info>.name {
+    width: 95%;
+}
+
+.coursebox .content .summary, .coursebox .content .coursecat {
+    float: none;
+    width: 100%;
+}
+
 .big-button-wrapper {
     display: block;
     float: left;
