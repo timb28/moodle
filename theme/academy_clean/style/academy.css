@@ -363,7 +363,7 @@ Grader Report
 
 /* Admin Settings */
 #page-admin-index .generalbox { margin-bottom: 1em; }
-.path-admin .form-overridden {
+.path-admin .form-label .form-overridden {
     font-size: 75%;
     color: orange;
 }
