@@ -51,24 +51,9 @@ class block_academy_score extends block_base {
 		$report = new grade_report_overview($USER->id, $gpr, $context);
 
 		$newdata=$this->grade_data($report);
-		if (is_array($newdata))
+		if ($newdata != null)
 		{
-			if (count($newdata)>0)
-			{
-				$newtext="<table class=\"grades\"><tr><th>".get_string('gradetblheader_course', 'block_academy_score')."</th><th>".get_string('gradetblheader_grade', 'block_academy_score')."</th></tr>";
-				foreach($newdata as $newgrade)
-				{
-					// need to put data into table for display here
-					$newtext.="<tr><td>{$newgrade[0]}</td><td>{$newgrade[1]}</td></tr>";
-                    
-                    // Add the grade to the total score
-                    $total_score+= $newgrade[1];
-				}
-				$newtext.="</table>";
-				$this->content->text.=$newtext;
-			}
-            
-            $total_score = ceil($total_score);
+            $total_score = ceil($newdata);
             $this->content->text.= "<div class=\"score-total\">{$total_score}</div>";
 		}
 		else
@@ -85,7 +70,7 @@ class block_academy_score extends block_base {
 	
 	public function grade_data($report) {
 		global $CFG, $DB, $OUTPUT;
-		$data = array();
+		$gradedata = null;
 		
 		if ($courses = enrol_get_users_courses($report->user->id, false, 'id, shortname, showgrades')) {
 			$numusers = $report->get_numusers(false);
@@ -97,6 +82,8 @@ class block_academy_score extends block_base {
                 $valid_course_categories = $this->config->coursecategories;
             }
 
+            $gradedata = 0;
+            
 			foreach ($courses as $course) {
 				if (!$course->showgrades) {
 					continue;
@@ -113,10 +100,6 @@ class block_academy_score extends block_base {
 					continue;
 				}
 
-				$courseshortname = format_string($course->shortname, true, array('context' => $coursecontext));
-				$courselink = html_writer::link(new moodle_url('/grade/report/user/index.php', array('id' => $course->id, 'userid' => $report->user->id)), $courseshortname);
-				$canviewhidden = has_capability('moodle/grade:viewhidden', $coursecontext);
-
 				// Get course grade_item
 				$course_item = grade_item::fetch_course_item($course->id);
 
@@ -125,13 +108,13 @@ class block_academy_score extends block_base {
 				$course_grade->grade_item =& $course_item;
 				$finalgrade = $course_grade->finalgrade;
 
-				$data[] = array($courselink, $finalgrade);
+				$gradedata+= $finalgrade;
 			}
 			
-			if (count($data)==0) {
+			if ($gradedata == null) {
 				return $OUTPUT->notification(get_string('nocourses', 'grades'));
 			} else {
-				return $data;
+				return $gradedata;
 			}
 		} else {
 			return $OUTPUT->notification(get_string('nocourses', 'grades'));
