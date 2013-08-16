@@ -28,7 +28,7 @@
     $string['pluginname']='Academy Score block';
 	$string['academy_score']='Academy Score';
 	$string['blocktitle']='My IQ';
-	$string['blockstring']='My IQ string';
+	$string['blockcontent']='My IQ: {$a}';
     $string['coursecategories']='Select Course Categories';
 	$string['gradetblheader_course'] = 'Course';
 	$string['gradetblheader_grade'] = 'Grade';

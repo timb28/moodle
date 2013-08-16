@@ -54,7 +54,7 @@ class block_academy_score extends block_base {
 		if ($newdata != null)
 		{
             $total_score = ceil($newdata);
-            $this->content->text.= "<div class=\"score-total\">{$total_score}</div>";
+            $this->content->text.= "<div class=\"score-total\">" . get_string('blockcontent', 'block_academy_score', $total_score) . "</div>";
 		}
 		else
 		{
@@ -120,6 +120,10 @@ class block_academy_score extends block_base {
 			return $OUTPUT->notification(get_string('nocourses', 'grades'));
 		}
 	}
+    
+  public function hide_header() {
+    return true;
+  }
 }
 
 ?>
