@@ -98,50 +98,19 @@ class block_academy_selfcompletion extends block_base {
             $this->content->text = get_string('coursealreadycompleted', 'completion');
             return $this->content;
 
+        // Check if the user has already marked themselves as complete
+        } else if ($completion->is_complete()) {
+            $this->content->text = get_string('alreadyselfcompleted', 'block_academy_selfcompletion');
+            return $this->content;
+
+        // If user is not complete, or has not yet self completed
         } else {
             $options = new stdClass();
             $options->newlines = true;    // Convert newlines to <br/> tags
             $this->content->text = format_text($this->config->message, FORMAT_MOODLE, $options);
             
-            $completionstate = $completion->is_complete();
-            
-            $newstate =
-                    $completionstate == COMPLETION_COMPLETE
-                    ? COMPLETION_INCOMPLETE
-                    : COMPLETION_COMPLETE;
-            
-            $buttonlabel = '';
-            if ($completion->is_complete()) {
-                $buttonlabel = '&#x27F2; Mark incomplete';
-            } else {
-                $buttonlabel = '✔ Mark complete';
-            }
-
-            $output = '';
-            $output .= html_writer::start_tag('form', array('method' => 'post',
-                'action' => new moodle_url('/course/togglecompletion.php'),
-                'class' => 'togglecompletion singlebutton preventjs'));
-            $output .= html_writer::start_tag('div', array(
-                'class' => 'text-center'));
-            $output .= html_writer::empty_tag('input', array(
-                'type' => 'hidden', 'name' => 'course', 'value' => $COURSE->id));
-            $output .= html_writer::empty_tag('input', array(
-                'type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()));
-            $output .= html_writer::empty_tag('input', array(
-                'type' => 'hidden', 'name' => 'completionstate', 'value' => $newstate));
-            $output .= html_writer::empty_tag('input', array(
-                'type' => 'hidden', 'name' => 'confirm', 'value' => '1'));
-            $output .= html_writer::empty_tag('input', array(
-                'type' => 'submit',
-                'value' => $buttonlabel,
-                'class' => 'btn',
-                'aria-live' => 'polite'));
-            $output .= '<input type="hidden" value="28" name="course">';
-            $output .= html_writer::end_tag('div');
-            $output .= html_writer::end_tag('form');
-            
-            $this->content->footer = $output;
-            
+            $this->content->footer = '<br /><a href="'.$CFG->wwwroot.'/course/togglecompletion.php?course='.$this->page->course->id.'" class="btn btn-success">';
+            $this->content->footer .= get_string('completecourse', 'block_academy_selfcompletion',$COURSE->shortname).'</a>';
         }
 
         return $this->content;
