@@ -8,9 +8,6 @@
 *********************************************************/
 
 a:link { transition: color .1s ease-out; }
-a:visited {color: #05b;}
-a:hover {color: #002e63; text-decoration: underline; }
-a:active {color:#002e63; outline: none; }
 
 a.logo {
     background: url([[pix:theme|logo]]) no-repeat 0 0;
@@ -56,6 +53,7 @@ div#page {
   margin: 0;
   outline: 0;
   padding: 5px 15px 5px 5px;
+  color: #383435;
   line-height: 1.8em;
   text-shadow: none;
 }
@@ -121,81 +119,6 @@ div#page {
 .av-gallery ul li a:hover img {
     display: block;
     border: 1px solid #002e63;
-}
-
-/* Course
----------------------------*/
-
-h2.headingblock {
-    border-width: 0 0 1px 0;
-    padding: 5px 5px 2px;
-    font-weight: normal;
-    font-size: 1.2em;
-    background: none;
-    color: #251c17;
-}
-
-ul.topics li.section, ul.weeks li.section {
-    /* All course topics. */
-}
-
-ul.topics li#section-0, ul.weeks li#section-0 {
-    /* First course section. */
-}
-ul.weeks li.section.current, ul.topics li.section.current  {
-    border: 1px solid #09f;
-    font-weight: normal;
-    color: #212121;
-}
-
-div.summary {
-    padding: 5px 0px 5px 0px;
-}
-
-ul.topics div.content > ul li.activity {
-    margin-top: 8px;
-    padding: 4px;
-}
-
-.path-course-view.section .left.side {
-    background: none;
-}
-
-.path-course-view li.activity {
-    margin-left:20px;
-    position:relative;
-}
-
-.course-content .section.main {
-    border: none;
-}
-
-.course-content ul.topics li.section .content {
-    margin: 0;
-    padding: 10px;
-    /*border-bottom: 1px solid #ddd;*/
-}
-.path-course-view .jumpmenu {
-    padding: 15px;
-}
-
-/* Fix for ordered and unordered list in course topic summary & course weekly summary */
-ul, li ul, 
-.course-content ul.weeks .content .summary ul,
-.course-content ul.topics .content .summary ul {list-style: disc outside none;}
-ol, li ol, 
-.course-content ul.weeks .content .summary ol,
-.course-content ul.topics .content .summary ol {list-style: decimal outside none;}
-
-/* Remove bullet points next to download report links. */
-ul.export-actions { margin-top: 1em; }
-ul.export-actions li { list-style: none; }
-
-/* Course editing */
-/*  Hide duplicate activity icon as duplication content in a course with
-    completion tracking turned on breaks the course. */
-.editing_duplicate {
-    display: none;
 }
 
 /* dock left
