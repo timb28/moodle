@@ -19,7 +19,16 @@ defined('MOODLE_INTERNAL') || die();
 // Get the HTML for the settings bits.
 $html = theme_academy_clean_get_html_for_settings($OUTPUT, $PAGE);
 
-$hascenterregion = $PAGE->blocks->region_has_content('center', $OUTPUT);
+$hascenterregion = (empty($PAGE->layout_options['noblocks']) && $PAGE->blocks->region_has_content('center', $OUTPUT));
+$showcenterregion = ($hascenterregion && !$PAGE->blocks->region_completely_docked('center', $OUTPUT));
+
+// If there can be a center region on this page and we are editing, always
+// show it so blocks can be dragged into it.
+if ($PAGE->user_is_editing()) {
+    if ($PAGE->blocks->is_known_region('center')) {
+        $showcenterregion = true;
+    }
+}
 
 // Enable CSS to target pages presented to guest users.
 $roleclass = '';
@@ -87,14 +96,16 @@ echo $OUTPUT->doctype() ?>
 
                 
             <!-- START OF BOTTOM -->
-            <?php if ($hascenterregion) { ?>
             <div id="page-center" class="row-fluid">
-                <div class="block-region">
-                    <?php echo $OUTPUT->blocks_for_region('center') ?>
+                <div class="block-region-center">
+                    <?php
+                    if ($showcenterregion) { 
+                        echo $OUTPUT->blocks('center');
+                    }
+                    ?>
                     <div class="clearfix"></div>
                 </div>
             </div>
-            <?php } // if $hascenterregion ?>
 
         </section>
         <?php
