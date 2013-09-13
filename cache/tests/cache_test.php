@@ -120,6 +120,23 @@ class cache_phpunit_tests extends advanced_testcase {
     }
 
     /**
+     * Tests for cache keys that would break on windows.
+     */
+    public function test_windows_nasty_keys() {
+        $instance = cache_config_phpunittest::instance();
+        $instance->phpunit_add_definition('phpunit/windowskeytest', array(
+            'mode' => cache_store::MODE_APPLICATION,
+            'component' => 'phpunit',
+            'area' => 'windowskeytest',
+            'simplekeys' => true,
+            'simpledata' => true
+        ));
+        $cache = cache::make('phpunit', 'windowskeytest');
+        $this->assertTrue($cache->set('contest', 'test data 1'));
+        $this->assertEquals('test data 1', $cache->get('contest'));
+    }
+
+    /**
      * Tests the default application cache
      */
     public function test_default_application_cache() {
@@ -191,9 +208,9 @@ class cache_phpunit_tests extends advanced_testcase {
      * @param cache_loader $cache
      */
     protected function run_on_cache(cache_loader $cache) {
-        $key = 'testkey';
+        $key = 'contestkey';
         $datascalars = array('test data', null);
-        $dataarray = array('test' => 'data', 'part' => 'two');
+        $dataarray = array('contest' => 'data', 'part' => 'two');
         $dataobject = (object)$dataarray;
 
         foreach ($datascalars as $datascalar) {
@@ -850,7 +867,7 @@ class cache_phpunit_tests extends advanced_testcase {
         // OK data added, data invalidated, and invalidation time has been set.
         // Now we need to manually add back the data and adjust the invalidation time.
         $hash = md5(cache_store::MODE_APPLICATION.'/phpunit/eventinvalidationtest/'.$CFG->wwwroot.'phpunit');
-        $timefile = $CFG->dataroot."/cache/cachestore_file/default_application/phpunit_eventinvalidationtest/las/lastinvalidation-$hash.cache";
+        $timefile = $CFG->dataroot."/cache/cachestore_file/default_application/phpunit_eventinvalidationtest/las-cache/lastinvalidation-$hash.cache";
         // Make sure the file is correct.
         $this->assertTrue(file_exists($timefile));
         $timecont = serialize(cache::now() - 60); // Back 60sec in the past to force it to re-invalidate.
@@ -858,7 +875,7 @@ class cache_phpunit_tests extends advanced_testcase {
         file_put_contents($timefile, $timecont);
         $this->assertTrue(file_exists($timefile));
 
-        $datafile = $CFG->dataroot."/cache/cachestore_file/default_application/phpunit_eventinvalidationtest/tes/testkey1-$hash.cache";
+        $datafile = $CFG->dataroot."/cache/cachestore_file/default_application/phpunit_eventinvalidationtest/tes-cache/testkey1-$hash.cache";
         $datacont = serialize("test data 1");
         make_writable_directory(dirname($datafile));
         file_put_contents($datafile, $datacont);
@@ -1109,9 +1126,9 @@ class cache_phpunit_tests extends advanced_testcase {
     }
 
     /**
-     * Test that multiple loaders work ok.
+     * Test that multiple application loaders work ok.
      */
-    public function test_multiple_loaders() {
+    public function test_multiple_application_loaders() {
         $instance = cache_config_phpunittest::instance(true);
         $instance->phpunit_add_file_store('phpunittest1');
         $instance->phpunit_add_file_store('phpunittest2');
@@ -1156,6 +1173,93 @@ class cache_phpunit_tests extends advanced_testcase {
         $this->assertFalse($result['a']);
         $this->assertEquals('B', $result['b']);
         $this->assertFalse($result['c']);
+
+        // Test non-recursive deletes.
+        $this->assertTrue($cache->set('test', 'test'));
+        $this->assertSame('test', $cache->get('test'));
+        $this->assertTrue($cache->delete('test', false));
+        // We should still have it on a deeper loader.
+        $this->assertSame('test', $cache->get('test'));
+        // Test non-recusive with many functions.
+        $this->assertSame(3, $cache->set_many(array(
+            'one' => 'one',
+            'two' => 'two',
+            'three' => 'three'
+        )));
+        $this->assertSame('one', $cache->get('one'));
+        $this->assertSame(array('two' => 'two', 'three' => 'three'), $cache->get_many(array('two', 'three')));
+        $this->assertSame(3, $cache->delete_many(array('one', 'two', 'three'), false));
+        $this->assertSame('one', $cache->get('one'));
+        $this->assertSame(array('two' => 'two', 'three' => 'three'), $cache->get_many(array('two', 'three')));
+    }
+
+    /**
+     * Test that multiple application loaders work ok.
+     */
+    public function test_multiple_session_loaders() {
+        /* @var cache_config_phpunittest $instance */
+        $instance = cache_config_phpunittest::instance(true);
+        $instance->phpunit_add_session_store('phpunittest1');
+        $instance->phpunit_add_session_store('phpunittest2');
+        $instance->phpunit_add_definition('phpunit/multi_loader', array(
+            'mode' => cache_store::MODE_SESSION,
+            'component' => 'phpunit',
+            'area' => 'multi_loader'
+        ));
+        $instance->phpunit_add_definition_mapping('phpunit/multi_loader', 'phpunittest1', 3);
+        $instance->phpunit_add_definition_mapping('phpunit/multi_loader', 'phpunittest2', 2);
+
+        $cache = cache::make('phpunit', 'multi_loader');
+        $this->assertInstanceOf('cache_session', $cache);
+        $this->assertFalse($cache->get('test'));
+        $this->assertTrue($cache->set('test', 'test'));
+        $this->assertEquals('test', $cache->get('test'));
+        $this->assertTrue($cache->delete('test'));
+        $this->assertFalse($cache->get('test'));
+        $this->assertTrue($cache->set('test', 'test'));
+        $this->assertTrue($cache->purge());
+        $this->assertFalse($cache->get('test'));
+
+        // Test the many commands.
+        $this->assertEquals(3, $cache->set_many(array('a' => 'A', 'b' => 'B', 'c' => 'C')));
+        $result = $cache->get_many(array('a', 'b', 'c'));
+        $this->assertInternalType('array', $result);
+        $this->assertCount(3, $result);
+        $this->assertArrayHasKey('a', $result);
+        $this->assertArrayHasKey('b', $result);
+        $this->assertArrayHasKey('c', $result);
+        $this->assertEquals('A', $result['a']);
+        $this->assertEquals('B', $result['b']);
+        $this->assertEquals('C', $result['c']);
+        $this->assertEquals($result, $cache->get_many(array('a', 'b', 'c')));
+        $this->assertEquals(2, $cache->delete_many(array('a', 'c')));
+        $result = $cache->get_many(array('a', 'b', 'c'));
+        $this->assertInternalType('array', $result);
+        $this->assertCount(3, $result);
+        $this->assertArrayHasKey('a', $result);
+        $this->assertArrayHasKey('b', $result);
+        $this->assertArrayHasKey('c', $result);
+        $this->assertFalse($result['a']);
+        $this->assertEquals('B', $result['b']);
+        $this->assertFalse($result['c']);
+
+        // Test non-recursive deletes.
+        $this->assertTrue($cache->set('test', 'test'));
+        $this->assertSame('test', $cache->get('test'));
+        $this->assertTrue($cache->delete('test', false));
+        // We should still have it on a deeper loader.
+        $this->assertSame('test', $cache->get('test'));
+        // Test non-recusive with many functions.
+        $this->assertSame(3, $cache->set_many(array(
+            'one' => 'one',
+            'two' => 'two',
+            'three' => 'three'
+        )));
+        $this->assertSame('one', $cache->get('one'));
+        $this->assertSame(array('two' => 'two', 'three' => 'three'), $cache->get_many(array('two', 'three')));
+        $this->assertSame(3, $cache->delete_many(array('one', 'two', 'three'), false));
+        $this->assertSame('one', $cache->get('one'));
+        $this->assertSame(array('two' => 'two', 'three' => 'three'), $cache->get_many(array('two', 'three')));
     }
 
     /**
