@@ -89,10 +89,6 @@ body.path-mod-questionnaire .qn-type {
     padding: 5px;
 }
 
-body.path-mod-questionnaire .qn-question h3 {
-    margin: 2em 0 0;
-}
-
 body.path-mod-questionnaire .message,
 body.path-mod-questionnaire .notifyproblem {
     background-color: #ffcccc;
