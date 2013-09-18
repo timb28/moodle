@@ -27,7 +27,7 @@ $functions = array(
                 'classname'   => 'local_academywebservices_external',
                 'methodname'  => 'get_course_complete_for_user',
                 'classpath'   => 'local/academywebservices/externallib.php',
-                'description' => 'Return Hello World FIRSTNAME. Can change the text (Hello World) sending a new text as parameter',
+                'description' => 'Get course completion for a single user',
                 'type'        => 'read',
         )
 );

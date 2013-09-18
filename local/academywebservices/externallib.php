@@ -21,6 +21,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once($CFG->libdir . "/externallib.php");
+require_once($CFG->libdir . "/completionlib.php");
+require_once($CFG->dirroot . "/user/lib.php");
 
 class local_academywebservices_external extends external_api {
 
@@ -30,7 +32,10 @@ class local_academywebservices_external extends external_api {
      */
     public static function get_course_complete_for_user_parameters() {
         return new external_function_parameters(
-                array('welcomemessage' => new external_value(PARAM_TEXT, 'The welcome message. By default it is "Hello world,"', VALUE_DEFAULT, 'Hello world, '))
+                array(
+                    'courseid' => new external_value(PARAM_INT, 'course id'),
+                    'username' => new external_value(PARAM_TEXT, 'username'),
+                )
         );
     }
 
@@ -38,13 +43,14 @@ class local_academywebservices_external extends external_api {
      * Returns welcome message
      * @return string welcome message
      */
-    public static function get_course_complete_for_user($welcomemessage = 'Hello world, ') {
-        global $USER;
+    public static function get_course_complete_for_user($courseid, $username) {
+        global $DB, $USER;
+        
+        $username = strtolower( utf8_decode($username) );
 
         //Parameter validation
         //REQUIRED
-        $params = self::validate_parameters(self::get_course_complete_for_user_parameters(),
-                array('welcomemessage' => $welcomemessage));
+        $params = self::validate_parameters(self::get_course_complete_for_user_parameters(), array('courseid'=>$courseid, 'username' => $username));
 
         //Context validation
         //OPTIONAL but in most web service it should present
@@ -56,8 +62,36 @@ class local_academywebservices_external extends external_api {
         if (!has_capability('moodle/user:viewdetails', $context)) {
             throw new moodle_exception('cannotviewprofile');
         }
+        
+        // TBD throw errors
+        //throw new invalid_parameter_exception('Group with the same name already exists in the course');
+        
+        // Clean the parameters
+        $cleanedcourseid = clean_param($params['courseid'], PARAM_INT);
+        if ( $params['courseid'] != $cleanedcourseid) {
+                throw new invalid_parameter_exception('The field \'courseid\' value is invalid: ' . $params['courseid'] . '(cleaned value: '.$cleanedcourseid.')');
+            }
+            
+        $course = $DB->get_record('course', array('id' => $cleanedcourseid), '*', MUST_EXIST);
+        
+        $cleanedusername = clean_param($params['username'], PARAM_RAW);
+        if ( $username != $cleanedusername) {
+                throw new invalid_parameter_exception('The field \'username\' value is invalid: ' . $params['username'] . '(cleaned value: '.$cleanedusername.')');
+            }
+        
+        // Retrieve the user
+        $user = $DB->get_record('user', array('username' => $cleanedusername), '*', MUST_EXIST);
+        
+        $userdetails = user_get_user_details($user, $course);
+        
+        $userid = $userdetails['id'];
+        
+        $iscomplete = 0;
+        if (self::is_course_complete($courseid, $userid)) {
+            $iscomplete = 1; 
+        }
 
-        return $params['welcomemessage'] . $USER->firstname ;;
+        return array('complete' => $iscomplete);
     }
 
     /**
@@ -65,8 +99,29 @@ class local_academywebservices_external extends external_api {
      * @return external_description
      */
     public static function get_course_complete_for_user_returns() {
-        return new external_value(PARAM_TEXT, 'The welcome message + user first name');
+        return new external_single_structure(
+            array (
+                'complete' => new external_value(PARAM_INT, 'complete')
+            )
+        ); ////////// TBD CHANGE BACK TO PARAM_INT //////////////////
     }
+    
+        /**
+     * Has the supplied user completed this course
+     *
+     * @param int $user_id User's id
+     * @return boolean
+     */
+    public function is_course_complete($courseid, $userid) {
+        $params = array(
+            'userid'    => $userid,
+            'course'  => $courseid
+        );
+
+        $ccompletion = new completion_completion($params);
+        return $ccompletion->is_complete();
+    }
+    
 
 
 

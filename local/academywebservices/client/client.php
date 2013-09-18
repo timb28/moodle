@@ -29,13 +29,14 @@ $domainname = 'http://420-c73/dev-moodle';
 $functionname = 'academy_get_course_complete_for_user';
 
 /// PARAMETERS
-$welcomemsg = 'Hello, ';
+$courseid = 31;
+$username = 'tstudent';
 
 ///// XML-RPC CALL
 header('Content-Type: text/plain');
 $serverurl = $domainname . '/webservice/xmlrpc/server.php'. '?wstoken=' . $token;
 require_once('./curl.php');
 $curl = new curl;
-$post = xmlrpc_encode_request($functionname, array($welcomemsg));
+$post = xmlrpc_encode_request($functionname, array($courseid, $username));
 $resp = xmlrpc_decode($curl->post($serverurl, $post));
 print_r($resp);
