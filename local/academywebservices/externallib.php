@@ -44,7 +44,12 @@ class local_academywebservices_external extends external_api {
      * @return string welcome message
      */
     public static function get_course_complete_for_user($courseid, $username) {
-        global $DB, $USER;
+        global $CFG, $DB, $USER;
+        
+        // First check global completion
+        if (!isset($CFG->enablecompletion) || $CFG->enablecompletion == COMPLETION_DISABLED) {
+            throw new moodle_exception('Completion is not enabled sitewide');
+        }
         
         $username = strtolower( utf8_decode($username) );
 
@@ -71,8 +76,22 @@ class local_academywebservices_external extends external_api {
         if ( $params['courseid'] != $cleanedcourseid) {
                 throw new invalid_parameter_exception('The field \'courseid\' value is invalid: ' . $params['courseid'] . '(cleaned value: '.$cleanedcourseid.')');
             }
-            
-        $course = $DB->get_record('course', array('id' => $cleanedcourseid), '*', MUST_EXIST);
+        
+        // Retrieve the course
+        try {
+            $course = $DB->get_record('course', array('id' => $cleanedcourseid), '*', MUST_EXIST);
+        } catch (dml_missing_record_exception $e) {
+            throw new invalid_parameter_exception('The field \'courseid\' value is invalid: ' . $params['courseid'] );
+        }
+        
+        // Check that course completion is enabled
+        if (!isset($course->enablecompletion)) {
+            $course->enablecompletion = $DB->get_field('course', 'enablecompletion', array('id' => $course->id));
+        }
+
+        if ($course->enablecompletion == COMPLETION_DISABLED) {
+            throw new moodle_exception('Completion is not enabled for this course.');
+        }
         
         $cleanedusername = clean_param($params['username'], PARAM_RAW);
         if ( $username != $cleanedusername) {
@@ -81,11 +100,10 @@ class local_academywebservices_external extends external_api {
         
         // Retrieve the user
         $user = $DB->get_record('user', array('username' => $cleanedusername), '*', MUST_EXIST);
-        
         $userdetails = user_get_user_details($user, $course);
-        
         $userid = $userdetails['id'];
         
+        // Determine whether the user has completed the course
         $iscomplete = 0;
         if (self::is_course_complete($courseid, $userid)) {
             $iscomplete = 1; 
@@ -103,13 +121,18 @@ class local_academywebservices_external extends external_api {
             array (
                 'complete' => new external_value(PARAM_INT, 'complete')
             )
-        ); ////////// TBD CHANGE BACK TO PARAM_INT //////////////////
+        );
     }
     
-        /**
-     * Has the supplied user completed this course
+    /**
+     * Has the supplied user completed this course.
+     * Will always return true if the user has completed the course at any
+     * time in the past.
+     * Returns 0 when course completion is incomplete, in progress or pending
+     * Returns 1 when course completion is complete
      *
-     * @param int $user_id User's id
+     * @param int $courseid Course id
+     * @param int $userid User id
      * @return boolean
      */
     public function is_course_complete($courseid, $userid) {
