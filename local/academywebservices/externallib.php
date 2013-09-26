@@ -68,9 +68,6 @@ class local_academywebservices_external extends external_api {
             throw new moodle_exception('cannotviewprofile');
         }
         
-        // TBD throw errors
-        //throw new invalid_parameter_exception('Group with the same name already exists in the course');
-        
         // Clean the parameters
         $cleanedcourseid = clean_param($params['courseid'], PARAM_INT);
         if ( $params['courseid'] != $cleanedcourseid) {
