@@ -465,10 +465,6 @@ body#page-mod-scorm-player div#scormpage div.yui-layout-clip-left {
 /* Widen the area where the SCORM content appears */
 body#page-mod-scorm-player div#scormpage div.yui-layout-unit.yui-layout-unit-center.yui-layout-scroll {
     left: 0 !important;
-    /*width: 930px !important;*/
-}
-body#page-mod-scorm-player div#scorm_content object {
-    /*width: 930px !important;*/
 }
 
 /* Hide the border and background around the SCORM content */
@@ -484,7 +480,6 @@ body#page-mod-scorm-player div#scormpage div.yui-layout {
 body#page-mod-scorm-player div#scormpage div.yui-layout-bd.yui-layout-bd-nohd.yui-layout-bd-noft {
     border: 0 !important;
     background: 0 !important;
-    /*width: 930px !important;*/
 }
 
 /* Display exit activity botton in the bottom right */
