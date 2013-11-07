@@ -35,6 +35,9 @@ div#page {
 }
 
 /* Nav Bar */
+.custom_wide_menu {
+    margin: 0 auto 15px;
+}
 .navbar {
   margin-bottom: 0;
 }
