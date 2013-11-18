@@ -36,6 +36,9 @@ if (is_guest(get_context_instance(CONTEXT_COURSE, $COURSE->id), $USER)) {
     $roleclass = 'guest';
 }
 
+// Enable resource overlays
+$PAGE->requires->yui_module('moodle-theme_academy_clean-resourceoverlay', 'M.theme_academy_clean.resourceoverlay.init');
+
 echo $OUTPUT->doctype() ?>
 <html <?php echo $OUTPUT->htmlattributes(); ?>>
 <head>
