@@ -29,40 +29,61 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
         /* Setup the modal pop-up. */
         resourcenode.append(" ResourceNodeFound");
         
+        // Save then remove the existing onClick attribute
+        var popupurl = resourcenode.getAttribute('onclick');
+        resourcenode.removeAttribute('onclick');
+        
         Y.delegate('click', function(e){
             e.preventDefault();
+            
+            fullurl = this.getAttribute('href')+'&redirect=1';
 
             //display a progress indicator
             var title = '',
-                content = Y.Node.create('<div id="overlayprogress"><img src="'+M.cfg.loadingicon+'" class="spinner" /></div>'),
+                content = Y.Node.create('<iframe src="'+fullurl+'"></iframe>'),
                 o = new Y.Overlay({
                     headerContent :  title,
-                    bodyContent : content
+                    bodyContent : content,
+                    lightbox : true,
+                    width : '540px',
+                    centered : true,
+                    draggable : false,
+                    zindex : 100, // Display in front of other items
+                    lightbox : true, // This dialogue should be modal
+                    shim : true,
+                    closeButtonTitle : this.get('closeButtonTitle'),
+                    plugins : [
+ 
+                        Y.Plugin.OverlayModal,
+                        Y.Plugin.OverlayKeepaligned,
+                        { fn: Y.Plugin.OverlayAutohide, cfg: {
+                            focusedOutside : false  // disables the Overlay from auto-hiding on losing focus
+                        }}
+
+                    ],
                 }),
                 fullurl,
                 cfg;
             self.overlay = o;
             o.render(Y.one(document.body));
 
-            //Switch over to the ajax url and fetch the glossary item
-            fullurl = this.getAttribute('href').replace('showentry.php','showentry_ajax.php');
-            cfg = {
-                method: 'get',
-                context : self,
-                on: {
-                    success: function(id, o) {
-                        this.display_callback(o.responseText);
-                    },
-                    failure: function(id, o) {
-                        var debuginfo = o.statusText;
-                        if (M.cfg.developerdebug) {
-                            o.statusText += ' (' + fullurl + ')';
-                        }
-                        this.display_callback('bodyContent',debuginfo);
-                    }
-                }
-            };
-            Y.io(fullurl, cfg);
+//            cfg = {
+//                method: 'get',
+//                context : self,
+//                on: {
+//                    success: function(id, o) {
+//                        this.display_callback(o.responseText);
+//                    },
+//                    failure: function(id, o) {
+//                        var debuginfo = o.statusText;
+//                        if (M.cfg.developerdebug) {
+//                            o.statusText += ' (' + fullurl + ')';
+//                        }
+//                        this.display_callback('bodyContent',debuginfo);
+//                    }
+//                }
+//            };
+//            Y.io(fullurl, cfg);
 
         }, Y.one(document.body), '.activity.resource .activityinstance a');
     },
@@ -186,7 +207,7 @@ M.theme_academy_clean.resourceoverlay = {
         "io-base",
         "json-parse",
         "event-delegate",
-        "overlay",
+        "panel",
         "moodle-core-notification"
     ]
 });

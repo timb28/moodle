@@ -6,7 +6,7 @@
         "io-base",
         "json-parse",
         "event-delegate",
-        "overlay",
+        "panel",
         "moodle-core-notification"
     ]
   }
