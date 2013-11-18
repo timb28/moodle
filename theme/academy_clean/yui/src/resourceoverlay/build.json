@@ -1,0 +1,10 @@
+{
+  "name": "moodle-theme_academy_clean-resourceoverlay",
+  "builds": {
+    "moodle-theme_academy_clean-resourceoverlay": {
+      "jsfiles": [
+        "resourceoverlay.js"
+      ]
+    }
+  }
+}
