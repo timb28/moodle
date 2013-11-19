@@ -1,9 +1,6 @@
 var RESOURCEOVERLAYNAME = 'Academy theme resource overlay',
     ACTIVITYSELECTOR = '.activity.resource .activityinstance a',
     IFRAMECLASS = 'overlay',
-    LOCATION = 'location',
-    WIDTH = 600,
-    HEIGHT = 450,
     RESOURCEOVERLAY;
 
 RESOURCEOVERLAY = function() {
@@ -17,27 +14,30 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
         var self = this;
         
         var resourcenodes = Y.all(ACTIVITYSELECTOR).each(processNodes);
-        
-        Y.delegate('click', function(e){
+
+        Y.delegate('mousedown', function(e){
             // Stop the event's default behavior
             e.preventDefault();
+
+            // Stop the event from bubbling up the DOM tree
+            e.stopPropagation();
             
-            var params = e.target.getAttribute('params');
+            var params = e.target.getAttribute('onclick');
             
             // Get the resource attributes from the onclickurl
-            WIDTH = getValueFromOnClick(params, 'width');
-            HEIGHT = getValueFromOnClick(params, 'height');
+            var width = getValueFromOnClick(params, 'width');
+            var height = getValueFromOnClick(params, 'height');
 
-            LOCATION = this.getAttribute('href')+'&redirect=1';
+            var location = this.getAttribute('href')+'&redirect=1';
 
             //display an overlay
             var title = '',
-                content = Y.Node.create('<iframe class="'+IFRAMECLASS+'" width="'+WIDTH+'" height="'+HEIGHT+'" src="'+LOCATION+'"></iframe>'),
+                content = Y.Node.create('<iframe class="'+IFRAMECLASS+'" width="'+width+'" height="'+height+'" src="'+location+'"></iframe>'),
                 d = new M.core.dialogue({
                     headerContent :  title,
                     bodyContent : content,
                     lightbox : true,
-                    width : WIDTH,
+                    width : width,
                     height : 'auto',
                     centered : true,
                     modal: true,
@@ -71,31 +71,13 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
         name : {
             validator : Y.Lang.isString,
             value : 'resourceoverlay'
-        },
-        options : {
-            getter : function() {
-                return {
-                    width : this.get(WIDTH),
-                    height : this.get(HEIGHT),
-                    location : this.get(LOCATION)
-                };
-            },
-            readOnly : true
-        },
-        width : {value : 600},
-        height : {value : 450},
-        location : {value : null}
+        }
     }
 });
 
 function processNodes(node) {
     // If the node has an onClick attribute, rename it to avoid it being run
     if (node.getAttribute('onclick').length > 2) {
-        var onclickurl = node.getAttribute('onclick');
-        
-        node.removeAttribute('onclick');
-        node.setAttribute('params',onclickurl);
-
         /* TESTING. */
         node.append("&nbspPOPUP");            
     }
@@ -103,7 +85,7 @@ function processNodes(node) {
 
 function filterActivities(node) {
     // Limit overlay to activities that open in a pop-up window
-    if (node.hasAttribute('params') && node.test(ACTIVITYSELECTOR)) {
+    if (node.getAttribute('onclick').length > 2 && node.test(ACTIVITYSELECTOR)) {
         return true;
     }
   
