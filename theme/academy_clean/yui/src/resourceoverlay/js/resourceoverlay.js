@@ -22,27 +22,17 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
     initializer : function() {
         var self = this;
         
-        var resourcenode = Y.all('.activity.resource .activityinstance a');
-        
-        // Save then remove the existing onClick attribute
-        var onclickurl = resourcenode.getAttribute('onclick');
-        resourcenode.removeAttribute('onclick');
-        resourcenode.setAttribute('params',onclickurl);
-
-        /* Setup the modal pop-up. */
-        resourcenode.append(" ResourceNodeFound");
+        var resourcenodes = Y.all('.activity.resource .activityinstance a').each(processNodes);
         
         Y.delegate('click', function(e){
+            // Stop the event's default behavior
             e.preventDefault();
             
-            var params = resourcenode.getAttribute('params');
+            var params = e.target.getAttribute('params');
             
             // Get the resource attributes from the onclickurl
-            var widthregex = /width=(\d+)/i;
-            var width = params[0].match(widthregex)[1];
-            
-            var heightregex = /height=(\d+)/i;
-            var height = params[0].match(heightregex)[1];
+            var width = getValueFromOnClick(params, 'width');
+            var height = getValueFromOnClick(params, 'height');
 
             fullurl = this.getAttribute('href')+'&redirect=1';
 
@@ -77,12 +67,8 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
             self.dialog = d;
             d.render(Y.one(document.body));
 
-        }, Y.one(document.body), '.activity.resource .activityinstance a');
+        }, Y.one(document.body), filterActivities);
 
-    },
-    hide : function(){
-        RESOURCEOVERLAY.superclass.hide.call(this);
-        this.destroy();
     }
 
 }, {
@@ -128,6 +114,40 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
     }
 });
 
+function processNodes(node) {
+    // If the node has an onClick attribute, rename it to avoid it being run
+    if (node.getAttribute('onclick').length > 2) {
+        var onclickurl = node.getAttribute('onclick');
+        
+        node.removeAttribute('onclick');
+        node.setAttribute('params',onclickurl);
+
+        /* TESTING. */
+        node.append("&nbspPOPUP");            
+    }
+}
+
+function filterActivities(node) {
+    // Limit overlay to activities that open in a pop-up window
+    if (node.hasAttribute('params') && node.test('.activity.resource .activityinstance a')) {
+        return true;
+    }
+  
+    return false;
+}
+
+function getValueFromOnClick(onClick, value) {
+    var regex, results;
+    
+    // Get the value from the onclickurl
+    regex = new RegExp(value + '=([0-9]+)', 'i');
+    results = onClick.match(regex);
+    
+    if (results === null) {
+        return null;
+    }
+    return results[1];
+}
 
 M.theme_academy_clean = M.theme_academy_clean || {};
 M.theme_academy_clean.resourceoverlay = {
