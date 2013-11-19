@@ -25,128 +25,67 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
         var self = this;
         
         var resourcenode = Y.all('.activity.resource .activityinstance a');
+        
+        // Save then remove the existing onClick attribute
+        var onclickurl = resourcenode.getAttribute('onclick');
+        resourcenode.removeAttribute('onclick');
+        resourcenode.setAttribute('params',onclickurl);
 
         /* Setup the modal pop-up. */
         resourcenode.append(" ResourceNodeFound");
         
-        // Save then remove the existing onClick attribute
-        var popupurl = resourcenode.getAttribute('onclick');
-        resourcenode.removeAttribute('onclick');
-        
         Y.delegate('click', function(e){
             e.preventDefault();
             
+            var params = resourcenode.getAttribute('params');
+            
+            // Get the resource attributes from the onclickurl
+            var widthregex = /width=(\d+)/i;
+            var width = params[0].match(widthregex)[1];
+            
+            var heightregex = /height=(\d+)/i;
+            var height = params[0].match(heightregex)[1];
+
             fullurl = this.getAttribute('href')+'&redirect=1';
 
-            //display a progress indicator
+            //display an overlay
             var title = '',
-                content = Y.Node.create('<iframe src="'+fullurl+'"></iframe>'),
-                o = new Y.Overlay({
+                content = Y.Node.create('<iframe class="overlay" width="'+width+'" height="'+height+'" src="'+fullurl+'"></iframe>'),
+                d = new M.core.dialogue({
                     headerContent :  title,
                     bodyContent : content,
                     lightbox : true,
-                    width : '540px',
+                    width : width,
+                    height : 'auto',
                     centered : true,
+                    modal: true,
                     draggable : false,
-                    zindex : 100, // Display in front of other items
-                    lightbox : true, // This dialogue should be modal
-                    shim : true,
+                    zindex : 5, // Display in front of other items
+                    shim : false,
                     closeButtonTitle : this.get('closeButtonTitle'),
-                    plugins : [
- 
-                        Y.Plugin.OverlayModal,
-                        Y.Plugin.OverlayKeepaligned,
-                        { fn: Y.Plugin.OverlayAutohide, cfg: {
-                            focusedOutside : false  // disables the Overlay from auto-hiding on losing focus
-                        }}
+                    hideOn: [
+                        {
+                            eventName: 'clickoutside'
+                        }
+                    ]
+                });
 
-                    ],
-                }),
-                fullurl,
-                cfg;
-            self.overlay = o;
-            o.render(Y.one(document.body));
+            // Videos play in hidden iframe so destroy the node on close
+            d.get('buttons').header[0].on('click', function(e){
+                var destroyAllNodes = true;
+                d.destroy(destroyAllNodes);
+            });
 
-//            cfg = {
-//                method: 'get',
-//                context : self,
-//                on: {
-//                    success: function(id, o) {
-//                        this.display_callback(o.responseText);
-//                    },
-//                    failure: function(id, o) {
-//                        var debuginfo = o.statusText;
-//                        if (M.cfg.developerdebug) {
-//                            o.statusText += ' (' + fullurl + ')';
-//                        }
-//                        this.display_callback('bodyContent',debuginfo);
-//                    }
-//                }
-//            };
-//            Y.io(fullurl, cfg);
+            self.dialog = d;
+            d.render(Y.one(document.body));
 
         }, Y.one(document.body), '.activity.resource .activityinstance a');
+
     },
-    display_callback : function(content) {
-        var data,
-            key,
-            alertpanel;
-        try {
-            data = Y.JSON.parse(content);
-            if (data.success){
-                this.overlay.hide(); //hide progress indicator
-
-                for (key in data.entries) {
-                    definition = data.entries[key].definition + data.entries[key].attachments;
-                    alertpanel = new M.core.alert({title:data.entries[key].concept, message:definition, lightbox:false});
-                    Y.Node.one('#id_yuialertconfirm-' + alertpanel.COUNT).focus();
-                }
-
-                return true;
-            } else if (data.error) {
-                new M.core.ajaxException(data);
-            }
-        } catch(e) {
-            new M.core.exception(e);
-        }
-        return false;
+    hide : function(){
+        RESOURCEOVERLAY.superclass.hide.call(this);
+        this.destroy();
     }
-
-// // Use Y.one( [css selector string] )
-// Create a new YUI instance and populate it with the required modules.
-//YUI().use('overlay', function (Y) {
-    // Overlay is available and ready for use. Add implementation
-    // code here.
-
-    ////YUI().use('node', function (Y) {
-//        var resourcenode = Y.all('.activity.resource .activityinstance a');
-//
-//        /* Setup the modal pop-up. */
-//        resourcenode.append("Test");
-//
-//        /* Trigger the modal pop-up. */
-//        resourcenode.on('click', function(e) {
-//            e.preventDefault();
-//
-//            //display a progress indicator
-//            var title = '',
-//                content = Y.Node.create('<div id="overlayprogress"><img src="'+M.cfg.loadingicon+'" class="spinner" /></div>'),
-//                o = new Y.Overlay({
-//                    headerContent :  title,
-//                    bodyContent : content
-//                }),
-//                    fullurl,
-//                    cfg;
-//            this.overlay = o;
-//            o.render(Y.one(document.body));
-//
-//            alert('href: ' + e.target.ancestor('a').get('href') + ' event: ' + e.type + ' target: ' + e.target.get('tagName'));
-//
-//        });
-
-    ////});
-
-//});
 
 }, {
     NAME : RESOURCEOVERLAYNAME,
@@ -200,14 +139,4 @@ M.theme_academy_clean.resourceoverlay = {
 };
 
 
-}, '@VERSION@', {
-    "requires": [
-        "base",
-        "node",
-        "io-base",
-        "json-parse",
-        "event-delegate",
-        "panel",
-        "moodle-core-notification"
-    ]
-});
+}, '@VERSION@', {"requires": ["base", "node", "event-delegate", "moodle-core-dialogue", "moodle-core-notification"]});
