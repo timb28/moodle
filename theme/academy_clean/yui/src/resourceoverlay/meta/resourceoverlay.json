@@ -3,10 +3,8 @@
     "requires": [
         "base",
         "node",
-        "io-base",
-        "json-parse",
         "event-delegate",
-        "panel",
+        "moodle-core-dialogue",
         "moodle-core-notification"
     ]
   }

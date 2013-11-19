@@ -20,4 +20,7 @@ table.roleplaymedia td {
 }
 
 /* Overlays*/
-#overlayprogress {position:fixed;top:50%;width:100%;text-align:center;}
+iframe.overlay {
+    border: 0;
+    width: 100%;
+}
