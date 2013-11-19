@@ -1,15 +1,9 @@
 var RESOURCEOVERLAYNAME = 'Academy theme resource overlay',
-    WIDTH = 'width',
-    HEIGHT = 'height',
-    MENUBAR = 'menubar',
+    ACTIVITYSELECTOR = '.activity.resource .activityinstance a',
+    IFRAMECLASS = 'overlay',
     LOCATION = 'location',
-    SCROLLBARS = 'scrollbars',
-    RESIZEABLE = 'resizable',
-    TOOLBAR = 'toolbar',
-    STATUS = 'status',
-    DIRECTORIES = 'directories',
-    FULLSCREEN = 'fullscreen',
-    DEPENDENT = 'dependent',
+    WIDTH = 600,
+    HEIGHT = 450,
     RESOURCEOVERLAY;
 
 RESOURCEOVERLAY = function() {
@@ -22,7 +16,7 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
     initializer : function() {
         var self = this;
         
-        var resourcenodes = Y.all('.activity.resource .activityinstance a').each(processNodes);
+        var resourcenodes = Y.all(ACTIVITYSELECTOR).each(processNodes);
         
         Y.delegate('click', function(e){
             // Stop the event's default behavior
@@ -31,19 +25,19 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
             var params = e.target.getAttribute('params');
             
             // Get the resource attributes from the onclickurl
-            var width = getValueFromOnClick(params, 'width');
-            var height = getValueFromOnClick(params, 'height');
+            WIDTH = getValueFromOnClick(params, 'width');
+            HEIGHT = getValueFromOnClick(params, 'height');
 
-            fullurl = this.getAttribute('href')+'&redirect=1';
+            LOCATION = this.getAttribute('href')+'&redirect=1';
 
             //display an overlay
             var title = '',
-                content = Y.Node.create('<iframe class="overlay" width="'+width+'" height="'+height+'" src="'+fullurl+'"></iframe>'),
+                content = Y.Node.create('<iframe class="'+IFRAMECLASS+'" width="'+WIDTH+'" height="'+HEIGHT+'" src="'+LOCATION+'"></iframe>'),
                 d = new M.core.dialogue({
                     headerContent :  title,
                     bodyContent : content,
                     lightbox : true,
-                    width : width,
+                    width : WIDTH,
                     height : 'auto',
                     centered : true,
                     modal: true,
@@ -74,43 +68,23 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
 }, {
     NAME : RESOURCEOVERLAYNAME,
     ATTRS : {
-        url : {
-            validator : Y.Lang.isString,
-            value : M.cfg.wwwroot+'/mod/glossary/showentry.php'
-        },
         name : {
             validator : Y.Lang.isString,
-            value : 'glossaryconcept'
+            value : 'resourceoverlay'
         },
         options : {
             getter : function() {
                 return {
                     width : this.get(WIDTH),
                     height : this.get(HEIGHT),
-                    menubar : this.get(MENUBAR),
-                    location : this.get(LOCATION),
-                    scrollbars : this.get(SCROLLBARS),
-                    resizable : this.get(RESIZEABLE),
-                    toolbar : this.get(TOOLBAR),
-                    status : this.get(STATUS),
-                    directories : this.get(DIRECTORIES),
-                    fullscreen : this.get(FULLSCREEN),
-                    dependent : this.get(DEPENDENT)
+                    location : this.get(LOCATION)
                 };
             },
             readOnly : true
         },
         width : {value : 600},
         height : {value : 450},
-        menubar : {value : false},
-        location : {value : false},
-        scrollbars : {value : true},
-        resizable : {value : true},
-        toolbar : {value : true},
-        status : {value : true},
-        directories : {value : false},
-        fullscreen : {value : false},
-        dependent : {value : true}
+        location : {value : null}
     }
 });
 
@@ -129,7 +103,7 @@ function processNodes(node) {
 
 function filterActivities(node) {
     // Limit overlay to activities that open in a pop-up window
-    if (node.hasAttribute('params') && node.test('.activity.resource .activityinstance a')) {
+    if (node.hasAttribute('params') && node.test(ACTIVITYSELECTOR)) {
         return true;
     }
   
