@@ -23,7 +23,9 @@ table.roleplaymedia td {
 iframe.overlay {
     border: 0;
     width: 100%;
+    overflow: hidden;
 }
 .moodle-dialogue-base .moodle-dialogue .moodle-dialogue-bd {
+    padding: 12px;
     padding-bottom: 0; /* Remove extra whitespace */
 }

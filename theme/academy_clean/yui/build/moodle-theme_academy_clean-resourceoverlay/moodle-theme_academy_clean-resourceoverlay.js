@@ -3,6 +3,7 @@ YUI.add('moodle-theme_academy_clean-resourceoverlay', function (Y, NAME) {
 var RESOURCEOVERLAYNAME = 'Academy theme resource overlay',
     ACTIVITYSELECTOR = '.activity.resource .activityinstance a, .activity.url .activityinstance a',
     IFRAMECLASS = 'overlay',
+    IFRAMEPADDING = 12, // px
     RESOURCEOVERLAY;
 
 RESOURCEOVERLAY = function() {
@@ -28,18 +29,19 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
             
             // Get the resource attributes from the onclickurl
             var width = getValueFromOnClick(params, 'width');
+            var paddedwidth = parseFloat(width) + parseFloat(IFRAMEPADDING * 2);
             var height = getValueFromOnClick(params, 'height');
 
             var location = this.getAttribute('href')+'&redirect=1';
 
             //display an overlay
             var title = '',
-                content = Y.Node.create('<iframe class="'+IFRAMECLASS+'" width="'+width+'" height="'+height+'" src="'+location+'"></iframe>'),
+                content = Y.Node.create('<iframe class="'+IFRAMECLASS+'" width="'+width+'" height="'+height+'" src="'+location+'" scrolling="no"></iframe>'),
                 d = new M.core.dialogue({
                     headerContent :  title,
                     bodyContent : content,
                     lightbox : true,
-                    width : width,
+                    width : paddedwidth,
                     height : 'auto',
                     centered : true,
                     modal: true,
