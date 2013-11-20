@@ -1,5 +1,5 @@
 var RESOURCEOVERLAYNAME = 'Academy theme resource overlay',
-    ACTIVITYSELECTOR = '.activity.resource .activityinstance a',
+    ACTIVITYSELECTOR = '.activity.resource .activityinstance a, .activity.url .activityinstance a',
     IFRAMECLASS = 'overlay',
     RESOURCEOVERLAY;
 
