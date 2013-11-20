@@ -14,7 +14,7 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
     overlay : null,
     initializer : function() {
         var self = this;
-        
+
         var resourcenodes = Y.all(ACTIVITYSELECTOR).each(processNodes);
 
         Y.delegate('mousedown', function(e){
@@ -24,7 +24,7 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
             // Stop the event from bubbling up the DOM tree
             e.stopPropagation();
             
-            var params = e.target.getAttribute('onclick');
+            var params = this.getAttribute('onclick');
             
             // Get the resource attributes from the onclickurl
             var width = getValueFromOnClick(params, 'width');
@@ -63,7 +63,7 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
             self.dialog = d;
             d.render(Y.one(document.body));
 
-        }, Y.one(document.body), filterActivities);
+        }, Y.one('#page'), filterActivities);
 
     }
 
@@ -78,7 +78,6 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
 });
 
 function processNodes(node) {
-    // If the node has an onClick attribute, rename it to avoid it being run
     if (node.getAttribute('onclick').length > 2) {
         /* TESTING. */
         node.append("&nbspPOPUP");            
@@ -86,8 +85,8 @@ function processNodes(node) {
 }
 
 function filterActivities(node) {
-    // Limit overlay to activities that open in a pop-up window
-    if (node.getAttribute('onclick').length > 2 && node.test(ACTIVITYSELECTOR)) {
+    if (node.getAttribute('onclick').length > 2
+            && node.test(ACTIVITYSELECTOR)) {
         return true;
     }
   
