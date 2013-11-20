@@ -24,3 +24,6 @@ iframe.overlay {
     border: 0;
     width: 100%;
 }
+.moodle-dialogue-base .moodle-dialogue .moodle-dialogue-bd {
+    padding-bottom: 0; /* Remove extra whitespace */
+}
