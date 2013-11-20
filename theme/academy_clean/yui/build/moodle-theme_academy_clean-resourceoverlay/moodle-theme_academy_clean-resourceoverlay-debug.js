@@ -1,7 +1,7 @@
 YUI.add('moodle-theme_academy_clean-resourceoverlay', function (Y, NAME) {
 
 var RESOURCEOVERLAYNAME = 'Academy theme resource overlay',
-    ACTIVITYSELECTOR = '.activity.resource .activityinstance a',
+    ACTIVITYSELECTOR = '.activity.resource .activityinstance a, .activity.url .activityinstance a',
     IFRAMECLASS = 'overlay',
     RESOURCEOVERLAY;
 
@@ -46,18 +46,18 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
                     draggable : false,
                     zindex : 5, // Display in front of other items
                     shim : false,
-                    closeButtonTitle : this.get('closeButtonTitle'),
-                    hideOn: [
-                        {
-                            eventName: 'clickoutside'
-                        }
-                    ]
+                    closeButtonTitle : this.get('closeButtonTitle')
                 });
 
             // Videos play in hidden iframe so destroy the node on close
             d.get('buttons').header[0].on('click', function(e){
                 var destroyAllNodes = true;
                 d.destroy(destroyAllNodes);
+            });
+
+            // Destroy the dialog when anywhere outside it is clicked
+            d.get('maskNode').on("click", function(e) {
+                setTimeout(function() {d.destroy();}, 50);
             });
 
             self.dialog = d;
