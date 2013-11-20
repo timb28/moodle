@@ -13,10 +13,10 @@
 class block_harcourts_answers extends block_base {
     public function init() {
         $this->title = get_string('pluginname', 'block_harcourts_answers');
-        $this->config->format = FORMAT_HTML;
     }
 
     public function get_content() {
+        $this->config->format = FORMAT_HTML;
 
         if ($this->content !== null) {
             return $this->content;
