@@ -1,7 +1,7 @@
 YUI.add('moodle-theme_academy_clean-resourceoverlay', function (Y, NAME) {
 
 var RESOURCEOVERLAYNAME = 'Academy theme resource overlay',
-    ACTIVITYSELECTOR = '.activity.resource .activityinstance a, .activity.url .activityinstance a',
+    ACTIVITYSELECTOR = '.activity.url .activityinstance a',
     IFRAMECLASS = 'overlay',
     IFRAMEPADDING = 12, // px
     RESOURCEOVERLAY;
@@ -40,7 +40,8 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
 
             //display an overlay
             var title = '',
-                content = Y.Node.create('<iframe class="'+IFRAMECLASS+'" width="'+width+'" height="'+height+'" src="'+location+'" scrolling="no"></iframe>'),
+                content = Y.Node.create('<iframe class="'+IFRAMECLASS+'" width="'+width
+                        +'" height="'+height+'" src="'+location+'" scrolling="no"></iframe>'),
                 dialogue = new M.core.dialogue({
                     headerContent :  title,
                     bodyContent : content,
@@ -248,7 +249,7 @@ function center_dialogue(dialogue) {
 function processNodes(node) {
     if (node.getAttribute('onclick').length > 2) {
         /* TESTING. */
-        node.append("&nbspPOPUP");            
+        node.append("&nbspPOPUP");
     }
 }
 
