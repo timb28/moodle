@@ -49,7 +49,7 @@ Y.extend(RESOURCEOVERLAY, Y.Base, {
                     centered : true,
                     constrain : true,
                     draggable : false,
-                    zindex : 100, // Display in front of other items
+                    zindex : 1000, // Display in front of other items
                     shim : true,
                     closeButtonTitle : this.get('closeButtonTitle')
                 });
