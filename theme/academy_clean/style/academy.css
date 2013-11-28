@@ -515,9 +515,8 @@ ul.resourcelibrary-links {
 li.resourcelibrary-links {
     float: left;
     list-style: none;
-    margin-right: 85px;
+    margin: 20px 30px;
     text-align: center;
-    text-transform: uppercase;
 }
 
 li.resourcelibrary-links:last-child {
