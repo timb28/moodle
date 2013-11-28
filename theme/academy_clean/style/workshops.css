@@ -1,0 +1,27 @@
+/* 
+    Document   : sales-workshops
+    Created on : 25/11/2013, 12:14:08 PM
+    Author     : timbutler
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.workshops_section-wrapper {
+    padding: 30px;
+    padding-bottom: 0;    
+}
+
+.workshops_section-wrapper.workshops_introduction {
+    background: url([[pix:theme|bg-introduction]]) top left no-repeat;
+}
+
+.workshops_section-wrapper.workshops_activity {
+    background: url([[pix:theme|bg-activity]]) top left no-repeat;
+}
+
+.workshops_section-summary {
+    background-color: rgba(255,255,255,0.9);
+    padding: 30px;
+    min-height: 264px;
+}
+
