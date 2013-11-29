@@ -567,6 +567,10 @@ li.resourcelibrary-other a { background: url([[pix:theme|icon-other]]) no-repeat
     padding-bottom: 1px;
 }
 
+.path-course-view .completionprogress {
+    z-index: inherit; /* Bootstrapbase: The default z-index = 1000 puts it infront of pop-overs. */
+}
+
 /**
  * Search
  */
@@ -761,9 +765,4 @@ body#page-enrol-index div.box.generalbox.info {
 }
 .guest.pagelayout-coursecategory #region-main {
     width: 100%;
-}
-
-/* Bootstrap overrides */
-.path-course-view .completionprogress {
-    z-index: inherit; /* The default z-index: 1000 puts it infront of pop-overs. */
 }
