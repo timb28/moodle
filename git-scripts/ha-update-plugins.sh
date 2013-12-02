@@ -4,7 +4,7 @@
 
 ## Certificates
 echo "Updating Certificates Module"
-(cd ../mod/certificate/ && git fetch upstream && git pull upstream master)
+(cd ../mod/certificate/ && git fetch upstream && git pull upstream MOODLE_25_STABLE)
 
 ## Configurable Reports
 echo "Updating Configurable Reports Block"
