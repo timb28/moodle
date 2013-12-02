@@ -8,8 +8,8 @@ echo "Cloning Certificates Module"
 (cd .. && git --git-dir=mod/certificate/.git remote add upstream https://github.com/markn86/moodle-mod_certificate.git)
 (cd .. && echo /mod/certificate/ >> .git/info/exclude)
 (cd ../mod/certificate && git branch -a)
-(cd ../mod/certificate && git branch --track MOODLE_25_STABLE origin/MOODLE_25_STABLE)
-(cd ../mod/certificate && git checkout MOODLE_25_STABLE)
+(cd ../mod/certificate && git branch --track HA-Moodle25 origin/HA-Moodle25)
+(cd ../mod/certificate && git checkout HA-Moodle25)
  
 ## Configurable Reports
 echo "Cloning Configurable Reports Block"
