@@ -25,3 +25,14 @@
     min-height: 264px;
 }
 
+li.activity div.contentafterlink div.no-overflow {
+    overflow: visible;
+}
+
+.workshop-task-button {
+    position: relative;
+    left: -27px;
+    top: -58px;
+    overflow: visible;
+}
+
