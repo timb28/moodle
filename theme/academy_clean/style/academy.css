@@ -40,6 +40,17 @@ div#page {
   box-shadow: 0 0 35px rgba(0,0,0,0.8);
 }
 
+/* Maintenance warning */
+.errorbox.maintenancewarning {
+    background-color: red;
+    color: white;
+    width: 60%;
+    margin: 0 auto;
+    padding: .5em;
+    text-align: center;
+    font-weight: bold;
+}
+
 /* Nav Bar */
 .navbar {
   margin-bottom: 0;
