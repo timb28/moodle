@@ -585,55 +585,6 @@ li.resourcelibrary-other a { background: url([[pix:theme|icon-other]]) no-repeat
 }
 
 /**
- * Course Activities
- */
-.section .activity .activityinstance>a {
-    display: inline-block;
-    padding: 4px 12px;
-    margin: 0 0 10px 5px;
-    font-size: 16px;
-    line-height: 22px;
-    text-align: center;
-    text-decoration: none;
-    vertical-align: middle;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
-    -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
-    color: #fff;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
-    background-color: #07f;
-    background-image: -moz-linear-gradient(top, #09f, #04f);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#09f), to(#04f));
-    background-image: -webkit-linear-gradient(top, #09f, #04f);
-    background-image: -o-linear-gradient(top, #09f, #04f);
-    background-image: linear-gradient(to bottom, #09f, #04f);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0099ff', endColorstr='#ff0044ff', GradientType=0);
-    border-color: #04f #04f #0030b3;
-    border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
-    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
-}
-
-.section .activity .activityinstance>a:hover {
-    background-color: #04f;
-    text-decoration: none;
-    background-position: 0 -35px;
-    -webkit-transition: background-position .1s linear;
-    -moz-transition: background-position .1s linear;
-    -o-transition: background-position .1s linear;
-    transition: background-position .1s linear;
-}
-
-.section .activity.modtype_videofile .activityinstance>a {
-
-}
-
-/**
  * Course Completion
  */
 table#completion-progress td.completion-progresscell { text-align: center; }
