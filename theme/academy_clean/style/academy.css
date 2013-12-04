@@ -815,3 +815,8 @@ body#page-enrol-index div.box.generalbox.info {
 .guest.pagelayout-coursecategory #region-main {
     width: 100%;
 }
+
+/* Bootstrap overrides */
+.path-course-view .completionprogress {
+    z-index: inherit; /* The default z-index: 1000 puts it infront of pop-overs. */
+}
