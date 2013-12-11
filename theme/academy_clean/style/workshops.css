@@ -6,25 +6,6 @@
         Purpose of the stylesheet follows.
 */
 
-/*.workshops_section-wrapper {
-    padding: 30px;
-    padding-bottom: 0;    
-}
-
-.workshops_section-wrapper.workshops_introduction {
-    background: url([[pix:theme|bg-introduction]]) top left no-repeat;
-}
-
-.workshops_section-wrapper.workshops_activity {
-    background: url([[pix:theme|bg-activity]]) top left no-repeat;
-}
-
-.workshops_section-summary {
-    background-color: rgba(255,255,255,0.9);
-    padding: 30px;
-    min-height: 264px;
-}*/
-
 li.activity div.contentafterlink div.no-overflow {
     overflow: visible;
 }
@@ -32,11 +13,6 @@ li.activity div.contentafterlink div.no-overflow {
 body.category-13.path-course-view #completionprogressid {
     display: none; /* Hide "Your Progress" title */
 }
-
-/*body.category-13.path-course-view h1 {
-    display: inline-block;
-    background: white;
-}*/
 
 body.category-13.path-course-view #page {
     background-color: white;
@@ -47,15 +23,6 @@ body.category-13.path-course-view #page {
 
 body.category-13.path-course-view .course-content ul li.section.main {
     border: none;
-}
-
-body.category-13.path-course-view #page .course-content .topics {
-/*.workshops_section-wrapper.workshops_introduction {*/
-/*    background: url([[pix:theme|bg-introduction]]) top left no-repeat;
-    background-color: white;
-    background-image: url([[pix:theme|workshops/content-background]]);
-    background-repeat: no-repeat;
-    background-size: contain;*/
 }
 
 .workshops_section-summary {
@@ -137,13 +104,5 @@ body.category-13.path-course-view #page .course-content ul li.activity.label:las
 
 #page-bottom {
     background-color: white;
-    /*border: 2px solid #eee;*/
 }
-
-/*.workshop-task-button {
-    position: relative;
-    left: -27px;
-    top: -58px;
-    overflow: visible;
-}*/
 
