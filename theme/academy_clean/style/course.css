@@ -85,10 +85,6 @@ ul.export-actions li { list-style: none; }
     float: left;
 }
 
-.course-content ul.topics li.section .summary {
-    margin-left: 20px;
-}
-
 li.activity.label,
 .file-picker td.label {
     padding: 0.2em;

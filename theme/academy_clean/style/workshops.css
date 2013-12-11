@@ -6,7 +6,7 @@
         Purpose of the stylesheet follows.
 */
 
-.workshops_section-wrapper {
+/*.workshops_section-wrapper {
     padding: 30px;
     padding-bottom: 0;    
 }
@@ -23,16 +23,127 @@
     background-color: rgba(255,255,255,0.9);
     padding: 30px;
     min-height: 264px;
-}
+}*/
 
 li.activity div.contentafterlink div.no-overflow {
     overflow: visible;
 }
 
-.workshop-task-button {
+body.category-13.path-course-view #completionprogressid {
+    display: none; /* Hide "Your Progress" title */
+}
+
+/*body.category-13.path-course-view h1 {
+    display: inline-block;
+    background: white;
+}*/
+
+body.category-13.path-course-view #page {
+    background-color: white;
+    background-image: url([[pix:theme|workshops/background]]);
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+body.category-13.path-course-view .course-content ul li.section.main {
+    border: none;
+}
+
+body.category-13.path-course-view #page .course-content .topics {
+/*.workshops_section-wrapper.workshops_introduction {*/
+/*    background: url([[pix:theme|bg-introduction]]) top left no-repeat;
+    background-color: white;
+    background-image: url([[pix:theme|workshops/content-background]]);
+    background-repeat: no-repeat;
+    background-size: contain;*/
+}
+
+.workshops_section-summary {
+    background: rgba(255, 255, 255, .75);
+    padding: .2em 1em;
+    text-shadow: 1px 1px white;
+}
+
+body.category-13.path-course-view #page .course-content ul li.activity.label {
+    display: inline-block;
+    padding-right: 2em;
+}
+
+body.category-13.path-course-view #page .course-content ul li.activity.label:last-child {
+    padding-right: 0;
+}
+
+.ws-button-wrapper {
+    width: 180px;
+    height: 180px;
+    background-color: #dfdede;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.ws-button-wrapper:hover {
+    text-decoration: underline;
+}
+
+.ws-button-wrapper.ws-button-watch {
+    background-image: url([[pix:theme|workshops/watch]]);
+}
+.ws-button-wrapper.ws-button-try {
+    background-image: url([[pix:theme|workshops/try]]);
+}
+.ws-button-wrapper.ws-button-share {
+    background-image: url([[pix:theme|workshops/share]]);
+}
+
+.ws-button-wrapper.ws-button-done.ws-button-watch {
+    opacity: 0.4;
+}
+
+.ws-button-wrapper .ws-button-text-overlay {
+    width: 100%;
+    height: 33px;
+}
+
+.ws-button-watch .ws-button-text-overlay {
+    background-color: rgba(244, 120, 115, .9);
+}
+.ws-button-try .ws-button-text-overlay {
+    background-color: rgba(90, 174, 242, .9);
+}
+.ws-button-share .ws-button-text-overlay {
+    background-color: rgba(180, 184, 50, .9);
+}
+
+.ws-button-wrapper .ws-button-text-overlay a {
+    color: white;
+    font-size: 1.5em;
+    line-height: 1.5em;
+    padding-left: 0.5em;
+}
+
+.ws-button-wrapper .ws-button-text-overlay .first-word {
+    font-weight: bold;
+}
+
+.ws-button-wrapper.ws-button-done .ws-button-icon-overlay {
+    background-image: url([[pix:theme|workshops/done]]);
+    background-repeat: no-repeat;
+    background-position: center 30%;
+    width: 100%;
+    height: 100%;
+}
+
+#page-bottom {
+    background-color: white;
+    /*border: 2px solid #eee;*/
+}
+
+/*.workshop-task-button {
     position: relative;
     left: -27px;
     top: -58px;
     overflow: visible;
-}
+}*/
 
