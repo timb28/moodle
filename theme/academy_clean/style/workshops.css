@@ -3,7 +3,7 @@
     Created on : 25/11/2013, 12:14:08 PM
     Author     : timbutler
     Description:
-        Purpose of the stylesheet follows.
+        Styles specific to online sales workshops.
 */
 
 li.activity div.contentafterlink div.no-overflow {
@@ -28,7 +28,6 @@ body.category-13.path-course-view .course-content ul li.section.main {
 .workshops_section-summary {
     background: rgba(255, 255, 255, .75);
     padding: .2em 1em;
-    text-shadow: 1px 1px white;
 }
 
 body.category-13.path-course-view #page .course-content ul li.activity.label {

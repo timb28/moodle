@@ -696,6 +696,17 @@ td.crosswordarea {
     list-style: disc;
 }
 
+/** Video File **/
+body#page-mod-videofile-view.pagelayout-popup {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    background-image: none;
+}
+body#page-mod-videofile-view.pagelayout-popup #maincontent {
+    height: 0;
+}
+
 /** Tiny MCE **/
 .fitem .feditor textarea {
   width: 522px;
