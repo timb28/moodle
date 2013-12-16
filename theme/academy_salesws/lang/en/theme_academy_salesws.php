@@ -44,3 +44,16 @@ Website: <a href="http://www.harcourtsacademy.com">www.harcourtsacademy.com</a>
 
 $string['configtitle'] = 'Academy Sales Workshops';
 $string['pluginname'] = 'Academy Sales Workshops';
+
+$string['piwiksiteid'] = 'Piwik Site ID';
+$string['piwiksiteiddesc'] = 'For tracking web site visitors. Enter zero to disable tracking.';
+
+$string['invert'] = 'Invert navbar';
+$string['invertdesc'] = 'Swaps text and background for the navbar at the top of the page between black and white.';
+
+$string['customcss'] = 'Custom CSS';
+$string['customcssdesc'] = 'Whatever CSS rules you add to this textarea will be reflected in every page, making for easier customization of this theme.';
+
+$string['footnote'] = 'Footnote';
+$string['footnotedesc'] = 'Whatever you add to this textarea will be displayed in the footer throughout your Moodle site.';
+
