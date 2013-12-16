@@ -35,7 +35,7 @@ $THEME->name = 'academy_clean';
 //
 $THEME->doctype = 'html5';
 $THEME->parents = array('bootstrapbase');
-$THEME->sheets = array('academy','course','content','form','questionnaire','joomla','print','custom','workshops');
+$THEME->sheets = array('academy','course','content','form','questionnaire','joomla','print','custom');
 $THEME->supportscssoptimisation = false;
 $THEME->yuicssmodules = array();
 

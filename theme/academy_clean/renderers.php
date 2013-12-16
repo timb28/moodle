@@ -9,6 +9,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+require_once($CFG->dirroot.'/theme/bootstrapbase/renderers.php');
+
 class theme_academy_clean_core_renderer extends theme_bootstrapbase_core_renderer {
 
    /*
