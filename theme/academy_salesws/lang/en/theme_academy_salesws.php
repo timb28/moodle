@@ -32,7 +32,7 @@ $string['choosereadme'] = '
 <h3>About</h3>
 <p>Academy Sales Workshops is a modified Moodle bootstrap theme which inherits styles and renderers from its parent theme.</p>
 <h3>Parents</h3>
-<p>This theme is based upon the Bootstrap theme, which was created for Moodle 2.5, with the help of:<br>
+<p>This theme is based upon the Academy Clean theme based on the Bootstrap theme, which was created for Moodle 2.5, with the help of:<br>
 Stuart Lamour, Mark Aberdour, Paul Hibbitts, Mary Evans.</p>
 <h3>Theme Credits</h3>
 <p>Authors: Tim Butler, Bas Brands, David Scotson, Mary Evans<br>

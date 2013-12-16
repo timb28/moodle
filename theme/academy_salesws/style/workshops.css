@@ -10,18 +10,18 @@ li.activity div.contentafterlink div.no-overflow {
     overflow: visible;
 }
 
-body.category-13.path-course-view #completionprogressid {
+body.path-course-view #completionprogressid {
     display: none; /* Hide "Your Progress" title */
 }
 
-body.category-13.path-course-view #page {
+body.path-course-view #page {
     background-color: white;
     background-image: url([[pix:theme|workshops/background]]);
     background-repeat: no-repeat;
     background-size: contain;
 }
 
-body.category-13.path-course-view .course-content ul li.section.main {
+body.path-course-view .course-content ul li.section.main {
     border: none;
 }
 
@@ -30,12 +30,12 @@ body.category-13.path-course-view .course-content ul li.section.main {
     padding: .2em 1em;
 }
 
-body.category-13.path-course-view #page .course-content ul li.activity.label {
+body.path-course-view #page .course-content ul li.activity.label {
     display: inline-block;
     padding-right: 2em;
 }
 
-body.category-13.path-course-view #page .course-content ul li.activity.label:last-child {
+body.path-course-view #page .course-content ul li.activity.label:last-child {
     padding-right: 0;
 }
 
