@@ -4,6 +4,10 @@
 
 echo "Updating Github URLs"
 
+## Moodle
+echo "Moodle"
+(cd .. && git remote set-url origin https://github.com/HarcourtsAcademy/moodle.git)
+
 ## Certificate
 echo "Certificate Module"
 (cd .. && git --git-dir=mod/certificate/.git remote set-url origin https://github.com/HarcourtsAcademy/moodle-mod_certificate.git)
