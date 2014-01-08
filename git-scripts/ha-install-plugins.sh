@@ -4,7 +4,7 @@
 
 ## Certificates
 echo "Cloning Certificates Module"
-(cd .. && git clone https://github.com/timb28/moodle-mod_certificate.git mod/certificate)
+(cd .. && git clone https://github.com/HarcourtsAcademy/moodle-mod_certificate.git mod/certificate)
 (cd .. && git --git-dir=mod/certificate/.git remote add upstream https://github.com/markn86/moodle-mod_certificate.git)
 (cd .. && echo /mod/certificate/ >> .git/info/exclude)
 (cd ../mod/certificate && git branch -a)
