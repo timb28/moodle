@@ -18,3 +18,9 @@ table.roleplaymedia th,
 table.roleplaymedia td {
   padding: 0;
 }
+
+/* NZ Online CE */
+table.table-indented {
+    margin-left: 2em;
+    margin-right: 2em;
+}
