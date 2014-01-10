@@ -71,10 +71,10 @@ ul.topics li#section-0, ul.weeks li#section-0 {
 /* Fix for ordered and unordered list in course topic summary & course weekly summary */
 ul, li ul, 
 .course-content ul.weeks .content .summary ul,
-.course-content ul.topics .content .summary ul {list-style: disc outside none;}
+.course-content ul.topics .content .summary ul {list-style-position: outside;}
 ol, li ol, 
 .course-content ul.weeks .content .summary ol,
-.course-content ul.topics .content .summary ol {list-style: decimal outside none;}
+.course-content ul.topics .content .summary ol {list-style-position: outside;}
 
 /* Remove bullet points next to download report links. */
 ul.export-actions { margin-top: 1em; }
