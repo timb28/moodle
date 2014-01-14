@@ -8,7 +8,7 @@ echo "Updating Certificates Module"
 
 ## Configurable Reports
 echo "Updating Configurable Reports Block"
-(cd ../blocks/configurable_reports && git fetch upstream && git pull upstream master)
+(cd ../blocks/configurable_reports && git fetch upstream && git pull upstream CR_23_STABLE && git checkout CR_23_STABLE)
 
 ## Game
 echo "Updating Game Module"
