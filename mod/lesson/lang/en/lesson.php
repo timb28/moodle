@@ -94,7 +94,7 @@ $string['collapsed'] = 'Collapsed';
 $string['comments'] = 'Your comments';
 $string['completed'] = 'Completed';
 $string['completederror'] = 'Complete the lesson';
-$string['completethefollowingconditions'] = 'You must complete the following condition(s) in <b>{$a}</b> lesson before you can proceed.';
+$string['completethefollowingconditions'] = 'You must complete the following condition(s) in <b><a href=\'{$a->url}\'>{$a->name}</a></b> before you can proceed.';
 $string['conditionsfordependency'] = 'Condition(s) for the dependency';
 $string['configactionaftercorrectanswer'] = 'The default action to take after a correct answer';
 $string['configmaxanswers'] = 'Default maximum number of answers per page';
