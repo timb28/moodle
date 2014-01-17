@@ -21,7 +21,6 @@ a.logo {
 
 body {
     background: url([[pix:theme|background]]) top left repeat fixed #203C62;
-    background-color: gray;
 }
 
 header.custom_wide_menu {
@@ -407,59 +406,6 @@ body#page-mod-scorm-player #region-main {
     width: 100%;
 }
 
-/* Quiz Edit page (no right side blocks) covers two page states: quizbank open and closed */
-div#region-main .questionbankwindow.block .header {  /*-- question bank header   --*/
-    background: #999; /* for non-css3 browsers */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#374C83', endColorstr='#09111C'); /* for IE */
-    background: -webkit-gradient(linear, left top, left bottom, from(#374C83), to(#09111C)); /* for webkit browsers */
-    background: -moz-linear-gradient(top,  #374C83,  #09111C); /* for firefox 3.6+ */
-    height: auto;
-    padding: 6px 5px;
-    position: relative; /* Fixes IE bug where first header offset to right by 5 extra pixels. */
-}
-
-body#page-mod-quiz-edit .questionbankwindow.block.collapsed {
-
-}
-
-body#page-mod-quiz-edit .questionbankwindow.block {
-    width: 48%;
-}
-
-body#page-mod-quiz-edit div.quizcontents {
-    padding-left: 15px;
-    width: 48%;
-}
-
-body#page-mod-quiz-edit div.quizwhenbankcollapsed {
-    width: 100%;
-}
-
-body#page-mod-quiz-edit #region-post {
-    display: none;
-}
-
-body#page-mod-quiz-edit #page-content #region-main-box {
-    width: 100%;
-}
-
-body#page-mod-quiz-edit #page-content #region-post-box {
-    float: none;
-    left: auto;
-    margin-left: auto;
-}
-
-body#page-mod-quiz-edit #page-content #region-main-wrap {
-    float: none;
-    position: static;
-    right: auto;
-    width: 100%;
-}
-
-body#page-mod-quiz-edit #page-content #region-main {
-    margin-left: auto;
-}
-
 .que .info {
     background: none;
     float: left;
@@ -550,6 +496,27 @@ li.resourcelibrary-other a { background: url([[pix:theme|icon-other]]) no-repeat
 /**
  * Academy overridden CSS
  */
+
+#chooseqtype .qtypename { width: auto; }
+
+#page-mod-quiz-edit .questionbankwindow.block div.header {
+    background-color: transparent;
+}
+#page-mod-quiz-edit .questionbankwindow.block div.header div.title h2 {
+    color: #000;
+    text-align: center;
+}
+#page-mod-quiz-edit .questionbankwindow a#showbankcmd,
+#page-mod-quiz-edit .questionbankwindow a#hidebankcmd {
+    color: inherit;
+    text-decoration: inherit;
+}
+#page-mod-quiz-edit .questionbankwindow a#showbankcmd:hover,
+#page-mod-quiz-edit .questionbankwindow a#hidebankcmd:hover {
+    color: inherit;
+    text-decoration: underline;
+    background: transparent;
+}
 
 .branchbuttoncontainer.horizontal {
      clear: both;
