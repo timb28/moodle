@@ -507,8 +507,14 @@ if ($pageid != LESSON_EOL) {
 
     // after all the grade processing, check to see if "Show Grades" is off for the course
     // if yes, redirect to the course page
-    if (!$course->showgrades) {
+    // Academy Patch M#016 Enable lesson activity chaining
+    if (!$course->showgrades && $lesson->activitylink == 0) {
         redirect(new moodle_url('/course/view.php', array('id'=>$course->id)));
+    }
+
+    // Academy Patch M#016 Enable lesson activity chaining
+    if (!$course->showgrades && $lesson->activitylink) {
+        redirect($lesson->url_for_activitylink());
     }
 
     // high scores code

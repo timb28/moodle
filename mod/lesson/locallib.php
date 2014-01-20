@@ -1275,6 +1275,26 @@ class lesson extends lesson_base {
         return '';
     }
 
+        /**
+     * Returns the url for the related activity. Academy Patch M#016 Enable lesson activity chaining
+     * @return moodle_url|false
+     */
+    public function url_for_activitylink() {
+        global $DB;
+        $module = $DB->get_record('course_modules', array('id' => $this->properties->activitylink));
+        if ($module) {
+            $modname = $DB->get_field('modules', 'name', array('id' => $module->module));
+            if ($modname) {
+                $instancename = $DB->get_field($modname, 'name', array('id' => $module->instance));
+                if ($instancename) {
+                    return new moodle_url('/mod/'.$modname.'/view.php', array('id'=>$this->properties->activitylink));
+                }
+            }
+        }
+        return false;
+    }
+
+
     /**
      * Loads the requested page.
      *
