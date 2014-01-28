@@ -392,10 +392,16 @@ Grader Report
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#77002e63, endColorstr=#77002e63)";
 }
 
-/* Academy graded online programmes.
+/* Course Activities.
 -------------------------------------*/
 .section li.activity.resource {
      margin-bottom: 10px;
+}
+.availabilityinfo {
+    display: none; /* Hide activity restriction information unless editing */
+}
+.editing .availabilityinfo {
+    display: block;
 }
 
 /* Display SCORM content full width */
