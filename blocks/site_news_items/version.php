@@ -1,11 +1,4 @@
 <?php
-
-/**
- * Harcourts Academy Site News Block
- *
- * @package   block_site_news_items
- * @copyright 2011 Harcourts Academy
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-$plugin->version = 2001050301;
+    $plugin->version = 2014012816;  // YYYYMMDDHH (year, month, day, 24-hr time)
+    $plugin->requires = 2010112400; // YYYYMMDDHH (This is the release version for Moodle 2.0)
+?>

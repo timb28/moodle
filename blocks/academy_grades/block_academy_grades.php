@@ -4,6 +4,10 @@ class block_academy_grades extends block_base {
         $this->title = get_string('title', 'block_academy_grades');
     }
 
+    public function applicable_formats() {
+        return array('all' => true, 'my' => false);
+    }
+
     public function get_content() {
         global $CFG, $DB, $OUTPUT;
         

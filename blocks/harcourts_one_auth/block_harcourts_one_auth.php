@@ -19,6 +19,10 @@ class block_harcourts_one_auth extends block_base {
         $this->title = get_string('pluginname', 'block_harcourts_one_auth');
     }
 
+    public function applicable_formats() {
+        return array('all' => true, 'my' => false);
+    }
+
     public function get_content() {
       
         if ($this->content !== null) {

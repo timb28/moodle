@@ -1,8 +1,21 @@
 <?php
 
+/**
+ * Harcourts Academy Site News Block
+ *
+ * @package   block_site_news_items
+ * @copyright 2011 Harcourts Academy
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+
 class block_site_news_items extends block_base {
     function init() {
         $this->title = get_string('pluginname', 'block_site_news_items');
+    }
+
+    public function applicable_formats() {
+        return array('all' => true, 'my' => false);
     }
 
     function get_content() {

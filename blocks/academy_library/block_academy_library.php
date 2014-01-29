@@ -21,6 +21,11 @@ class block_academy_library extends block_base {
             );
     }
 
+    public function applicable_formats() {
+        return array('all' => true, 'my' => false);
+    }
+
+
     public function get_content() {
         global $CFG;
 
