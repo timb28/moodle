@@ -208,9 +208,7 @@ if (!$result->correctanswer && !$result->noanswer && !$result->isessayquestion &
 $url = new moodle_url('/mod/lesson/view.php', array('id'=>$cm->id, 'pageid'=>$result->newpageid));
 if ($lesson->review && !$result->correctanswer && !$result->noanswer && !$result->isessayquestion) {
     // Review button continue
-    /* Academy patch: Remove the "No, I just want to go on to the next question" button to prevent NZ CE students from continuing without
-     * answering the question correctly.
-    echo $OUTPUT->single_button($url, get_string('reviewquestioncontinue', 'lesson')); */
+    echo $OUTPUT->single_button($url, get_string('reviewquestioncontinue', 'lesson'));
 } else {
     // Normal continue button
     echo $OUTPUT->single_button($url, get_string('continue', 'lesson'));

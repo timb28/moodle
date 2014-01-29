@@ -239,7 +239,6 @@ class mod_lesson_mod_form extends moodleform_mod {
         $mform->setDefault('review', 0);
 
         $numbers = array();
-        $numbers[100] = 100; /* Academy Patch #014 Expand Max Lesson Question Attempts */
         for ($i = 10; $i > 0; $i--) {
             $numbers[$i] = $i;
         }

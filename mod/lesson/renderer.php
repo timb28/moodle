@@ -136,11 +136,7 @@ class mod_lesson_renderer extends plugin_renderer_base {
      */
     public function dependancy_errors($dependentlesson, $errors) {
         $output  = $this->output->box_start('generalbox boxaligncenter');
-        $link = new stdClass();
-        $link->name = $dependentlesson->name;
-        $cm = get_coursemodule_from_instance('lesson', $dependentlesson->id);
-        $link->url = "view.php?id=" . $cm->id;
-        $output .= get_string('completethefollowingconditions', 'lesson', $link);
+        $output .= get_string('completethefollowingconditions', 'lesson', $dependentlesson->name);
         $output .= $this->output->box(implode('<br />'.get_string('and', 'lesson').'<br />', $errors),'center');
         $output .= $this->output->box_end();
         return $output;
