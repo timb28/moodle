@@ -6,6 +6,11 @@
         Contains Academy specific styles for content and assessments.
 */
 
+/* All content */
+#region-main img {
+    max-width: 98%
+}
+
 /* Assessments */
 .unassessed-assessment input.answer {
     display: block;
