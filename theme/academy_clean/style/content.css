@@ -35,9 +35,10 @@ table.ce2013-weblink {
 }
 
 /* iStart24 Online */
-div.istartaction img {
+.box.generalbox div.istartaction img,
+.box.contents div.istartaction img{
     float: left;
-    margin-right: 8px;
+    margin: 0 8px 0 0;
     border: 0;
 }
 div.istartaction p {
