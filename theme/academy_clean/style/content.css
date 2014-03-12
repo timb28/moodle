@@ -38,6 +38,7 @@ table.ce2013-weblink {
 div.istartaction img {
     float: left;
     margin-right: 8px;
+    border: 0;
 }
 div.istartaction p {
     font-style: italic;
