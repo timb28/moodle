@@ -33,3 +33,12 @@ table.table-indented {
 table.ce2013-weblink {
     width: 100%;
 }
+
+/* iStart24 Online */
+div.istartaction img {
+    float: left;
+    margin-right: 8px;
+}
+div.istartaction p {
+    font-style: italic;
+}
