@@ -158,11 +158,6 @@ div#page {
     max-height: 900px; /*-- Overwrite default max-height of 500px --*/
 }
 
-.path-mod-lesson .box.contents img, .path-mod-lesson .box.edit_pages_box tbody img {
-    margin: 6px;
-    border: 1px solid #ddd;
-}
-
 .path-mod-lesson .box.contents img.left, .path-mod-lesson .box.edit_pages_box tbody img.left {
     float: left;
     margin: 0 15px 15px 0;
