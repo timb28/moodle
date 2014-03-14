@@ -11,6 +11,20 @@ img.img-bordered {
     border: 1px solid #ddd;
 }
 
+img.img-padded {
+    margin: 6px;
+}
+
+img.img-align-left {
+    float: left;
+    margin: 0 6px 6px 0;
+}
+
+img.img-align-right {
+    float: right;
+    margin: 0 0 6px 6px;
+}
+
 /* Assessments */
 .unassessed-assessment input.answer {
     display: block;
