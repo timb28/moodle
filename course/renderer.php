@@ -882,6 +882,10 @@ class core_course_renderer extends plugin_renderer_base {
         // Start the div for the activity title, excluding the edit icons.
         $output .= html_writer::start_tag('div', array('class' => 'activityinstance'));
 
+        /* START M#20 Vertically align the activity completion checkbox to the top of the activity Part 1 of 2 */
+        $output .= $this->course_section_cm_completion($course, $completioninfo, $mod, $displayoptions);
+        /* END M#20 Vertically align the activity completion checkbox to the top of the activity Part 1 of 2 */
+
         // Display the link to the module (or do nothing if module has no url)
         $output .= $this->course_section_cm_name($mod, $displayoptions);
 
@@ -909,7 +913,9 @@ class core_course_renderer extends plugin_renderer_base {
             $output .= $mod->get_after_edit_icons();
         }
 
+        /* START M#20 Vertically align the activity completion checkbox to the top of the activity Part 2 of 2
         $output .= $this->course_section_cm_completion($course, $completioninfo, $mod, $displayoptions);
+        * END M#20 Vertically align the activity completion checkbox to the top of the activity Part 2 of 2 */
 
         // If there is content AND a link, then display the content here
         // (AFTER any icons). Otherwise it was displayed before
