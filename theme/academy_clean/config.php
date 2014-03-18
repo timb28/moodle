@@ -39,7 +39,7 @@ $THEME->sheets = array('academy','course','content','form','questionnaire','joom
 $THEME->supportscssoptimisation = false;
 $THEME->yuicssmodules = array();
 
-$THEME->editor_sheets = array();
+$THEME->editor_sheets = array('content');
 
 $THEME->plugins_exclude_sheets = array(
     'block' => array(
