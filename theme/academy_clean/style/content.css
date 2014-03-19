@@ -49,18 +49,46 @@ table.ce2013-weblink {
 }
 
 /* iStart24 Online */
-div.istartaction {
+.istartaction {
+    padding: 0 0 4px 58px;
     border-bottom: 1px solid #eee;
-    min-height: 64px;
+    min-height: 60px;
+    font-style: italic;
 }
 
-div.istartaction img,
-.box.generalbox div.istartaction img,
-.box.contents div.istartaction img{
-    float: left;
-    margin: 1px 8px 8px 0;
-    border: 0;
+.istartaction.istartaction-affirmations {
+    background: url([[pix:theme|istart/affirmations]]) top left no-repeat;
 }
-div.istartaction p {
-    font-style: italic;
+.istartaction.istartaction-form {
+    background: url([[pix:theme|istart/form]]) top left no-repeat;
+}
+.istartaction.istartaction-letter {
+    background: url([[pix:theme|istart/letter]]) top left no-repeat;
+}
+.istartaction.istartaction-material {
+    background: url([[pix:theme|istart/material]]) top left no-repeat;
+}
+.istartaction.istartaction-online {
+    background: url([[pix:theme|istart/online]]) top left no-repeat;
+}
+.istartaction.istartaction-purchase {
+    background: url([[pix:theme|istart/purchase]]) top left no-repeat;
+}
+.istartaction.istartaction-read {
+    background: url([[pix:theme|istart/read]]) top left no-repeat;
+}
+.istartaction.istartaction-schedule {
+    background: url([[pix:theme|istart/schedule]]) top left no-repeat;
+}
+.istartaction.istartaction-script {
+    background: url([[pix:theme|istart/script]]) top left no-repeat;
+}
+.istartaction.istartaction-tutorial {
+    background: url([[pix:theme|istart/tutorial]]) top left no-repeat;
+}
+.istartaction.istartaction-video {
+    background: url([[pix:theme|istart/video]]) top left no-repeat;
+}
+.istartaction.istartaction-write {
+    background: url([[pix:theme|istart/write]]) top left no-repeat;
 }
