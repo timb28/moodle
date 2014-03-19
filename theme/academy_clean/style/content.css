@@ -62,6 +62,9 @@ table.ce2013-weblink {
 .istartaction.istartaction-form {
     background: url([[pix:theme|istart/form]]) top left no-repeat;
 }
+.istartaction.istartaction-h1 {
+    background: url([[pix:theme|istart/h1]]) top left no-repeat;
+}
 .istartaction.istartaction-letter {
     background: url([[pix:theme|istart/letter]]) top left no-repeat;
 }
