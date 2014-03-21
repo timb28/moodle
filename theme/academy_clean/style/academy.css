@@ -23,6 +23,19 @@ body {
     background: url([[pix:theme|background]]) top left repeat fixed #203C62;
 }
 
+body.pagelayout-embedded {
+    background: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+body.pagelayout-embedded div#page {
+    background: transparent;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+}
+
 header.custom_wide_menu {
     max-width: 1680px;
     margin: 0 auto 15px;
