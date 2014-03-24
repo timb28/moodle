@@ -27,7 +27,7 @@ class theme_academy_clean_core_renderer extends theme_bootstrapbase_core_rendere
         $list_items = '<li>'.join(" $divider</li><li>", $breadcrumbs).'</li>';
         $title = '<span class="accesshide">'.get_string('pagepath').'</span>';
         return $title . "<ul class=\"breadcrumb\">$list_items</ul>";
-    } 
+    }
 }
 
 include_once($CFG->dirroot . "/course/renderer.php");
@@ -63,6 +63,7 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
         }
 
         $output = '';
+        $embedvideofile = true;
 
         if (!$mod->uservisible &&
                 (empty($mod->showavailability) || empty($mod->availableinfo))) {
@@ -97,6 +98,7 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
         $linkclasses = '';
         $accesstext = '';
         $textclasses = '';
+
         if ($mod->uservisible) {
             $conditionalhidden = $this->is_cm_conditionally_hidden($mod);
             $accessiblebutdim = (!$mod->visible || $conditionalhidden) &&
@@ -105,6 +107,7 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
             if ($accessiblebutdim) {
                 $linkclasses .= ' dimmed';
                 $textclasses .= ' dimmed_text';
+                $embedvideofile = false;
                 if ($conditionalhidden) {
                     $linkclasses .= ' conditionalhidden';
                     $textclasses .= ' conditionalhidden';
@@ -115,6 +118,7 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
         } else {
             $linkclasses .= ' dimmed';
             $textclasses .= ' dimmed_text';
+            $embedvideofile = false;
         }
 
         // Get on-click attribute value if specified and decode the onclick - it
@@ -129,36 +133,34 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
         }
 
         // Display link itself.
-        $activitylink = html_writer::empty_tag('img', array('src' => $mod->get_icon_url(),
-                'class' => 'iconlarge activityicon', 'alt' => ' ', 'role' => 'presentation')) . $accesstext .
-                html_writer::tag('span', $instancename . $altname, array('class' => 'instancename'));
-        if ($mod->uservisible) {
-            $output .= html_writer::link($url, $activitylink, array('class' => $linkclasses, 'onclick' => $onclick)) .
-                    $groupinglabel;
+        if ($embedvideofile) {
+            /* Resize the videofile container to suit the video dimensions. */
+            $paddingbottom = round (100 / ($customdata['width'] / $customdata['height']), 2);
+
+            $output.= html_writer::tag('h3', $instancename . $altname);
+            $output.= html_writer::start_div('videofile-container', array('style' => 'padding-bottom: '. $paddingbottom .'%'));
+            $output.= html_writer::tag('iframe', '', array('width' => '560',
+                                                             'height' => '315',
+                                                             'src' => $url,
+                                                             'frameborder' => '0',
+                                                             'allowfullscreen' => '1'));
+
+            $output.= html_writer::end_div();
         } else {
-            // We may be displaying this just in order to show information
-            // about visibility, without the actual link ($mod->uservisible)
-            $output .= html_writer::tag('div', $activitylink, array('class' => $textclasses)) .
-                    $groupinglabel;
+            $activitylink = html_writer::empty_tag('img', array('src' => $mod->get_icon_url(),
+                    'class' => 'iconlarge activityicon', 'alt' => ' ', 'role' => 'presentation')) . $accesstext .
+                    html_writer::tag('span', $instancename . $altname, array('class' => 'instancename'));
+            if ($mod->uservisible) {
+                $output .= html_writer::link($url, $activitylink, array('class' => $linkclasses, 'onclick' => $onclick)) .
+                        $groupinglabel;
+            } else {
+                // We may be displaying this just in order to show information
+                // about visibility, without the actual link ($mod->uservisible)
+                $output .= html_writer::tag('div', $activitylink, array('class' => $textclasses)) .
+                        $groupinglabel;
+            }
+
         }
-
-        /* Resize the videofile container to suit the video dimensions. */
-        $paddingbottom = 100 / ($customdata['width'] / $customdata['height']);
-
-        $output = html_writer::tag('h3', $instancename . $altname);
-        $output.= html_writer::start_div('videofile-container', array('style' => 'padding-bottom: '. $paddingbottom .'%'));
-        $output.= html_writer::empty_tag('iframe', array('width' => '560',
-                                                         'height' => '315',
-                                                         'src' => $url,
-                                                         'frameborder' => '0',
-                                                         'allowfullscreen' => '1'));
-
-//        $output = '<h3>'. $instancename .'</h3>';
-//        $output.= '<div class="videofile-container" style="padding-bottom: '. $paddingbottom .'%">';
-//        $output.= '<iframe width="560" height="315" src="' . $url . '" frameborder="0" allowfullscreen></iframe>';
-//        $output.= '</div>';
-
-        $output.= html_writer::end_div();
 
         return $output;
     }
