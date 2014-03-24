@@ -31,10 +31,11 @@ class theme_academy_clean_core_renderer extends theme_bootstrapbase_core_rendere
 }
 
 include_once($CFG->dirroot . "/course/renderer.php");
+require_once("$CFG->libdir/resourcelib.php");
 
 class theme_academy_clean_core_course_renderer extends core_course_renderer {
 
-/**
+    /**
      * Renders html to display the videofile player instead of the course module on a course page
      *
      * If module is unavailable for user but still needs to be displayed
@@ -49,8 +50,15 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
     public function course_section_cm_name(cm_info $mod, $displayoptions = array()) {
         global $CFG;
 
-        /* Other modules appear as normal/ */
+        /* Modules other than mod/videofile appear as normal. */
         if ($mod->modname !== "videofile") {
+            return core_course_renderer::course_section_cm_name($mod, $displayoptions);
+        }
+
+        /* Non-embeded video files should also appear as normal. */
+        $customdata = $mod->get_custom_data();
+        $display = $customdata['display'];
+        if ($display != RESOURCELIB_DISPLAY_EMBED) {
             return core_course_renderer::course_section_cm_name($mod, $displayoptions);
         }
 
@@ -134,9 +142,23 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
                     $groupinglabel;
         }
 
-        $output = '<div class="videofile-container">';
-        $output.= '<iframe width="560" height="315" src="' . $url . '" frameborder="0" allowfullscreen></iframe>';
-        $output.= '</div>';
+        /* Resize the videofile container to suit the video dimensions. */
+        $paddingbottom = 100 / ($customdata['width'] / $customdata['height']);
+
+        $output = html_writer::tag('h3', $instancename . $altname);
+        $output.= html_writer::start_div('videofile-container', array('style' => 'padding-bottom: '. $paddingbottom .'%'));
+        $output.= html_writer::empty_tag('iframe', array('width' => '560',
+                                                         'height' => '315',
+                                                         'src' => $url,
+                                                         'frameborder' => '0',
+                                                         'allowfullscreen' => '1'));
+
+//        $output = '<h3>'. $instancename .'</h3>';
+//        $output.= '<div class="videofile-container" style="padding-bottom: '. $paddingbottom .'%">';
+//        $output.= '<iframe width="560" height="315" src="' . $url . '" frameborder="0" allowfullscreen></iframe>';
+//        $output.= '</div>';
+
+        $output.= html_writer::end_div();
 
         return $output;
     }

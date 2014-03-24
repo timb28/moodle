@@ -24,13 +24,13 @@ body {
 }
 
 body.pagelayout-embedded {
-    background: transparent;
+    background: #fff;
     margin: 0;
     padding: 0;
 }
 
 body.pagelayout-embedded div#page {
-    background: transparent;
+    background: #fff;
     margin: 0;
     padding: 0;
     box-shadow: none;
