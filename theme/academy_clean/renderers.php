@@ -137,7 +137,7 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
             /* Resize the videofile container to suit the video dimensions. */
             $paddingbottom = round (100 / ($customdata['width'] / $customdata['height']), 2);
 
-            $output.= html_writer::tag('h3', $instancename . $altname);
+            $output.= html_writer::tag('h3', $instancename . $altname, array('class' => $textclasses));
             $output.= html_writer::start_div('videofile-container', array('style' => 'padding-bottom: '. $paddingbottom .'%'));
             $output.= html_writer::tag('iframe', '', array('width' => '560',
                                                              'height' => '315',
@@ -146,20 +146,28 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
                                                              'allowfullscreen' => '1'));
 
             $output.= html_writer::end_div();
-        } else {
-            $activitylink = html_writer::empty_tag('img', array('src' => $mod->get_icon_url(),
-                    'class' => 'iconlarge activityicon', 'alt' => ' ', 'role' => 'presentation')) . $accesstext .
-                    html_writer::tag('span', $instancename . $altname, array('class' => 'instancename'));
-            if ($mod->uservisible) {
-                $output .= html_writer::link($url, $activitylink, array('class' => $linkclasses, 'onclick' => $onclick)) .
-                        $groupinglabel;
-            } else {
-                // We may be displaying this just in order to show information
-                // about visibility, without the actual link ($mod->uservisible)
-                $output .= html_writer::tag('div', $activitylink, array('class' => $textclasses)) .
-                        $groupinglabel;
-            }
+        }
 
+        if ($embedvideofile) {
+            // Include the standard text and link for use by YUI
+            $output.= html_writer::start_div('', array('style' => 'display: none;'));
+        }
+        
+        $activitylink = html_writer::empty_tag('img', array('src' => $mod->get_icon_url(),
+                'class' => 'iconlarge activityicon', 'alt' => ' ', 'role' => 'presentation')) . $accesstext .
+                html_writer::tag('span', $instancename . $altname, array('class' => 'instancename'));
+        if ($mod->uservisible) {
+            $output .= html_writer::link($url, $activitylink, array('class' => $linkclasses, 'onclick' => $onclick)) .
+                    $groupinglabel;
+        } else {
+            // We may be displaying this just in order to show information
+            // about visibility, without the actual link ($mod->uservisible)
+            $output .= html_writer::tag('div', $activitylink, array('class' => $textclasses)) .
+                    $groupinglabel;
+        }
+
+        if ($embedvideofile) {
+            $output.= html_writer::end_div();
         }
 
         return $output;
