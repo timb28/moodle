@@ -28,3 +28,4 @@ $string['pluginname_desc'] = 'The Harcourts One enrolment plugin allows you to d
 $string['url'] = 'Harcourts One URL';
 $string['harcourtsone:config'] = 'Configure Harcourts One enrol instances';
 $string['harcourtsone:manage'] = 'Manage Harcourts One user enrolments';
+$string['status'] = 'Allow Harcourts One enrolments';

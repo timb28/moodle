@@ -85,6 +85,23 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
     }
 
     /**
+     * Add new instance of enrol plugin.
+     * @param stdClass $course
+     * @param array instance fields
+     * @return int id of new instance, null if can not be created
+     */
+    public function add_instance($course, array $fields = NULL) {
+        global $DB;
+
+        if ($DB->record_exists('enrol', array('courseid'=>$course->id, 'enrol'=>'harcourtsone'))) {
+            // only one instance allowed, sorry
+            return NULL;
+        }
+
+        return parent::add_instance($course, $fields);
+    }
+
+    /**
      * Creates course enrol form, checks if form submitted
      * and enrols user if necessary. It can also redirect.
      *

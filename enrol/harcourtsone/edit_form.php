@@ -41,6 +41,8 @@ class enrol_harcourtsone_edit_form extends moodleform {
 
         $options = array(ENROL_INSTANCE_ENABLED  => get_string('yes'),
                          ENROL_INSTANCE_DISABLED => get_string('no'));
+        $mform->addElement('select', 'status', get_string('status', 'enrol_harcourtsone'), $options);
+        $mform->setDefault('status', $plugin->get_config('status'));
         
         $mform->addElement('text', 'url', get_string('url', 'enrol_harcourtsone'), array('size'=>25));
         $mform->setType('cost', PARAM_URL);
