@@ -38,7 +38,7 @@ $capabilities = array(
     ),
 
     /* Configure enrol-harcourtsone instances in course. */
-    'enrol/harcourtsone:config' => array(
+    'enrol/harcourtsone:manage' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(

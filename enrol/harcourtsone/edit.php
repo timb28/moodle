@@ -57,7 +57,7 @@ if ($instanceid) {
     $instance->courseid = $course->id;
 }
 
-$mform = new enrol_harcourts_edit_form(NULL, array($instance, $plugin, $context));
+$mform = new enrol_harcourtsone_edit_form(NULL, array($instance, $plugin, $context));
 
 if ($mform->is_cancelled()) {
     redirect($return);

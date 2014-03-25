@@ -41,26 +41,47 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
 
     public function roles_protected() {
         // Users can't tweak the roles later.
-        return true;
+        return false;
     }
 
     public function allow_enrol(stdClass $instance) {
         // Users with enrol cap can't enrol other users manually manually.
-        return false;
+        return true;
     }
 
     public function allow_unenrol(stdClass $instance) {
         // Users with unenrol cap can't unenrol other users manually manually.
-        return false;
+        return true;
     }
 
     public function allow_manage(stdClass $instance) {
         // Users with manage cap can't tweak period and status.
-        return false;
+        return true;
     }
 
     public function show_enrolme_link(stdClass $instance) {
          return ($instance->status == ENROL_INSTANCE_ENABLED);
+    }
+
+    /**
+     * Returns link to page which may be used to add new instance of enrolment plugin in course.
+     * @param int $courseid
+     * @return moodle_url page url
+     */
+    public function get_newinstance_link($courseid) {
+        global $DB;
+
+        $context = context_course::instance($courseid, MUST_EXIST);
+
+        if (!has_capability('moodle/course:enrolconfig', $context) or !has_capability('enrol/harcourtsone:config', $context)) {
+            return NULL;
+        }
+
+        if ($DB->record_exists('enrol', array('courseid'=>$courseid, 'enrol'=>'harcourtsone'))) {
+            return NULL;
+        }
+
+        return new moodle_url('/enrol/harcourtsone/edit.php', array('courseid'=>$courseid));
     }
 
     /**

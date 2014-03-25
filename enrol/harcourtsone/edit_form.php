@@ -34,7 +34,7 @@ class enrol_harcourtsone_edit_form extends moodleform {
 
         list($instance, $plugin, $context) = $this->_customdata;
 
-        $mform->addElement('header', 'header', get_string('pluginname', 'enrol_harcoursone'));
+        $mform->addElement('header', 'header', get_string('pluginname', 'enrol_harcourtsone'));
 
         $mform->addElement('text', 'name', get_string('custominstancename', 'enrol'));
         $mform->setType('name', PARAM_TEXT);

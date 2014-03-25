@@ -26,3 +26,5 @@ $string['harcourntsonelink'] = 'Register for this course using <a href="\'{$a}\'
 $string['pluginname'] = 'Harcourts One';
 $string['pluginname_desc'] = 'The Harcourts One enrolment plugin allows you to direct potential students to a Harcourts One course to register.';
 $string['url'] = 'Harcourts One URL';
+$string['harcourtsone:config'] = 'Configure Harcourts One enrol instances';
+$string['harcourtsone:manage'] = 'Manage Harcourts One user enrolments';
