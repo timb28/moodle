@@ -109,7 +109,7 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
      * @return string html text, usually a form in a text box
      */
     function enrol_page_hook(stdClass $instance) {
-        global $OUTPUT, $CFG, $PAGE;
+        global $OUTPUT, $CFG;
 
         ob_start();
 
@@ -124,9 +124,7 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
                 } else {
                     $wwwroot = $CFG->wwwroot;
                 }
-                echo '<div class="mdl-align"><p>'.get_string('logininstructions', 'enrol_harcourtsone').'</p>';
-                echo '<p><a class="btn" href="'.$wwwroot.'/login/">'.get_string('loginbutton', 'enrol_harcourtsone').'</a></p>';
-                echo '</div>';
+                redirect($wwwroot.'/login/');
             } else {
                 echo '<div class="mdl-align"><p>'.get_string("enrolinstructions", "enrol_harcourtsone").'</p>';
                 echo '<p><a class="btn" href="'.$instance->customtext1 .'">'.get_string("enrolbutton", "enrol_harcourtsone").'</a></p>';
