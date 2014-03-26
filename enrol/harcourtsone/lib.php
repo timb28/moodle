@@ -111,9 +111,13 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
     function enrol_page_hook(stdClass $instance) {
         global $OUTPUT;
 
-        $OUTPUT .= get_string("harcourntsonelink", "enrol_harcourts", "http://one.harcourts.com.au/");
+        ob_start();
 
-        return $OUTPUT;
+        echo '<div class="mdl-align"><p>'.get_string("enrolinstructions", "enrol_harcourtsone").'</p>';
+        echo '<p><a class="btn" href="'.$instance->customtext1 .'">'.get_string("enrolbutton", "enrol_harcourtsone").'</a></p>';
+        echo '</div>';
+
+        return $OUTPUT->box(ob_get_clean());
     }
 
     /**
@@ -132,7 +136,7 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
         $icons = array();
 
         if (has_capability('enrol/harcourtsone:config', $context)) {
-            $editlink = new moodle_url("/enrol/harcourtsone/edit.php", array('courseid'=>$instance->courseid));
+            $editlink = new moodle_url("/enrol/harcourtsone/edit.php", array('courseid'=>$instance->courseid, 'id'=>$instance->id));
             $icons[] = $OUTPUT->action_icon($editlink, new pix_icon('t/edit', get_string('edit'), 'core',
                     array('class' => 'iconsmall')));
         }

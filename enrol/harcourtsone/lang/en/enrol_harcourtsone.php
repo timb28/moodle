@@ -22,10 +22,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['harcourntsonelink'] = 'Register for this course using <a href="\'{$a}\'">Harcourts One</a> to begin.';
+$string['enrolinstructions'] = 'Please register for this course using Harcourts One.<br/><br/><strong>Note:</strong> Harcourts One registrations can take up to an hour to activate.';
+$string['enrolbutton'] = '<i class="icon-user"></i> Register';
 $string['pluginname'] = 'Harcourts One';
 $string['pluginname_desc'] = 'The Harcourts One enrolment plugin allows you to direct potential students to a Harcourts One course to register.';
-$string['url'] = 'Harcourts One URL';
+$string['customtext1'] = 'Harcourts One URL';
 $string['harcourtsone:config'] = 'Configure Harcourts One enrol instances';
 $string['harcourtsone:manage'] = 'Manage Harcourts One user enrolments';
 $string['status'] = 'Allow Harcourts One enrolments';

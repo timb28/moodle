@@ -67,7 +67,7 @@ if ($mform->is_cancelled()) {
 
         $instance->status         = $data->status;
         $instance->name           = $data->name;
-        $instance->url            = $data->url;
+        $instance->customtext1            = $data->customtext1;
         $instance->timemodified   = time();
         $DB->update_record('enrol', $instance);
 
@@ -76,7 +76,7 @@ if ($mform->is_cancelled()) {
         }
 
     } else {
-        $fields = array('status'=>$data->status, 'name'=>$data->name, 'url'=>$data->url);
+        $fields = array('status'=>$data->status, 'name'=>$data->name, 'customtext1'=>$data->customtext1);
         $plugin->add_instance($course, $fields);
     }
 
