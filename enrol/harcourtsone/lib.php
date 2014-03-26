@@ -109,13 +109,31 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
      * @return string html text, usually a form in a text box
      */
     function enrol_page_hook(stdClass $instance) {
-        global $OUTPUT;
+        global $OUTPUT, $CFG, $PAGE;
 
         ob_start();
 
-        echo '<div class="mdl-align"><p>'.get_string("enrolinstructions", "enrol_harcourtsone").'</p>';
-        echo '<p><a class="btn" href="'.$instance->customtext1 .'">'.get_string("enrolbutton", "enrol_harcourtsone").'</a></p>';
-        echo '</div>';
+        if ($instance->customtext1 == NULL) { // no cost, other enrolment methods (instances) should be used
+            echo '<p>'.get_string('nourl', 'enrol_harcourtsone').'</p>';
+        } else {
+            if (isguestuser()) { // force login only for guest user, not real users with guest role
+                if ($CFG->loginhttps) {
+                    // This actually is not so secure ;-), 'cause we're
+                    // in unencrypted connection...
+                    $wwwroot = str_replace("http://", "https://", $CFG->wwwroot);
+                } else {
+                    $wwwroot = $CFG->wwwroot;
+                }
+                echo '<div class="mdl-align"><p>'.get_string('logininstructions', 'enrol_harcourtsone').'</p>';
+                echo '<p><a class="btn" href="'.$wwwroot.'/login/">'.get_string('loginbutton', 'enrol_harcourtsone').'</a></p>';
+                echo '</div>';
+            } else {
+                echo '<div class="mdl-align"><p>'.get_string("enrolinstructions", "enrol_harcourtsone").'</p>';
+                echo '<p><a class="btn" href="'.$instance->customtext1 .'">'.get_string("enrolbutton", "enrol_harcourtsone").'</a></p>';
+                echo '</div>';
+            }
+
+        }
 
         return $OUTPUT->box(ob_get_clean());
     }
