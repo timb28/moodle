@@ -45,7 +45,7 @@ class enrol_harcourtsone_edit_form extends moodleform {
         $mform->setDefault('status', $plugin->get_config('status'));
         
         $mform->addElement('text', 'url', get_string('url', 'enrol_harcourtsone'), array('size'=>25));
-        $mform->setType('cost', PARAM_URL);
+        $mform->setType('url', PARAM_URL);
 
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);

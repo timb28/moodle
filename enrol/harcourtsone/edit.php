@@ -46,8 +46,7 @@ if (!enrol_is_enabled('harcourtsone')) {
 $plugin = enrol_get_plugin('harcourtsone');
 
 if ($instanceid) {
-    $instance = $DB->get_record('enrol', array('courseid'=>$course->id, 'enrol'=>'paypal', 'id'=>$instanceid), '*', MUST_EXIST);
-    $instance->cost = format_float($instance->cost, 2, true);
+    $instance = $DB->get_record('enrol', array('courseid'=>$course->id, 'enrol'=>'harcourtsone', 'id'=>$instanceid), '*', MUST_EXIST);
 } else {
     require_capability('moodle/course:enrolconfig', $context);
     // no instance yet, we have to add new instance
@@ -66,12 +65,9 @@ if ($mform->is_cancelled()) {
     if ($instance->id) {
         $reset = ($instance->status != $data->status);
 
+        $instance->status         = $data->status;
         $instance->name           = $data->name;
         $instance->url            = $data->url;
-        $instance->roleid         = $data->roleid;
-        $instance->enrolperiod    = $data->enrolperiod;
-        $instance->enrolstartdate = $data->enrolstartdate;
-        $instance->enrolenddate   = $data->enrolenddate;
         $instance->timemodified   = time();
         $DB->update_record('enrol', $instance);
 
@@ -80,8 +76,7 @@ if ($mform->is_cancelled()) {
         }
 
     } else {
-        $fields = array('name'=>$data->name, 'url'=>$data->url,'roleid'=>$data->roleid,
-                        'enrolperiod'=>$data->enrolperiod, 'enrolstartdate'=>$data->enrolstartdate, 'enrolenddate'=>$data->enrolenddate);
+        $fields = array('status'=>$data->status, 'name'=>$data->name, 'url'=>$data->url);
         $plugin->add_instance($course, $fields);
     }
 

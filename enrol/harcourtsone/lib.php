@@ -41,22 +41,22 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
 
     public function roles_protected() {
         // Users can't tweak the roles later.
-        return false;
+        return true;
     }
 
     public function allow_enrol(stdClass $instance) {
         // Users with enrol cap can't enrol other users manually manually.
-        return true;
+        return false;
     }
 
     public function allow_unenrol(stdClass $instance) {
         // Users with unenrol cap can't unenrol other users manually manually.
-        return true;
+        return false;
     }
 
     public function allow_manage(stdClass $instance) {
         // Users with manage cap can't tweak period and status.
-        return true;
+        return false;
     }
 
     public function show_enrolme_link(stdClass $instance) {
@@ -114,5 +114,29 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
         $OUTPUT .= get_string("harcourntsonelink", "enrol_harcourts", "http://one.harcourts.com.au/");
 
         return $OUTPUT;
+    }
+
+    /**
+     * Returns edit icons for the page with list of instances.
+     * @param stdClass $instance
+     * @return array
+     */
+    public function get_action_icons(stdClass $instance) {
+        global $OUTPUT;
+
+        if ($instance->enrol !== 'harcourtsone') {
+            throw new coding_exception('invalid enrol instance!');
+        }
+        $context = context_course::instance($instance->courseid);
+
+        $icons = array();
+
+        if (has_capability('enrol/harcourtsone:config', $context)) {
+            $editlink = new moodle_url("/enrol/harcourtsone/edit.php", array('courseid'=>$instance->courseid));
+            $icons[] = $OUTPUT->action_icon($editlink, new pix_icon('t/edit', get_string('edit'), 'core',
+                    array('class' => 'iconsmall')));
+        }
+
+        return $icons;
     }
 }
