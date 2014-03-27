@@ -109,12 +109,12 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
      * @return string html text, usually a form in a text box
      */
     function enrol_page_hook(stdClass $instance) {
-        global $OUTPUT, $CFG;
+        global $OUTPUT, $CFG, $PAGE;
 
         ob_start();
 
         if ($instance->customtext1 == NULL) { // no cost, other enrolment methods (instances) should be used
-            echo '<p>'.get_string('nourl', 'enrol_harcourtsone').'</p>';
+            echo html_writer::tag('p', get_string('nourl', 'enrol_harcourtsone'));
         } else {
             if (isguestuser()) { // force login only for guest user, not real users with guest role
                 if ($CFG->loginhttps) {
@@ -126,9 +126,20 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
                 }
                 redirect($wwwroot.'/login/');
             } else {
-                echo '<div class="mdl-align"><p>'.get_string("enrolinstructions", "enrol_harcourtsone").'</p>';
-                echo '<p><a class="btn" href="'.$instance->customtext1 .'">'.get_string("enrolbutton", "enrol_harcourtsone").'</a></p>';
-                echo '</div>';
+                echo html_writer::start_div('mdl-align alert alert-block');
+                echo html_writer::tag('p', get_string("enrolinstructions", "enrol_harcourtsone"));
+                echo html_writer::start_tag('p');
+                echo html_writer::link($instance->customtext1, get_string("enrolbutton", "enrol_harcourtsone"), array('class'=>'btn'));
+                echo html_writer::end_tag('p');
+                echo html_writer::end_div();
+
+                /* Match the padding of 'alert' to  vertically align the elements. */
+                echo html_writer::start_div('mdl-align alert-block', array('style'=>'padding: 8px 35px 8px 14px;'));
+                echo html_writer::tag('p', get_string("reloadinstructions", "enrol_harcourtsone"));
+                echo html_writer::start_tag('p');
+                echo html_writer::link($PAGE->url, get_string("reloadbutton", "enrol_harcourtsone"), array('class'=>'btn'));
+                echo html_writer::end_tag('p');
+                echo html_writer::end_div();
             }
 
         }
