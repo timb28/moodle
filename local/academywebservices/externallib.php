@@ -26,6 +26,8 @@ require_once($CFG->dirroot . "/user/lib.php");
 
 class local_academywebservices_external extends external_api {
 
+    const DATEFORMAT = "Y-m-d H:i:s.0000";
+
     /**
      * Returns description of method parameters
      * @return external_function_parameters
@@ -108,7 +110,7 @@ class local_academywebservices_external extends external_api {
         }
 
         date_default_timezone_set('UTC');
-        $datetimecompleted = date(DATE_ISO8601, $timecompleted);
+        $datetimecompleted = date(self::DATEFORMAT, $timecompleted);
 
         return array('complete' => $iscomplete, 'timecompleted' => $datetimecompleted);
     }
