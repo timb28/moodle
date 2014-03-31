@@ -102,11 +102,15 @@ class local_academywebservices_external extends external_api {
         
         // Determine whether the user has completed the course
         $iscomplete = 0;
-        if (self::is_course_complete($courseid, $userid)) {
-            $iscomplete = 1; 
+        $timecompleted = self::course_complete($courseid, $userid);
+        if ($timecompleted) {
+            $iscomplete = 1;
         }
 
-        return array('complete' => $iscomplete);
+        date_default_timezone_set('UTC');
+        $datetimecompleted = date(DATE_ISO8601, $timecompleted);
+
+        return array('complete' => $iscomplete, 'timecompleted' => $datetimecompleted);
     }
 
     /**
@@ -116,7 +120,8 @@ class local_academywebservices_external extends external_api {
     public static function get_course_complete_for_user_returns() {
         return new external_single_structure(
             array (
-                'complete' => new external_value(PARAM_INT, 'complete')
+                'complete' => new external_value(PARAM_INT, 'complete'),
+                'timecompleted' => new external_value(PARAM_TEXT, 'timecompleted')
             )
         );
     }
@@ -130,16 +135,16 @@ class local_academywebservices_external extends external_api {
      *
      * @param int $courseid Course id
      * @param int $userid User id
-     * @return boolean
+     * @return datetime
      */
-    public function is_course_complete($courseid, $userid) {
+    public static function course_complete($courseid, $userid) {
         $params = array(
             'userid'    => $userid,
             'course'  => $courseid
         );
 
         $ccompletion = new completion_completion($params);
-        return $ccompletion->is_complete();
+        return $ccompletion->timecompleted;
     }
     
 
