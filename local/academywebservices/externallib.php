@@ -104,15 +104,15 @@ class local_academywebservices_external extends external_api {
         
         // Determine whether the user has completed the course
         $iscomplete = 0;
-        $timecompleted = self::course_complete($courseid, $userid);
-        if ($timecompleted) {
+        $completedtime = self::course_complete($courseid, $userid);
+        if ($completedtime) {
             $iscomplete = 1;
         }
 
         date_default_timezone_set('UTC');
-        $datetimecompleted = date(self::DATEFORMAT, $timecompleted);
+        $completeddatetime = date(self::DATEFORMAT, $completedtime);
 
-        return array('complete' => $iscomplete, 'timecompleted' => $datetimecompleted);
+        return array('complete' => $iscomplete, 'completeddatetime' => $completeddatetime);
     }
 
     /**
@@ -123,7 +123,7 @@ class local_academywebservices_external extends external_api {
         return new external_single_structure(
             array (
                 'complete' => new external_value(PARAM_INT, 'complete'),
-                'timecompleted' => new external_value(PARAM_TEXT, 'timecompleted')
+                'completeddatetime' => new external_value(PARAM_TEXT, 'completeddatetime')
             )
         );
     }
