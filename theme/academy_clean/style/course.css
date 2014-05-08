@@ -6,25 +6,6 @@
         Styles for displaying course content.
 */
 
-/*h2.headingblock {
-    border-width: 0 0 1px 0;
-    padding: 5px 5px 2px;
-    font-weight: normal;
-    font-size: 1.2em;
-    background: none;
-    color: #251c17;
-}
-
-.site-topic ul.section,
-.course-content ul.section  {
-    margin: 0;
-}
-
-ul.topics div.content > ul li:first-child.activity {
-    margin-top: 0;
-    padding-top: 0;
-}*/
-
 ul.topics li.section, ul.weeks li.section {
     /* All course topics. */
 }
@@ -32,41 +13,6 @@ ul.topics li.section, ul.weeks li.section {
 ul.topics li#section-0, ul.weeks li#section-0 {
     /* First course section. */
 }
-/*ul.weeks li.section.current, ul.topics li.section.current  {
-    border: 1px solid #09f;
-    font-weight: normal;
-    color: #212121;
-}*/
-
-/*div.summary div {
-    padding: 5px 0px 5px 0px;
-}*/
-
-/*ul.topics div.content > ul li.activity {
-    margin-top: 8px;
-    padding: 4px;
-}*/
-
-/*.path-course-view.section .left.side {
-    background: none;
-}
-
-.path-course-view li.activity {
-    margin-left: 20px;
-    position: relative;
-}*/
-
-/*.course-content .section.main {
-    border: none;
-}
-
-.course-content ul.topics li.section .content {
-    margin: 0;
-    padding: 10px;
-}
-.path-course-view .jumpmenu {
-    padding: 15px;
-}*/
 
 /* Fix for ordered and unordered list in course topic summary & course weekly summary */
 ul, li ul, 
@@ -108,3 +54,15 @@ li.activity.label,
     display: none;
 }
 
+/* iStart24 Online customisations */
+body.www-academyrealestatetraining-com--au-moodle.path-course-view.course-150
+#page-header
+h1 {
+    display: none;
+}
+
+body.www-academyrealestatetraining-com--au-moodle.path-course-view.course-150
+.course-content
+ul.section {
+    margin-top: 0;
+}
