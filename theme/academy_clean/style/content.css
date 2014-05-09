@@ -95,3 +95,67 @@ table.ce2013-weblink {
 .istartaction.istartaction-write {
     background: url([[pix:theme|istart/write]]) top left no-repeat;
 }
+/* iStart24 Week Menus */
+.istart-menu-wrapper {
+    margin: 2.3em 0;
+}
+ul.istart-menu {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+ul.istart-menu li {
+	padding: 0;
+	margin: 0;
+	width: 25%;
+	float: left;
+}
+ul.istart-menu li a {
+	width: 128px;
+    height: 128px;
+    max-width: 100%;
+	display: block;
+    text-align: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-size: 1.1em;
+}
+ul.istart-menu li.istart-menu-watch a {
+	background-image: url([[pix:theme|istart/menu-watch]]);
+}
+ul.istart-menu li.istart-menu-read a {
+	background-image: url([[pix:theme|istart/menu-read]]);
+}
+ul.istart-menu li.istart-menu-connect a {
+	background-image: url([[pix:theme|istart/menu-connect]]);
+}
+ul.istart-menu li.istart-menu-do a {
+	background-image: url([[pix:theme|istart/menu-do]]);
+}
+
+/* iStart24 Flex Sections */
+.istart-week-task h3.sectionname {
+    background-color: black;
+    color: white;
+    padding: 1em;
+}
+
+.istart-week-task h3.sectionname a {
+    color: white;
+}
+
+body.path-course-view .istart-week-task h3.sectionname a {
+    display: block;
+}
+body.path-course-view .istart-week-task h3.sectionname a.expanded {
+    display: inline;
+}
+.course-content ul li.section.main.istart-week-task {
+    border-bottom: 0;
+}
+/* For course editors */
+body.path-course-view.editing .istart-week-task h3.sectionname a:first-child {
+    display: inline;
+    float: left;
+}
