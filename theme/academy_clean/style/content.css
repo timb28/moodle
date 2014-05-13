@@ -97,7 +97,14 @@ table.ce2013-weblink {
 }
 /* iStart24 Week Menus */
 .istart-menu-wrapper {
-    margin: 2.3em 0;
+    padding: 2.3em 0;
+}
+.istart-menu-wrapper.istart-week-01 {
+    background-image: url([[pix:theme|istart/start-here]]);
+    background-repeat: no-repeat;
+    background-position: 15% 0;
+    padding-top: 57px;
+
 }
 ul.istart-menu {
 	padding: 0;
@@ -169,3 +176,4 @@ li.section.main.istart-week-task {
 .course-content ul li.section.main.istart-week-task {
     border-bottom: 0;
 }
+/* iStart24 "Start Here" */
