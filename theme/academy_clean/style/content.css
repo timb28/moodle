@@ -148,6 +148,8 @@ li.section.main.istart-week-task {
     background-repeat: no-repeat;
     background-size: contain;
     padding-left: 1.2em;
+    white-space:nowrap;
+    max-height: 24px;
 }
 .istart-week-task.istart-week-task-watch h3 {
     background-image: url([[pix:theme|istart/title-watch]]);
@@ -161,25 +163,9 @@ li.section.main.istart-week-task {
 .istart-week-task.istart-week-task-do h3 {
     background-image: url([[pix:theme|istart/title-do]]);
 }
-.istart-week-task h3.sectionname {
-    /*padding: 1em;*/
-}
-
 .istart-week-task h3.sectionname a {
     color: black;
 }
-
-body.path-course-view .istart-week-task h3.sectionname a {
-    /*display: block;*/
-}
-body.path-course-view .istart-week-task h3.sectionname a.expanded {
-    /*display: inline;*/
-}
 .course-content ul li.section.main.istart-week-task {
     border-bottom: 0;
-}
-/* For course editors */
-body.path-course-view.editing .istart-week-task h3.sectionname a:first-child {
-/*    display: inline;
-    float: left;*/
 }
