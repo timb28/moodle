@@ -137,7 +137,7 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
             /* Resize the videofile container to suit the video dimensions. */
             $paddingbottom = round (100 / ($customdata['width'] / $customdata['height']), 2);
 
-            $output.= html_writer::tag('h3', $instancename . $altname, array('class' => $textclasses));
+            $output.= html_writer::tag('h4', $instancename . $altname, array('class' => $textclasses));
             $output.= html_writer::start_div('videofile-container', array('style' => 'padding-bottom: '. $paddingbottom .'%'));
             $output.= html_writer::tag('iframe', '', array('width' => '560',
                                                              'height' => '315',
