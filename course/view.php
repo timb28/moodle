@@ -120,6 +120,11 @@
     // Fix course format if it is no longer installed
     $course->format = course_get_format($course)->get_format();
 
+    // START Academy Patch M#21 Course short name added as a body class to course pages for CSS styling
+    // Enable CSS to target courses by their shortname.
+    $PAGE->add_body_class('course-shortname-'.trim($course->shortname));
+    // END Academy Patch M#21 Course short name added as a body class to course pages for CSS styling
+
     $PAGE->set_pagelayout('course');
     $PAGE->set_pagetype('course-view-' . $course->format);
     $PAGE->set_other_editing_capability('moodle/course:update');
