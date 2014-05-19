@@ -176,3 +176,13 @@ li.section.main.istart-week-task {
 .course-content ul li.section.main.istart-week-task {
     border-bottom: 0;
 }
+
+/* iStart24 hide course resources */
+body.course-shortname-iStart li.activity.lesson.modtype_lesson,
+body.course-shortname-iStart li.activity.forum.modtype_forum {
+    display: none;
+}
+body.course-shortname-iStart.editing li.activity.lesson.modtype_lesson,
+body.course-shortname-iStart.editing li.activity.forum.modtype_forum {
+    display: list-item;
+}
