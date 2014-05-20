@@ -83,10 +83,15 @@ class behat_selectors {
      */
     protected static $moodleselectors = array(
         'dialogue' => <<<XPATH
-.//div[contains(concat(' ', normalize-space(@class), ' '), ' moodle-dialogue ')]/descendant::h1[normalize-space(.) = %locator%]/ancestor::div[contains(concat(' ', normalize-space(@class), ' '), ' moodle-dialogue ')]
+//div[contains(concat(' ', normalize-space(@class), ' '), ' moodle-dialogue ') and
+    normalize-space(descendant::div[
+        contains(concat(' ', normalize-space(@class), ' '), ' moodle-dialogue-hd ')
+        ]) = %locator%] |
+//div[contains(concat(' ', normalize-space(@class), ' '), ' yui-dialog ') and
+    normalize-space(descendant::div[@class='hd']) = %locator%]
 XPATH
         , 'block' => <<<XPATH
-.//div[contains(concat(' ', normalize-space(@class), ' '), concat(' ', %locator%, ' '))] | .//div[contains(concat(' ', normalize-space(@class), ' '), ' block ')]/descendant::h2[normalize-space(.) = %locator%]/ancestor::div[contains(concat(' ', normalize-space(@class), ' '), ' block ')]
+//div[contains(concat(' ', normalize-space(@class), ' '), concat(' ', %locator%, ' '))] | //div[contains(concat(' ', normalize-space(@class), ' '), ' block ')]/descendant::h2[normalize-space(.) = %locator%]/ancestor::div[contains(concat(' ', normalize-space(@class), ' '), ' block ')]
 XPATH
         , 'region' => <<<XPATH
 .//*[self::div | self::section | self::aside][./@id = %locator%]
