@@ -145,7 +145,7 @@ li.section.main.istart-week-task {
     height: 160px;
     max-width: 100%;
     text-align: center;
-    width: 128px;
+    width: 100px;
 }
 .format-flexsections.editing .istart-week-task h3 {
     background-position: left center;
@@ -199,4 +199,20 @@ body.course-shortname-iStart li.activity.forum.modtype_forum {
 body.course-shortname-iStart.editing li.activity.lesson.modtype_lesson,
 body.course-shortname-iStart.editing li.activity.forum.modtype_forum {
     display: list-item;
+}
+/** iStart24 Read pictures. Note: Also use the 'img-responsive' class. */
+img.istart-read-hero {
+    float: right;
+    margin: 8px;
+}
+@media (max-width: 669px) {
+    img.istart-read-hero {
+        float: none;
+        clear: both;
+    }
+}
+@media (min-width: 670px) and (max-width: 979px) {
+    img.istart-read-hero {
+        max-width: 50%;
+    }
 }
