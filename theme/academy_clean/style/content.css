@@ -95,10 +95,8 @@ table.ce2013-weblink {
 .istartaction.istartaction-write {
     background: url([[pix:theme|istart/write]]) top left no-repeat;
 }
-/* iStart24 Week Menus */
-.istart-menu-wrapper {
-    padding: 2.3em 0;
-}
+/** iStart24 */
+/** "Start Here" banner that points to Watch */
 .format-flexsections .flexsections-level-0 > .istart-week-01 > .content > .summary {
     background-image: url([[pix:theme|istart/start-here]]);
     background-repeat: no-repeat;
@@ -106,45 +104,6 @@ table.ce2013-weblink {
     padding-top: 57px;
 
 }
-ul.istart-menu {
-	padding: 0;
-	margin: 0;
-	list-style: none;
-}
-ul.istart-menu li {
-	padding: 0;
-	margin: 0;
-	width: 25%;
-	float: left;
-}
-ul.istart-menu li a {
-	width: 128px;
-    height: 128px;
-    max-width: 100%;
-    display: block;
-    text-align: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center top;
-    font-size: 1.1em;
-}
-ul.istart-menu li a span {
-    display: block;
-    padding-top: 100%;
-}
-ul.istart-menu li.istart-menu-watch a {
-	background-image: url([[pix:theme|istart/menu-watch]]);
-}
-ul.istart-menu li.istart-menu-read a {
-	background-image: url([[pix:theme|istart/menu-read]]);
-}
-ul.istart-menu li.istart-menu-connect a {
-	background-image: url([[pix:theme|istart/menu-connect]]);
-}
-ul.istart-menu li.istart-menu-do a {
-	background-image: url([[pix:theme|istart/menu-do]]);
-}
-
 /** iStart24 Flex Sections
  *  Requirements:
  *  1 The twenty four week Flex Sections have the custom class "istart-week-NN"
@@ -163,8 +122,6 @@ ul.istart-menu li.istart-menu-do a {
     border-radius: 4px;
     background: transparent;
     border: 1px solid #DDDDDD;
-/*    display: inline;
-    float: right;*/
 }
 .format-flexsections .header.backto a {
     display: block;
