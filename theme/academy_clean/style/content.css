@@ -99,10 +99,10 @@ table.ce2013-weblink {
 .istart-menu-wrapper {
     padding: 2.3em 0;
 }
-.istart-menu-wrapper.istart-week-01 {
+.format-flexsections .flexsections-level-0 > .istart-week-01 > .content > .summary {
     background-image: url([[pix:theme|istart/start-here]]);
     background-repeat: no-repeat;
-    background-position: 20px 0;
+    background-position: 4% 0;
     padding-top: 57px;
 
 }
@@ -145,10 +145,32 @@ ul.istart-menu li.istart-menu-do a {
 	background-image: url([[pix:theme|istart/menu-do]]);
 }
 
-/* iStart24 Flex Sections */
+/** iStart24 Flex Sections
+ *  Requirements:
+ *  1 The twenty four week Flex Sections have the custom class "istart-week-NN"
+ *  2 The four Flex Sections in each week have the following custom classes
+ *    - istart-week-task istart-week-task-watch
+ *    - istart-week-task istart-week-task-read
+ *    - istart-week-task istart-week-task-connect
+ *    - istart-week-task istart-week-task-do
+ *
+ */
+.format-flexsections .course-content-header,
+.format-flexsections .course-content-footer {
+    clear: both;
+}
+.format-flexsections .header.backto {
+    border-radius: 4px;
+    background: transparent;
+    border: 1px solid #DDDDDD;
+/*    display: inline;
+    float: right;*/
+}
+.format-flexsections .header.backto a {
+    display: block;
+}
 .format-flexsections .course-content ul.flexsections.flexsections-level-1
 li.section.main.istart-week-task {
-    padding-top: 2.5em;
     float: left;
     width: 25%;
 }
