@@ -87,7 +87,7 @@ echo $OUTPUT->doctype() ?>
     </header>
 
     <div id="page-content" class="row-fluid">
-        <section id="region-main" class="span9">
+        <section id="region-main" class="span8">
             <?php
             echo $OUTPUT->course_content_header();
             echo $OUTPUT->main_content();
@@ -109,7 +109,7 @@ echo $OUTPUT->doctype() ?>
 
         </section>
         <?php
-        echo $OUTPUT->blocks('side-pre', 'span3');
+        echo $OUTPUT->blocks('side-pre', 'span4');
         ?>
     </div>
 
