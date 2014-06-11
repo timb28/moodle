@@ -146,32 +146,67 @@ ul.istart-menu li.istart-menu-do a {
 }
 
 /* iStart24 Flex Sections */
-.format-flexsections .course-content ul.flexsections
+.format-flexsections .course-content ul.flexsections.flexsections-level-1
 li.section.main.istart-week-task {
     padding-top: 2.5em;
+    float: left;
+    width: 25%;
 }
-.istart-week-task h3 {
+.format-flexsections.editing .course-content ul.flexsections.flexsections-level-1
+li.section.main.istart-week-task {
+    float: none;
+    width: inherit;
+}
+.istart-week-task h3 a {
+    background-position: left 32px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: block;
+    font-size: 1.1em;
+    height: 160px;
+    max-width: 100%;
+    text-align: center;
+    width: 128px;
+}
+.format-flexsections.editing .istart-week-task h3 {
     background-position: left center;
     background-repeat: no-repeat;
     background-size: contain;
     padding-left: 1.2em;
-    white-space:nowrap;
     max-height: 24px;
 }
-.istart-week-task.istart-week-task-watch h3 {
+.format-flexsections.editing .istart-week-task h3 a {
+    background: none;
+    display: inline;
+    width: auto;
+    height: inherit;
+    text-align: left;
+    font-size: inherit;
+}
+.istart-week-task.istart-week-task-watch h3 a {
+    background-image: url([[pix:theme|istart/menu-watch]]);
+}
+.istart-week-task.istart-week-task-read h3 a {
+    background-image: url([[pix:theme|istart/menu-read]]);
+}
+.istart-week-task.istart-week-task-connect h3 a {
+    background-image: url([[pix:theme|istart/menu-connect]]);
+}
+.istart-week-task.istart-week-task-do h3 a {
+    background-image: url([[pix:theme|istart/menu-do]]);
+}
+/*** Icons when editing flexsections **/
+.format-flexsections.editing .istart-week-task.istart-week-task-watch h3 {
     background-image: url([[pix:theme|istart/title-watch]]);
 }
-.istart-week-task.istart-week-task-read h3 {
+.format-flexsections.editing .istart-week-task.istart-week-task-read h3 {
     background-image: url([[pix:theme|istart/title-read]]);
 }
-.istart-week-task.istart-week-task-connect h3 {
+.format-flexsections.editing .istart-week-task.istart-week-task-connect h3 {
     background-image: url([[pix:theme|istart/title-connect]]);
 }
-.istart-week-task.istart-week-task-do h3 {
+.format-flexsections.editing .istart-week-task.istart-week-task-do h3 {
     background-image: url([[pix:theme|istart/title-do]]);
-}
-.istart-week-task h3.sectionname a {
-    color: black;
 }
 .course-content ul li.section.main.istart-week-task {
     border-bottom: 0;
