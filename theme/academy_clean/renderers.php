@@ -18,7 +18,6 @@ class theme_academy_clean_core_renderer extends theme_bootstrapbase_core_rendere
     public function navbar() {
         $items = $this->page->navbar->get_items();
         $breadcrumbs = array();
-        $breadcrumbs[] = '<a href="/">Home</a>'; // Make the first breadcrumb a link to our main website.
         foreach ($items as $item) {
             $item->hideicon = true;
             $breadcrumbs[] = $this->render($item);
