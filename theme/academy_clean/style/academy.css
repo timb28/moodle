@@ -38,8 +38,13 @@ body.pagelayout-embedded div#page {
 
 header.custom_wide_menu {
     max-width: 1680px;
-    margin: 0 auto 15px;
+    margin: 0 auto;
     padding: 0 20px;
+}
+@media (min-width: 980px) {
+    header.custom_wide_menu {
+       margin-bottom: 6px;
+   }
 }
 
 th, td, a img { border-width: 0; }
@@ -68,21 +73,24 @@ div#page {
   margin-bottom: 0;
 }
 .navbar-fixed-top {
-  background: url([[pix:theme|background]]) top left repeat fixed #203C62;
+    
 }
-.navbar-inverse .navbar-inner, .navbar-inner {
+.navbar-inverse .navbar-inner,
+.navbar-inner {
   border: none;
-  box-shadow: none;
-  background: transparent;
+  /*background: url([[pix:theme|background]]) top left repeat fixed #203C62;*/
 }
-
+.navbar-fixed-top .navbar-inner,
+.navbar-static-top .navbar-inner {
+  box-shadow: none;
+}
 .navbar .nav>li>a, .custom_wide_menu li a {
   display: block;
   width: auto;
   margin: 0;
   outline: 0;
   padding: 5px 15px 5px 5px;
-  color: #383435;
+  color: #ffffff;
   line-height: 1.8em;
   text-shadow: none;
 }
