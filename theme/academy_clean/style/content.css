@@ -192,12 +192,12 @@ li.section.main.istart-week-task {
 }
 
 /* iStart24 hide course resources */
-body.course-shortname-iStart li.activity.lesson.modtype_lesson,
-body.course-shortname-iStart li.activity.forum.modtype_forum {
+body.course-shortname-iStart24 li.activity.lesson.modtype_lesson,
+body.course-shortname-iStart24 li.activity.forum.modtype_forum {
     display: none;
 }
-body.course-shortname-iStart.editing li.activity.lesson.modtype_lesson,
-body.course-shortname-iStart.editing li.activity.forum.modtype_forum {
+body.course-shortname-iStart24.editing li.activity.lesson.modtype_lesson,
+body.course-shortname-iStart24.editing li.activity.forum.modtype_forum {
     display: list-item;
 }
 /** iStart24 Read pictures. Note: Also use the 'img-responsive' class. */
