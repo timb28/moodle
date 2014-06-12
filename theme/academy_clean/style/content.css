@@ -200,6 +200,16 @@ body.course-shortname-iStart24.editing li.activity.lesson.modtype_lesson,
 body.course-shortname-iStart24.editing li.activity.forum.modtype_forum {
     display: list-item;
 }
+/* iStart24 hide iStart24 page title */
+body.course-shortname-iStart24 #page-header
+h1 {
+    display: none;
+}
+
+body.course-shortname-iStart24 .course-content
+ul.section {
+    margin-top: 0;
+}
 /** iStart24 Read pictures. Note: Also use the 'img-responsive' class. */
 img.istart-read-hero {
     float: right;
