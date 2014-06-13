@@ -56,6 +56,11 @@ div#page {
   background-color: white;
   box-shadow: 0 0 35px rgba(0,0,0,0.8);
 }
+@media (max-width: 980px) {
+   div#page {
+       padding: 0 .5em;
+   }
+}
 
 /* Maintenance warning */
 .errorbox.maintenancewarning {
@@ -101,6 +106,11 @@ div#page {
   border-radius: 0;
   margin: 0;
   padding: 1em 0;
+}
+@media (max-width: 980px) {
+   .breadcrumb {
+       padding: .5em 0;
+   }
 }
 
 .breadcrumb-button {
