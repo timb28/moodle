@@ -23,7 +23,7 @@ class theme_academy_clean_core_renderer extends theme_bootstrapbase_core_rendere
             $breadcrumbs[] = $this->render($item);
         }
         $divider = '<span class="divider">/</span>';
-        $list_items = '<li>'.join(" $divider</li><li>", $breadcrumbs).'</li>';
+        $list_items = '<li>'.join("$divider</li><li>", $breadcrumbs).'</li>';
         $title = '<span class="accesshide">'.get_string('pagepath').'</span>';
         return $title . "<ul class=\"breadcrumb\">$list_items</ul>";
     }
