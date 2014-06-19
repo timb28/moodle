@@ -126,6 +126,9 @@ table.ce2013-weblink {
 .format-flexsections .header.backto a {
     display: block;
 }
+.format-flexsections .course-content-footer {
+    margin-top: 1em;
+}
 .format-flexsections .course-content ul.flexsections.flexsections-level-1
 li.section.main.istart-week-task {
     float: left;
