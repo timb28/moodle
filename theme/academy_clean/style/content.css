@@ -102,7 +102,12 @@ table.ce2013-weblink {
     background-repeat: no-repeat;
     background-position: 4% 0;
     padding-top: 57px;
-
+}
+@media (min-width: 980px) {
+    .format-flexsections .flexsections-level-0 > .istart-week-01 > .content > .summary {
+        position: relative;
+        top: 52px; /* = height of the header */
+    }
 }
 /** iStart24 Flex Sections
  *  Requirements:
@@ -133,6 +138,13 @@ table.ce2013-weblink {
 li.section.main.istart-week-task {
     float: left;
     width: 25%;
+    padding-top: 0;
+}
+@media (min-width: 980px) {
+    .format-flexsections .course-content ul.flexsections.flexsections-level-1
+    li.section.main.istart-week-task  {
+        padding-top: 52px; /* = height of the header */
+    }
 }
 .format-flexsections.editing .course-content ul.flexsections.flexsections-level-1
 li.section.main.istart-week-task {
