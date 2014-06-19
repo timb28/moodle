@@ -226,3 +226,8 @@ img.istart-read-hero {
         max-width: 50%;
     }
 }
+
+/** iStart 24 Remove "Attempt: 1" heading from Welcome lesson */
+body.course-shortname-iStart24#page-mod-lesson-view h3.main {
+    display: none;
+}
