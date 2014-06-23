@@ -49,7 +49,6 @@
 .istartaction.istartaction-write {
     background: url([[pix:theme|istart/write]]) top left no-repeat;
 }
-/** iStart24 */
 /** "Start Here" banner that points to Watch */
 .format-flexsections .flexsections-level-0 > .istart-week-01 > .content > .summary {
     background-image: url([[pix:theme|istart/start-here]]);
@@ -87,6 +86,9 @@
 }
 .format-flexsections .course-content-footer {
     margin: 1em 0;
+}
+body.course-shortname-iStart24 .section h3 {
+    font-weight: normal;
 }
 .format-flexsections .course-content ul.flexsections.flexsections-level-1
 li.section.main.istart-week-task {
@@ -177,7 +179,7 @@ h1 {
 
 body.course-shortname-iStart24 .course-content
 ul.section {
-    margin-top: 0;
+    margin: 0;
 }
 /** iStart24 Read pictures. Note: Also use the 'img-responsive' class. */
 img.istart-read-hero {
