@@ -1,0 +1,202 @@
+/**
+ * Contains all the style customisations for iStart24 courses.
+ *   Created on : 23/06/2014, 3:09:48 PM
+ *   Author     : timbutler
+ */
+.istartaction {
+    padding: 0 0 4px 58px;
+    border-bottom: 1px solid #eee;
+    min-height: 60px;
+    font-style: italic;
+}
+
+.istartaction.istartaction-affirmations {
+    background: url([[pix:theme|istart/affirmations]]) top left no-repeat;
+}
+.istartaction.istartaction-form {
+    background: url([[pix:theme|istart/form]]) top left no-repeat;
+}
+.istartaction.istartaction-h1 {
+    background: url([[pix:theme|istart/h1]]) top left no-repeat;
+}
+.istartaction.istartaction-letter {
+    background: url([[pix:theme|istart/letter]]) top left no-repeat;
+}
+.istartaction.istartaction-material {
+    background: url([[pix:theme|istart/material]]) top left no-repeat;
+}
+.istartaction.istartaction-online {
+    background: url([[pix:theme|istart/online]]) top left no-repeat;
+}
+.istartaction.istartaction-purchase {
+    background: url([[pix:theme|istart/purchase]]) top left no-repeat;
+}
+.istartaction.istartaction-read {
+    background: url([[pix:theme|istart/read]]) top left no-repeat;
+}
+.istartaction.istartaction-schedule {
+    background: url([[pix:theme|istart/schedule]]) top left no-repeat;
+}
+.istartaction.istartaction-script {
+    background: url([[pix:theme|istart/script]]) top left no-repeat;
+}
+.istartaction.istartaction-tutorial {
+    background: url([[pix:theme|istart/tutorial]]) top left no-repeat;
+}
+.istartaction.istartaction-video {
+    background: url([[pix:theme|istart/video]]) top left no-repeat;
+}
+.istartaction.istartaction-write {
+    background: url([[pix:theme|istart/write]]) top left no-repeat;
+}
+/** iStart24 */
+/** "Start Here" banner that points to Watch */
+.format-flexsections .flexsections-level-0 > .istart-week-01 > .content > .summary {
+    background-image: url([[pix:theme|istart/start-here]]);
+    background-repeat: no-repeat;
+    background-position: 4% 0;
+    padding-top: 57px;
+}
+@media (min-width: 980px) {
+    .format-flexsections .flexsections-level-0 > .istart-week-01 > .content > .summary {
+        position: relative;
+        top: 52px; /* = height of the header */
+    }
+}
+/** iStart24 Flex Sections
+ *  Requirements:
+ *  1 The twenty four week Flex Sections have the custom class "istart-week-NN"
+ *  2 The four Flex Sections in each week have the following custom classes
+ *    - istart-week-task istart-week-task-watch
+ *    - istart-week-task istart-week-task-read
+ *    - istart-week-task istart-week-task-connect
+ *    - istart-week-task istart-week-task-do
+ *
+ */
+.format-flexsections .course-content-header,
+.format-flexsections .course-content-footer {
+    clear: both;
+}
+.format-flexsections .header.backto {
+    border-radius: 4px;
+    background: transparent;
+    border: 1px solid #DDDDDD;
+}
+.format-flexsections .header.backto a {
+    display: block;
+}
+.format-flexsections .course-content-footer {
+    margin: 1em 0;
+}
+.format-flexsections .course-content ul.flexsections.flexsections-level-1
+li.section.main.istart-week-task {
+    float: left;
+    width: 25%;
+    padding-top: 0;
+}
+@media (min-width: 980px) {
+    .format-flexsections .course-content ul.flexsections.flexsections-level-1
+    li.section.main.istart-week-task  {
+        padding-top: 52px; /* = height of the header */
+    }
+}
+.format-flexsections.editing .course-content ul.flexsections.flexsections-level-1
+li.section.main.istart-week-task {
+    float: none;
+    width: inherit;
+}
+.istart-week-task h3 a {
+    background-position: left 32px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: block;
+    font-size: 1.1em;
+    height: 160px;
+    max-width: 100%;
+    text-align: center;
+    width: 100px;
+}
+.format-flexsections.editing .istart-week-task h3 {
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding-left: 1.2em;
+    max-height: 24px;
+}
+.format-flexsections.editing .istart-week-task h3 a {
+    background: none;
+    display: inline;
+    width: auto;
+    height: inherit;
+    text-align: left;
+    font-size: inherit;
+}
+.istart-week-task.istart-week-task-watch h3 a {
+    background-image: url([[pix:theme|istart/menu-watch]]);
+}
+.istart-week-task.istart-week-task-read h3 a {
+    background-image: url([[pix:theme|istart/menu-read]]);
+}
+.istart-week-task.istart-week-task-connect h3 a {
+    background-image: url([[pix:theme|istart/menu-connect]]);
+}
+.istart-week-task.istart-week-task-do h3 a {
+    background-image: url([[pix:theme|istart/menu-do]]);
+}
+/*** Icons when editing flexsections **/
+.format-flexsections.editing .istart-week-task.istart-week-task-watch h3 {
+    background-image: url([[pix:theme|istart/title-watch]]);
+}
+.format-flexsections.editing .istart-week-task.istart-week-task-read h3 {
+    background-image: url([[pix:theme|istart/title-read]]);
+}
+.format-flexsections.editing .istart-week-task.istart-week-task-connect h3 {
+    background-image: url([[pix:theme|istart/title-connect]]);
+}
+.format-flexsections.editing .istart-week-task.istart-week-task-do h3 {
+    background-image: url([[pix:theme|istart/title-do]]);
+}
+.course-content ul li.section.main.istart-week-task {
+    border-bottom: 0;
+}
+
+/* iStart24 hide course resources */
+body.course-shortname-iStart24 li.activity.lesson.modtype_lesson,
+body.course-shortname-iStart24 li.activity.forum.modtype_forum {
+    display: none;
+}
+body.course-shortname-iStart24.editing li.activity.lesson.modtype_lesson,
+body.course-shortname-iStart24.editing li.activity.forum.modtype_forum {
+    display: list-item;
+}
+/* iStart24 hide iStart24 page title */
+body.course-shortname-iStart24 #page-header
+h1 {
+    display: none;
+}
+
+body.course-shortname-iStart24 .course-content
+ul.section {
+    margin-top: 0;
+}
+/** iStart24 Read pictures. Note: Also use the 'img-responsive' class. */
+img.istart-read-hero {
+    float: right;
+    margin: 8px;
+}
+@media (max-width: 669px) {
+    img.istart-read-hero {
+        float: none;
+        clear: both;
+    }
+}
+@media (min-width: 670px) and (max-width: 979px) {
+    img.istart-read-hero {
+        max-width: 50%;
+    }
+}
+
+/** iStart 24 Remove "Attempt: 1" heading from Welcome lesson */
+body.course-shortname-iStart24#page-mod-lesson-view h3.main {
+    display: none;
+}
