@@ -36,11 +36,11 @@ $THEME->name = 'academy_clean';
 $THEME->doctype = 'html5';
 $THEME->parents = array('bootstrapbase');
 $THEME->sheets = array('academy','course','content','form','questionnaire',
-    'joomla','print','custom','videofile', 'istart');
+    'joomla','print','custom','videofile','istart');
 $THEME->supportscssoptimisation = false;
 $THEME->yuicssmodules = array();
 
-$THEME->editor_sheets = array('content');
+$THEME->editor_sheets = array('content','istart');
 
 $THEME->plugins_exclude_sheets = array(
     'block' => array(
