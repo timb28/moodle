@@ -163,12 +163,14 @@ li.section.main.istart-week-task {
 }
 
 /* iStart24 hide course resources */
-body.course-shortname-iStart24 li.activity.lesson.modtype_lesson,
-body.course-shortname-iStart24 li.activity.forum.modtype_forum {
+body.course-shortname-iStart24 .istart-welcome li.activity.lesson,
+body.course-shortname-iStart24 .istart-welcome li.activity.forum,
+body.course-shortname-iStart24 .istart-welcome li.activity.page {
     display: none;
 }
-body.course-shortname-iStart24.editing li.activity.lesson.modtype_lesson,
-body.course-shortname-iStart24.editing li.activity.forum.modtype_forum {
+body.course-shortname-iStart24.editing .istart-welcome li.activity.lesson,
+body.course-shortname-iStart24.editing .istart-welcome li.activity.forum,
+body.course-shortname-iStart24.editing .istart-welcome li.activity.page {
     display: list-item;
 }
 /* iStart24 hide iStart24 page title */

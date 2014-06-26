@@ -54,6 +54,11 @@ table.roleplaymedia td {
   padding: 0;
 }
 
+/* Pages */
+#page-mod-page-view .modified {
+    display: none;
+}
+
 /* NZ Online CE */
 table.table-indented {
     margin-left: 2em;
