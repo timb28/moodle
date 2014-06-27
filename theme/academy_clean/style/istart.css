@@ -3,6 +3,7 @@
  *   Created on : 23/06/2014, 3:09:48 PM
  *   Author     : timbutler
  */
+
 .istartaction {
     padding: 0 0 4px 58px;
     border-bottom: 1px solid #eee;
@@ -49,19 +50,6 @@
 .istartaction.istartaction-write {
     background: url([[pix:theme|istart/write]]) top left no-repeat;
 }
-/** "Start Here" banner that points to Watch */
-.format-flexsections .flexsections-level-0 > .istart-week-01 > .content > .summary {
-    background-image: url([[pix:theme|istart/start-here]]);
-    background-repeat: no-repeat;
-    background-position: 4% 0;
-    padding-top: 57px;
-}
-@media (min-width: 980px) {
-    .format-flexsections .flexsections-level-0 > .istart-week-01 > .content > .summary {
-        position: relative;
-        top: 52px; /* = height of the header */
-    }
-}
 /** iStart24 Flex Sections
  *  Requirements:
  *  1 The twenty four week Flex Sections have the custom class "istart-week-NN"
@@ -72,29 +60,54 @@
  *    - istart-week-task istart-week-task-do
  *
  */
-.format-flexsections .course-content-header,
-.format-flexsections .course-content-footer {
+.course-shortname-iStart24.format-flexsections .course-content-header {
+    display: none;
+}
+.course-shortname-iStart24.format-flexsections .course-content-footer {
     clear: both;
 }
-.format-flexsections .header.backto {
+.course-shortname-iStart24.format-flexsections .header.backto {
+    background-color: #f5f5f5;
+    background-image: linear-gradient(to bottom, #fff, #e6e6e6);
+    background-repeat: repeat-x;
+    border-color: #ccc #ccc #b3b3b3;
+    border-image: none;
     border-radius: 4px;
-    background: transparent;
-    border: 1px solid #DDDDDD;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #333;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    line-height: 24px;
+    padding: 4px 12px;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    vertical-align: middle;
 }
-.format-flexsections .header.backto a {
-    display: block;
+.course-shortname-iStart24.format-flexsections .header.backto:hover {
+    background-position: 0 -15px;
+    background-color: #e6e6e6;
+    color: #333;
+    text-decoration: none;
+    transition: background-position 0.1s linear 0s;
 }
-.format-flexsections .course-content-footer {
+.course-shortname-iStart24.format-flexsections .course-content-footer {
     margin: 1em 0;
 }
-body.course-shortname-iStart24 .section h3 {
+.course-shortname-iStart24 .course-content > .flexsections > .section > .content > h3 {
+    margin-top: 0;
+    font-weight: bold;
+}
+.course-shortname-iStart24 .section h3 {
     font-weight: normal;
 }
 .format-flexsections .course-content ul.flexsections.flexsections-level-1
 li.section.main.istart-week-task {
     float: left;
     width: 25%;
-    padding-top: 0;
+    padding-top: 2em;
 }
 @media (min-width: 980px) {
     .format-flexsections .course-content ul.flexsections.flexsections-level-1
