@@ -68,3 +68,18 @@ table.table-indented {
 table.ce2013-weblink {
     width: 100%;
 }
+
+/* Alert icons */
+.ha-alert .icon {
+    background-size: contain;
+    width: 34px;
+    height: 34px;
+    margin-top: 4px;
+    float: left;
+}
+.ha-alert .message {
+    margin-left: 40px;
+}
+.ha-alert .ha-icon-circled-info {
+    background: url([[pix:theme|icon-circled-info]]) 0% 50% no-repeat;
+}
