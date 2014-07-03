@@ -6,6 +6,16 @@
         Contains Academy specific styles for content and assessments.
 */
 
+/** Reports **/
+.pagelayout-report #completion-progress-wrapper {
+    overflow-x: scroll;
+}
+
+.pagelayout-report ul.progress-actions li {
+    padding: .4em;
+    list-style: none;
+}
+
 /** Extend Bootstrap definitition lists */
 @media (max-width: 767px) {
     .dl-horizontal.dl-narrow dd {
