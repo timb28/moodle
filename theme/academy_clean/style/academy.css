@@ -495,35 +495,31 @@ div.standardbutton#scormexitbutton {
 .block_academy_library .content .no-overflow {
      min-width: 100%; /* Firefox fix for overflow: auto issue. */
 }
-
 ul.resourcelibrary-links {
     margin: 0;
-    margin-top: 10px;
+    width: 100%;
 }
-
 li.resourcelibrary-links {
     float: left;
     list-style: none;
-    margin-right: 85px;
+    width: 20%;
+    min-width: 80px;
     text-align: center;
     text-transform: uppercase;
 }
-
-li.resourcelibrary-links:last-child {
-    margin-right: 0;
-}
-
 li.resourcelibrary-links a {
     display: block;
-    width: 60px;
+    width: 80px;
     padding-top: 60px;
+    background-position: 15px 0;
+    background-repeat: no-repeat;
+    text-align: center;
 }
-
-li.resourcelibrary-manuals a { background: url([[pix:theme|icon-manuals]]) no-repeat; }
-li.resourcelibrary-forms a { background: url([[pix:theme|icon-forms]]) no-repeat; }
-li.resourcelibrary-letters a { background: url([[pix:theme|icon-letters]]) no-repeat; }
-li.resourcelibrary-scripts a { background: url([[pix:theme|icon-scripts]]) no-repeat; }
-li.resourcelibrary-other a { background: url([[pix:theme|icon-other]]) no-repeat; }
+li.resourcelibrary-manuals a { background-image: url([[pix:theme|icon-manuals]]); }
+li.resourcelibrary-forms   a { background-image: url([[pix:theme|icon-forms]]); }
+li.resourcelibrary-letters a { background-image: url([[pix:theme|icon-letters]]); }
+li.resourcelibrary-scripts a { background-image: url([[pix:theme|icon-scripts]]); }
+li.resourcelibrary-other   a { background-image: url([[pix:theme|icon-other]]); }
 
 /**
  * Academy overridden CSS
