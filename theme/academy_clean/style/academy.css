@@ -130,39 +130,29 @@ div#page {
     border: none;
     box-shadow: none;
 }
-
 #page-center .block.block_html .content .no-overflow {
     min-width: 100%; /* Firefox fix for overflow: auto issue. */
 }
-
 .av-gallery ul {
-    width: 180px;
     float: left;
+    width: 30%;
+    min-width: 170px;
     margin: 0;
-    margin-right: 58px;
     padding: 0;
 }
-
-.av-gallery ul:last-child {
-    margin-right: 0;
-}
-
 .av-gallery ul li {
-    margin-bottom: .5em;
+    margin: 0 .5em .5em 0;
     list-style: none;
 }
-
 .av-gallery ul li h2 {
     font-size: 1.2em;
     padding: 0;
     margin: 0;
 }
-
 .av-gallery ul li img {
     display: block;
     border: 1px solid #000;
 }
-
 .av-gallery ul li a:hover img {
     display: block;
     border: 1px solid #002e63;
