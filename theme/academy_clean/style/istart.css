@@ -219,3 +219,8 @@ img.istart-read-hero {
 body.course-shortname-iStart24#page-mod-lesson-view h3.main {
     display: none;
 }
+
+/** iStart24 Hide the week prefix used to distinguish task labels. */
+body.course-shortname-iStart24 .istart-week-prefix {
+    display: none;
+}
