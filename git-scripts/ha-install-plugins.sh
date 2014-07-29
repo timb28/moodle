@@ -17,15 +17,6 @@ echo "Cloning Configurable Reports Block"
 (cd .. && echo /blocks/configurable_reports/ >> .git/info/exclude)
 (cd .. && git --git-dir=blocks/configurable_reports/.git remote add upstream https://github.com/jleyva/moodle-block_configurablereports.git)
  
-## Game
-echo "Cloning Game Module"
-(cd .. && git clone https://github.com/HarcourtsAcademy/moodle-mod_game.git mod/game)
-(cd .. && echo /mod/game/ >> .git/info/exclude)
-(cd ../mod/game && git remote add upstream https://github.com/bdaloukas/moodle-mod_game.git)
-(cd ../mod/game && git branch -a)
-(cd ../mod/game && git branch --track MOODLE_20_STABLE origin/MOODLE_20_STABLE)
-(cd ../mod/game && git checkout MOODLE_20_STABLE)
- 
 ## Questionnaire
 echo "Cloning Questionnaire Module"
 (cd .. && git clone https://github.com/HarcourtsAcademy/moodle-mod_questionnaire.git mod/questionnaire)

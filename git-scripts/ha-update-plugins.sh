@@ -10,10 +10,6 @@ echo "Updating Certificates Module"
 echo "Updating Configurable Reports Block"
 (cd ../blocks/configurable_reports && git fetch origin && git pull origin CR_23_STABLE && git checkout CR_23_STABLE)
 
-## Game
-echo "Updating Game Module"
-(cd ../mod/game && git fetch origin && git pull origin MOODLE_20_STABLE)
-
 ## Questionnaire
 echo "Updating Questionnaire Module"
 (cd ../mod/questionnaire/ && git fetch origin && git pull origin MOODLE_25_STABLE)
