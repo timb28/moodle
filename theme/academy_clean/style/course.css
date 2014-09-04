@@ -53,3 +53,6 @@ li.activity.label,
 .editing_duplicate {
     display: none;
 }
+
+.left.side{display:none}
+.editing .left.side{display:inline}
