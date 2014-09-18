@@ -2142,10 +2142,7 @@ class joomdle_helpers_external extends external_api {
         $params = self::validate_parameters(self::suspend_enrolment_parameters(), array('username'=>$username, 'id' => $id));
 
         $auth = new  auth_plugin_joomdle ();
-        /* START M#23 Prevent Harcourts One from suspending student enrolments until tracker HO-117895 is fixed */
-//        $id = $auth->suspend_enrolment ($username, $id);
-        $id = null;
-        /* END M#23 Prevent Harcourts One from suspending student enrolments until tracker HO-117895 is fixed */
+        $id = $auth->suspend_enrolment ($username, $id);
 
         return $id;
     }
