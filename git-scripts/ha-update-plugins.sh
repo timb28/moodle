@@ -20,7 +20,7 @@ echo "Updating Block Unanswered Discussions"
 
 ## Enrolments ##
 echo "Updating Enrol Application"
-./enrol_apply-update.sh
+./enrol_apply-update-origin.sh
 
 ## Course Formats ##
 echo "Updating Course Format Flexsections"
