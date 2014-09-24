@@ -12,10 +12,7 @@ echo "Cloning Certificates Module"
 (cd ../mod/certificate && git checkout HA-Moodle25)
  
 ## Configurable Reports
-echo "Cloning Configurable Reports Block"
-(cd .. && git clone https://github.com/HarcourtsAcademy/moodle-block_configurablereports.git blocks/configurable_reports)
-(cd .. && echo /blocks/configurable_reports/ >> .git/info/exclude)
-(cd .. && git --git-dir=blocks/configurable_reports/.git remote add upstream https://github.com/jleyva/moodle-block_configurablereports.git)
+./block_configurable_report-install.sh
  
 ## Questionnaire
 echo "Cloning Questionnaire Module"

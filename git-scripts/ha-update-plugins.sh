@@ -3,6 +3,9 @@
 ## 
 
 ## Blocks ##
+echo "Updating Configurable Reports Block"
+./block_configurable_report-update-origin.sh
+
 echo "Updating Block Forum Aggregator"
 ./block_forum_aggregator-update.sh
 
@@ -25,9 +28,6 @@ echo "Updating Course Format Flexsections"
 
 ## Activities ##
 ./mod_certificate-update-origin.sh
-
-echo "Updating Configurable Reports Block"
-(cd ../blocks/configurable_reports && git fetch origin && git pull origin CR_23_STABLE && git checkout CR_23_STABLE)
 
 echo "Updating Activity Game"
 ./mod_game-update.sh
