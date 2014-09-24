@@ -160,8 +160,13 @@ class data_field_file extends data_field_base {
         $width  = $this->field->param1 ? ' width  = "'.s($this->field->param1).'" ':' ';
         $height = $this->field->param2 ? ' height = "'.s($this->field->param2).'" ':' ';
 
-        $str = $OUTPUT->pix_icon(file_file_icon($file), get_mimetype_description($file), 'moodle', array('width' => 16, 'height' => 16)). '&nbsp;'.
-               '<a href="'.$src.'" >'.s($name).'</a>';
+        // Academy patch: filter output so video URLs can be played using the flowplayer filter.
+        $options = new stdClass();
+        $options->filter = true;
+        $options->para = false;
+        $link = '<a href="'.$src.'" >'.s($name).'</a>';
+        $str = format_text($link, null, $options);
+
         return $str;
     }
 
