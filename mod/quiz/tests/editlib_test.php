@@ -113,16 +113,4 @@ class mod_quiz_editlib_testcase extends advanced_testcase {
         $count = $DB->count_records('question', array('id' => $randomq->id));
         $this->assertEquals(0, $count);
     }
-
-    public function test_quiz_question_tostring() {
-        $question = new stdClass();
-        $question->qtype = 'multichoice';
-        $question->name = 'The question name';
-        $question->questiontext = '<p>What sort of <b>inequality</b> is x &lt; y<img alt="?" src="..."></p>';
-        $question->questiontextformat = FORMAT_HTML;
-
-        $summary = quiz_question_tostring($question);
-        $this->assertEquals('<span class="questionname">The question name</span>' .
-                '<span class="questiontext">What sort of INEQUALITY is x &lt; y[?]</span>', $summary);
-    }
 }
