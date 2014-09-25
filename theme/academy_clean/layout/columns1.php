@@ -24,7 +24,7 @@ $courseclass = ' course-shortname-'.trim($COURSE->shortname);
 
 // Enable CSS to target pages presented to guest users.
 $roleclass = '';
-if (is_guest(get_context_instance(CONTEXT_COURSE, $COURSE->id), $USER)) {
+if (is_guest(context_course::instance($COURSE->id), $USER)) {
     $roleclass = 'guest';
 }
 
