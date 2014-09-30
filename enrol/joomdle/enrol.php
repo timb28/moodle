@@ -51,7 +51,7 @@ function print_entry($course) {
     $strloginto = get_string('loginto', '', $course->shortname);
     $strcourses = get_string('courses');
 
-    $context = get_context_instance(CONTEXT_SYSTEM);
+    $context = context_system::instance();
 
     $navlinks = array();
     $navlinks[] = array('name' => $strcourses, 'link' => ".", 'type' => 'misc');

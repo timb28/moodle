@@ -79,7 +79,7 @@ class enrol_joomdle_plugin extends enrol_plugin {
              throw new coding_exception('Invalid enrol instance type!');
         }
 
-        $context = get_context_instance(CONTEXT_COURSE, $instance->courseid);
+        $context = context_course::instance($instance->courseid);
         if (has_capability('enrol/joomdle:config', $context)) {
             $managelink = new moodle_url('/enrol/joomdle/edit.php', array('courseid'=>$instance->courseid, 'id'=>$instance->id));
             $instancesnode->add($this->get_instance_name($instance), $managelink, navigation_node::TYPE_SETTING);
@@ -97,7 +97,7 @@ class enrol_joomdle_plugin extends enrol_plugin {
         if ($instance->enrol !== 'joomdle') {
             throw new coding_exception('invalid enrol instance!');
         }
-        $context = get_context_instance(CONTEXT_COURSE, $instance->courseid);
+        $context = context_course::instance($instance->courseid);
 
         $icons = array();
 
@@ -115,7 +115,7 @@ class enrol_joomdle_plugin extends enrol_plugin {
      * @return moodle_url page url
      */
     public function get_newinstance_link($courseid) {
-        $context = get_context_instance(CONTEXT_COURSE, $courseid, MUST_EXIST);
+        $context = context_course::instance($courseid, MUST_EXIST);
 
  //       if (!has_capability('moodle/course:enrolconfig', $context) or !has_capability('enrol/joomdle:config', $context)) {
    //         return NULL;
@@ -160,7 +160,7 @@ class enrol_joomdle_plugin extends enrol_plugin {
         $strloginto = get_string("loginto", "", $course->shortname);
         $strcourses = get_string("courses");
 
-        $context = get_context_instance(CONTEXT_COURSE, $course->id);
+        $context = context_course::instance($course->id);
         // Pass $view=true to filter hidden caps if the user cannot see them
         if ($users = get_users_by_capability($context, 'moodle/course:update', 'u.*', 'u.id ASC',
                                              '', '', '', '', false, true)) {
