@@ -32,7 +32,7 @@ $USER = get_complete_user_data('username', $username);
 complete_user_login($USER);
 
 require_login($course->id, true, $cm);
-$context = get_context_instance(CONTEXT_MODULE, $cm->id);
+$context = context_module::instance($cm->id);
 require_capability('mod/certificate:view', $context);
 
 

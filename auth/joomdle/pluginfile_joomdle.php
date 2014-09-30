@@ -363,7 +363,7 @@ if ($component === 'blog') {
 
             while (!$canview && count($courses) > 0) {
                 $course = array_shift($courses);
-                if (has_capability('moodle/user:viewdetails', get_context_instance(CONTEXT_COURSE, $course->id))) {
+                if (has_capability('moodle/user:viewdetails', context_course::instance($course->id))) {
                     $canview = true;
                 }
             }
@@ -380,7 +380,7 @@ if ($component === 'blog') {
 
     } else if ($filearea === 'profile' and $context->contextlevel == CONTEXT_COURSE) {
         $userid = (int)array_shift($args);
-        $usercontext = get_context_instance(CONTEXT_USER, $userid);
+        $usercontext = context_user::instance($userid);
 
         if ($CFG->forcelogin) {
             require_login();

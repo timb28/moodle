@@ -18,7 +18,7 @@ require_once($CFG->libdir.'/authlib.php');
 require_once($CFG->dirroot.'/auth/joomdle/auth.php');
 
 // it gives a warning if no context set, I guess it does nor matter which we use
-$PAGE->set_context(get_context_instance(CONTEXT_SYSTEM));
+$PAGE->set_context(context_system::instance());
 /*
 if (!$site = get_site()) {
     print_error('mnet_session_prohibited', 'mnet', '', '');

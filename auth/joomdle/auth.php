@@ -833,7 +833,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 			$record['id'] = $course->id;
 			$record['fullname'] = $course->fullname;
 
-			$context = get_context_instance(CONTEXT_COURSE, $course->id);
+			$context = context_course::instance($course->id);
 			/* 3 indica profesores editores (table mdl_role) */
 			$profs = get_role_users(3 , $context);
 			$data = array ();
@@ -1005,7 +1005,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 			$c['fullname'] = format_string($c['fullname']);
 			$c['cat_name'] = format_string($c['cat_name']);
 
-			$context = get_context_instance(CONTEXT_COURSE, $curso->remoteid);
+			$context = context_course::instance($curso->remoteid);
 			$c['summary'] = file_rewrite_pluginfile_urls ($c['summary'], 'pluginfile.php', $context->id, 'course', 'summary', NULL);
 			$c['summary'] = str_replace ('pluginfile.php', '/auth/joomdle/pluginfile_joomdle.php', $c['summary']);
 			$c['summary'] = format_text($c['summary'], FORMAT_MOODLE, $options);
@@ -1142,7 +1142,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 			$c['fullname'] = format_string($c['fullname']);
 			$c['cat_name'] = format_string($c['cat_name']);
 
-			$context = get_context_instance(CONTEXT_COURSE, $curso->remoteid);
+			$context = context_course::instance($curso->remoteid);
 			$c['summary'] = file_rewrite_pluginfile_urls ($c['summary'], 'pluginfile.php', $context->id, 'course', 'summary', NULL);
 			$c['summary'] = str_replace ('pluginfile.php', '/auth/joomdle/pluginfile_joomdle.php', $c['summary']);
 			$c['summary'] = format_text($c['summary'], FORMAT_MOODLE, $options);
@@ -1183,7 +1183,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 			$c = get_object_vars ($cat);
 			$c['name'] = format_string($c['name']);
 
-			$context = get_context_instance(CONTEXT_COURSECAT, $cat->id);
+			$context = context_coursecat::instance($cat->id);
 			$c['description'] = file_rewrite_pluginfile_urls ($c['description'], 'pluginfile.php', $context->id, 'coursecat', 'description', NULL);
 			$c['description'] = str_replace ('pluginfile.php', '/auth/joomdle/pluginfile_joomdle.php', $c['description']);
 			$c['description'] = format_text($c['description'], FORMAT_MOODLE, $options);
@@ -1311,12 +1311,12 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 
 			$c['fullname'] = format_string($c['fullname']);
 			$c['cat_name'] = format_string($c['cat_name']);
-			$context = get_context_instance(CONTEXT_COURSECAT, $c['cat_id']);
+			$context = context_coursecat::instance($c['cat_id']);
 			$c['cat_description'] = file_rewrite_pluginfile_urls ($c['cat_description'], 'pluginfile.php', $context->id, 'coursecat', 'description', NULL);
 			$c['cat_description'] = str_replace ('pluginfile.php', '/auth/joomdle/pluginfile_joomdle.php', $c['cat_description']);
 			$c['cat_description'] = format_text($c['cat_description'], FORMAT_MOODLE, $options);
 
-			$context = get_context_instance(CONTEXT_COURSE, $curso->remoteid);
+			$context = context_course::instance($curso->remoteid);
 			$c['summary'] = file_rewrite_pluginfile_urls ($c['summary'], 'pluginfile.php', $context->id, 'course', 'summary', NULL);
 			$c['summary'] = str_replace ('pluginfile.php', '/auth/joomdle/pluginfile_joomdle.php', $c['summary']);
 			$c['summary'] = format_text($c['summary'], FORMAT_MOODLE, $options);
@@ -1372,12 +1372,12 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 		$course_info =  get_object_vars ($record);
 		$course_info['fullname'] = format_string($course_info['fullname']);
 		$course_info['cat_name'] = format_string($course_info['cat_name']);
-		$context = get_context_instance(CONTEXT_COURSECAT, $course_info['cat_id']);
+		$context = context_coursecat::instance($course_info['cat_id']);
 		$course_info['cat_description'] = file_rewrite_pluginfile_urls ($course_info['cat_description'], 'pluginfile.php', $context->id, 'coursecat', 'description', NULL);
 		$course_info['cat_description'] = str_replace ('pluginfile.php', '/auth/joomdle/pluginfile_joomdle.php', $course_info['cat_description']);
 		$course_info['cat_description'] = format_text($course_info['cat_description'], FORMAT_MOODLE, $options);
 
-		$context = get_context_instance(CONTEXT_COURSE, $record->remoteid);
+		$context = context_course::instance($record->remoteid);
 		$course_info['summary'] = file_rewrite_pluginfile_urls ($course_info['summary'], 'pluginfile.php', $context->id, 'course', 'summary', NULL);
 		$course_info['summary'] = str_replace ('pluginfile.php', '/auth/joomdle/pluginfile_joomdle.php', $course_info['summary']);
 		$course_info['summary'] = format_text($course_info['summary'], FORMAT_MOODLE, $options);
@@ -1497,7 +1497,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 		$params = array ($id);
 		$records =  $DB->get_records_sql($query, $params);
 
-		$context = get_context_instance(CONTEXT_COURSE, $id);
+		$context = context_course::instance($id);
 
 		$options['noclean'] = true;
 		$data = array ();
@@ -1527,7 +1527,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 		global $CFG;
 
 		$id = addslashes ($id);
-		$context = get_context_instance(CONTEXT_COURSE, $id);
+		$context = context_course::instance($id);
 		/* 3 indica profesores editores (table mdl_role) */
 		$profs = get_role_users(3 , $context);
 
@@ -2125,7 +2125,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
             return array();
 
         $gpr = new grade_plugin_return(array('type'=>'report', 'plugin'=>'user', 'courseid'=>$id, 'userid'=>$user->id));
-        $context = get_context_instance(CONTEXT_COURSE, $id);
+        $context = context_course::instance($id);
         $report = new grade_report_user($id, $gpr, $context, $user->id);
 
         // Get course total
@@ -2450,7 +2450,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 	{
 		global $CFG;
 
-		$context = get_context_instance(CONTEXT_COURSE, $id);
+		$context = context_course::instance($id);
 		/* 5 indica estudiantes (table mdl_role) */
 		$alumnos = get_role_users(5 , $context);
 
@@ -2461,7 +2461,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 	{
 		global $CFG;
 
-		$context = get_context_instance(CONTEXT_COURSE, $id);
+		$context = context_course::instance($id);
 		/* 5 indica estudiantes (table mdl_role) */
 		$alumnos = get_role_users(5 , $context);
 
@@ -3072,7 +3072,7 @@ function create_joomdle_user ($username, $app = '')
 				$tmp_file = $CFG->dataroot.'/temp/'.'tmp_pic';
 				file_put_contents ($tmp_file, $pic);
 
-				$context = get_context_instance(CONTEXT_USER, $user->id);
+				$context = context_user::instance($user->id);
 				process_new_icon($context, 'user', 'icon', 0, $tmp_file);
 
 				$conditions = array ('id' => $user->id);
@@ -3199,7 +3199,7 @@ function search_courses ($text, $phrase, $ordering, $limit)
 		$c['fullname'] = format_string($c['fullname']);
 		$c['summary'] = format_text($c['summary'], FORMAT_MOODLE, $options);
 		$c['cat_name'] = format_string($c['cat_name']);
-		$context = get_context_instance(CONTEXT_COURSECAT, $c['cat_id']);
+		$context = context_coursecat::instance($c['cat_id']);
 		$c['cat_description'] = file_rewrite_pluginfile_urls ($c['cat_description'], 'pluginfile.php', $context->id, 'coursecat', 'description', NULL);
 		$c['cat_description'] = str_replace ('pluginfile.php', '/auth/joomdle/pluginfile_joomdle.php', $c['cat_description']);
 		$c['cat_description'] = format_text($c['cat_description'], FORMAT_MOODLE, $options);
@@ -3872,7 +3872,7 @@ function add_user_role ($username, $course_id, $role_id)
     $params = array ('id' => $course_id);
     $course = $DB->get_record('course', $params);
 
-    $context   = get_context_instance(CONTEXT_COURSE, $course->id);
+    $context   = context_course::instance($course->id);
 
     if (!$context)
         return;
@@ -4232,7 +4232,7 @@ function user_details ($username)
 	$u['picture'] = $user->picture;
 
 	$id = $user->id;
-	$usercontext = get_context_instance(CONTEXT_USER, $id, MUST_EXIST);
+	$usercontext = context_user::instance($id, MUST_EXIST);
 	$context_id = $usercontext->id;
 
 	if ($user->picture)
@@ -4438,7 +4438,7 @@ function migrate_to_joomdle ($username)
             return false;
 
 
-		$context   = get_context_instance(CONTEXT_USER, $child_user->id);
+		$context   = context_user::instance($child_user->id);
 		
 		role_assign($parent_role_id, $parent_user->id, $context->id ); //, $timestart, 0, $hidden);
 
@@ -4514,7 +4514,7 @@ function migrate_to_joomdle ($username)
 		$username = strtolower ($username);
 		$user = get_complete_user_data ('username', $username);
 		/* Get mentors for the student */
-		$usercontext   = get_context_instance(CONTEXT_USER, $user->id);
+		$usercontext   = context_user::instance($user->id);
 		$usercontextid = $usercontext->id;
 
 		$query =
@@ -4574,7 +4574,7 @@ function migrate_to_joomdle ($username)
         $students = $this->get_course_students ($id);
         foreach ($students as $student)
         {
-            $context = get_context_instance(CONTEXT_USER, $student['id']);
+            $context = context_user::instance($student['id']);
 
             $conditions = array ('contextid' => $context->id);
             $parents = $DB->get_records('role_assignments',$conditions);
@@ -4948,7 +4948,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 		$params = array ($id);
 		$records =  $DB->get_records_sql($query, $params);
 
-		$context = get_context_instance(CONTEXT_COURSE, $id);
+		$context = context_course::instance($id);
 
 		$user = get_complete_user_data ('username', $username);
 
@@ -5063,7 +5063,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 		$params = array ($id);
 		$records =  $DB->get_records_sql($query, $params);
 
-		$context = get_context_instance(CONTEXT_COURSE, $id);
+		$context = context_course::instance($id);
 
 		if ($username)
 				$user = get_complete_user_data ('username', $username);
@@ -5143,7 +5143,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 
         get_all_mods($id, $mods, $modnames, $modnamesplural, $modnamesused);
 
-		$context = get_context_instance(CONTEXT_COURSE, $id);
+		$context = context_course::instance($id);
 
 		$e = array ();
         foreach ($sections as $section)
@@ -5307,7 +5307,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 
 		$options['noclean'] = true;
 		$mypage['name'] = $page->name;
-		$context = get_context_instance(CONTEXT_MODULE, $cm->id);
+		$context = context_module::instance($cm->id);
         $mypage['content'] = file_rewrite_pluginfile_urls ($page->content, 'pluginfile.php', $context->id, 'mod_page', 'content', $page->revision);
 		$mypage['content'] = format_text($mypage['content'], FORMAT_MOODLE, $options);
 
@@ -5325,7 +5325,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
             
 		$options['noclean'] = true;
         $mylabel['name'] = $label->name;
-        $context = get_context_instance(CONTEXT_MODULE, $cm->id);
+        $context = context_module::instance($cm->id);
         $mylabel['content'] = $label->intro;
 		$mylabel['content'] = format_text($mylabel['content'], FORMAT_MOODLE, $options);
 
@@ -5724,7 +5724,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
                 $userinfo['picture'] = $user->picture;
 
                 $id = $user->id;
-				$usercontext = get_context_instance(CONTEXT_USER, $id, MUST_EXIST);
+				$usercontext = context_user::instance($id, MUST_EXIST);
 				$context_id = $usercontext->id;
 
 				if ($user->picture)
@@ -5800,7 +5800,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 		$userinfo['picture'] = $user->picture;
 
 		$id = $user->id;
-		$usercontext = get_context_instance(CONTEXT_USER, $id, MUST_EXIST);
+		$usercontext = context_user::instance($id, MUST_EXIST);
 		$context_id = $usercontext->id;
 
 		if ($user->picture)
@@ -5849,7 +5849,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 		$conditions = array ('id' => $course->category);
 		$cat = $DB->get_record('course_categories',$conditions);
 
-		$context = get_context_instance(CONTEXT_COURSE, $course->id);
+		$context = context_course::instance($course->id);
 		$course->summary = file_rewrite_pluginfile_urls ($course->summary, 'pluginfile.php', $context->id, 'course', 'summary', NULL);
 		$course->summary = str_replace ('pluginfile.php', '/auth/joomdle/pluginfile_joomdle.php', $course->summary);
 		if ($activities)
@@ -5941,7 +5941,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 
 		$auth_joomdle = new auth_plugin_joomdle ();
 
-		$context = get_context_instance_by_id ($role->contextid);
+		$context = context::instance_by_id($role->contextid);
 		/* If a course enrolment, publish */
 		if ($context->contextlevel == CONTEXT_COURSE)
 		{
@@ -5976,7 +5976,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 				if ($role->roleid == 5) //XXX not hardcoded value?
 				{
 					/* Get mentors for the student */
-					$usercontext   = get_context_instance(CONTEXT_USER, $role->userid);
+					$usercontext   = context_user::instance($role->userid);
 					$usercontextid = $usercontext->id;
 
 					$query =
@@ -6014,7 +6014,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 					$type = 'course_students';
 
 					/* Get mentors for the student */
-					$usercontext   = get_context_instance(CONTEXT_USER, $role->userid);
+					$usercontext   = context_user::instance($role->userid);
 					$usercontextid = $usercontext->id;
 
 					$query =
@@ -6075,7 +6075,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 
 		$auth_joomdle = new auth_plugin_joomdle ();
 
-		$context = get_context_instance_by_id ($role->contextid);
+		$context = context::instance_by_id($role->contextid);
 		/* If a course unenrolment, remove from group */
 		if ($context->contextlevel == CONTEXT_COURSE)
 		{
@@ -6099,7 +6099,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 					$type = 'course_students';
 
 					/* Get mentors for the student */
-					$usercontext   = get_context_instance(CONTEXT_USER, $role->userid);
+					$usercontext   = context_user::instance($role->userid);
 					$usercontextid = $usercontext->id;
 
 					$query =
