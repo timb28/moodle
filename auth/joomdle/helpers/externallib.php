@@ -120,6 +120,7 @@ class joomdle_helpers_external extends external_api {
                     'id' => new external_value(PARAM_INT, 'group record id'),
                     'fullname' => new external_value(PARAM_TEXT, 'course name'),
                     'category' => new external_value(PARAM_INT, 'course category id'),
+                    'cat_name' => new external_value(PARAM_TEXT, 'course category name'),
                 )
             )
         );
@@ -1479,7 +1480,7 @@ class joomdle_helpers_external extends external_api {
         $params = self::validate_parameters(self::get_course_daily_stats_parameters(), array('id' => $id));
  
 		$auth = new  auth_plugin_joomdle ();
-		$return = $auth->get_course_daily_stats ();
+		$return = $auth->get_course_daily_stats ($id);
 
         return $return;
     }
@@ -3231,7 +3232,7 @@ class joomdle_helpers_external extends external_api {
         $params = self::validate_parameters(self::get_all_parents_parameters(), array());
 
         $auth = new  auth_plugin_joomdle ();
-        $return = $auth->get_all_parents ($id);
+        $return = $auth->get_all_parents ();
 
 
         return $return;
@@ -3427,6 +3428,220 @@ class joomdle_helpers_external extends external_api {
 		$id = $auth->multiple_remove_from_group ($username, $courses);
 
         return $id;
+    }
+
+	/* my_all_courses */
+    public static function my_all_courses_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'username' => new external_value(PARAM_TEXT, 'Username'),
+                        )
+        );
+    }
+
+    public static function my_all_courses_returns() {
+		 return new external_multiple_structure(
+            new external_single_structure(
+                array(
+                    'id' => new external_value(PARAM_INT, 'group record id'),
+                    'fullname' => new external_value(PARAM_TEXT, 'course name'),
+                    'category' => new external_value(PARAM_INT, 'course category id'),
+                )
+            )
+        );
+    }
+
+    public static function my_all_courses($username) {
+        global $CFG, $DB;
+ 
+        $params = self::validate_parameters(self::my_all_courses_parameters(), array('username'=>$username));
+ 
+		$auth = new  auth_plugin_joomdle ();
+		$return = $auth->my_all_courses ($username);
+
+        return $return;
+    }
+
+	/* multiple_unenrol_user */
+    public static function multiple_unenrol_user_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'username' => new external_value(PARAM_TEXT, 'username'),
+							'courses' => new external_multiple_structure(
+									new external_single_structure(
+										array(
+											'id' => new external_value(PARAM_INT, 'course id'),
+										)
+									)
+								),
+                        )
+        );
+    }
+
+    public static function multiple_unenrol_user_returns() {
+        return new  external_value(PARAM_INT, 'user enroled');
+    }
+
+    public static function multiple_unenrol_user($username, $courses) { 
+        global $CFG, $DB;
+ 
+        $params = self::validate_parameters(self::multiple_unenrol_user_parameters(), array('username'=>$username, 'courses' => $courses));
+ 
+		$auth = new  auth_plugin_joomdle ();
+		$id = $auth->multiple_unenrol_user ($username, $courses);
+
+        return $id;
+    }
+
+	    /* suspend_enrolment */
+    public static function unenrol_user_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'username' => new external_value(PARAM_TEXT, 'username'),
+                            'id' => new external_value(PARAM_INT, 'course id'),
+                        )
+        );
+    }
+
+    public static function unenrol_user_returns() {
+        return new  external_value(PARAM_INT, 'user created');
+    }
+
+    public static function unenrol_user($username, $id) {
+        global $CFG, $DB;
+
+        $params = self::validate_parameters(self::unenrol_user_parameters(), array('username'=>$username, 'id' => $id));
+
+        $auth = new  auth_plugin_joomdle ();
+        $id = $auth->unenrol_user ($username, $id);
+
+        return $id;
+    }
+
+
+	/* get_children_grades */
+    public static function get_children_grades_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'username' => new external_value(PARAM_TEXT, 'username'),
+                        )
+        );
+    }
+
+    public static function get_children_grades_returns() {
+		 return new external_multiple_structure(
+				new external_single_structure(
+					array(
+						'username' => new external_value(PARAM_TEXT, 'username'),
+						'name' => new external_value(PARAM_TEXT, 'name'),
+						'grades' =>
+								 new external_multiple_structure(
+									new external_single_structure(
+										array(
+											'fullname' => new external_value(PARAM_TEXT, 'fullname'),
+											'remoteid' => new external_value(PARAM_INT, 'course id'),
+											'grades' => new external_multiple_structure(
+														new external_single_structure(
+															array (
+																'itemname' => new external_value(PARAM_TEXT, 'item name'),
+																'finalgrade' => new external_value(PARAM_TEXT, 'final grade'),
+															)
+														)
+											),
+
+										)
+									)
+								)
+					)
+				)
+            );
+    }
+
+    public static function get_children_grades($username) {
+        global $CFG, $DB;
+ 
+        $params = self::validate_parameters(self::get_children_grades_parameters(), array('username'=>$username));
+ 
+		$auth = new  auth_plugin_joomdle ();
+		$return = $auth->get_children_grades ($username);
+
+        return $return;
+    }
+
+
+	/* get_children_grade_user_report */
+    public static function get_children_grade_user_report_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'username' => new external_value(PARAM_TEXT, 'username'),
+                        )
+        );
+    }
+
+    public static function get_children_grade_user_report_returns() {
+		 return new external_multiple_structure(
+				new external_single_structure(
+					array(
+						'username' => new external_value(PARAM_TEXT, 'username'),
+						'name' => new external_value(PARAM_TEXT, 'name'),
+						'grades' =>
+								  new external_multiple_structure(
+									new external_single_structure(
+										array(
+											'fullname' => new external_value(PARAM_TEXT, 'fullname'),
+											'remoteid' => new external_value(PARAM_INT, 'course id'),
+											'grades' => 
+												new external_single_structure(
+												array(
+													'config' =>
+														new external_single_structure(
+															array(
+																	'showlettergrade' => new external_value(PARAM_INT, 'showlettergrade'),
+																)
+															),
+													'data' =>
+														 new external_multiple_structure(
+															new external_single_structure(
+																array(
+																	'fullname' => new external_value(PARAM_TEXT, 'item name'),
+																	'grademax' => new external_value(PARAM_FLOAT, 'grademax'),
+																	'finalgrade' => new external_value(PARAM_FLOAT, 'final grade'),
+																	'letter' => new external_value(PARAM_TEXT, 'grade letter'),
+																	'items' => new external_multiple_structure(
+																			new external_single_structure(
+																				array(
+																					'name' => new external_value(PARAM_TEXT, 'item name'),
+																					'due' => new external_value(PARAM_INT, 'due date'),
+																					'grademax' => new external_value(PARAM_FLOAT, 'grademax'),
+																					'finalgrade' => new external_value(PARAM_FLOAT, 'final grade'),
+																					'feedback' => new external_value(PARAM_RAW, 'feedback'),
+																					'letter' => new external_value(PARAM_TEXT, 'grade letter'),
+																				)
+																			)
+																		)
+																)
+															)
+														)
+												)
+											)
+										)
+									)
+								)
+
+					)
+				)
+            );
+    }
+
+    public static function get_children_grade_user_report($username) {
+        global $CFG, $DB;
+ 
+        $params = self::validate_parameters(self::get_children_grade_user_report_parameters(), array('username'=>$username));
+ 
+		$auth = new  auth_plugin_joomdle ();
+		$return = $auth->get_children_grade_user_report ($username);
+
+        return $return;
     }
 
 }

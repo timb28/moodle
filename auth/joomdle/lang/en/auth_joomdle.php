@@ -2,8 +2,8 @@
 
 
 $string['pluginname'] = 'Joomdle';
-$string['pluginame_desc'] = 'This method uses Joomdle web services to know whether a user has a valid session in Joomla.Version 0.92';
-$string['auth_joomdledescription'] = 'This method uses Joomdle web services to know whether a user has a valid session in Joomla.Version 0.92';
+$string['pluginame_desc'] = 'This method uses Joomdle web services to know whether a user has a valid session in Joomla.Version 0.95';
+$string['auth_joomdledescription'] = 'This method uses Joomdle web services to know whether a user has a valid session in Joomla.Version 0.95';
 
 $string['joomla_sp_name'] = 'Joomdle';
 $string['joomla_sp_description'] = 'Services for Joomla Integration<br>';
@@ -43,4 +43,6 @@ $string['auth_joomla_joomla_user_groups'] = 'Use Joomla user groups';
 $string['auth_joomla_joomla_user_groups_description'] = 'Create Joomla user groups for students and teachers. Joomla 1.6+ only';
 $string['auth_joomla_use_kunena_forums'] = 'Use Kunena forums';
 $string['auth_joomla_use_kunena_forums_description'] = 'Sync course forums to Kunena forums in Joomla. Joomla 1.6+ only';
+$string['auth_joomla_redirectless_sso'] = 'Use redirect-less SSO';
+$string['auth_joomla_redirectless_sso_description'] = 'Use SSO without redirection. Requires cURL';
 ?>

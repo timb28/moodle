@@ -1,10 +1,10 @@
 <?php 
 
 $string['pluginname'] = 'Joomdle';
-$string['pluginame_desc'] = 'Este método usa los servicios web Joomdle para saber si un usuario tiene cuenta en Joomla.Version 0.92';
+$string['pluginame_desc'] = 'Este método usa los servicios web Joomdle para saber si un usuario tiene cuenta en Joomla.Version 0.95';
 
 $string['auth_joomdletitle'] = 'Joomdle';
-$string['auth_joomdledescription'] = 'Este método utiliza servicios web para saber si un usuario tiene una sesión válida en Joomla.\nVersion 0.92';
+$string['auth_joomdledescription'] = 'Este método utiliza servicios web para saber si un usuario tiene una sesión válida en Joomla.\nVersion 0.95';
 $string['joomla_sp_name'] = 'Joomdle';
 $string['joomla_sp_description'] = 'Servicios para la integración con Joomla<br>';
 $string['auth_joomla_url'] = 'URL de Joomla<br>';
@@ -37,5 +37,7 @@ $string['auth_joomla_joomla_lang'] = 'Lenguaje por defecto en Joomla';
 $string['auth_joomla_joomla_lang_description'] = 'Cadena del lenguaje por defecto en Joomla. Sólo es necesario para J1.6/1.7/2.5 con múltiples lenguajes';
 $string['auth_joomla_joomla_sef'] = 'Joomla SEF activado';
 $string['auth_joomla_joomla_sef_description'] = 'Configuración SEF de Joomla. Sólo es necesario para J1.6/1.7/2.5 con múltiples lenguajes';
+$string['auth_joomla_redirectless_sso'] = 'Usar SSO sin redirección';
+$string['auth_joomla_redirectless_sso_description'] = 'Usar SSO sin redirección. Requiere cURL';
 
 ?>

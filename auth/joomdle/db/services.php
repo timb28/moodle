@@ -686,6 +686,41 @@ $functions = array(
         'description' => 'Removes user from groups', 
         'type'        => 'read',                 
     ),
+    'joomdle_my_all_courses' => array(        
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'my_all_courses', 
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Get all users in which the has a role assgined', 
+        'type'        => 'read',                 
+    ),
+   'joomdle_unenrol_user' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'unenrol_user',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Unenrol user',
+        'type'        => 'read',
+    ),
+   'joomdle_multiple_unenrol_user' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'multiple_unenrol_user',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Multiple unenrol user',
+        'type'        => 'read',
+    ),
+    'joomdle_get_children_grades' => array(        
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'get_children_grades', 
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Get children grades', 
+        'type'        => 'read',                 
+    ),
+    'joomdle_get_children_grade_user_report' => array(        
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'get_children_grade_user_report', 
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Get children grade report', 
+        'type'        => 'read',                 
+    ),
 );
 
 ?>

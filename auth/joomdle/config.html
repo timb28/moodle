@@ -9,7 +9,7 @@ $joomla_version = get_config('auth/joomdle', 'joomla_version');
 if (!isset($joomla_version))
 	$joomla_version = 'j15';
 
-$jvs = array ( 'j16' => 'Joomla 1.6/1.7/2.5', 'j15' => 'Joomla 1.5.x');
+$jvs = array ( 'j16' => 'Joomla 1.6/1.7/2.5/3.x', 'j15' => 'Joomla 1.5.x');
 
 
 $connection_method = get_config('auth/joomdle', 'connection_method');
@@ -57,6 +57,9 @@ if (!isset($joomla_user_groups))
 $use_kunena_forums = get_config('auth/joomdle', 'use_kunena_forums');
 if (!isset($use_kunena_forums))
 	$use_kunena_forums = 0;
+$redirectless_sso = get_config('auth/joomdle', 'redirectless_sso');
+if (!isset($redirectless_sso))
+	$redirectless_sso = 0;
 
 $yesno = array(get_string('no'), get_string('yes'));
 
@@ -111,6 +114,14 @@ $yesno = array(get_string('no'), get_string('yes'));
 		<?php echo html_writer::select($yesno, 'joomla_sef', $joomla_sef, false); ?>
     </td>
     <td><?php print_string('auth_joomla_joomla_sef_description', 'auth_joomdle') ?></td>
+</tr>
+
+<tr>
+    <td align="right"><label for="menujoomla_redirecless"><?php print_string('auth_joomla_redirectless_sso', 'auth_joomdle') ?></label></td>
+    <td>
+		<?php echo html_writer::select($yesno, 'redirectless_sso', $redirectless_sso, false); ?>
+    </td>
+    <td><?php print_string('auth_joomla_redirectless_sso_description', 'auth_joomdle') ?></td>
 </tr>
 
 <tr>
