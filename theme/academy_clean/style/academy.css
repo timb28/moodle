@@ -227,6 +227,7 @@ div#page {
     width: 100%;
     padding: 5px 0;
     color: #999;
+    border-top: none;
 }
 
 #page-footer a:link {color: #eee; }
