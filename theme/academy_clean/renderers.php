@@ -55,7 +55,7 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
         }
 
         /* Non-embeded video files should also appear as normal. */
-        $customdata = $mod->get_custom_data();
+        $customdata = $mod->customdata;
         $display = $customdata['display'];
         if ($display != RESOURCELIB_DISPLAY_EMBED) {
             return core_course_renderer::course_section_cm_name($mod, $displayoptions);
