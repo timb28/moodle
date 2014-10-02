@@ -98,6 +98,10 @@ class block_academy_library extends block_base {
     public function specialization() {
         $this->title = get_string('blocktitledefault', 'block_academy_library');
 
+        if (!is_object($this->config)) {
+            $this->config = new stdClass();
+        }
+
         // Append the country name if user can see all countries library blocks
         if ($this->user_can_edit() && !empty($this->config->country)) {
             $this->title = $this->title . " - " . get_string('country'.$this->config->country, 'block_academy_library');
