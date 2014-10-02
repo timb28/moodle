@@ -16,7 +16,7 @@ require_once("../../config.php");
 $returnUrl = optional_param('return', '/', PARAM_TEXT);
 
 $PAGE->set_url('/auth/harcourtsone/index.php');
-$PAGE->set_context(get_context_instance(CONTEXT_SYSTEM));
+$PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('admin');
 
 $PAGE->navbar->add(get_string('navbartitle', 'auth_harcourtsone'));
