@@ -16,7 +16,10 @@ class block_harcourts_answers extends block_base {
     }
 
     public function get_content() {
-        $this->config->format = FORMAT_HTML;
+        global $CFG;
+
+//        $this->config = new stdClass;
+//        $this->config->format = FORMAT_HTML;
 
         if ($this->content !== null) {
             return $this->content;
@@ -24,22 +27,12 @@ class block_harcourts_answers extends block_base {
 
         $this->content = new stdClass;
         $this->content->footer = '';
-        $this->content->text = '';
+        require_once($CFG->libdir . '/harcourtslib.php');
+
+        $answerslink = '<a href="' . get_harcourtsanswerslink() . '">' . get_string('linkname', 'block_harcourts_answers') . '</a>';
+        $this->content->text = get_string('blockstring', 'block_harcourts_answers', $answerslink);
 
         return $this->content;
-    }
-
-    public function specialization() {
-
-        $this->title = get_string('blocktitle', 'block_harcourts_answers');
-
-        if (empty($this->content->text)) {
-            global $CFG;
-            require_once($CFG->libdir . '/harcourtslib.php');
-
-            $answerslink = '<a href="' . get_harcourtsanswerslink() . '">' . get_string('linkname', 'block_harcourts_answers') . '</a>';
-            $this->content->text = get_string('blockstring', 'block_harcourts_answers', $answerslink);
-        }
     }
 
     /**
