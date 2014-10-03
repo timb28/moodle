@@ -69,7 +69,7 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
             // nothing to be displayed to the user
             return $output;
         }
-        $url = $mod->get_url();
+        $url = $mod->url;
         if (!$url) {
             return $output;
         }
@@ -122,7 +122,7 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
 
         // Get on-click attribute value if specified and decode the onclick - it
         // has already been encoded for display (puke).
-        $onclick = htmlspecialchars_decode($mod->get_on_click(), ENT_QUOTES);
+        $onclick = htmlspecialchars_decode($mod->onclick, ENT_QUOTES);
 
         $groupinglabel = '';
         if (!empty($mod->groupingid) && has_capability('moodle/course:managegroups', context_course::instance($mod->course))) {
