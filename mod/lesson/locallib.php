@@ -1311,7 +1311,7 @@ class lesson extends lesson_base {
         return '';
     }
 
-        /**
+    /**
      * Returns the url for the related activity. Academy Patch M#016 Enable lesson activity chaining
      * @return moodle_url|false
      */
