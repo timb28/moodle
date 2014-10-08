@@ -124,6 +124,13 @@ class data_field_url extends data_field_base {
             } else {
                 $str = $url;
             }
+
+            /** Academy patch M#002 filter URLs so video URLs can be played using the flowplayer filter. */
+            $options = new stdClass();
+            $options->filter = true;
+            $options->para = false;
+            $str = format_text($str, null, $options);
+
             return $str;
         }
         return false;
