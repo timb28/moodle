@@ -840,6 +840,9 @@ class PHPMailer
      */
     public static function validateAddress($address, $patternselect = 'auto')
     {
+        /** Academy Patch M#024 Enable comments in email addresses. */
+        $address = preg_replace('/\([^)]*\)|[()]/', '', $address); // Remove email comments before validation
+
         if ($patternselect == 'auto') {
             if (defined(
                 'PCRE_VERSION'

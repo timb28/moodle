@@ -407,7 +407,7 @@ class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
         // First try to match the local part on the common dot-atom format
         $result = false;
 
-        /* Academy Patch #22 Enable comments in email addresses */
+        /** Academy Patch M#024 Enable comments in email addresses. */
         // Dot-atom characters are: 1*atext *("." 1*atext)
         // atext: ALPHA / DIGIT / and "!", "#", "$", "%", "&", "'", "*",
         //        "+", "-", "/", "=", "?", "^", "_", "`", "{", "|", "}", "~", "(", ")"
