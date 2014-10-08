@@ -160,7 +160,7 @@ class data_field_file extends data_field_base {
         $width  = $this->field->param1 ? ' width  = "'.s($this->field->param1).'" ':' ';
         $height = $this->field->param2 ? ' height = "'.s($this->field->param2).'" ':' ';
 
-        // Academy patch: filter output so video URLs can be played using the flowplayer filter.
+        // Academy patch M#003 filter output so video URLs can be played using the flowplayer filter.
         $options = new stdClass();
         $options->filter = true;
         $options->para = false;
