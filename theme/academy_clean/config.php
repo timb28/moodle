@@ -40,7 +40,7 @@ $THEME->sheets = array('academy','bootstrapbase','course','content','form','ques
 $THEME->supportscssoptimisation = false;
 $THEME->yuicssmodules = array();
 
-$THEME->editor_sheets = array('content','bootstrapbase','istart');
+$THEME->editor_sheets = array('content','istart');
 
 $THEME->plugins_exclude_sheets = array(
     'block' => array(
