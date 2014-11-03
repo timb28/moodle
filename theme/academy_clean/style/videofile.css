@@ -21,3 +21,6 @@
     width: 100%;
     height: 100%;
 }
+.section .activity.videofile .mod-indent-outer {
+    display: block; /* Fixes tiny video displaysize introduced when Moodle 2.7 changed .mod-indent-outer to be display: table */
+}
