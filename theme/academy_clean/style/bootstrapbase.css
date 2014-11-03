@@ -16,3 +16,7 @@ Moodle Bootstrapbase theme overrides
 .coursebox.collapsed {
     margin-bottom: 6px; // Override Bootstrapbase 'margin-bottom:0;'
 }
+
+#page-course-index-category .generalbox.info {
+    border: none;
+}
