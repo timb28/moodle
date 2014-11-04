@@ -1,38 +1,16 @@
+#!/bin/bash
 ##
 ## Shell script to download all the third party Moodle plugins used by Harcourts Academy
 ##
 
 ## Certificates
-echo "Cloning Certificates Module"
-(cd .. && git clone https://github.com/HarcourtsAcademy/moodle-mod_certificate.git mod/certificate)
-(cd .. && git --git-dir=mod/certificate/.git remote add upstream https://github.com/markn86/moodle-mod_certificate.git)
-(cd .. && echo /mod/certificate/ >> .git/info/exclude)
-(cd ../mod/certificate && git branch -a)
-(cd ../mod/certificate && git branch --track HA-Moodle25 origin/HA-Moodle25)
-(cd ../mod/certificate && git checkout HA-Moodle25)
+./mod_certificate-install.sh
  
 ## Configurable Reports
 ./block_configurable_report-install.sh
  
 ## Questionnaire
-echo "Cloning Questionnaire Module"
-(cd .. && git clone https://github.com/HarcourtsAcademy/moodle-mod_questionnaire.git mod/questionnaire)
-(cd .. && echo /mod/questionnaire/ >> .git/info/exclude)
-(cd ../mod/questionnaire && git remote add upstream https://github.com/remotelearner/moodle-mod_questionnaire.git)
-(cd ../mod/questionnaire && git branch -a)
-(cd ../mod/questionnaire && git branch --track MOODLE_25_STABLE origin/MOODLE_25_STABLE)
-(cd ../mod/questionnaire && git checkout MOODLE_25_STABLE)
-
-## Themes
-
-## Essential
-echo "Cloning Essential Theme"
-(cd .. && git clone https://github.com/HarcourtsAcademy/moodle-theme_essential.git theme/essential)
-(cd .. && echo /theme/essential/ >> .git/info/exclude)
-(cd ../theme/essential/ && git remote add upstream https://github.com/moodleman/moodle-theme_essential.git)
-(cd ../theme/essential/ && git branch -a)
-(cd ../theme/essential/ && git branch --track MOODLE_25 origin/MOODLE_25)
-(cd ../theme/essential/ && git checkout MOODLE_25)
+./mod_questionnaire-install.sh
 
 ## Quiz Question Types
 
