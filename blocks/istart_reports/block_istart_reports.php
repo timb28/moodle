@@ -15,19 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * istart_manager_report block caps.
+ * istart_reports block.
  *
- * @package    block_istart_manager_report
+ * @package    block_istart_reports
  * @copyright  Harcourts Academy <academy@harcourts.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-class block_istart_manager_report extends block_base {
+class block_istart_reports extends block_base {
 
     function init() {
-        $this->title = get_string('pluginname', 'block_istart_manager_report');
+        $this->title = get_string('pluginname', 'block_istart_reports');
     }
 
     function get_content() {
@@ -61,6 +61,14 @@ class block_istart_manager_report extends block_base {
         if ($this->page->course->id == SITEID) {
             $this->context->text .= "site context";
         }
+
+        // Is the user a student?
+
+        // Have they entered their manager's email address?
+        // If yes, display their manager's email address with an edit link
+        // If no, display a message and text field asking the student to enter their manager's email address
+
+        // 
 
         if (! empty($this->config->text)) {
             $this->content->text .= $this->config->text;

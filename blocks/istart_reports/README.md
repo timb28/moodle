@@ -1,4 +1,4 @@
-moodle-blocks_istart_manager_report
+moodle-blocks_istart_reports
 ============================
 Moodle plugin which emails a weekly report to the managers of iStart students.
 
@@ -16,16 +16,16 @@ Changes
 Installation
 ============
 Install the plugin like any other plugin to folder
-/blocks/istart_manager_report
+/blocks/istart_reports
 
 See http://docs.moodle.org/25/en/Installing_plugins for details on installing Moodle plugins
 
 
 Usage & Settings
 ================
-After installing blocks_istart_manager_report, the plugin doesn't do anything until it is configured.
+After installing blocks_istart_reports, the plugin doesn't do anything until it is configured.
 
-To configure the plugin, please visit Plugins -> Blocks -> iStart Manager Report.
+To configure the plugin, please visit Plugins -> Blocks -> iStart Reports.
 
 There, you find TBD sections:
 

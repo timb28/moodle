@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,18 +16,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Strings for component 'block_istart_reports', language 'en'
  *
- * @package    block_istart_manager_report
- * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   block_istart_reports
+ * @copyright Harcourts Academy <academy@harcourts.net>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->version   = 2014112000;
-$plugin->component = 'block_istart_manager_report';
-$plugin->release = '0.1 (Build: 2014112000)';
-$plugin->requires = 2013051401;                     // Requires Moodle 2.5+
-$plugin->maturity = MATURITY_ALPHA;
-//$plugin->cron = 300;
+$string['blockstring'] = 'Block string';
+$string['descconfig'] = 'Description of the config section';
+$string['descfoo'] = 'Config description';
+$string['headerconfig'] = 'Config section header';
+$string['labelfoo'] = 'Config label';
+$string['istart_reports:addinstance'] = 'Add a istart_reports block';
+$string['istart_reports:myaddinstance'] = 'Add a istart_reports block to my moodle';
+$string['pluginname'] = 'iStart Reports';

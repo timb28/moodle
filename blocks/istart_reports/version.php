@@ -15,20 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * istart_manager_report block settings.
+ * Version details
  *
- * @package    block_istart_manager_report
- * @copyright  Harcourts Academy <academy@harcourts.net>
+ * @package    block_istart_reports
+ * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-//$settings->add(new admin_setting_heading('sampleheader',
-//                                         get_string('headerconfig', 'block_istart_manager_report'),
-//                                         get_string('descconfig', 'block_istart_manager_report')));
-//
-//$settings->add(new admin_setting_configcheckbox('istart_manager_report/foo',
-//                                                get_string('labelfoo', 'block_istart_manager_report'),
-//                                                get_string('descfoo', 'block_istart_manager_report'),
-//                                                '0'));
+$plugin->version   = 2014112000;
+$plugin->component = 'block_istart_reports';
+$plugin->release = '0.1 (Build: 2014112000)';
+$plugin->requires = 2013051401;                     // Requires Moodle 2.5+
+$plugin->maturity = MATURITY_ALPHA;
+//$plugin->cron = 300;
