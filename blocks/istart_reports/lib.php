@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->libdir. '/coursecatlib.php');
+
 define('BLOCK_NAME', 'istart_reports');
 
 /**
@@ -54,6 +56,10 @@ function istart_reports_process_manager_reports() {
 
     // Get istart courses that have this block
     $courses = get_courses_with_block(get_blockid(BLOCK_NAME));
+    
+    foreach ($courses as $course) {
+        error_log("Course: " . $course->id);
+    }
     
     // Clean store of manager report emails sent and reports processed for past students (sent > six months ago)
     // Clean store of manager report emails sent for past students no longer enrolled
@@ -91,10 +97,12 @@ function get_blockid($name) {
 
 /**
  * Gets all courses that contain this block
- * @return array Courses
+ * @return array courses[]
  */
 function get_courses_with_block($blockid) {
+    $searchcriteria = array('blocklist' => $blockid);
 
+    return coursecat::search_courses($searchcriteria);
 }
 
 /**
