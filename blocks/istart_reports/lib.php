@@ -82,7 +82,7 @@ function get_blockid($name) {
     global $DB;
     
     if ($block = $DB->get_record('block', array('name'=>$name))) {
-        error_log('Block ID: ' . $block->id);
+        return $block->id;
     } else {
         // this block can't be found in the database
         throw new moodle_exception('noblockid', 'block_istart_reports');
