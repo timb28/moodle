@@ -15,18 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * A scheduled task for block_istart_reports cron.
  *
  * @package    block_istart_reports
- * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
+ * @copyright  2014 Harcourts Academy <academy@harcourts.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace block_istart_reports\task;
 
-defined('MOODLE_INTERNAL') || die();
+class cron_task extends \core\task\scheduled_task {
 
-$plugin->version   = 2014112000;
-$plugin->component = 'block_istart_reports';
-$plugin->release = '0.1 (Build: 2014112000)';
-$plugin->requires = 2014051200;                     // Requires Moodle 2.7+
-$plugin->maturity = MATURITY_ALPHA;
-//$plugin->cron = 300;
+    /**
+     * Get a descriptive name for this task (shown to admins).
+     *
+     * @return string
+     */
+    public function get_name() {
+        return get_string('crontask', 'block_istart_reports');
+    }
+
+    /**
+     * Run istart_reports cron.
+     */
+    public function execute() {
+        global $CFG;
+        require_once($CFG->dirroot . '/blocks/istart_reports/lib.php');
+        istart_reports_cron();
+    }
+
+}

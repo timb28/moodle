@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot . '/blocks/istart_reports/lib.php');
+
 class block_istart_reports extends block_base {
 
     function init() {
@@ -62,13 +64,19 @@ class block_istart_reports extends block_base {
             $this->context->text .= "site context";
         }
 
-        // Is the user a student?
+        // Manager Report
 
+        // Is the user a student?
         // Have they entered their manager's email address?
         // If yes, display their manager's email address with an edit link
-        // If no, display a message and text field asking the student to enter their manager's email address
+        // If no, display a message and text field asking the student to enter their manager's 
+           // email address (saved into a new user profile field called 'manageremail')
 
-        // 
+        // Is the user a trainer?
+        // Display link to iStart Week Report (todo: create this as a report plugin)
+
+        $this->content->text = "<p>here</p>";
+        istart_send_manager_report(1, 2, 3, '2014-11-21');
 
         if (! empty($this->config->text)) {
             $this->content->text .= $this->config->text;
@@ -95,10 +103,10 @@ class block_istart_reports extends block_base {
     function has_config() {return true;}
 
     public function cron() {
-            mtrace( "Hey, my cron script is running" );
+      mtrace( "Hey, my cron script is running" );
              
-                 // do something
+      // 
                   
-                      return true;
+      return true;
     }
 }

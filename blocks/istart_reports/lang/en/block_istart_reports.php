@@ -24,10 +24,12 @@
  */
 
 $string['blockstring'] = 'Block string';
+$string['crontask'] = 'iStart Report jobs';
 $string['descconfig'] = 'Description of the config section';
 $string['descfoo'] = 'Config description';
 $string['headerconfig'] = 'Config section header';
 $string['labelfoo'] = 'Config label';
 $string['istart_reports:addinstance'] = 'Add a istart_reports block';
 $string['istart_reports:myaddinstance'] = 'Add a istart_reports block to my moodle';
+$string['manageremailsubject'] = 'iStart24 Online {$a->week} completion report for {$a->firstname} {$a->lastname}';
 $string['pluginname'] = 'iStart Reports';

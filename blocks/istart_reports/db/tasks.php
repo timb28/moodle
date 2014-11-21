@@ -15,18 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Definition of Forum scheduled tasks.
  *
- * @package    block_istart_reports
- * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   block_istart_reports
+ * @category  task
+ * @copyright 2014 Harcourts Academy <academy@harcourts.net>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2014112000;
-$plugin->component = 'block_istart_reports';
-$plugin->release = '0.1 (Build: 2014112000)';
-$plugin->requires = 2014051200;                     // Requires Moodle 2.7+
-$plugin->maturity = MATURITY_ALPHA;
-//$plugin->cron = 300;
+$tasks = array(
+    array(
+        'classname' => 'block_istart_reports\task\cron_task',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '1',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*'
+    )
+); // 1am every day
