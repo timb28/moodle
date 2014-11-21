@@ -64,6 +64,7 @@ function istart_reports_process_manager_reports() {
         // If yes, was the report processed?
             // If yes, task complete: continue
             // If no, istart_process_manager_report($intake, $reportdate)
+    istart_process_manager_report(3, 1441933200);
     
     return true;
 }
@@ -74,7 +75,7 @@ function istart_reports_process_manager_reports() {
  * @param string $reportdate <p>The report date as a date/time string.</p>
  * @return true
  */
-function istart_process_manager_report(int $groupid, string $reportdate) {
+function istart_process_manager_report($groupid, $reportdate) {
     // Is there a manager report for the group to send on the given report date?
         // If no: return
 
@@ -84,7 +85,12 @@ function istart_process_manager_report(int $groupid, string $reportdate) {
     //  - have finished an iStart week recently (after start date + 6 and before start date + 174)
 
     // Send the manager report for every student in that list
-    // istart_send_manager_report($courseid, $groupid, $userid, $reportdate) {
+    // istart_send_manager_report($courseid, $groupid, $userid, $reportdate);
+    $groupmembers = groups_get_members($groupid);
+//    $user = get_user(3753);
+    foreach ($groupmembers as $user) {
+        istart_send_manager_report(48, $groupid, $user, $reportdate);
+    }
 
     // Store that the manager report for the group on the given report date has been processed
 
@@ -95,16 +101,18 @@ function istart_process_manager_report(int $groupid, string $reportdate) {
 }
 
 /**
- * Sends an istart user a manager report for a given date
- * @param int $userid ID of the user.
+ * Sends an istart user a manager report for a given date.
+ * @param int $courseid course ID of the istart course.
  * @param int $groupid ID of the user's group.
+ * @param stdClass $user user being reported on.
  * @param string $reportdate <p>The report date as a date/time string.</p>
  * @return true
  */
-function istart_send_manager_report($courseid, $groupid, $userid, $reportdate) {
+function istart_send_manager_report($courseid, $groupid, $user, $reportdate) {
     global $CFG;
 
     // Does the user have a manager's email address set?
+    //
         // If no: return
 
     // Is there a manager report for the user to send on the given report date?
@@ -126,8 +134,8 @@ function istart_send_manager_report($courseid, $groupid, $userid, $reportdate) {
     // Create the email subject "iStart24 Online [Week #] completion report for [Firstname] [Lastname]"
     $a = new stdClass();
     $a->week = "Week 1";
-    $a->firstname = "Firstname";
-    $a->lastname = "Lastname";
+    $a->firstname = $user->firstname;
+    $a->lastname = $user->lastname;
     $email->subject = get_string("manageremailsubject", "block_istart_reports", $a);
 
     // Create the email headers
@@ -138,7 +146,7 @@ function istart_send_manager_report($courseid, $groupid, $userid, $reportdate) {
             'Return-Path: <>',
             'List-Id: "iStart Manager Report" <istart.manager.report@'.$hostname.'>',
             'List-Help: '.$CFG->wwwroot.'/course/view.php?id='.$courseid,
-            'Message-ID: '.istart_report_get_email_message_id($courseid, $groupid, $userid, $reportdate, $hostname),
+            'Message-ID: '.istart_report_get_email_message_id($courseid, $groupid, $user->id, $reportdate, $hostname),
             'X-Course-Id: '.$courseid,
      );
 
@@ -146,7 +154,7 @@ function istart_send_manager_report($courseid, $groupid, $userid, $reportdate) {
     $email->html = manager_report_make_mail_html();
 
     // Send the email
-    error_log('sending email');
+    error_log('sending email to: ' . $user->id);
 
     mtrace('Sending iStart Manager Report Email', '');
 
@@ -167,11 +175,11 @@ function istart_send_manager_report($courseid, $groupid, $userid, $reportdate) {
             $email->text, $email->html);
 
     if (!$mailresult){
-        mtrace("Error: blocks/istart_reports/lib.php istart_send_manager_report(): Could not send out email for course $courseid group $groupid for report $reportdate to user $userid".
+        mtrace("Error: blocks/istart_reports/lib.php istart_send_manager_report(): Could not send out email for course $courseid group $groupid for report $reportdate to user $user->id".
              " ($manageremailaddress) .. not trying again.");
     } else {
         // TODO: Store that the manager report for the user on the given report date has been sent
-        // userid, groupid, manager's email address, reportdate and email send date.
+        // user->id, groupid, manager's email address, reportdate and email send date.
     }
 
     return true;
