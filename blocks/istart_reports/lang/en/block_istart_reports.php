@@ -29,6 +29,7 @@ $string['descconfig'] = 'Description of the config section';
 $string['descfoo'] = 'Config description';
 $string['headerconfig'] = 'Config section header';
 $string['labelfoo'] = 'Config label';
+$string['noblockid'] = 'Couldn\'t find block id. Ensure this block exists in the block database table.';
 $string['istart_reports:addinstance'] = 'Add a istart_reports block';
 $string['istart_reports:myaddinstance'] = 'Add a istart_reports block to my moodle';
 $string['manageremailsubject'] = 'iStart24 Online {$a->week} completion report for {$a->firstname} {$a->lastname}';

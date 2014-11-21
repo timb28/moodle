@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+define('BLOCK_NAME', 'istart_reports');
+
 /**
  * Function to be run periodically according to the scheduled task.
  *
@@ -49,6 +51,9 @@ function istart_reports_process_manager_reports() {
     core_php_time_limit::raise(300); // terminate if not able to process manager reports in 5 minutes
 
     // Record in the Moodle event log that istart manager reports have started processing
+
+    // Get istart courses that have this block
+    $courses = get_courses_with_block(get_blockid(BLOCK_NAME));
     
     // Clean store of manager report emails sent and reports processed for past students (sent > six months ago)
     // Clean store of manager report emails sent for past students no longer enrolled
@@ -67,6 +72,29 @@ function istart_reports_process_manager_reports() {
     istart_process_manager_report(3, 1441933200);
     
     return true;
+}
+
+/**
+ * Get the block id for this block
+ * @return int Block ID
+ */
+function get_blockid($name) {
+    global $DB;
+    
+    if ($block = $DB->get_record('block', array('name'=>$name))) {
+        error_log('Block ID: ' . $block->id);
+    } else {
+        // this block can't be found in the database
+        throw new moodle_exception('noblockid', 'block_istart_reports');
+    }
+}
+
+/**
+ * Gets all courses that contain this block
+ * @return array Courses
+ */
+function get_courses_with_block($blockid) {
+
 }
 
 /**
