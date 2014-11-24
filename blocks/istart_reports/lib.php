@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir. '/coursecatlib.php');
+require_once($CFG->dirroot.'/user/profile/lib.php');
 
 define('BLOCK_NAME', 'istart_reports');
 
@@ -221,7 +222,7 @@ function istart_process_manager_report($courseid, $group, $reporttime) {
  * @param int $groupid ID of the user's group.
  * @param stdClass $user user being reported on.
  * @param string $reportdate <p>The report date as a date/time string.</p>
- * @return true
+ * @return true or error
  */
 function istart_send_manager_report($courseid, $groupid, $user, $reporttime) {
     global $CFG;
@@ -229,12 +230,23 @@ function istart_send_manager_report($courseid, $groupid, $user, $reporttime) {
     $reportdate = date("j M Y", $reporttime);
 
     // Does the user have a manager's email address set?
-    //
-        // If no: return
+    profile_load_data($user);
+    if ($user->profile_field_manageremailaddress == NULL) {
+        return 'Manager email is not set for user: $user->id ($user->firstname $user->lastname).';
+    }
+    
+    $manageremailaddress = $user->profile_field_manageremailaddress;
+
+    // Is the manager's email address valid?
+    if (!validate_email($manageremailaddress)) {
+        return 'Manager email ($manageremailaddress) not valid for user:'
+                . ' $user->id ($user->firstname $user->lastname).';
+    }
+    error_log(" - Manager's email address: $manageremailaddress");
 
     // Is there a manager report for the user to send on the given report date?
         // If no: return
-    $manageremailaddress = 'tim.butler@harcourts.net';
+    
 
     // Has the report for that user been sent already?
         // If yes, return
@@ -271,7 +283,7 @@ function istart_send_manager_report($courseid, $groupid, $user, $reporttime) {
     $email->html = manager_report_make_mail_html();
 
     // Send the email
-    error_log('sending email to: ' . $user->id);
+    error_log(' > Sending email to: ' . $user->id);
 
     mtrace('Sending iStart Manager Report Email', '');
 
