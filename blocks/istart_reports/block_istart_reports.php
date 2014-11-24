@@ -45,6 +45,7 @@ class block_istart_reports extends block_base {
         }
 
         $this->content = new stdClass();
+        $this->content->text = '<p>here</p>';
         $this->content->items = array();
         $this->content->icons = array();
         $this->content->footer = '';
@@ -75,7 +76,6 @@ class block_istart_reports extends block_base {
         // Is the user a trainer?
         // Display link to iStart Week Report (todo: create this as a report plugin)
 
-        $this->content->text = "<p>here</p>";
         istart_reports_process_manager_reports();
 
         if (! empty($this->config->text)) {
