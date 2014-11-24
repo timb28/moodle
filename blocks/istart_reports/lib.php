@@ -118,7 +118,7 @@ function queue_manager_report_for_group($courseid, $group) {
     $daysago = 0;
 
     while ($daysago <= NUMPASTREPORTDAYS) {
-        $reporttime = time() - (DAYSECS * $daysago); //TODO: fix the time to UMT 0:00 on the day otherwise this changes too often
+        $reporttime = strtotime(date("Ymd")) - (DAYSECS * $daysago);
         error_log("2. Started processing group: $group->id ($group->name),  Days ago: $daysago, Report time: $reporttime");
         queue_manager_report_for_group_on_date($courseid, $group, $reporttime);
         $daysago++;
