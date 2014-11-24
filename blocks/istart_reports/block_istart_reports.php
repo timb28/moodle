@@ -77,7 +77,7 @@ class block_istart_reports extends block_base {
         // Display link to iStart Week Report (todo: create this as a report plugin)
 
         clean_reports();
-        queue_manager_reports();
+        process_manager_reports();
 
         if (! empty($this->config->text)) {
             $this->content->text .= $this->config->text;
