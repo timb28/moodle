@@ -76,7 +76,7 @@ class block_istart_reports extends block_base {
         // Is the user a trainer?
         // Display link to iStart Week Report (todo: create this as a report plugin)
 
-        istart_reports_process_manager_reports();
+        queue_manager_reports();
 
         if (! empty($this->config->text)) {
             $this->content->text .= $this->config->text;

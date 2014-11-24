@@ -23,12 +23,20 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+/* NOTE!!!!!!!!
+ * Refer to https://moodle.org/mod/forum/discuss.php?d=91370 when saving changed
+ * manager's email addresses.
+ *
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir. '/coursecatlib.php');
 require_once($CFG->dirroot.'/user/profile/lib.php');
 
 define('BLOCK_NAME', 'istart_reports');
+define('NUMPASTREPORTDAYS', 6);
+define('MANAGERREPORT', 1);
 
 /**
  * Function to be run periodically according to the scheduled task.
@@ -39,17 +47,18 @@ define('BLOCK_NAME', 'istart_reports');
  */
 function istart_reports_cron() {
 
-    istart_reports_process_manager_reports();
+    queue_manager_reports();
+    process_manager_reports();
 
 
     return true;
 }
 
 /**
- * Processes manager reports for all intake groups
+ * Queues manager reports for all intake groups for later sending
  * @return true
  */
-function istart_reports_process_manager_reports() {
+function queue_manager_reports() {
     
     core_php_time_limit::raise(300); // terminate if not able to process manager reports in 5 minutes
 
@@ -59,7 +68,7 @@ function istart_reports_process_manager_reports() {
     $courses = get_courses_with_block(get_blockid(BLOCK_NAME));
     
     foreach ($courses as $course) {
-        error_log("Course: " . $course->id);
+        error_log("1. Started processing reports for course: $course->id");
 
         // Get all current istart intakes as an array containing the $group->idnumber for each intake
         $groups = groups_get_all_groups($course->id);
@@ -75,10 +84,113 @@ function istart_reports_process_manager_reports() {
             // Clean store of manager report emails sent and reports processed for past students (sent > six months ago)
             // Clean store of manager report emails sent for past students no longer enrolled
 
-            istart_process_manager_report_for_group($course->id, $group);
+            queue_manager_report_for_group($course->id, $group);
         }
     }
 
+    return true;
+}
+
+/**
+ * Sends istart manager reports for a given istart intake group
+ * @param int $courseid ID of the course.
+ * @param stdClass $group the group to process.
+ * @return true if a report was sent
+ */
+function queue_manager_report_for_group($courseid, $group) {
+    // Send out all unsent manager reports from the last six days.
+    // Reports older than 6 days will not be mailed.  This is to avoid the problem where
+    // cron has not been running for a long time or a student moves iStart group,
+    // and then suddenly people are flooded with mail from the past few weeks or months
+    $daysago = 0;
+
+    while ($daysago <= NUMPASTREPORTDAYS) {
+        $reporttime = time() - (DAYSECS * $daysago);
+        error_log("2. Started processing group: $group->id ($group->name),  Days ago: $daysago, Report time: $reporttime");
+        queue_manager_report_for_group_on_date($courseid, $group, $reporttime);
+        $daysago++;
+    }
+}
+
+/**
+ * Sends istart manager reports for a given istart intake group
+ * @param int $courseid ID of the course.
+ * @param stdClass $group the group to be processed.
+ * @param string $reporttime The report date as a timestamp.
+ * @return true if a report was sent [TODO: will it?]
+ */
+function queue_manager_report_for_group_on_date($courseid, $group, $reporttime) {
+    $starttime = strtotime($group->idnumber);
+
+    // Is there a manager report for the group to send on the given report date?
+    if (!is_istart_report_date($starttime,$reporttime)) {
+        return false;
+    }
+    // If yes, was the report processed?
+    // If yes, task complete: continue
+    // If no, istart_process_manager_report($intake, $reportdate)
+    error_log("Started processing reports for group: $group->id ($group->name)");
+
+    // Get a list of all users in the group who:
+    //  - are students
+    //  - have a manager email (user profile field 'manageremail')
+    //  - have finished an iStart week recently (after start date + 6 and before start date + 174)
+
+    // Send the manager report for every student in that list
+    // istart_send_manager_report($courseid, $groupid, $userid, $reportdate);
+    $groupmembers = groups_get_members($group->id);
+
+    foreach ($groupmembers as $user) {
+//        istart_send_manager_report($courseid, $group->id, $user, $reporttime);
+        istart_queue_manager_report_for_user_on_date($courseid, $group->id, $user, $reporttime);
+
+    }
+
+    // Store that the manager report for the group on the given report date has been processed
+
+    // Record in the Moodle event log that istart manager reports have been sent
+    // for the groupid and report date
+
+    return true;
+}
+
+/**
+ * Queues an istart user a manager report for later sending.
+ * @param int $courseid course ID of the istart course.
+ * @param int $groupid ID of the user's group.
+ * @param stdClass $user user being reported on.
+ * @param string $reporttime The report date as a timestamp.
+ * @return true or error
+ */
+function istart_queue_manager_report_for_user_on_date($courseid, $groupid, $user, $reporttime) {
+    global $DB;
+    error_log(" - Queueing manager report for $user->id at $reporttime");
+
+    // Check if already queued
+    $conditions = array(
+            'courseid'=>$courseid,
+            'groupid'=>$groupid,
+            'userid'=>$user->id,
+            'reporttype'=>MANAGERREPORT
+        );
+    if ($DB->record_exists('block_istart_reports_queue', $conditions)) {
+        return "iStart manager report not queued because the record exists";
+    }
+
+    $data = new stdClass();
+    $data->courseid = $courseid;
+    $data->groupid = $groupid;
+    $data->userid = $user->id;
+    $data->reporttype = MANAGERREPORT;
+
+    $DB->insert_record('block_istart_reports_queue', $data);
+}
+
+/**
+ * Processes manager reports for all intake groups
+ * @return true
+ */
+function process_manager_reports() {
     return true;
 }
 
@@ -152,68 +264,6 @@ function get_courses_with_block($blockid) {
     $searchcriteria = array('blocklist' => $blockid);
 
     return coursecat::search_courses($searchcriteria);
-}
-
-/**
- * Sends istart manager reports for a given istart intake group
- * @param int $courseid ID of the course.
- * @param stdClass $group the group to process.
- * @return true if a report was sent
- */
-function istart_process_manager_report_for_group($courseid, $group) {
-    // Send out all unsent manager reports from the last six days.
-    // Reports older than 6 days will not be mailed.  This is to avoid the problem where
-    // cron has not been running for a long time or a student moves iStart group,
-    // and then suddenly people are flooded with mail from the past few weeks or months
-    $numpastreportdays = 6;
-    $daysago = 0;
-
-    while ($daysago <= $numpastreportdays) {
-        $reporttime = time() - (DAYSECS * $daysago);
-        error_log("Processing group: $group->id ($group->name),  Days ago: $daysago, Report time: $reporttime");
-        istart_process_manager_report($courseid, $group, $reporttime);
-        $daysago++;
-    }
-}
-
-/**
- * Sends istart manager reports for a given istart intake group
- * @param int $courseid ID of the course.
- * @param stdClass $group the group to be processed.
- * @param string $reporttime The report date as a timestamp.
- * @return true if a report was sent [TODO: will it?]
- */
-function istart_process_manager_report($courseid, $group, $reporttime) {
-    $starttime = strtotime($group->idnumber);
-
-    // Is there a manager report for the group to send on the given report date?
-    if (!is_istart_report_date($starttime,$reporttime)) {
-        return false;
-    }
-    // If yes, was the report processed?
-    // If yes, task complete: continue
-    // If no, istart_process_manager_report($intake, $reportdate)
-    error_log("Processing reports for group: $group->id ($group->name)");
-
-    // Get a list of all users in the group who:
-    //  - are students
-    //  - have a manager email (user profile field 'manageremail')
-    //  - have finished an iStart week recently (after start date + 6 and before start date + 174)
-
-    // Send the manager report for every student in that list
-    // istart_send_manager_report($courseid, $groupid, $userid, $reportdate);
-    $groupmembers = groups_get_members($group->id);
-
-    foreach ($groupmembers as $user) {
-        istart_send_manager_report($courseid, $group->id, $user, $reporttime);
-    }
-
-    // Store that the manager report for the group on the given report date has been processed
-
-    // Record in the Moodle event log that istart manager reports have been sent
-    // for the groupid and report date
-
-    return true;
 }
 
 /**
