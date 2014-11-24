@@ -74,18 +74,8 @@ function istart_reports_process_manager_reports() {
             // Clean store of manager report emails sent and reports processed for past students (sent > six months ago)
             // Clean store of manager report emails sent for past students no longer enrolled
 
-
-            // Send out all unsent manager reports from the last six days.
-            // Reports older than 6 days will not be mailed.  This is to avoid the problem where
-            // cron has not been running for a long time or a student moves iStart group,
-            // and then suddenly people are flooded with mail from the past few weeks or months
-
-            // For each istart intake, get whether there there was a report from each day up to 6 days ago
-
-            istart_process_manager_report($group, time());
+            istart_process_manager_report_for_group($course->id, $group);
         }
-
-
     }
 
     return true;
@@ -116,21 +106,21 @@ function is_group_valid($group) {
 function is_istart_report_date($starttime, $reporttime, $totalistartweeks = 24) {
     $startdate = getdate($starttime);
     $reportdate = getdate($reporttime);
-    error_log("Start day of the week: ".$startdate["wday"]);
+    error_log(" - Start day of the week: ".$startdate["wday"]);
 
-    error_log("Given date day of the week: ".$reportdate["wday"]);
+    error_log(" - Given date day of the week: ".$reportdate["wday"]);
 
     // A report is only due on the same day of the week as the istart start date
     if ($startdate["wday"] != $reportdate["wday"]) {
         // No report due
+        error_log(" - No report: date is not the same day of the week");
         return false;
     }
 
-    $secondsinweek = 24 * 60 * 60;
-
     // A report is only due on weeks following an istart week (7 days to 168 days)
-    if ( (($reporttime - $starttime) < (7 * $secondsinweek)) or
-            (( $reporttime - $starttime) > ( ($totalistartweeks + 1) * 7 * $secondsinweek) ) ) {
+    if ( (($reporttime - $starttime) < (7 * WEEKSECS)) or
+            (( $reporttime - $starttime) > ( ($totalistartweeks + 1) * 7 * WEEKSECS) ) ) {
+        error_log(" - No report: date is not within the istart programme");
         return false;
     }
 
@@ -165,11 +155,34 @@ function get_courses_with_block($blockid) {
 
 /**
  * Sends istart manager reports for a given istart intake group
- * @param int $groupid ID of the group.
- * @param string $reportdate <p>The report date as a date/time string.</p>
+ * @param int $courseid ID of the course.
+ * @param stdClass $group the group to process.
  * @return true if a report was sent
  */
-function istart_process_manager_report($group, $reporttime) {
+function istart_process_manager_report_for_group($courseid, $group) {
+    // Send out all unsent manager reports from the last six days.
+    // Reports older than 6 days will not be mailed.  This is to avoid the problem where
+    // cron has not been running for a long time or a student moves iStart group,
+    // and then suddenly people are flooded with mail from the past few weeks or months
+    $numpastreportdays = 6;
+    $daysago = 0;
+
+    while ($daysago <= $numpastreportdays) {
+        $reporttime = time() - (DAYSECS * $daysago);
+        error_log("Processing group: $group->id ($group->name),  Days ago: $daysago, Report time: $reporttime");
+        istart_process_manager_report($courseid, $group, $reporttime);
+        $daysago++;
+    }
+}
+
+/**
+ * Sends istart manager reports for a given istart intake group
+ * @param int $courseid ID of the course.
+ * @param stdClass $group the group to be processed.
+ * @param string $reporttime The report date as a timestamp.
+ * @return true if a report was sent [TODO: will it?]
+ */
+function istart_process_manager_report($courseid, $group, $reporttime) {
     $starttime = strtotime($group->idnumber);
 
     // Is there a manager report for the group to send on the given report date?
@@ -189,9 +202,9 @@ function istart_process_manager_report($group, $reporttime) {
     // Send the manager report for every student in that list
     // istart_send_manager_report($courseid, $groupid, $userid, $reportdate);
     $groupmembers = groups_get_members($group->id);
-//    $user = get_user(3753);
+
     foreach ($groupmembers as $user) {
-        istart_send_manager_report(48, $group->id, $user, $reporttime);
+        istart_send_manager_report($courseid, $group->id, $user, $reporttime);
     }
 
     // Store that the manager report for the group on the given report date has been processed
