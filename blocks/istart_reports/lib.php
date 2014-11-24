@@ -47,11 +47,27 @@ define('MANAGERREPORT', 1);
  */
 function istart_reports_cron() {
 
+    clean_reports();
     queue_manager_reports();
     process_manager_reports();
 
 
     return true;
+}
+
+/**
+ * Cleans manager report queue
+ * @return true or error
+ */
+function clean_reports() {
+    global $DB;
+
+    $oldreportconditions = 'reporttime IS NULL or reporttime < '.(time() - YEARSECS);
+
+    // Clean store of manager report emails sent and reports processed for past students (sent > six months ago)
+    $DB->delete_records_select('block_istart_reports_queue', $oldreportconditions);
+
+    // Clean store of manager report emails sent for past students no longer enrolled
 }
 
 /**
@@ -81,9 +97,6 @@ function queue_manager_reports() {
                 continue;
             }
 
-            // Clean store of manager report emails sent and reports processed for past students (sent > six months ago)
-            // Clean store of manager report emails sent for past students no longer enrolled
-
             queue_manager_report_for_group($course->id, $group);
         }
     }
@@ -105,7 +118,7 @@ function queue_manager_report_for_group($courseid, $group) {
     $daysago = 0;
 
     while ($daysago <= NUMPASTREPORTDAYS) {
-        $reporttime = time() - (DAYSECS * $daysago);
+        $reporttime = time() - (DAYSECS * $daysago); //TODO: fix the time to UMT 0:00 on the day otherwise this changes too often
         error_log("2. Started processing group: $group->id ($group->name),  Days ago: $daysago, Report time: $reporttime");
         queue_manager_report_for_group_on_date($courseid, $group, $reporttime);
         $daysago++;
@@ -141,7 +154,6 @@ function queue_manager_report_for_group_on_date($courseid, $group, $reporttime) 
     $groupmembers = groups_get_members($group->id);
 
     foreach ($groupmembers as $user) {
-//        istart_send_manager_report($courseid, $group->id, $user, $reporttime);
         istart_queue_manager_report_for_user_on_date($courseid, $group->id, $user, $reporttime);
 
     }
@@ -171,7 +183,8 @@ function istart_queue_manager_report_for_user_on_date($courseid, $groupid, $user
             'courseid'=>$courseid,
             'groupid'=>$groupid,
             'userid'=>$user->id,
-            'reporttype'=>MANAGERREPORT
+            'reporttype'=>MANAGERREPORT,
+            'reporttime'=>$reporttime
         );
     if ($DB->record_exists('block_istart_reports_queue', $conditions)) {
         return "iStart manager report not queued because the record exists";
@@ -182,6 +195,7 @@ function istart_queue_manager_report_for_user_on_date($courseid, $groupid, $user
     $data->groupid = $groupid;
     $data->userid = $user->id;
     $data->reporttype = MANAGERREPORT;
+    $data->reporttime = $reporttime;
 
     $DB->insert_record('block_istart_reports_queue', $data);
 }
