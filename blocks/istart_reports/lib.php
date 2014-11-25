@@ -155,7 +155,6 @@ function process_manager_report_for_group_on_date($courseid, $group, $reporttime
 
     foreach ($groupmembers as $user) {
         send_manager_report($courseid, $group->id, $user, $reporttime);
-
     }
 
     // Store that the manager report for the group on the given report date has been processed
@@ -211,10 +210,6 @@ function send_manager_report($courseid, $groupid, $user, $reporttime) {
                 . ' $user->id ($user->firstname $user->lastname).';
     }
     error_log(" - Manager's email address: $manageremailaddress");
-
-    // Is there a manager report for the user to send on the given report date?
-        // If no: return
-
 
     // Has the report for that user been sent already?
         // If yes, return
@@ -317,10 +312,10 @@ function is_group_valid($group) {
 
 /**
  * Get whether an istart group has a report due on a date
- * @param int starttime
- * @param int reporttime
- * @param int How many istart weeks in the programme
- * @return bool
+ * @param int $starttime of istart intake (usually the 1st of a month)
+ * @param int $reporttime of the day the report is created / sent
+ * @param int $totalistartweeks how many istart weeks in the programme
+ * @return bool true if a report is due on the given $reporttime day
  */
 function is_istart_report_date($starttime, $reporttime, $totalistartweeks = 24) {
     $startdate = getdate($starttime);
@@ -342,7 +337,6 @@ function is_istart_report_date($starttime, $reporttime, $totalistartweeks = 24) 
         error_log(" - No report: date is not within the istart programme");
         return false;
     }
-
 
     return true;
 }
