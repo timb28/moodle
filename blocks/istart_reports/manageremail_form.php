@@ -27,9 +27,20 @@ require_once("$CFG->libdir/formslib.php");
 
 class manageremail_form extends moodleform {
     public function definition() {
-        global $CFG;
+        global $CFG, $COURSE;
 
         $mform = $this->_form;
+
+        $mform->addElement('text', 'manageremail', get_string('labelmanageremail', 'block_istart_reports'), array('size'=>'20'));
+        $mform->setType('manageremail', PARAM_TEXT);
+
+//        $mform->addElement('hidden', 'userid', $USER->id);
+//        $mform->setType('userid',PARAM_INT);
+
+        $mform->addElement('hidden', 'courseid', $COURSE->id);
+        $mform->setType('courseid', PARAM_INT);
+
+        $this->add_action_buttons();
     }
 
 

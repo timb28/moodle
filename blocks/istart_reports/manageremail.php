@@ -39,7 +39,7 @@ $context = context_course::instance($courseid);
 $blockname = get_string('pluginname', 'block_istart_reports');
 $header = get_string('headermanageremail', 'block_istart_reports');
 
-$returnurl = '/course/view.php?id=' . $courseid;
+$returnurl = $CFG->wwwroot.'/course/view.php?id=' . $courseid;
 
 $PAGE->set_context($context);
 $PAGE->set_course($course);
@@ -55,8 +55,9 @@ $mform = new manageremail_form();
 
 //Form processing and displaying is done here
 if ($mform->is_cancelled()) {
-    //Handle form cancel operation, if cancel button is present on form
-} else if ($fromform = $mform->get_data()) {
+    // Return to the course, if cancel button is pressed
+    redirect($returnurl);
+} else if ($fromform = $mform->get_data() && confirm_sesskey()) {
   //In this case you process validated data. $mform->get_data() returns data posted in form.
 } else {
   // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
@@ -68,9 +69,10 @@ if ($mform->is_cancelled()) {
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading($blockname);
+echo $OUTPUT->heading($header);
 
 echo html_writer::start_tag('div', array('class' => 'no-overflow'));
+echo html_writer::div(get_string('intromanageremail','block_istart_reports'), 'intromanageremail');
 $mform->display();
 echo html_writer::end_tag('div');
 echo $OUTPUT->footer();

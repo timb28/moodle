@@ -29,4 +29,7 @@ $plugin->component = 'block_istart_reports';
 $plugin->release = '0.1 (Build: 2014112000)';
 $plugin->requires = 2014051200;                     // Requires Moodle 2.7+
 $plugin->maturity = MATURITY_ALPHA;
+$plugin->dependencies = array(
+    'format_flexsections' => 2014090400,   // The Flexsections course format must be present.
+);
 //$plugin->cron = 300;
