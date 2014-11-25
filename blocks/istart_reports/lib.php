@@ -224,15 +224,21 @@ function send_manager_report($courseid, $groupid, $user, $reporttime) {
     error_log(" - Sending manager report for $user->id at $reporttime");
 
     // Check if already sent
-    $conditions = array(
-            'courseid'=>$courseid,
-            'groupid'=>$groupid,
-            'userid'=>$user->id,
-            'reporttype'=>MANAGERREPORT,
-            'reporttime'=>$reporttime
-        );
-    if ($DB->record_exists('block_istart_reports', $conditions)) {
-        return "iStart manager report not sent because it has already been sent";
+    try {
+        if ($DB->record_exists_select('block_istart_reports',
+                'courseid = :courseid AND groupid = :groupid AND userid = :userid'
+                . ' AND reporttype = :reporttype AND reporttime = :reporttime AND senttime IS NOT NULL',
+                     array(
+                        'courseid' => $courseid,
+                        'groupid'  => $groupid,
+                        'userid'   => $user->id,
+                        'reporttype' => MANAGERREPORT,
+                        'reporttime' => $reporttime) )) {
+            return "iStart manager report not sent because it has already been sent";
+        }
+    } catch(Exception $e) {
+        error_log($e, DEBUG_NORMAL);
+        return "iStart manager report not sent because the database cannot be read";
     }
 
     // Does the user have a manager's email address set?
