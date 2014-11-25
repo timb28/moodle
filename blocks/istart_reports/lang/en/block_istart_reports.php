@@ -29,6 +29,10 @@ $string['descconfig'] = 'Description of the config section';
 $string['descfoo'] = 'Config description';
 $string['headerconfig'] = 'Config section header';
 
+$string['studentmanagerreports'] = 'Your weekly progress reports are being sent to<br/>{$a}';
+$string['noreportaddress'] = 'No one';
+$string['labeleditreportaddress'] = 'Change';
+
 $string['headermanageremail'] = 'Edit Manager Email Address';
 $string['intromanageremail'] = 'Enter your manager&rsquo;s email address below to send them a weekly email highlighting your iStart progress.';
 $string['labelmanageremail'] = 'Manager&rsquo;s email address';

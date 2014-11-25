@@ -33,7 +33,7 @@ class block_istart_reports extends block_base {
     }
 
     function get_content() {
-        global $CFG, $OUTPUT;
+        global $CFG, $COURSE, $OUTPUT, $USER;
 
         if ($this->content !== null) {
             return $this->content;
@@ -69,7 +69,21 @@ class block_istart_reports extends block_base {
 
         // Is the user a student?
         // Have they entered their manager's email address?
-        // If yes, display their manager's email address with an edit link
+        profile_load_data($USER);
+        $manageremailaddress = clean_text($USER->profile_field_manageremailaddress);
+        $a = '';
+        if ($manageremailaddress == NULL) {
+            $a = '<span class="label label-important">' . get_string('noreportaddress', 'block_istart_reports') . '</span>'
+                    . ' <a href="'.$CFG->wwwroot.'/blocks/istart_reports/manageremail.php?courseid='.$COURSE->id.'"'
+                    . ' class="btn btn-mini">'.get_string('labeleditreportaddress','block_istart_reports').'</a>';
+        } else {
+            // If yes, display their manager's email address with an edit link
+            $a = '<span class="label label-info">' . $manageremailaddress . '</span>'
+                    . ' <a href="'.$CFG->wwwroot.'/blocks/istart_reports/manageremail.php?courseid='.$COURSE->id.'"'
+                    . ' class="btn btn-mini">'.get_string('labeleditreportaddress','block_istart_reports').'</a>';
+        }
+        $this->content->text.= get_string('studentmanagerreports', 'block_istart_reports', $a);
+
         // If no, display a message and text field asking the student to enter their manager's 
            // email address (saved into a new user profile field called 'manageremail')
 
@@ -111,3 +125,5 @@ class block_istart_reports extends block_base {
       return true;
     }
 }
+
+opcache_reset(); // TODO: Remove this line
