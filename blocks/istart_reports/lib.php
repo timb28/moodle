@@ -167,55 +167,11 @@ function process_manager_report_for_group_on_date($courseid, $group, $reporttime
 }
 
 /**
- * Process an istart user a manager report.
- * @param int $courseid course ID of the istart course.
- * @param int $groupid ID of the user's group.
- * @param stdClass $user user being reported on.
- * @param string $reporttime The report date as a timestamp.
- * @return true or error
- */
-function process_manager_report_for_user_on_date($courseid, $groupid, $user, $reporttime) {
-    global $DB;
-    error_log(" - Queueing manager report for $user->id at $reporttime");
-
-    // Check if already sent
-    $conditions = array(
-            'courseid'=>$courseid,
-            'groupid'=>$groupid,
-            'userid'=>$user->id,
-            'reporttype'=>MANAGERREPORT,
-            'reporttime'=>$reporttime
-        ); // TODO: stop here if the email has been sent - need to check the senttime
-    if ($DB->record_exists('block_istart_reports', $conditions)) {
-        return "iStart manager report not sent because it has already been sent";
-    }
-
-    $data = new stdClass();
-    $data->courseid = $courseid;
-    $data->groupid = $groupid;
-    $data->userid = $user->id;
-    $data->reporttype = MANAGERREPORT;
-    $data->reporttime = $reporttime;
-
-    // TODO catch DML exception
-    $newid = $DB->insert_record('block_istart_reports', $data);
-
-    if (istart_send_manager_report($courseid, $groupid, $user, $reporttime)) {
-        // Record that the email was sent
-        $newdata = new stdClass();
-        $newdata->id = $newid;
-        $newdata->senttime = 1;
-        $newdata->sentto = 'test';
-        $DB->update_record('block_istart_reports', $newdata);
-    }
-}
-
-/**
  * Sends an istart user a manager report for a given date.
  * @param int $courseid course ID of the istart course.
  * @param int $groupid ID of the user's group.
  * @param stdClass $user user being reported on.
- * @param string $reportdate <p>The report date as a date/time string.</p>
+ * @param string $reportdate The report date as a timestamp.
  * @return true or error
  */
 function send_manager_report($courseid, $groupid, $user, $reporttime) {
