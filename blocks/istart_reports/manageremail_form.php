@@ -27,12 +27,13 @@ require_once("$CFG->libdir/formslib.php");
 
 class manageremail_form extends moodleform {
     public function definition() {
-        global $CFG, $COURSE;
+        global $CFG, $COURSE, $USER;
 
         $mform = $this->_form;
 
-        $mform->addElement('text', 'manageremail', get_string('labelmanageremail', 'block_istart_reports'), array('size'=>'20'));
+        $mform->addElement('text', 'manageremail', get_string('labelmanageremail', 'block_istart_reports'), array('size'=>'30'));
         $mform->setType('manageremail', PARAM_TEXT);
+        $mform->setDefault('manageremail',get_manager_email_address($USER));
 
 //        $mform->addElement('hidden', 'userid', $USER->id);
 //        $mform->setType('userid',PARAM_INT);
@@ -45,6 +46,7 @@ class manageremail_form extends moodleform {
 
 
     function validation($data, $files) {
+        // TODO validate email address
         return array();
     }
 }

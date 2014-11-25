@@ -25,6 +25,7 @@
 
 require_once("../../config.php");
 require_once('manageremail_form.php');
+require_once('lib.php');
 
 require_login();
 
@@ -57,15 +58,10 @@ $mform = new manageremail_form();
 if ($mform->is_cancelled()) {
     // Return to the course, if cancel button is pressed
     redirect($returnurl);
-} else if ($fromform = $mform->get_data() && confirm_sesskey()) {
+} else if ( ($fromform = $mform->get_data()) && confirm_sesskey() ) {
   //In this case you process validated data. $mform->get_data() returns data posted in form.
-} else {
-  // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-  // or on the first display of the form.
-
-  //Set default data (if any)
-  $mform->set_data($toform);
-  //displays the form
+  $success = set_manager_email_address($USER, $fromform->manageremail);
+  //redirect($returnurl);
 }
 
 echo $OUTPUT->header();

@@ -366,7 +366,15 @@ function get_courses_with_block($blockid) {
     return coursecat::search_courses($searchcriteria);
 }
 
-
+/**
+ * Gets manager's email address for the given user
+ * @param stdClass $user The user object
+ * @return string manager's email address
+ */
+function get_manager_email_address($user) {
+    profile_load_data($user);
+    return clean_text($user->profile_field_manageremailaddress);
+}
 
 /**
  * Create a message-id string to use in the custom headers of report emails
@@ -406,4 +414,19 @@ function manager_report_make_mail_html() {
     // Add email close
 
     return "<p>HTML text with <b>formatting</b>.</p>";
+}
+
+/**
+ * Sets manager's email address for a user
+ * @param stdClass $user The user object
+ * @param string $emailaddress The manager's email address to save
+ * @return bool true if success
+ */
+function set_manager_email_address($user, $emailaddress) {
+    profile_load_data($user);
+    error_log('new email 1: '.$emailaddress);
+    error_log('new email 2: '.substr($emailaddress, 0, 255));
+    $user->profile_field_manageremailaddress = substr($emailaddress, 0, 255);
+    profile_save_data($user);
+    return true;
 }

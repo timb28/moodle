@@ -69,29 +69,26 @@ class block_istart_reports extends block_base {
 
         // Is the user a student?
         // Have they entered their manager's email address?
-        profile_load_data($USER);
-        $manageremailaddress = clean_text($USER->profile_field_manageremailaddress);
+        $manageremailaddress = get_manager_email_address($USER);
         $a = '';
         if ($manageremailaddress == NULL) {
+            // If not, display a message and link asking the student to enter their manager's email address
             $a = '<span class="label label-important">' . get_string('noreportaddress', 'block_istart_reports') . '</span>'
                     . ' <a href="'.$CFG->wwwroot.'/blocks/istart_reports/manageremail.php?courseid='.$COURSE->id.'"'
                     . ' class="btn btn-mini">'.get_string('labeleditreportaddress','block_istart_reports').'</a>';
         } else {
-            // If yes, display their manager's email address with an edit link
+            // If there is a manager's email address, display their manager's email address with a link to change it
             $a = '<span class="label label-info">' . $manageremailaddress . '</span>'
                     . ' <a href="'.$CFG->wwwroot.'/blocks/istart_reports/manageremail.php?courseid='.$COURSE->id.'"'
                     . ' class="btn btn-mini">'.get_string('labeleditreportaddress','block_istart_reports').'</a>';
         }
         $this->content->text.= get_string('studentmanagerreports', 'block_istart_reports', $a);
 
-        // If no, display a message and text field asking the student to enter their manager's 
-           // email address (saved into a new user profile field called 'manageremail')
-
         // Is the user a trainer?
         // Display link to iStart Week Report (todo: create this as a report plugin)
 
-        clean_reports();
-        process_manager_reports();
+//        clean_reports();
+//        process_manager_reports();
 
         if (! empty($this->config->text)) {
             $this->content->text .= $this->config->text;
