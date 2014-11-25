@@ -47,6 +47,7 @@ class block_istart_reports extends block_base {
         $this->content = new stdClass();
         $this->content->items = array();
         $this->content->icons = array();
+        $this->content->text = '';
         $this->content->footer = '';
 
         // user/index.php expect course context, so get one if page has module context.
@@ -66,7 +67,6 @@ class block_istart_reports extends block_base {
         // Manager Report
         // Check if the users role means their progress gets reported to a manager.
         if (has_capability('block/istart_reports:reporttomanager', $currentcontext)) {
-            error_log(" Has capability.");
 
             // Have they entered their manager's email address?
             $manageremailaddress = get_manager_email_address($USER);
@@ -82,12 +82,17 @@ class block_istart_reports extends block_base {
                         . ' <a href="'.$CFG->wwwroot.'/blocks/istart_reports/manageremail.php?courseid='.$COURSE->id.'"'
                         . ' class="btn btn-mini">'.get_string('labeleditreportaddress','block_istart_reports').'</a>';
             }
-            $this->content->text = get_string('studentmanagerreports', 'block_istart_reports', $a);
+            $this->content->text.= "<div>".get_string('studentmanagerreports', 'block_istart_reports', $a)."</div>";
             unset($a);
         }
 
-        // Is the user a trainer?
-        // Display link to iStart Week Report (todo: create this as a report plugin)
+        // Display link to iStart Week Report
+        $coursecontext = $this->page->context->get_course_context(false);
+                // Check if the users role means their progress gets reported to a manager.
+        if (has_capability('report/completion:view', $coursecontext)) {
+            error_log(" Has report capability.");
+            $this->content->text.= "<div>TODO: Display link to completion report.</div>";
+        }
 
 //        clean_reports();
 //        process_manager_reports();
