@@ -49,7 +49,7 @@ $PAGE->navbar->add($header);
 $PAGE->set_title($blockname . ': ' . $header);
 $PAGE->set_heading($blockname . ': ' . $header);
 $PAGE->set_url('/course/view.php', array('id' => $courseid, 'return' => $returnurl));
-$PAGE->set_pagetype($blockname);
+$PAGE->set_pagetype('istart-reports');
 $PAGE->set_pagelayout('standard');
 
 $mform = new manageremail_form();

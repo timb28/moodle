@@ -90,12 +90,8 @@ class block_istart_reports extends block_base {
         $coursecontext = $this->page->context->get_course_context(false);
                 // Check if the users role means their progress gets reported to a manager.
         if (has_capability('report/completion:view', $coursecontext)) {
-            error_log(" Has report capability.");
             $this->content->text.= "<div>TODO: Display link to completion report.</div>";
         }
-
-//        clean_reports();
-//        process_manager_reports();
 
         if (! empty($this->config->text)) {
             $this->content->text .= $this->config->text;

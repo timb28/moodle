@@ -29,8 +29,8 @@ $tasks = array(
     array(
         'classname' => 'block_istart_reports\task\cron_task',
         'blocking' => 0,
-        'minute' => '0',
-        'hour' => '1',
+        'minute' => '10', // TODO: change to 0
+        'hour' => '*', // TODO: change to 1
         'day' => '*',
         'month' => '*',
         'dayofweek' => '*'
