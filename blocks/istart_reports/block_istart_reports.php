@@ -45,44 +45,46 @@ class block_istart_reports extends block_base {
         }
 
         $this->content = new stdClass();
-        $this->content->text = '<p>here</p>';
         $this->content->items = array();
         $this->content->icons = array();
         $this->content->footer = '';
 
         // user/index.php expect course context, so get one if page has module context.
-        $currentcontext = $this->page->context->get_course_context(false);
+//        $currentcontext = $this->page->context->get_course_context(false);
+        $currentcontext = CONTEXT_BLOCK::instance($this->instance->id);
+//        $currentcontext = CONTEXT_COURSE::instance($COURSE->id);
 
-        if (! empty($this->config->text)) {
-            $this->content->text = $this->config->text;
-        }
+//        if (! empty($this->config->text)) {
+//            $this->content->text = $this->config->text;
+//        }
 
-        $this->content = '';
-        if (empty($currentcontext)) {
-            return $this->content;
-        }
-        if ($this->page->course->id == SITEID) {
-            $this->context->text .= "site context";
-        }
+//        $this->content = '';
+//        if (empty($currentcontext)) {
+//            return $this->content;
+//        }
 
         // Manager Report
+        // Check if the users role means their progress gets reported to a manager.
+        if (has_capability('block/istart_reports:reporttomanager', $currentcontext)) {
+            error_log(" Has capability.");
 
-        // Is the user a student?
-        // Have they entered their manager's email address?
-        $manageremailaddress = get_manager_email_address($USER);
-        $a = '';
-        if ($manageremailaddress == NULL) {
-            // If not, display a message and link asking the student to enter their manager's email address
-            $a = '<span class="label label-important">' . get_string('noreportaddress', 'block_istart_reports') . '</span>'
-                    . ' <a href="'.$CFG->wwwroot.'/blocks/istart_reports/manageremail.php?courseid='.$COURSE->id.'"'
-                    . ' class="btn btn-mini">'.get_string('labeleditreportaddress','block_istart_reports').'</a>';
-        } else {
-            // If there is a manager's email address, display their manager's email address with a link to change it
-            $a = '<span class="label label-info">' . $manageremailaddress . '</span>'
-                    . ' <a href="'.$CFG->wwwroot.'/blocks/istart_reports/manageremail.php?courseid='.$COURSE->id.'"'
-                    . ' class="btn btn-mini">'.get_string('labeleditreportaddress','block_istart_reports').'</a>';
+            // Have they entered their manager's email address?
+            $manageremailaddress = get_manager_email_address($USER);
+            $a = '';
+            if ($manageremailaddress == NULL) {
+                // If not, display a message and link asking the student to enter their manager's email address
+                $a = '<span class="label label-important">' . get_string('noreportaddress', 'block_istart_reports') . '</span>'
+                        . ' <a href="'.$CFG->wwwroot.'/blocks/istart_reports/manageremail.php?courseid='.$COURSE->id.'"'
+                        . ' class="btn btn-mini">'.get_string('labeleditreportaddress','block_istart_reports').'</a>';
+            } else {
+                // If there is a manager's email address, display their manager's email address with a link to change it
+                $a = '<span class="label label-info">' . $manageremailaddress . '</span>'
+                        . ' <a href="'.$CFG->wwwroot.'/blocks/istart_reports/manageremail.php?courseid='.$COURSE->id.'"'
+                        . ' class="btn btn-mini">'.get_string('labeleditreportaddress','block_istart_reports').'</a>';
+            }
+            $this->content->text = get_string('studentmanagerreports', 'block_istart_reports', $a);
+            unset($a);
         }
-        $this->content->text.= get_string('studentmanagerreports', 'block_istart_reports', $a);
 
         // Is the user a trainer?
         // Display link to iStart Week Report (todo: create this as a report plugin)
@@ -100,19 +102,18 @@ class block_istart_reports extends block_base {
     // my moodle can only have SITEID and it's redundant here, so take it away
     public function applicable_formats() {
         return array('all' => false,
-                     'site' => true,
-                     'site-index' => true,
+                     'site' => false,
+                     'site-index' => false,
                      'course-view' => true, 
                      'course-view-social' => false,
-                     'mod' => true, 
-                     'mod-quiz' => false);
+                     'mod' => false);
     }
 
     public function instance_allow_multiple() {
-          return true;
+          return false;
     }
 
-    function has_config() {return true;}
+    function has_config() {return false;}
 
     public function cron() {
       mtrace( "Hey, my cron script is running" );

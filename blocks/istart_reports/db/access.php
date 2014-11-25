@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * istart_reports block caps.
+ * istart_reports block capabilities.
  *
  * @package   block_istart_reports
  * @copyright Harcourts Academy <academy@harcourts.net>
@@ -25,16 +25,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
-
-    'block/istart_reports:myaddinstance' => array(
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => array(
-            'user' => CAP_ALLOW
-        ),
-
-        'clonepermissionsfrom' => 'moodle/my:manageblocks'
-    ),
 
     'block/istart_reports:addinstance' => array(
         'riskbitmask' => RISK_SPAM | RISK_XSS,
@@ -48,4 +38,14 @@ $capabilities = array(
 
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ),
+
+    'block/istart_reports:reporttomanager' => array(
+        'riskbitmask' => RISK_SPAM,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => array(
+            'student' => CAP_ALLOW
+        )
+    ),
+    
 );
