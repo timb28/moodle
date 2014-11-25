@@ -37,6 +37,8 @@ $string['headermanageremail'] = 'Edit Manager Email Address';
 $string['intromanageremail'] = 'Enter your manager&rsquo;s email address below to send them a weekly email highlighting your iStart progress.';
 $string['labelmanageremail'] = 'Manager&rsquo;s email address';
 
+$string['managerreporthtml'] = '<p>Weekly Manager Report for {$a->coursename}</p>';
+
 $string['labelfoo'] = 'Config label';
 $string['noblockid'] = 'Couldn\'t find block id. Ensure this block exists in the block database table.';
 $string['nocourse'] = 'Invalid Course with id of {$a}';

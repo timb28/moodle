@@ -97,7 +97,7 @@ function process_manager_reports() {
                 continue;
             }
 
-            process_manager_report_for_group($course->id, $group);
+            process_manager_report_for_group($course, $group);
         }
     }
 
@@ -110,7 +110,7 @@ function process_manager_reports() {
  * @param stdClass $group the group to process.
  * @return true if a report was sent
  */
-function process_manager_report_for_group($courseid, $group) {
+function process_manager_report_for_group($course, $group) {
     // Send out all unsent manager reports from the last six days.
     // Reports older than 6 days will not be mailed.  This is to avoid the problem where
     // cron has not been running for a long time or a student moves iStart group,
@@ -120,7 +120,7 @@ function process_manager_report_for_group($courseid, $group) {
     while ($daysago <= NUMPASTREPORTDAYS) {
         $reporttime = strtotime(date("Ymd")) - (DAYSECS * $daysago);
         error_log("2. Started processing group: $group->id ($group->name),  Days ago: $daysago, Report time: $reporttime");
-        process_manager_report_for_group_on_date($courseid, $group, $reporttime);
+        process_manager_report_for_group_on_date($course, $group, $reporttime);
         $daysago++;
     }
 }
@@ -132,7 +132,7 @@ function process_manager_report_for_group($courseid, $group) {
  * @param string $reporttime The report date as a timestamp.
  * @return true if a report was sent [TODO: will it?]
  */
-function process_manager_report_for_group_on_date($courseid, $group, $reporttime) {
+function process_manager_report_for_group_on_date($course, $group, $reporttime) {
     $starttime = strtotime($group->idnumber);
 
     // Is there a manager report for the group to send on the given report date?
@@ -154,7 +154,7 @@ function process_manager_report_for_group_on_date($courseid, $group, $reporttime
     $groupmembers = groups_get_members($group->id);
 
     foreach ($groupmembers as $user) {
-        send_manager_report($courseid, $group->id, $user, $reporttime);
+        send_manager_report($course, $group, $user, $reporttime);
     }
 
     // Store that the manager report for the group on the given report date has been processed
@@ -173,7 +173,7 @@ function process_manager_report_for_group_on_date($courseid, $group, $reporttime
  * @param string $reportdate The report date as a timestamp.
  * @return true or error
  */
-function send_manager_report($courseid, $groupid, $user, $reporttime) {
+function send_manager_report($course, $group, $user, $reporttime) {
     global $CFG, $DB;
 
     error_log(" - Sending manager report for $user->id at $reporttime");
@@ -184,8 +184,8 @@ function send_manager_report($courseid, $groupid, $user, $reporttime) {
                 'courseid = :courseid AND groupid = :groupid AND userid = :userid'
                 . ' AND reporttype = :reporttype AND reporttime = :reporttime AND senttime IS NOT NULL',
                      array(
-                        'courseid' => $courseid,
-                        'groupid'  => $groupid,
+                        'courseid' => $course->id,
+                        'groupid'  => $group->id,
                         'userid'   => $user->id,
                         'reporttype' => MANAGERREPORT,
                         'reporttime' => $reporttime) )) {
@@ -197,12 +197,10 @@ function send_manager_report($courseid, $groupid, $user, $reporttime) {
     }
 
     // Does the user have a manager's email address set?
-    profile_load_data($user);
-    if ($user->profile_field_manageremailaddress == NULL) {
+    $manageremailaddress = get_manager_email_address($user);
+    if ($manageremailaddress == NULL) {
         return 'Manager email is not set for user: $user->id ($user->firstname $user->lastname).';
     }
-
-    $manageremailaddress = $user->profile_field_manageremailaddress;
 
     // Is the manager's email address valid?
     if (!validate_email($manageremailaddress)) {
@@ -225,10 +223,11 @@ function send_manager_report($courseid, $groupid, $user, $reporttime) {
 
     // Create the email subject "iStart24 Online [Week #] completion report for [Firstname] [Lastname]"
     $a = new stdClass();
-    $a->week = "Week 1";
+    $a->week = "Week 1"; // TODO get the real week number
     $a->firstname = $user->firstname;
     $a->lastname = $user->lastname;
     $email->subject = get_string("manageremailsubject", "block_istart_reports", $a);
+    unset($a);
 
     // Create the email headers
     $urlinfo = parse_url($CFG->wwwroot);
@@ -237,17 +236,17 @@ function send_manager_report($courseid, $groupid, $user, $reporttime) {
     $email->customheaders = array (  // Headers to make emails easier to track
             'Return-Path: <>',
             'List-Id: "iStart Manager Report" <istart.manager.report@'.$hostname.'>',
-            'List-Help: '.$CFG->wwwroot.'/course/view.php?id='.$courseid,
-            'Message-ID: '.istart_report_get_email_message_id($courseid, $groupid, $user->id, $reporttime, $hostname),
-            'X-Course-Id: '.$courseid,
+            'List-Help: '.$CFG->wwwroot.'/course/view.php?id='.$course->id,
+            'Message-ID: '.istart_report_get_email_message_id($course->id, $group->id, $user->id, $reporttime, $hostname),
+            'X-Course-Id: '.$course->id,
      );
 
     $email->text = manager_report_make_mail_text();
-    $email->html = manager_report_make_mail_html();
+    $email->html = manager_report_make_mail_html($course, $group, $user, $reporttime);
 
     $data = new stdClass();
-    $data->courseid = $courseid;
-    $data->groupid = $groupid;
+    $data->courseid = $course->id;
+    $data->groupid = $group->id;
     $data->userid = $user->id;
     $data->reporttype = MANAGERREPORT;
     $data->reporttime = $reporttime;
@@ -276,7 +275,7 @@ function send_manager_report($courseid, $groupid, $user, $reporttime) {
 
     if (!$mailresult){
         mtrace("Error: blocks/istart_reports/lib.php istart_send_manager_report(): "
-                . "Could not send out email for course $courseid group $groupid "
+                . "Could not send out email for course $course->id group $group->id "
                 . "for report $reporttime to user $user->id"
                 . "($manageremailaddress). Error: $mailresult .. not trying again.");
     } else {
@@ -403,17 +402,19 @@ function manager_report_make_mail_text() {
     return "text";
 }
 
-function manager_report_make_mail_html() {
+function manager_report_make_mail_html($course, $group, $user, $reporttime) {
     // TODO: build HTML version of the email
 
     // Create the email body
     // Add welcome message
+    $a = new stdClass();
+    $a->coursename = $course->name;
     // For each course section in the list add:
     // 1. The name of the course section
     // 2. The percentage of tasks in that section the user has completed
     // Add email close
 
-    return "<p>HTML text with <b>formatting</b>.</p>";
+    return get_string('managerreporthtml','block_istart_reports', $a);
 }
 
 /**
