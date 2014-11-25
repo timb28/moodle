@@ -333,8 +333,12 @@ function send_manager_report($courseid, $groupid, $user, $reporttime) {
         $data->senttime = time();
     }
 
-    // TODO catch DML exception
-    $newid = $DB->insert_record('block_istart_reports', $data);
+    try {
+        $DB->insert_record('block_istart_reports', $data);
+    } catch(Exception $e) {
+        error_log($e, DEBUG_NORMAL);
+        return "iStart manager report could not be recorded in the database.";
+    }
 
     return true;
 }
