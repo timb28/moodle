@@ -424,9 +424,11 @@ function manager_report_make_mail_html() {
  */
 function set_manager_email_address($user, $emailaddress) {
     profile_load_data($user);
-    error_log('new email 1: '.$emailaddress);
-    error_log('new email 2: '.substr($emailaddress, 0, 255));
-    $user->profile_field_manageremailaddress = substr($emailaddress, 0, 255);
+    if (strlen($emailaddress) == 0) {
+        $user->profile_field_manageremailaddress = ""; // Avoids it being saved as "0"
+    } else {
+        $user->profile_field_manageremailaddress = substr($emailaddress, 0, 255);
+    }
     profile_save_data($user);
     return true;
 }

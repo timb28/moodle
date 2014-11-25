@@ -59,9 +59,9 @@ if ($mform->is_cancelled()) {
     // Return to the course, if cancel button is pressed
     redirect($returnurl);
 } else if ( ($fromform = $mform->get_data()) && confirm_sesskey() ) {
-  //In this case you process validated data. $mform->get_data() returns data posted in form.
-  $success = set_manager_email_address($USER, $fromform->manageremail);
-  //redirect($returnurl);
+    // Process validated form data.
+    $success = set_manager_email_address($USER, $fromform->manageremailaddress);
+    redirect($returnurl);
 }
 
 echo $OUTPUT->header();
@@ -72,3 +72,8 @@ echo html_writer::div(get_string('intromanageremail','block_istart_reports'), 'i
 $mform->display();
 echo html_writer::end_tag('div');
 echo $OUTPUT->footer();
+
+
+
+
+opcache_reset(); // TODO: Remove this line

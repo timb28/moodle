@@ -31,9 +31,9 @@ class manageremail_form extends moodleform {
 
         $mform = $this->_form;
 
-        $mform->addElement('text', 'manageremail', get_string('labelmanageremail', 'block_istart_reports'), array('size'=>'30'));
-        $mform->setType('manageremail', PARAM_TEXT);
-        $mform->setDefault('manageremail',get_manager_email_address($USER));
+        $mform->addElement('text', 'manageremailaddress', get_string('labelmanageremail', 'block_istart_reports'), array('size'=>'30'));
+        $mform->setType('manageremailaddress', PARAM_TEXT);
+        $mform->setDefault('manageremailaddress',get_manager_email_address($USER));
 
 //        $mform->addElement('hidden', 'userid', $USER->id);
 //        $mform->setType('userid',PARAM_INT);
@@ -46,7 +46,12 @@ class manageremail_form extends moodleform {
 
 
     function validation($data, $files) {
-        // TODO validate email address
+        // Validate email address
+        if ( ($data['manageremailaddress'] != "") &&
+                (!validate_email($data['manageremailaddress'])) ) {
+            return array('manageremailaddress'=>get_string('err_email', 'form'));
+        }
+
         return array();
     }
 }
