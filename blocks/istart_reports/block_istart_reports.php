@@ -50,19 +50,17 @@ class block_istart_reports extends block_base {
         $this->content->text = '';
         $this->content->footer = '';
 
-        // user/index.php expect course context, so get one if page has module context.
-//        $currentcontext = $this->page->context->get_course_context(false);
+        // Get the block's context
         $currentcontext = CONTEXT_BLOCK::instance($this->instance->id);
-//        $currentcontext = CONTEXT_COURSE::instance($COURSE->id);
 
 //        if (! empty($this->config->text)) {
 //            $this->content->text = $this->config->text;
 //        }
 
-//        $this->content = '';
-//        if (empty($currentcontext)) {
-//            return $this->content;
-//        }
+        $this->content = '';
+        if (empty($currentcontext)) {
+            return $this->content;
+        }
 
         // Manager Report
         // Check if the users role means their progress gets reported to a manager.
@@ -96,6 +94,9 @@ class block_istart_reports extends block_base {
         if (! empty($this->config->text)) {
             $this->content->text .= $this->config->text;
         }
+
+        // TODO remove when testing complete
+        istart_reports_cron();
 
         return $this->content;
     }
