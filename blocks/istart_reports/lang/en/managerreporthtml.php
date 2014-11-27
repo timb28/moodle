@@ -446,7 +446,7 @@ $string['managerreporthtml'] = '
 
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-family: Helvetica;font-size: 11px;line-height: 125%;text-align: left;">
 
-                            <a href="http://www.academyrealestatetraining.com/sales/istart24-online" target="_blank" style="word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-weight: normal;text-decoration: underline;"><img align="right" height="31" src="https://gallery.mailchimp.com/7eae2f154fe18e4b458689ab2/images/93bc7edf-f56c-4ae8-95a2-7c74545ae1cb.gif" style="width: 110px;height: 31px;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="110"></a><a href="http://www.harcourtsacademy.com/" target="_blank" style="word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-weight: normal;text-decoration: underline;"><img align="left" height="31" src="https://gallery.mailchimp.com/7eae2f154fe18e4b458689ab2/images/6dba8f89-7212-467d-b613-dac8e1ab308c.gif" style="width: 137px;height: 31px;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="137"></a>
+                            <a href="http://www.academyrealestatetraining.com/sales/istart24-online" target="_blank" style="word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-weight: normal;text-decoration: underline;"><img align="right" height="31" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/istart24.gif" style="width: 110px;height: 31px;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="110"></a><a href="http://www.harcourtsacademy.com/" target="_blank" style="word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-weight: normal;text-decoration: underline;"><img align="left" height="31" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/academy.gif" style="width: 137px;height: 31px;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="137"></a>
                         </td>
                     </tr>
                 </tbody></table>
@@ -524,45 +524,7 @@ $string['managerreporthtml'] = '
 
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">
 
-                            <div style="text-align:left;"><span style="line-height:20.7999992370605px"><img align="none" alt="Tasks are complete" height="53" src="https://gallery.mailchimp.com/7eae2f154fe18e4b458689ab2/images/11357538-1162-4349-8e52-bf6cc41791f9.gif" style="width: 52px;height: 53px;vertical-align: middle;margin: 0px 25px 0px 50px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="52">FIRSTNAME completed %NN of TYPE tasks (X out of Y)</span></div>
-
-                        </td>
-                    </tr>
-                </tbody></table>
-
-            </td>
-        </tr>
-    </tbody>
-</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-    <tbody class="mcnTextBlockOuter">
-        <tr>
-            <td valign="top" class="mcnTextBlockInner" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-
-                <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                    <tbody><tr>
-
-                        <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">
-
-                            <div style="text-align:left;"><span style="line-height:20.7999992370605px"><img align="none" alt="Tasks are complete" height="54" src="https://gallery.mailchimp.com/7eae2f154fe18e4b458689ab2/images/b95c0fa8-ffb9-444f-bd17-a5b0f568842b.gif" style="width: 53px;height: 54px;vertical-align: middle;margin: 0px 25px 0px 50px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="53">FIRSTNAME completed %NN of TYPE tasks (X out of Y)</span></div>
-
-                        </td>
-                    </tr>
-                </tbody></table>
-
-            </td>
-        </tr>
-    </tbody>
-</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-    <tbody class="mcnTextBlockOuter">
-        <tr>
-            <td valign="top" class="mcnTextBlockInner" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-
-                <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                    <tbody><tr>
-
-                        <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">
-
-                            <div style="text-align:left;"><span style="line-height:20.7999992370605px"><img align="none" alt="Tasks are complete" height="54" src="https://gallery.mailchimp.com/7eae2f154fe18e4b458689ab2/images/c53f28c6-ede8-47ae-9256-9ecf76d1af00.gif" style="width: 53px;height: 54px;vertical-align: middle;margin: 0px 25px 0px 50px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="53">FIRSTNAME completed %NN of TYPE tasks (X out of Y)</span></div>
+                            <div style="text-align:left;"><span style="line-height:20.7999992370605px"><img align="none" alt="Tasks are complete" height="53" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/10.gif" style="width: 52px;height: 53px;vertical-align: middle;margin: 0px 25px 0px 50px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="52">FIRSTNAME completed %NN of TYPE tasks (X out of Y)</span></div>
 
                         </td>
                     </tr>
@@ -628,7 +590,7 @@ $string['managerreporthtml'] = '
 
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: left;">
 
-                            <img align="left" height="53" src="https://gallery.mailchimp.com/7eae2f154fe18e4b458689ab2/images/ee929bc5-99dc-48a4-a333-485f3fa9be73.gif" style="width: 60px;height: 53px;margin: 0px;padding-right: 10px;vertical-align: middle;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="60">
+                            <img align="left" height="53" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/watch_icon.gif" style="width: 60px;height: 53px;margin: 0px;padding-right: 10px;vertical-align: middle;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="60">
 <p style="font-weight: bold;margin: 1em 0;padding: 0;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: left;">Video to watch</p>
 
                         </td>
@@ -648,7 +610,7 @@ $string['managerreporthtml'] = '
 
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: left;">
 
-                            <img align="left" height="55" src="https://gallery.mailchimp.com/7eae2f154fe18e4b458689ab2/images/1f8e0bbe-001c-4b40-9933-e0eede661a73.gif" style="width: 60px;height: 55px;padding-right: 10px;vertical-align: middle;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="60">
+                            <img align="left" height="55" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/read_icon.gif" style="width: 60px;height: 55px;padding-right: 10px;vertical-align: middle;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="60">
 <p style="font-weight: bold;margin: 1em 0;padding: 0;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: left;">Content to read</p>
 
                         </td>
@@ -675,7 +637,7 @@ $string['managerreporthtml'] = '
 
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: left;">
 
-                            <img align="left" height="53" src="https://gallery.mailchimp.com/7eae2f154fe18e4b458689ab2/images/38cf358c-89c1-45c2-bac1-4b4a78094f34.gif" style="width: 60px;height: 53px;padding-right: 10px;vertical-align: middle;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="60">
+                            <img align="left" height="53" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/share_icon.gif" style="width: 60px;height: 53px;padding-right: 10px;vertical-align: middle;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="60">
 <p style="font-weight: bold;margin: 1em 0;padding: 0;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: left;">Forum to share</p>
 
                         </td>
@@ -695,7 +657,7 @@ $string['managerreporthtml'] = '
 
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: left;">
 
-                            <img align="left" height="55" src="https://gallery.mailchimp.com/7eae2f154fe18e4b458689ab2/images/eff679e3-14aa-46a0-8711-af6fba6df243.gif" style="width: 60px;height: 55px;padding-right: 10px;vertical-align: middle;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="60">
+                            <img align="left" height="55" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/do_icon.gif" style="width: 60px;height: 55px;padding-right: 10px;vertical-align: middle;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="60">
 <p style="font-weight: bold;margin: 1em 0;padding: 0;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: left;">Tasks to do</p>
 
                         </td>
