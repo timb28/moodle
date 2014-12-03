@@ -147,7 +147,7 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
     // Get information on the istart week
     $reportdate = new DateTime();
     $reportdate->setTimestamp($reporttime);
-    $istartweek = get_istart_week($course, $group, $reportdate);
+    $istartweeklabel = get_istart_week_label($course, $group, $reportdate);
 
     // Get a list of all users in the group who:
     //  - are students
@@ -159,7 +159,7 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
     $groupmembers = groups_get_members($group->id);
 
     foreach ($groupmembers as $user) {
-        send_manager_report($course, $group, $user, $reporttime, $istartweek);
+        send_manager_report($course, $group, $user, $reporttime, $istartweeklabel);
     }
 
     // Store that the manager report for the group on the given report date has been processed
@@ -178,7 +178,7 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
  * @param string $istartweek The istart week.
  * @return true or error
  */
-function send_manager_report($course, $group, $user, $reporttime, $istartweek) {
+function send_manager_report($course, $group, $user, $reporttime, $istartweeklabel) {
     global $CFG, $DB;
 
     error_log(" - Sending manager report for $user->id at $reporttime");
@@ -247,7 +247,7 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweek) {
      );
 
     $email->text = manager_report_make_mail_text();
-    $email->html = manager_report_make_mail_html($course, $user, $istartweek);
+    $email->html = manager_report_make_mail_html($course, $user, $istartweeklabel);
 
     $data = new stdClass();
     $data->courseid = $course->id;
@@ -381,25 +381,19 @@ function get_manager_email_address($user) {
 }
 
 /**
- * Gets istart week name
+ * Gets istart week number
  * @param stdClass $course The course object
  * @param stdClass $group The goup object
  * @param string $date The date to calculate the week from
- * @return array The number and name of the istart week
+ * @return int The istart week number
  */
-function get_istart_week($course, $group, $atdate) {
+function get_istart_week_number($group, $atdate) {
 
     // Get week number of istart week for the week before the report date
     $istartstart = date_create($group->idnumber);
 
-    error_log("Start: " . date_format($istartstart, "U = Y-m-d H:i:s"));
-
-    error_log("At date: " . date_format($atdate, "U = Y-m-d H:i:s"));
-
     // Get days difference between istart start date and the date given
     $diff = $istartstart->diff($atdate);
-
-    error_log("Difference: " . $diff->days);
 
     // If the days difference is divisible exactly by 7 then it's should be considered next week
     if ( ($diff->days % 7) == 0) {
@@ -408,11 +402,48 @@ function get_istart_week($course, $group, $atdate) {
         $istartweeknumber = ceil($diff->days / 7);
     }
 
+    return $istartweeknumber;
+}
+
+/**
+ * Gets istart week label
+ * @param stdClass $course The course object
+ * @param stdClass $group The goup object
+ * @param string $date The date to calculate the week from
+ * @return array The number and name of the istart week
+ */
+function get_istart_week_label($course, $group, $atdate) {
+    global $DB;
+
+    $istartweeknumber = get_istart_week_number($group, $atdate);
+
     // Get the week name from the course section
 
-    // TODO
+    try {
 
-    return array('number'=>$istartweeknumber, 'name'=>'Business Planning');
+        $sql = '
+                SELECT
+                    cs.name
+                FROM
+                    {course_sections} AS cs
+                        JOIN
+                    {course_format_options} AS cfo ON cs.id = cfo.sectionid
+                WHERE
+                    course = :courseid AND cfo.name = "istartweek"
+                        AND cfo.value = :weeknum';
+        $params = array(
+                        'courseid' => $course->id,
+                        'weeknum'  => $istartweeknumber);
+        $weeklabel = $DB->get_field_sql($sql, $params);
+
+    } catch(Exception $e) {
+        error_log($e, DEBUG_NORMAL);
+        return("iStart manager report not sent because the iStart week label cannot be read from the database.");
+    }
+
+    error_log("istart week number: " . $istartweeknumber . " week label:" . $weeklabel);
+
+    return $weeklabel;
 }
 
 /**
@@ -442,17 +473,16 @@ function manager_report_make_mail_text() {
     return "text";
 }
 
-function manager_report_make_mail_html($course, $user, $istartweek) {
+function manager_report_make_mail_html($course, $user, $istartweeklabel) {
     // TODO: build HTML version of the email
 
     // Create the email body
     // Add welcome message
     $a = new stdClass();
-    $a->coursename = $course->name;
+    $a->coursename = $course->fullname;
     $a->firstname = $user->firstname;
     $a->lastname = $user->lastname;
-    $a->istartweek = $istartweek['number'];
-    $a->istarttopic = $istartweek['name'];
+    $a->istartlabel = $istartweeklabel;
     
 
     // For each course section in the list add:

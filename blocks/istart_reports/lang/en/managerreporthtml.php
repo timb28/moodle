@@ -417,18 +417,7 @@ $string['managerreporthtmlheader'] = '
 
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-left: 18px;padding-bottom: 9px;padding-right: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-family: Helvetica;font-size: 11px;line-height: 125%;text-align: left;">
 
-                            iStart24 Online Progress Report
-                        </td>
-                    </tr>
-                </tbody></table>
-
-                <table align="right" border="0" cellpadding="0" cellspacing="0" width="197" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                    <tbody><tr>
-
-                        <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-family: Helvetica;font-size: 11px;line-height: 125%;text-align: left;">
-
-                            <div style="text-align: right;"><a href="*|ARCHIVE|*" target="_blank" style="word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-weight: normal;text-decoration: underline;">View this email in your browser</a></div>
-
+                            {$a->coursename} Progress Report
                         </td>
                     </tr>
                 </tbody></table>
@@ -489,9 +478,9 @@ $string['managerreporthtmlheader'] = '
 
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">
 
-                            <h2 class="null" style="text-align: center;margin: 0;padding: 0;display: block;font-family: Helvetica;font-size: 26px;font-style: normal;font-weight: bold;line-height: 125%;letter-spacing: -.75px;color: #404040 !important;">iStart24 Report for {$a->firstname} {$a->lastname}</h2>
+                            <h2 class="null" style="text-align: center;margin: 0;padding: 0;display: block;font-family: Helvetica;font-size: 26px;font-style: normal;font-weight: bold;line-height: 125%;letter-spacing: -.75px;color: #404040 !important;">{$a->coursename} Report for {$a->firstname} {$a->lastname}</h2>
 
-<h3 class="null" style="text-align: center;margin: 0;padding: 0;display: block;font-family: Helvetica;font-size: 18px;font-style: normal;font-weight: bold;line-height: 125%;letter-spacing: -.5px;color: #606060 !important;">Week {$a->istartweek} ({$a->istarttopic})</h3>
+<h3 class="null" style="text-align: center;margin: 0;padding: 0;display: block;font-family: Helvetica;font-size: 18px;font-style: normal;font-weight: bold;line-height: 125%;letter-spacing: -.5px;color: #606060 !important;">{$a->istartlabel}</h3>
 
                         </td>
                     </tr>
