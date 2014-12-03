@@ -727,13 +727,11 @@ $string['managerreporthtmlheader'] = '
 
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #000000;font-family: Helvetica;font-size: 11px;line-height: 125%;text-align: left;">
 
-                            <div style="text-align: center;"><em>Copyright © 2014 *|LIST:COMPANY|*, All rights reserved.</em><br>
- *|LIST:DESCRIPTION|*<br>
-<br>
-<a class="utilityLink" href="*|UNSUB|*" style="line-height: 20.7999992370605px;word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #000000;font-weight: normal;text-decoration: underline;" target="_blank">unsubscribe</a><br>
+                            <div style="text-align: center;"><em>Copyright © Harcourts International, All rights reserved.</em><br>
+This email was sent to you because {$a->firstname} {$a->lastname} nominated you as their manager.<br>
 <br>
 <strong>Our mailing address is:</strong><br>
-*|HTML:LIST_ADDRESS_HTML|* </div>
+<a href="mailto:academy@harcourts.net">academy@harcourts.net</a> </div>
 
                         </td>
                     </tr>

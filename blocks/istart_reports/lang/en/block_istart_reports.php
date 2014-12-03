@@ -23,11 +23,11 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['blockstring'] = 'Block string';
 $string['crontask'] = 'iStart Report jobs';
-$string['descconfig'] = 'Description of the config section';
 $string['descfoo'] = 'Config description';
-$string['headerconfig'] = 'Config section header';
+$string['managerconfigheader'] = 'Manager Report Contents';
+$string['managerconfigdesc'] = 'Enter information included in manager report emails';
+$string['emailcopyrightconfig'] = 'Email copyright';
 
 $string['studentmanagerreports'] = 'Your weekly progress reports are being sent to<br/>{$a}';
 $string['noreportaddress'] = 'No one';

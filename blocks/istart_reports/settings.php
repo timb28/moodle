@@ -24,9 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-//$settings->add(new admin_setting_heading('sampleheader',
-//                                         get_string('headerconfig', 'block_istart_reports'),
-//                                         get_string('descconfig', 'block_istart_reports')));
+//$settings->add(new admin_setting_heading('managerreportheader',
+//                                         get_string('managerconfigheader', 'block_istart_reports'),
+//                                         get_string('managerconfigdesc', 'block_istart_reports')));
 //
 //$settings->add(new admin_setting_configcheckbox('istart_reports/foo',
 //                                                get_string('labelfoo', 'block_istart_reports'),
