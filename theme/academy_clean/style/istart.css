@@ -181,6 +181,7 @@ li.section.main.istart-week-task {
 /* iStart24 hide course resources */
 body.course-shortname-iStart24 .istart-welcome li.activity.lesson,
 body.course-shortname-iStart24 .istart-welcome li.activity.forum,
+body.course-shortname-iStart24 .istart-welcome li.activity.certificate,
 body.course-shortname-iStart24 .istart-welcome li.activity.questionnaire,
 body.course-shortname-iStart24 .istart-welcome li.activity.feedback,
 body.course-shortname-iStart24 .istart-welcome li.activity.page {
@@ -188,6 +189,7 @@ body.course-shortname-iStart24 .istart-welcome li.activity.page {
 }
 body.course-shortname-iStart24.editing .istart-welcome li.activity.lesson,
 body.course-shortname-iStart24.editing .istart-welcome li.activity.forum,
+body.course-shortname-iStart24.editing .istart-welcome li.activity.certificate,
 body.course-shortname-iStart24.editing .istart-welcome li.activity.questionnaire,
 body.course-shortname-iStart24.editing .istart-welcome li.activity.feedback,
 body.course-shortname-iStart24.editing .istart-welcome li.activity.page {
