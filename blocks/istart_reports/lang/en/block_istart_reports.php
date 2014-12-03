@@ -37,12 +37,11 @@ $string['headermanageremail'] = 'Edit Manager Email Address';
 $string['intromanageremail'] = 'Enter your manager&rsquo;s email address below to send them a weekly email highlighting your iStart progress.';
 $string['labelmanageremail'] = 'Manager&rsquo;s email address';
 
-require_once($CFG->dirroot . '/blocks/istart_reports/lang/en/managerreporthtml.php');
+require_once($CFG->dirroot . '/blocks/istart_reports/lang/en/manager_report.php');
 
 $string['labelfoo'] = 'Config label';
 $string['noblockid'] = 'Couldn\'t find block id. Ensure this block exists in the block database table.';
 $string['nocourse'] = 'Invalid Course with id of {$a}';
 $string['istart_reports:addinstance'] = 'Add a istart_reports block';
 $string['istart_reports:reporttomanager'] = 'Progress reported to a manager';
-$string['manageremailsubject'] = 'iStart24 Online {$a->week} completion report for {$a->firstname} {$a->lastname}';
 $string['pluginname'] = 'iStart Reports';

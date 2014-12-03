@@ -1,9 +1,12 @@
 <?php
+
+$string['manageremailsubject'] = 'iStart24 Online Week {$a->istartweeknumber} completion report for {$a->firstname} {$a->lastname}';
+
 $string['managerreporthtmlheader'] = '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><!-- NAME: 2 COLUMN -->
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>*|MC:SUBJECT|*</title>
+        <title>iStart24 Online Week {$a->istartweeknumber} completion report for {$a->firstname} {$a->lastname}</title>
 
     <style type="text/css">
 		body,#bodyTable,#bodyCell{
@@ -480,7 +483,7 @@ $string['managerreporthtmlheader'] = '
 
                             <h2 class="null" style="text-align: center;margin: 0;padding: 0;display: block;font-family: Helvetica;font-size: 26px;font-style: normal;font-weight: bold;line-height: 125%;letter-spacing: -.75px;color: #404040 !important;">{$a->coursename} Report for {$a->firstname} {$a->lastname}</h2>
 
-<h3 class="null" style="text-align: center;margin: 0;padding: 0;display: block;font-family: Helvetica;font-size: 18px;font-style: normal;font-weight: bold;line-height: 125%;letter-spacing: -.5px;color: #606060 !important;">{$a->istartlabel}</h3>
+<h3 class="null" style="text-align: center;margin: 0;padding: 0;display: block;font-family: Helvetica;font-size: 18px;font-style: normal;font-weight: bold;line-height: 125%;letter-spacing: -.5px;color: #606060 !important;">{$a->istartweeklabel}</h3>
 
                         </td>
                     </tr>

@@ -147,6 +147,7 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
     // Get information on the istart week
     $reportdate = new DateTime();
     $reportdate->setTimestamp($reporttime);
+    $istartweeknumber = get_istart_week_number($group, $reportdate);
     $istartweeklabel = get_istart_week_label($course, $group, $reportdate);
 
     // Get a list of all users in the group who:
@@ -159,7 +160,7 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
     $groupmembers = groups_get_members($group->id);
 
     foreach ($groupmembers as $user) {
-        send_manager_report($course, $group, $user, $reporttime, $istartweeklabel);
+        send_manager_report($course, $group, $user, $reporttime, $istartweeknumber, $istartweeklabel);
     }
 
     // Store that the manager report for the group on the given report date has been processed
@@ -178,7 +179,7 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
  * @param string $istartweek The istart week.
  * @return true or error
  */
-function send_manager_report($course, $group, $user, $reporttime, $istartweeklabel) {
+function send_manager_report($course, $group, $user, $reporttime, $istartweeknumber, $istartweeklabel) {
     global $CFG, $DB;
 
     error_log(" - Sending manager report for $user->id at $reporttime");
@@ -228,7 +229,7 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweeklab
 
     // Create the email subject "iStart24 Online [Week #] completion report for [Firstname] [Lastname]"
     $a = new stdClass();
-    $a->week = "Week 1"; // TODO get the real week number
+    $a->istartweeknumber = $istartweeknumber;
     $a->firstname = $user->firstname;
     $a->lastname = $user->lastname;
     $email->subject = get_string("manageremailsubject", "block_istart_reports", $a);
@@ -247,7 +248,7 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweeklab
      );
 
     $email->text = manager_report_make_mail_text();
-    $email->html = manager_report_make_mail_html($course, $user, $istartweeklabel);
+    $email->html = manager_report_make_mail_html($course, $user, $istartweeknumber, $istartweeklabel);
 
     $data = new stdClass();
     $data->courseid = $course->id;
@@ -473,7 +474,7 @@ function manager_report_make_mail_text() {
     return "text";
 }
 
-function manager_report_make_mail_html($course, $user, $istartweeklabel) {
+function manager_report_make_mail_html($course, $user, $istartweeknumber, $istartweeklabel) {
     // TODO: build HTML version of the email
 
     // Create the email body
@@ -482,7 +483,8 @@ function manager_report_make_mail_html($course, $user, $istartweeklabel) {
     $a->coursename = $course->fullname;
     $a->firstname = $user->firstname;
     $a->lastname = $user->lastname;
-    $a->istartlabel = $istartweeklabel;
+    $a->istartweeknumber = $istartweeknumber;
+    $a->istartweeklabel = $istartweeklabel;
     
 
     // For each course section in the list add:
