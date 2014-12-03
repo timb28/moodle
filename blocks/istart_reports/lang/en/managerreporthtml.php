@@ -1,6 +1,5 @@
 <?php
-require_once('../../../../config.php');
-$string['managerreporthtml'] = '
+$string['managerreporthtmlheader'] = '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><!-- NAME: 2 COLUMN -->
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -490,9 +489,9 @@ $string['managerreporthtml'] = '
 
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">
 
-                            <h2 class="null" style="text-align: center;margin: 0;padding: 0;display: block;font-family: Helvetica;font-size: 26px;font-style: normal;font-weight: bold;line-height: 125%;letter-spacing: -.75px;color: #404040 !important;">iStart24 Report for FIRSTNAME LASTNAME</h2>
+                            <h2 class="null" style="text-align: center;margin: 0;padding: 0;display: block;font-family: Helvetica;font-size: 26px;font-style: normal;font-weight: bold;line-height: 125%;letter-spacing: -.75px;color: #404040 !important;">iStart24 Report for {$a->firstname} {$a->lastname}</h2>
 
-<h3 class="null" style="text-align: center;margin: 0;padding: 0;display: block;font-family: Helvetica;font-size: 18px;font-style: normal;font-weight: bold;line-height: 125%;letter-spacing: -.5px;color: #606060 !important;">Week NN (TOPICNAME)</h3>
+<h3 class="null" style="text-align: center;margin: 0;padding: 0;display: block;font-family: Helvetica;font-size: 18px;font-style: normal;font-weight: bold;line-height: 125%;letter-spacing: -.5px;color: #606060 !important;">Week {$a->istartweek} ({$a->istarttopic})</h3>
 
                         </td>
                     </tr>
@@ -525,7 +524,7 @@ $string['managerreporthtml'] = '
 
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">
 
-                            <div style="text-align:left;"><span style="line-height:20.7999992370605px"><img align="none" alt="Tasks are complete" height="53" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/10.gif" style="width: 52px;height: 53px;vertical-align: middle;margin: 0px 25px 0px 50px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="52">FIRSTNAME completed %NN of TYPE tasks (X out of Y)</span></div>
+                            <div style="text-align:left;"><span style="line-height:20.7999992370605px"><img align="none" alt="Tasks are complete" height="53" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/10.gif" style="width: 52px;height: 53px;vertical-align: middle;margin: 0px 25px 0px 50px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="52">{$a->firstname} completed %NN of TYPE tasks (X out of Y)</span></div>
 
                         </td>
                     </tr>
@@ -766,8 +765,4 @@ $string['managerreporthtml'] = '
     </body>
 </html>
         ';
-
-//TODO: REmove the following:
-echo($string['managerreporthtml']);
-opcache_reset(); // TODO: Remove this line
 ?>

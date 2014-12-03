@@ -96,7 +96,15 @@ class block_istart_reports extends block_base {
         }
 
         // TODO remove when testing complete
-        istart_reports_cron();
+        $groups = groups_get_all_groups($COURSE->id);
+        foreach ($groups as $group) {
+            $now = new DateTime();
+            $now->setTimestamp(strtotime("-7 days"));
+
+            $week = get_istart_week($COURSE, $group, $now);
+            $this->content->text.= "<div>iStart week:".$week['number']." ".$week['name']."</div>";
+        }
+//        istart_reports_cron();
 
         return $this->content;
     }

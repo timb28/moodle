@@ -144,6 +144,11 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
     // If no, istart_process_manager_report($intake, $reportdate)
     error_log("Started processing reports for group: $group->id ($group->name)");
 
+    // Get information on the istart week
+    $reportdate = new DateTime();
+    $reportdate->setTimestamp($reporttime);
+    $istartweek = get_istart_week($course, $group, $reportdate);
+
     // Get a list of all users in the group who:
     //  - are students
     //  - have a manager email (user profile field 'manageremail')
@@ -154,7 +159,7 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
     $groupmembers = groups_get_members($group->id);
 
     foreach ($groupmembers as $user) {
-        send_manager_report($course, $group, $user, $reporttime);
+        send_manager_report($course, $group, $user, $reporttime, $istartweek);
     }
 
     // Store that the manager report for the group on the given report date has been processed
@@ -170,10 +175,10 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
  * @param int $courseid course ID of the istart course.
  * @param int $groupid ID of the user's group.
  * @param stdClass $user user being reported on.
- * @param string $reportdate The report date as a timestamp.
+ * @param string $istartweek The istart week.
  * @return true or error
  */
-function send_manager_report($course, $group, $user, $reporttime) {
+function send_manager_report($course, $group, $user, $reporttime, $istartweek) {
     global $CFG, $DB;
 
     error_log(" - Sending manager report for $user->id at $reporttime");
@@ -242,7 +247,7 @@ function send_manager_report($course, $group, $user, $reporttime) {
      );
 
     $email->text = manager_report_make_mail_text();
-    $email->html = manager_report_make_mail_html($course, $group, $user, $reporttime);
+    $email->html = manager_report_make_mail_html($course, $user, $istartweek);
 
     $data = new stdClass();
     $data->courseid = $course->id;
@@ -376,6 +381,41 @@ function get_manager_email_address($user) {
 }
 
 /**
+ * Gets istart week name
+ * @param stdClass $course The course object
+ * @param stdClass $group The goup object
+ * @param string $date The date to calculate the week from
+ * @return array The number and name of the istart week
+ */
+function get_istart_week($course, $group, $atdate) {
+
+    // Get week number of istart week for the week before the report date
+    $istartstart = date_create($group->idnumber);
+
+    error_log("Start: " . date_format($istartstart, "U = Y-m-d H:i:s"));
+
+    error_log("At date: " . date_format($atdate, "U = Y-m-d H:i:s"));
+
+    // Get days difference between istart start date and the date given
+    $diff = $istartstart->diff($atdate);
+
+    error_log("Difference: " . $diff->days);
+
+    // If the days difference is divisible exactly by 7 then it's should be considered next week
+    if ( ($diff->days % 7) == 0) {
+        $istartweeknumber = ceil($diff->days / 7) + 1;
+    } else {
+        $istartweeknumber = ceil($diff->days / 7);
+    }
+
+    // Get the week name from the course section
+
+    // TODO
+
+    return array('number'=>$istartweeknumber, 'name'=>'Business Planning');
+}
+
+/**
  * Create a message-id string to use in the custom headers of report emails
  *
  * message-id is used by email clients to identify emails and to nest conversations
@@ -402,19 +442,25 @@ function manager_report_make_mail_text() {
     return "text";
 }
 
-function manager_report_make_mail_html($course, $group, $user, $reporttime) {
+function manager_report_make_mail_html($course, $user, $istartweek) {
     // TODO: build HTML version of the email
 
     // Create the email body
     // Add welcome message
     $a = new stdClass();
     $a->coursename = $course->name;
+    $a->firstname = $user->firstname;
+    $a->lastname = $user->lastname;
+    $a->istartweek = $istartweek['number'];
+    $a->istarttopic = $istartweek['name'];
+    
+
     // For each course section in the list add:
     // 1. The name of the course section
     // 2. The percentage of tasks in that section the user has completed
     // Add email close
 
-    return get_string('managerreporthtml','block_istart_reports', $a);
+    return get_string('managerreporthtmlheader','block_istart_reports', $a);
 }
 
 /**
