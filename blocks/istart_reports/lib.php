@@ -221,11 +221,15 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweeknum
 
     foreach ($tasksections as $sectionid=>$sectionname) {
         $tasksection = array(
-            "sectionname" => $sectionname,
-            "totaltasks" => get_istart_section_total_tasks($course, $sectionid)
+            "sectionname"   => $sectionname,
+            "totaltasks"    => get_istart_section_total_tasks($course->id, $sectionid),
+            "taskscomplete" => get_istart_tasks_complete($sectionid, $user->id)
         );
 
-        error_log(" - Task sections: " . $sectionid . ": " . $tasksection['sectionname'] . ": " . $tasksection['totaltasks']);
+        error_log(" - Task sections: " . $sectionid
+                . ": " . $tasksection['sectionname']
+                . ": " . $tasksection['totaltasks']
+                . ": " . $tasksection['taskscomplete']);
 
     }
         // For each course section in the list:
@@ -470,9 +474,9 @@ function get_istart_task_sections($course) {
                 SELECT
                     cfo.sectionid, cs.name
                 FROM
-                    moodle27.mdl_course_format_options AS cfo
+                    {course_format_options} AS cfo
                         JOIN
-                    mdl_course_sections AS cs ON cfo.sectionid = cs.id
+                    {course_sections} AS cs ON cfo.sectionid = cs.id
                 WHERE
                         cs.course = :courseid
                         AND cfo.name = :cfotypename
@@ -492,11 +496,11 @@ function get_istart_task_sections($course) {
 
 /**
  * Gets the total number of tasks in a section
- * @param stdClass $course The course object
- * @param stdClass $section The course section object
+ * @param int $courseid The course id
+ * @param int $sectionid The course section id
  * @return int The total number of tasks
  */
-function get_istart_section_total_tasks($course, $sectionid) {
+function get_istart_section_total_tasks($courseid, $sectionid) {
     global $DB;
 
     // Get all course sections that contain tasks
@@ -504,7 +508,7 @@ function get_istart_section_total_tasks($course, $sectionid) {
 
         $table = 'course_modules';
         $conditions = array(
-                        'course' => $course->id,
+                        'course' => $courseid,
                         'completion' => 1,
                         'section'  => $sectionid);
         $totaltasks = $DB->count_records($table, $conditions);
@@ -518,20 +522,38 @@ function get_istart_section_total_tasks($course, $sectionid) {
 }
 
 /**
- * Gets the percent of tasks a user has completed in a given section
- * @param stdClass $course The course object
- * @param stdClass $section The course section object
- * @param stdClass $user The user object
- * @return int percent of tasks complete
+ * Gets the number of tasks a user has completed in a given section
+ * @param int $sectionid The course section id
+ * @param int $userid The user is
+ * @return int The count of tasks complete
  */
-function get_istart_tasks_percent_complete($course, $section, $user) {
-    // Get the number of total tasks in the section
+function get_istart_tasks_complete($sectionid, $userid) {
+    global $DB;
 
-    // Get the number of those tasks this student has completed
+    try {
 
-    // Calculate the percent complete
+        $sql = '
+                SELECT
+                    COUNT(cm.id) as "total"
+                FROM
+                    {course_modules} cm
+                        JOIN
+                    {label} l ON l.id = cm.instance
+                        JOIN
+                    {course_modules_completion} cmc ON cmc.coursemoduleid = cm.id
+                WHERE
+                    cmc.userid = :userid AND cm.section = :sectionid';
+        $params = array(
+                        'sectionid' => $sectionid,
+                        'userid'  => $userid);
+        $taskscomplete = $DB->get_record_sql($sql, $params);
 
-    return 1;
+    } catch(Exception $e) {
+        error_log($e, DEBUG_NORMAL);
+        return("Could not obtain istart tasks complete because the database could not be read.");
+    }
+
+    return $taskscomplete->total;
 }
 
 /**
