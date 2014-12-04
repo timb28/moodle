@@ -37,6 +37,7 @@ require_once($CFG->dirroot.'/user/profile/lib.php');
 define('BLOCK_NAME', 'istart_reports');
 define('NUMPASTREPORTDAYS', 6);
 define('MANAGERREPORT', 1);
+define('COURSEFORMATOPTIONTYPEFORTASKS', 'reportcompletions');
 
 /**
  * Function to be run periodically according to the scheduled task.
@@ -195,7 +196,7 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweeknum
                         'userid'   => $user->id,
                         'reporttype' => MANAGERREPORT,
                         'reporttime' => $reporttime) )) {
-            return "iStart manager report not sent because it has already been sent";
+//TODO uncomment after testing            return "iStart manager report not sent because it has already been sent";
         }
     } catch(Exception $e) {
         error_log($e, DEBUG_NORMAL);
@@ -215,14 +216,23 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweeknum
     }
     error_log(" - Manager's email address: $manageremailaddress");
 
-    // Has the report for that user been sent already?
-        // If yes, return
-
     // Get a list of all course sections for the report week that have reportable completion tasks
+    $tasksections = get_istart_task_sections($course);
+
+    foreach ($tasksections as $sectionid=>$sectionname) {
+        $tasksection = array(
+            "sectionname" => $sectionname,
+            "totaltasks" => get_istart_section_total_tasks($course, $sectionid)
+        );
+
+        error_log(" - Task sections: " . $sectionid . ": " . $tasksection['sectionname'] . ": " . $tasksection['totaltasks']);
+
+    }
         // For each course section in the list:
         // 1. Get the name of the section
         // 2. Get the total number of reportable tasks
         // 3. Get the number of reportable tasks the user has completed.
+
 
     // Create the email to send
     $email = new stdClass();
@@ -409,7 +419,7 @@ function get_istart_week_number($group, $atdate) {
 /**
  * Gets istart week label
  * @param stdClass $course The course object
- * @param stdClass $group The goup object
+ * @param stdClass $group The group object
  * @param string $date The date to calculate the week from
  * @return array The number and name of the istart week
  */
@@ -442,9 +452,86 @@ function get_istart_week_label($course, $group, $atdate) {
         return("iStart manager report not sent because the iStart week label cannot be read from the database.");
     }
 
-    error_log("istart week number: " . $istartweeknumber . " week label:" . $weeklabel);
-
     return $weeklabel;
+}
+
+/**
+ * Gets istart week label
+ * @param stdClass $course The course object
+ * @return array an associative array
+ */
+function get_istart_task_sections($course) {
+    global $DB;
+
+    // Get all course sections that contain tasks
+    try {
+
+        $sql = '
+                SELECT
+                    cfo.sectionid, cs.name
+                FROM
+                    moodle27.mdl_course_format_options AS cfo
+                        JOIN
+                    mdl_course_sections AS cs ON cfo.sectionid = cs.id
+                WHERE
+                        cs.course = :courseid
+                        AND cfo.name = :cfotypename
+                        AND cfo.value = 1;';
+        $params = array(
+                        'courseid' => $course->id,
+                        'cfotypename'  => COURSEFORMATOPTIONTYPEFORTASKS);
+        $tasksections = $DB->get_records_sql_menu($sql, $params);
+
+    } catch(Exception $e) {
+        error_log($e, DEBUG_NORMAL);
+        return("Could not obtain istart task sections because the database could not be read.");
+    }
+
+    return $tasksections;
+}
+
+/**
+ * Gets the total number of tasks in a section
+ * @param stdClass $course The course object
+ * @param stdClass $section The course section object
+ * @return int The total number of tasks
+ */
+function get_istart_section_total_tasks($course, $sectionid) {
+    global $DB;
+
+    // Get all course sections that contain tasks
+    try {
+
+        $table = 'course_modules';
+        $conditions = array(
+                        'course' => $course->id,
+                        'completion' => 1,
+                        'section'  => $sectionid);
+        $totaltasks = $DB->count_records($table, $conditions);
+
+    } catch(Exception $e) {
+        error_log($e, DEBUG_NORMAL);
+        return("Could not obtain istart total tasks in a section because the database could not be read.");
+    }
+
+    return $totaltasks;
+}
+
+/**
+ * Gets the percent of tasks a user has completed in a given section
+ * @param stdClass $course The course object
+ * @param stdClass $section The course section object
+ * @param stdClass $user The user object
+ * @return int percent of tasks complete
+ */
+function get_istart_tasks_percent_complete($course, $section, $user) {
+    // Get the number of total tasks in the section
+
+    // Get the number of those tasks this student has completed
+
+    // Calculate the percent complete
+
+    return 1;
 }
 
 /**
@@ -486,11 +573,6 @@ function manager_report_make_mail_html($course, $user, $istartweeknumber, $istar
     $a->istartweeknumber = $istartweeknumber;
     $a->istartweeklabel = $istartweeklabel;
     
-
-    // For each course section in the list add:
-    // 1. The name of the course section
-    // 2. The percentage of tasks in that section the user has completed
-    // Add email close
 
     return get_string('managerreporthtmlheader','block_istart_reports', $a);
 }
