@@ -220,6 +220,11 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweeknum
     $tasksections = get_istart_task_sections($course);
 
     foreach ($tasksections as $sectionid=>$sectionname) {
+        // For each course section in the list:
+        // 1. Get the name of the section
+        // 2. Get the total number of reportable tasks
+        // 3. Get the number of reportable tasks the user has completed.
+
         $tasksection = array(
             "sectionname"   => $sectionname,
             "totaltasks"    => get_istart_section_total_tasks($course->id, $sectionid),
@@ -231,12 +236,9 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweeknum
                 . ": " . $tasksection['totaltasks']
                 . ": " . $tasksection['taskscomplete']);
 
-    }
-        // For each course section in the list:
-        // 1. Get the name of the section
-        // 2. Get the total number of reportable tasks
-        // 3. Get the number of reportable tasks the user has completed.
+        $tasksections[$sectionid] = $tasksection;
 
+    }
 
     // Create the email to send
     $email = new stdClass();
@@ -262,7 +264,7 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweeknum
      );
 
     $email->text = manager_report_make_mail_text();
-    $email->html = manager_report_make_mail_html($course, $user, $istartweeknumber, $istartweeklabel);
+    $email->html = manager_report_make_mail_html($course, $user, $istartweeknumber, $istartweeklabel, $tasksections);
 
     $data = new stdClass();
     $data->courseid = $course->id;
@@ -583,7 +585,7 @@ function manager_report_make_mail_text() {
     return "text";
 }
 
-function manager_report_make_mail_html($course, $user, $istartweeknumber, $istartweeklabel) {
+function manager_report_make_mail_html($course, $user, $istartweeknumber, $istartweeklabel, $tasksections) {
     // TODO: build HTML version of the email
 
     // Create the email body
@@ -594,9 +596,20 @@ function manager_report_make_mail_html($course, $user, $istartweeknumber, $istar
     $a->lastname = $user->lastname;
     $a->istartweeknumber = $istartweeknumber;
     $a->istartweeklabel = $istartweeklabel;
-    
 
-    return get_string('managerreporthtmlheader','block_istart_reports', $a);
+    $email = get_string('managerreporthtmlheader','block_istart_reports', $a);
+    foreach ($tasksections as $sectionid=>$section) {
+        $percentcomplete = ceil( ($section["taskscomplete"] / $section["totaltasks"]) * 100);
+        $graph = ceil($percentcomplete / 10);
+
+        $a->graph = $graph;
+        $a->sectionname = $section["sectionname"];
+        $a->percentcomplete = $percentcomplete;
+        $email .= get_string('managerreporthtmlbody','block_istart_reports', $a);
+    }
+    $email .= get_string('managerreporthtmlfooter','block_istart_reports', $a);
+
+    return $email;
 }
 
 /**

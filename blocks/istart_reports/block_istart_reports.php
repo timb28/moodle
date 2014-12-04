@@ -22,6 +22,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// TODO: Enable completion tracking on this block so we can prevent access to
+//       week 1 when no manager email address is present.
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/blocks/istart_reports/lib.php');
@@ -68,7 +71,7 @@ class block_istart_reports extends block_base {
 
             // Have they entered their manager's email address?
             $manageremailaddress = get_manager_email_address($USER);
-            $a = '';
+            $a = null;
             if ($manageremailaddress == NULL) {
                 // If not, display a message and link asking the student to enter their manager's email address
                 $a = '<span class="label label-important">' . get_string('noreportaddress', 'block_istart_reports') . '</span>'
@@ -80,7 +83,7 @@ class block_istart_reports extends block_base {
                         . ' <a href="'.$CFG->wwwroot.'/blocks/istart_reports/manageremail.php?courseid='.$COURSE->id.'"'
                         . ' class="btn btn-mini">'.get_string('labeleditreportaddress','block_istart_reports').'</a>';
             }
-            $this->content->text.= "<div>".get_string('studentmanagerreports', 'block_istart_reports', $a)."</div>";
+            $this->content->text .= "<div>".get_string('studentmanagerreports', 'block_istart_reports', $a)."</div>";
             unset($a);
         }
 
@@ -88,7 +91,7 @@ class block_istart_reports extends block_base {
         $coursecontext = $this->page->context->get_course_context(false);
                 // Check if the users role means their progress gets reported to a manager.
         if (has_capability('report/completion:view', $coursecontext)) {
-            $this->content->text.= "<div>TODO: Display link to completion report.</div>";
+            $this->content->text .= "<div>TODO: Display link to completion report.</div>";
         }
 
         if (! empty($this->config->text)) {

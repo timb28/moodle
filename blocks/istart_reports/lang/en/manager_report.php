@@ -506,7 +506,9 @@ $string['managerreporthtmlheader'] = '
             </td>
         </tr>
     </tbody>
-</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+</table>';
+
+$string['managerreporthtmlbody'] = '<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
     <tbody class="mcnTextBlockOuter">
         <tr>
             <td valign="top" class="mcnTextBlockInner" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
@@ -516,7 +518,7 @@ $string['managerreporthtmlheader'] = '
 
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">
 
-                            <div style="text-align:left;"><span style="line-height:20.7999992370605px"><img align="none" alt="Tasks are complete" height="53" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/10.gif" style="width: 52px;height: 53px;vertical-align: middle;margin: 0px 25px 0px 50px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="52">{$a->firstname} completed %NN of TYPE tasks (X out of Y)</span></div>
+                            <div style="text-align:left;"><span style="line-height:20.7999992370605px"><img align="none" alt="Tasks are complete" height="53" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/{$a->graph}.gif" style="width: 52px;height: 53px;vertical-align: middle;margin: 0px 25px 0px 50px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="52">{$a->firstname} completed %{$a->percentcomplete} of {$a->sectionname} tasks</span></div>
 
                         </td>
                     </tr>
@@ -525,7 +527,9 @@ $string['managerreporthtmlheader'] = '
             </td>
         </tr>
     </tbody>
-</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnDividerBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+</table>';
+
+$string['managerreporthtmlfooter'] = '<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnDividerBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
     <tbody class="mcnDividerBlockOuter">
         <tr>
             <td class="mcnDividerBlockInner" style="padding: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
@@ -753,6 +757,4 @@ This email was sent to you because {$a->firstname} {$a->lastname} nominated you 
             </table>
         </center>
     </body>
-</html>
-        ';
-?>
+</html>';
