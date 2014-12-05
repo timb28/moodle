@@ -29,6 +29,8 @@
  *
  */
 
+// TODO update get_istart_task_sections so that it only returns sections for a given istart week
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir. '/coursecatlib.php');
@@ -113,14 +115,14 @@ function process_manager_reports() {
  */
 function process_manager_report_for_group($course, $group) {
     // Send out all unsent manager reports from the last six days.
-    // Reports older than 6 days will not be mailed.  This is to avoid the problem where
+    // Reports older than NUMPASTREPORTDAYS will not be mailed.  This is to avoid the problem where
     // cron has not been running for a long time or a student moves iStart group,
     // and then suddenly people are flooded with mail from the past few weeks or months
     $daysago = 0;
 
     while ($daysago <= NUMPASTREPORTDAYS) {
         $reporttime = strtotime(date("Ymd")) - (DAYSECS * $daysago);
-        error_log("2. Started processing group: $group->id ($group->name),  Days ago: $daysago, Report time: $reporttime");
+        error_log("2. Started processing group: $group->id ($group->name),  Days ago: $daysago, Report time: $reporttime"); // TODO remove after testing
         process_manager_report_for_group_on_date($course, $group, $reporttime);
         $daysago++;
     }
@@ -143,13 +145,12 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
     // If yes, was the report processed?
     // If yes, task complete: continue
     // If no, istart_process_manager_report($intake, $reportdate)
-    error_log("Started processing reports for group: $group->id ($group->name)");
+    error_log("Started processing reports for group: $group->id ($group->name)"); // TODO remove after testing
 
     // Get information on the istart week
     $reportdate = new DateTime();
     $reportdate->setTimestamp($reporttime);
-    $istartweeknumber = get_istart_week_number($group, $reportdate);
-    $istartweeklabel = get_istart_week_label($course, $group, $reportdate);
+    $istartweek = get_istart_week($course->id, get_istart_week_number($group, $reportdate));
 
     // Get a list of all users in the group who:
     //  - are students
@@ -161,7 +162,7 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
     $groupmembers = groups_get_members($group->id);
 
     foreach ($groupmembers as $user) {
-        send_manager_report($course, $group, $user, $reporttime, $istartweeknumber, $istartweeklabel);
+        send_manager_report($course, $group, $user, $reporttime, $istartweek);
     }
 
     // Store that the manager report for the group on the given report date has been processed
@@ -180,7 +181,7 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
  * @param string $istartweek The istart week.
  * @return true or error
  */
-function send_manager_report($course, $group, $user, $reporttime, $istartweeknumber, $istartweeklabel) {
+function send_manager_report($course, $group, $user, $reporttime, $istartweek) {
     global $CFG, $DB;
 
     error_log(" - Sending manager report for $user->id at $reporttime");
@@ -217,7 +218,8 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweeknum
     error_log(" - Manager's email address: $manageremailaddress");
 
     // Get a list of all course sections for the report week that have reportable completion tasks
-    $tasksections = get_istart_task_sections($course);
+    $tasksections = get_istart_child_task_sections($course->id, $istartweek["sectionid"]);
+    print_r($tasksections);
 
     foreach ($tasksections as $sectionid=>$sectionname) {
         // For each course section in the list:
@@ -242,6 +244,11 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweeknum
 
     // Create the email to send
     $email = new stdClass();
+
+    $reportdate = new DateTime();
+    $reportdate->setTimestamp($reporttime);
+    $istartweeknumber = get_istart_week_number($group, $reportdate);
+    $istartweeklabel = get_istart_week_label($course, $group, $reportdate);
 
     // Create the email subject "iStart24 Online [Week #] completion report for [Firstname] [Lastname]"
     $a = new stdClass();
@@ -462,36 +469,125 @@ function get_istart_week_label($course, $group, $atdate) {
 }
 
 /**
+ * Gets istart week section
+ * @param stdClass $course The course object
+ * @param stdClass $group The group object
+ * @param string $date The date to calculate the week from
+ * @return array The istart week course section
+ */
+function get_istart_week($courseid, $istartweeknumber) {
+    global $DB;
+
+    // Get the course section
+
+    try {
+
+        $sql = '
+                SELECT
+                    cs.name, cs.section
+                FROM
+                    {course_sections} AS cs
+                        JOIN
+                    {course_format_options} AS cfo ON cs.id = cfo.sectionid
+                WHERE
+                    cs.course = :courseid
+                        AND cs.visible = 1
+                        AND cfo.name = "istartweek"
+                        AND cfo.value = :weeknum';
+        $params = array(
+                        'courseid' => $courseid,
+                        'weeknum'  => $istartweeknumber);
+        $record = $DB->get_record_sql($sql, $params, MUST_EXIST);
+
+    } catch(Exception $e) {
+        error_log($e, DEBUG_NORMAL);
+        return("iStart manager report not sent because the iStart week section cannot be read from the database.");
+    }
+
+    $weeksection = array(
+                        "name"=>$record->name,
+                        "sectionid"=>$record->section,
+                        "weeknumber"=>$istartweeknumber
+                      );
+
+    return $weeksection;
+}
+
+/**
+ * Gets istart week section for the given week
+ * @param int $istartweeknumber the istart week number
+ * @return stdClass $section The section object
+ */
+//function get_istart_course_section($istartweeknumber) {
+//
+//
+//
+//
+// TODO: Delete this function
+//
+//
+//
+//}
+
+/**
  * Gets istart week label
  * @param stdClass $course The course object
  * @return array an associative array
  */
-function get_istart_task_sections($course) {
+function get_istart_child_task_sections($courseid, $parentsectionid) {
     global $DB;
+
+    // Calculate the section id of the istart week
+
 
     // Get all course sections that contain tasks
     try {
 
         $sql = '
                 SELECT
-                    cfo.sectionid, cs.name
+                    cfo1.sectionid, cs.name
                 FROM
-                    {course_format_options} AS cfo
+                    mdl_course_format_options AS cfo1
+                        INNER JOIN
+                    mdl_course_format_options AS cfo2 ON cfo1.sectionid = cfo2.sectionid
                         JOIN
-                    {course_sections} AS cs ON cfo.sectionid = cs.id
+                    mdl_course_sections AS cs ON cfo1.sectionid = cs.id
                 WHERE
-                        cs.course = :courseid
-                        AND cfo.name = :cfotypename
-                        AND cfo.value = 1;';
+                    cfo1.courseid = :courseid
+                        AND cfo1.name = "parent"
+                        AND cfo1.value = :parentsectionid
+                        AND cfo2.name = :cfotypename
+                        AND cfo2.value = 1;';
+//
+//
+//                SELECT
+//                    cfo.sectionid, cs.name
+//                FROM
+//                    {course_format_options} AS cfo
+//                        JOIN
+//                    {course_sections} AS cs ON cfo.sectionid = cs.id
+//                WHERE
+//                        cs.course = :courseid
+//                        AND cfo.name = :cfotypename
+//                        AND cfo.value = 1;';
         $params = array(
-                        'courseid' => $course->id,
+                        'courseid' => $courseid,
+                        'parentsectionid'=>$parentsectionid,
                         'cfotypename'  => COURSEFORMATOPTIONTYPEFORTASKS);
-        $tasksections = $DB->get_records_sql_menu($sql, $params);
+        $records = $DB->get_records_sql($sql, $params);
 
     } catch(Exception $e) {
         error_log($e, DEBUG_NORMAL);
         return("Could not obtain istart task sections because the database could not be read.");
     }
+    
+    $tasksections = array();
+
+    foreach ($records as $record) {
+        $tasksections[$record->sectionid] = $record->name;
+    }
+
+
 
     return $tasksections;
 }
