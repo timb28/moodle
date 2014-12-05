@@ -2,6 +2,46 @@
 
 $string['manageremailsubject'] = 'iStart24 Online Week {$a->istartweeknumber} completion report for {$a->firstname} {$a->lastname}';
 
+$string["managerreporttextheader"] = '
+{$a->coursename} Progress Report
+
+** iStart24 Report for {$a->firstname} {$a->lastname}
+------------------------------------------------------------
+
+
+** {$a->istartweeklabel}
+------------------------------------------------------------';
+
+$string['managerreporttextbody'] = '
+{$a->firstname} completed %{$a->percentcomplete} of {$a->sectionname} tasks
+';
+
+$string['managerreporttextfooter'] = '
+
+Each iStart24 week is structured to include a focus on a particular aspect of the real estate business. There are four parts to every week.
+
+Video to watch
+
+Content to read
+
+Forum to share
+
+Tasks to do
+
+=================================================================================
+** Find out more (http://www.academyrealestatetraining.com/sales/istart24-online)
+=================================================================================
+
+Copyright © Harcourts International, All rights reserved.
+This email was sent to you because {$a->firstname} {$a->lastname} nominated you as their manager.
+
+Our mailing address is:
+31 Amy Johnson Place
+Eagle Farm, QLD 4009
+Australia
+
+        ';
+
 $string['managerreporthtmlheader'] = '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><!-- NAME: 2 COLUMN -->
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -735,7 +775,9 @@ $string['managerreporthtmlfooter'] = '<table border="0" cellpadding="0" cellspac
 This email was sent to you because {$a->firstname} {$a->lastname} nominated you as their manager.<br>
 <br>
 <strong>Our mailing address is:</strong><br>
-<a href="mailto:academy@harcourts.net">academy@harcourts.net</a> </div>
+31 Amy Johnson Place<br>
+Eagle Farm, QLD 4009<br>
+Australia</div>
 
                         </td>
                     </tr>

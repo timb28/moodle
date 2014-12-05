@@ -668,21 +668,31 @@ function istart_report_get_email_message_id($courseid, $groupid, $userid, $repor
 }
 
 function manager_report_make_mail_text() {
-    // TODO: build text-only version of the email
-
     // Create the email body
     // Add welcome message
-    // For each course section in the list add:
-    // 1. The name of the course section
-    // 2. The percentage of tasks in that section the user has completed
-    // Add email close
+    $a = new stdClass();
+    $a->coursename = $course->fullname;
+    $a->firstname = $user->firstname;
+    $a->lastname = $user->lastname;
+    $a->istartweeknumber = $istartweeknumber;
+    $a->istartweeklabel = $istartweeklabel;
 
-    return "text";
+    $email = get_string('managerreporttextheader','block_istart_reports', $a);
+    foreach ($tasksections as $sectionid=>$section) {
+        $percentcomplete = ceil( ($section["taskscomplete"] / $section["totaltasks"]) * 100);
+        $graph = ceil($percentcomplete / 10);
+
+        $a->graph = $graph;
+        $a->sectionname = $section["sectionname"];
+        $a->percentcomplete = $percentcomplete;
+        $email .= get_string('managerreporttextbody','block_istart_reports', $a);
+    }
+    $email .= get_string('managerreporttextfooter','block_istart_reports', $a);
+
+    return $email;
 }
 
 function manager_report_make_mail_html($course, $user, $istartweeknumber, $istartweeklabel, $tasksections) {
-    // TODO: build HTML version of the email
-
     // Create the email body
     // Add welcome message
     $a = new stdClass();
