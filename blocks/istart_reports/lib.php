@@ -219,7 +219,6 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweek) {
 
     // Get a list of all course sections for the report week that have reportable completion tasks
     $tasksections = get_istart_child_task_sections($course->id, $istartweek["sectionid"]);
-    print_r($tasksections);
 
     foreach ($tasksections as $sectionid=>$sectionname) {
         // For each course section in the list:
