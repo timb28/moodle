@@ -23,13 +23,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/* NOTE!!!!!!!!
- * Refer to https://moodle.org/mod/forum/discuss.php?d=91370 when saving changed
- * manager's email addresses.
- *
- */
-
-// TODO update get_istart_task_sections so that it only returns sections for a given istart week
+// TODO: Add successful report processing to the Moodle event log
+// TODO: Test with multiple istart courses
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -69,8 +64,7 @@ function clean_reports() {
     // Clean store of manager report emails sent and reports processed for past students (sent > six months ago)
     $DB->delete_records_select('block_istart_reports', $oldreportconditions);
 
-    // Clean store of manager report emails sent for past students no longer enrolled
-    // TODO
+    // TODO: Clean store of manager report emails sent for past students no longer enrolled
 }
 
 /**
@@ -87,7 +81,7 @@ function process_manager_reports() {
     $courses = get_courses_with_block(get_blockid(BLOCK_NAME));
     
     foreach ($courses as $course) {
-        error_log("1. Started processing reports for course: $course->id");
+        error_log("1. Started processing reports for course: $course->id"); // TODO remove after testing
 
         // Get all current istart intakes as an array containing the $group->idnumber for each intake
         $groups = groups_get_all_groups($course->id);
@@ -109,9 +103,9 @@ function process_manager_reports() {
 
 /**
  * Sends istart manager reports for a given istart intake group
- * @param int $courseid ID of the course.
- * @param stdClass $group the group to process.
- * @return true if a report was sent
+ * @param stdClass $course The istart course object.
+ * @param stdClass $group The group to process.
+ * @return TODO true if a report was sent
  */
 function process_manager_report_for_group($course, $group) {
     // Send out all unsent manager reports from the last six days.
@@ -126,14 +120,16 @@ function process_manager_report_for_group($course, $group) {
         process_manager_report_for_group_on_date($course, $group, $reporttime);
         $daysago++;
     }
+
+    return true;
 }
 
 /**
  * Sends istart manager reports for a given istart intake group
- * @param int $courseid ID of the course.
+ * @param stdClass $course The istart course.
  * @param stdClass $group the group to be processed.
  * @param string $reporttime The report date as a timestamp.
- * @return true if a report was sent [TODO: will it?]
+ * @return TODO true if a report was sent
  */
 function process_manager_report_for_group_on_date($course, $group, $reporttime) {
     $starttime = strtotime($group->idnumber);
@@ -142,20 +138,14 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
     if (!is_istart_report_date($starttime,$reporttime)) {
         return false;
     }
-    // If yes, was the report processed?
-    // If yes, task complete: continue
-    // If no, istart_process_manager_report($intake, $reportdate)
-    error_log("Started processing reports for group: $group->id ($group->name)"); // TODO remove after testing
+
+    error_log("Started processing reports for group: $group->id ($group->name)"); 
 
     // Get information on the istart week
     $reportdate = new DateTime();
     $reportdate->setTimestamp($reporttime);
     $istartweek = get_istart_week($course->id, get_istart_week_number($group, $reportdate));
 
-    // Get a list of all users in the group who:
-    //  - are students
-    //  - have a manager email (user profile field 'manageremail')
-    //  - have finished an iStart week recently (after start date + 6 and before start date + 174)
 
     // Send the manager report for every student in that list
     // istart_send_manager_report($courseid, $groupid, $userid, $reportdate);
@@ -164,11 +154,6 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
     foreach ($groupmembers as $user) {
         send_manager_report($course, $group, $user, $reporttime, $istartweek);
     }
-
-    // Store that the manager report for the group on the given report date has been processed
-
-    // Record in the Moodle event log that istart manager reports have been sent
-    // for the groupid and report date
 
     return true;
 }
@@ -184,7 +169,7 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
 function send_manager_report($course, $group, $user, $reporttime, $istartweek) {
     global $CFG, $DB;
 
-    error_log(" - Sending manager report for $user->id at $reporttime");
+    error_log(" - Sending manager report for $user->id at $reporttime"); // TODO remove after testing
 
     // Check if already sent
     try {
@@ -215,7 +200,6 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweek) {
         return 'Manager email ($manageremailaddress) not valid for user:'
                 . ' $user->id ($user->firstname $user->lastname).';
     }
-    error_log(" - Manager's email address: $manageremailaddress");
 
     // Get a list of all course sections for the report week that have reportable completion tasks
     $tasksections = get_istart_child_task_sections($course->id, $istartweek["sectionid"]);
@@ -235,7 +219,7 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweek) {
         error_log(" - Task sections: " . $sectionid
                 . ": " . $tasksection['sectionname']
                 . ": " . $tasksection['totaltasks']
-                . ": " . $tasksection['taskscomplete']);
+                . ": " . $tasksection['taskscomplete']); // TODO remove after testing
 
         $tasksections[$sectionid] = $tasksection;
 
@@ -281,7 +265,7 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweek) {
     $data->sentto = $manageremailaddress;
 
     // Send the email
-    error_log(' > Sending email to: ' . $user->id);
+    error_log(' > Sending email to: ' . $user->id); // TODO remove after testing
 
     mtrace('Sending iStart Manager Report Email', '');
 
@@ -311,6 +295,8 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweek) {
         $data->senttime = time();
     }
 
+
+    // Store that the manager report for the user on the given report date has been sent
     try {
         $DB->insert_record('block_istart_reports', $data);
     } catch(Exception $e) {
@@ -347,21 +333,21 @@ function is_group_valid($group) {
 function is_istart_report_date($starttime, $reporttime, $totalistartweeks = 24) {
     $startdate = getdate($starttime);
     $reportdate = getdate($reporttime);
-    error_log(" - Start day of the week: ".$startdate["wday"]);
+    error_log(" - Start day of the week: ".$startdate["wday"]); // TODO remove after testing
 
-    error_log(" - Given date day of the week: ".$reportdate["wday"]);
+    error_log(" - Given date day of the week: ".$reportdate["wday"]); // TODO remove after testing
 
     // A report is only due on the same day of the week as the istart start date
     if ($startdate["wday"] != $reportdate["wday"]) {
         // No report due
-        error_log(" - No report: date is not the same day of the week");
+        error_log(" - No report: date is not the same day of the week"); // TODO remove after testing
         return false;
     }
 
     // A report is only due on weeks following an istart week (7 days to 168 days)
     if ( (($reporttime - $starttime) < (7 * WEEKSECS)) or
             (( $reporttime - $starttime) > ( ($totalistartweeks + 1) * 7 * WEEKSECS) ) ) {
-        error_log(" - No report: date is not within the istart programme");
+        error_log(" - No report: date is not within the istart programme"); // TODO remove after testing
         return false;
     }
 
@@ -513,25 +499,11 @@ function get_istart_week($courseid, $istartweeknumber) {
 }
 
 /**
- * Gets istart week section for the given week
- * @param int $istartweeknumber the istart week number
- * @return stdClass $section The section object
- */
-//function get_istart_course_section($istartweeknumber) {
-//
-//
-//
-//
-// TODO: Delete this function
-//
-//
-//
-//}
-
-/**
- * Gets istart week label
- * @param stdClass $course The course object
- * @return array an associative array
+ * Gets istart section ids and labels for all child sections flagged as containing
+ * istart tasks
+ * @param int $courseid The course id of the istart course
+ * @param int $parentsectionid The id of the parent course section
+ * @return array An associative array
  */
 function get_istart_child_task_sections($courseid, $parentsectionid) {
     global $DB;
@@ -557,18 +529,6 @@ function get_istart_child_task_sections($courseid, $parentsectionid) {
                         AND cfo1.value = :parentsectionid
                         AND cfo2.name = :cfotypename
                         AND cfo2.value = 1;';
-//
-//
-//                SELECT
-//                    cfo.sectionid, cs.name
-//                FROM
-//                    {course_format_options} AS cfo
-//                        JOIN
-//                    {course_sections} AS cs ON cfo.sectionid = cs.id
-//                WHERE
-//                        cs.course = :courseid
-//                        AND cfo.name = :cfotypename
-//                        AND cfo.value = 1;';
         $params = array(
                         'courseid' => $courseid,
                         'parentsectionid'=>$parentsectionid,
