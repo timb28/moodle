@@ -269,7 +269,7 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweek) {
             'X-Course-Id: '.$course->id,
      );
 
-    $email->text = manager_report_make_mail_text();
+    $email->text = manager_report_make_mail_text($course, $user, $istartweeknumber, $istartweeklabel, $tasksections);
     $email->html = manager_report_make_mail_html($course, $user, $istartweeknumber, $istartweeklabel, $tasksections);
 
     $data = new stdClass();
@@ -667,7 +667,7 @@ function istart_report_get_email_message_id($courseid, $groupid, $userid, $repor
     return '<'.hash('sha256','Course: '.$courseid.' Group: '.$groupid.' User: '.$userid.' Report date: '.$reportdate).'@'.$hostname.'>';
 }
 
-function manager_report_make_mail_text() {
+function manager_report_make_mail_text($course, $user, $istartweeknumber, $istartweeklabel, $tasksections) {
     // Create the email body
     // Add welcome message
     $a = new stdClass();

@@ -5,11 +5,7 @@ $string['manageremailsubject'] = 'iStart24 Online Week {$a->istartweeknumber} co
 $string["managerreporttextheader"] = '
 {$a->coursename} Progress Report
 
-** iStart24 Report for {$a->firstname} {$a->lastname}
-------------------------------------------------------------
-
-
-** {$a->istartweeklabel}
+** iStart24 {$a->istartweeklabel} Report for {$a->firstname} {$a->lastname}
 ------------------------------------------------------------';
 
 $string['managerreporttextbody'] = '
@@ -18,29 +14,28 @@ $string['managerreporttextbody'] = '
 
 $string['managerreporttextfooter'] = '
 
-Each iStart24 week is structured to include a focus on a particular aspect of the real estate business. There are four parts to every week.
+Each iStart24 week is structured to include a focus on a particular
+aspect of the real estate business. There are four parts to every week.
 
-Video to watch
+1. Video to watch
+2. Content to read
+3. Forum to share
+4. Tasks to do
 
-Content to read
+-------------------------------------------------------------------
+ Find out more
+ (http://www.academyrealestatetraining.com/sales/istart24-online)
+-------------------------------------------------------------------
 
-Forum to share
+Copyright Harcourts International, All rights reserved.
 
-Tasks to do
-
-=================================================================================
-** Find out more (http://www.academyrealestatetraining.com/sales/istart24-online)
-=================================================================================
-
-Copyright © Harcourts International, All rights reserved.
-This email was sent to you because {$a->firstname} {$a->lastname} nominated you as their manager.
+This email was sent to you because {$a->firstname} {$a->lastname}
+nominated you as their manager.
 
 Our mailing address is:
 31 Amy Johnson Place
 Eagle Farm, QLD 4009
-Australia
-
-        ';
+Australia';
 
 $string['managerreporthtmlheader'] = '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><!-- NAME: 2 COLUMN -->
