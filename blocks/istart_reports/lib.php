@@ -25,6 +25,9 @@
 
 // TODO: Add successful report processing to the Moodle event log
 // TODO: Test with multiple istart courses
+// TODO: Add link to page where students can view their last report
+// TODO: Add link to page where trainers can view report for all students
+// TODO: Add backup and restore code
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -61,7 +64,7 @@ function clean_reports() {
 
     $oldreportconditions = 'reporttime IS NULL or reporttime < '.(time() - YEARSECS);
 
-    // Clean store of manager report emails sent and reports processed for past students (sent > six months ago)
+    // Clean store of manager report emails sent and reports processed for past students (sent > 1 year ago)
     $DB->delete_records_select('block_istart_reports', $oldreportconditions);
 
     // TODO: Clean store of manager report emails sent for past students no longer enrolled
