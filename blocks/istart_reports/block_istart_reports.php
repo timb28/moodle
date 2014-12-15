@@ -60,7 +60,6 @@ class block_istart_reports extends block_base {
 //            $this->content->text = $this->config->text;
 //        }
 
-        $this->content = '';
         if (empty($currentcontext)) {
             return $this->content;
         }

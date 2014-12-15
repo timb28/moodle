@@ -34,6 +34,8 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir. '/coursecatlib.php');
 require_once($CFG->dirroot.'/user/profile/lib.php');
 
+use block_istart_reports\report\istart_week_report;
+
 define('BLOCK_NAME', 'istart_reports');
 define('NUMPASTREPORTDAYS', 6);
 define('MANAGERREPORT', 1);
@@ -148,6 +150,10 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
     $reportdate = new DateTime();
     $reportdate->setTimestamp($reporttime);
     $istartweek = get_istart_week($course->id, get_istart_week_number($group, $reportdate));
+
+    if (!is_array($istartweek)) {
+        return false;
+    }
 
 
     // Send the manager report for every student in that list
