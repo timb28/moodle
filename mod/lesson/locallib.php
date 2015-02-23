@@ -418,9 +418,8 @@ function lesson_displayleftif($lesson) {
 function lesson_add_fake_blocks($page, $cm, $lesson, $timer = null) {
     $bc = lesson_menu_block_contents($cm->id, $lesson);
     if (!empty($bc)) {
-        $regions = $page->blocks->get_regions();
-        $firstregion = reset($regions);
-        $page->blocks->add_fake_block($bc, $firstregion);
+        /** Academy Patch M#001 Enable Lesson Menu in right page column. */
+        $page->blocks->add_fake_block($bc, $page->blocks->get_default_region());
     }
 
     $bc = lesson_mediafile_block_contents($cm->id, $lesson);
@@ -1313,6 +1312,26 @@ class lesson extends lesson_base {
         }
         return '';
     }
+
+    /**
+     * Returns the url for the related activity. Academy Patch M#016 Enable lesson activity chaining
+     * @return moodle_url|false
+     */
+    public function url_for_activitylink() {
+        global $DB;
+        $module = $DB->get_record('course_modules', array('id' => $this->properties->activitylink));
+        if ($module) {
+            $modname = $DB->get_field('modules', 'name', array('id' => $module->module));
+            if ($modname) {
+                $instancename = $DB->get_field($modname, 'name', array('id' => $module->instance));
+                if ($instancename) {
+                    return new moodle_url('/mod/'.$modname.'/view.php', array('id'=>$this->properties->activitylink));
+                }
+            }
+        }
+        return false;
+    }
+
 
     /**
      * Loads the requested page.

@@ -1119,9 +1119,10 @@ bank window's title is prominent enough*/
     padding: 0;
 }
 
+/** Academy Patch M#025 Fix question bank 'move to category' select field width. */
 #page-mod-quiz-edit .questionbankwindow .createnewquestion select,
 #page-mod-quiz-edit .questionbankwindow #catmenu select,
-#page-mod-quiz-edit .questionbankwindow #menucategory {
+#page-mod-quiz-edit .questionbankwindow .menucategory {
     width: 100%;
 }
 

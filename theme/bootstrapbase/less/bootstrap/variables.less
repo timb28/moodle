@@ -38,7 +38,7 @@
 
 // Links
 // -------------------------
-@linkColor:             #08c;
+@linkColor:             #09f;
 @linkColorHover:        darken(@linkColor, 15%);
 
 
@@ -48,9 +48,9 @@
 @serifFontFamily:       Georgia, "Times New Roman", Times, serif;
 @monoFontFamily:        Monaco, Menlo, Consolas, "Courier New", monospace;
 
-@baseFontSize:          14px;
+@baseFontSize:          16px;
 @baseFontFamily:        @sansFontFamily;
-@baseLineHeight:        20px;
+@baseLineHeight:        24px;
 @altFontFamily:         @serifFontFamily;
 
 @headingsFontFamily:    inherit; // empty to use BS default, @baseFontFamily
@@ -66,8 +66,8 @@
 @fontSizeSmall:         @baseFontSize * 0.85; // ~12px
 @fontSizeMini:          @baseFontSize * 0.75; // ~11px
 
-@paddingLarge:          11px 19px; // 44px
-@paddingSmall:          2px 10px;  // 26px
+@paddingLarge:          13px 19px; // 44px
+@paddingSmall:          3px 10px;  // 26px
 @paddingMini:           0 6px;   // 22px
 
 @baseBorderRadius:      4px;
@@ -178,16 +178,16 @@
 // Navbar
 // -------------------------
 @navbarCollapseWidth:             979px;
-@navbarCollapseDesktopWidth:      @navbarCollapseWidth + 1;
+@navbarCollapseDesktopWidth:      (@navbarCollapseWidth + 1);
 
 @navbarHeight:                    40px;
 @navbarBackgroundHighlight:       #ffffff;
 @navbarBackground:                darken(@navbarBackgroundHighlight, 5%);
 @navbarBorder:                    darken(@navbarBackground, 12%);
 
-@navbarText:                      #777;
-@navbarLinkColor:                 #777;
-@navbarLinkColorHover:            @grayDark;
+@navbarText:                      @grayLight;
+@navbarLinkColor:                 @white;
+@navbarLinkColorHover:            @grayLight;
 @navbarLinkColorActive:           @gray;
 @navbarLinkBackgroundHover:       transparent;
 @navbarLinkBackgroundActive:      darken(@navbarBackground, 5%);
@@ -195,16 +195,16 @@
 @navbarBrandColor:                @navbarLinkColor;
 
 // Inverted navbar
-@navbarInverseBackground:                #111111;
-@navbarInverseBackgroundHighlight:       #222222;
+@navbarInverseBackground:                #0C1727;
+@navbarInverseBackgroundHighlight:       #152439;
 @navbarInverseBorder:                    #252525;
 
 @navbarInverseText:                      @grayLight;
-@navbarInverseLinkColor:                 @grayLight;
-@navbarInverseLinkColorHover:            @white;
+@navbarInverseLinkColor:                 @white;
+@navbarInverseLinkColorHover:            @grayLight;
 @navbarInverseLinkColorActive:           @navbarInverseLinkColorHover;
 @navbarInverseLinkBackgroundHover:       transparent;
-@navbarInverseLinkBackgroundActive:      @navbarInverseBackground;
+@navbarInverseLinkBackgroundActive:      @white;
 
 @navbarInverseSearchBackground:          lighten(@navbarInverseBackground, 25%);
 @navbarInverseSearchBackgroundFocus:     @white;
