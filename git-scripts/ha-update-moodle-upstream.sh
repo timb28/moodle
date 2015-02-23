@@ -7,5 +7,6 @@ echo "Updating Moodle from Upstream"
 (cd ../ && git checkout upstream/MOODLE_27_STABLE)
 (cd ../ && git branch HA-Moodle27)
 (cd ../ && git checkout HA-Moodle27)
-(cd ../ && git merge MOODLE_25_STABLE --strategy-option ours)
+## Uncomment following when upgrading to new major version
+## (cd ../ && git merge MOODLE_25_STABLE --strategy-option ours)
 ## Then manually resolve the merge conflicts.
