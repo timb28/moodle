@@ -1,0 +1,42 @@
+/* 
+    Created on : 22/01/2015, 3:50:02 PM
+    Author     : timbutler
+*/
+
+/* Answering Questions */
+.path-mod-feedback .box.feedback_anonymousinfo {
+    display: none;
+}
+.path-mod-feedback div.box.feedback_items {
+    margin: 1em 0 2em;
+}
+.path-mod-feedback .mform .fdescription.required {
+    margin-left: 0;
+}
+.path-mod-feedback div.feedback_complete_depend {
+    background: transparent;
+}
+
+/* Edit Questions */
+.path-mod-feedback div.feedback_depend {
+    border-radius: 8px;
+    padding: 0.5em;
+    background: #F4F4F4;
+}
+.path-mod-feedback li.feedback_itemlist {
+    padding: 3px;
+}
+.path-mod-feedback li.feedback_itemlist:hover {
+    box-shadow: 0 0 8px #DDD;
+}
+
+/* Viewing Responses */
+#page-mod-feedback-show_entries.path-mod-feedback .feedback_item_label_left {
+    font-weight: bold;
+    padding-top: 1em;
+}
+#page-mod-feedback-show_entries.path-mod-feedback .box.feedback_item_box_left .box .box {
+    padding: 3px 5px;
+    border: 2px solid #DDD;
+    border-radius: 5px;
+}
