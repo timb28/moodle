@@ -61,7 +61,7 @@ echo $OUTPUT->doctype() ?>
     </nav>
 </header>
 
-<header class="clearfix custom_wide_menu nav-collapse collapse">
+<header class="clearfix custom_wide_menu nav-collapse collapse visible-desktop">
     <div class="navbar pull-right"><?php echo $OUTPUT->custom_menu(); ?></div>
 </header>
   
