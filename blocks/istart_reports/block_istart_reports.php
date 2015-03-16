@@ -126,6 +126,7 @@ class block_istart_reports extends block_base {
                   
       return true;
     }
+
 }
 
 opcache_reset(); // TODO: Remove this line

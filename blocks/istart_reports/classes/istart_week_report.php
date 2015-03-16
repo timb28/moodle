@@ -42,7 +42,7 @@ class istart_week_report {
     * @return TODO true if a report was sent
     */
     function process_manager_reports() {
-        if ($this->reporttype === MANAGERREPORTTYPE) {
+        if ($this->reporttype !== MANAGERREPORTTYPE) {
             return;
         }
 

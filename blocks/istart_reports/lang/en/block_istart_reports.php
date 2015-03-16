@@ -25,7 +25,8 @@
 
 $string['crontask'] = 'iStart Report jobs';
 $string['descfoo'] = 'Config description';
-$string['managerconfigheader'] = 'Manager Report Contents';
+$string['blockconfigheader'] = 'iStart Reports Configuration';
+$string['blockconfigistartweeks'] = 'Number of iStart Weeks';
 $string['managerconfigdesc'] = 'Enter information included in manager report emails';
 $string['emailcopyrightconfig'] = 'Email copyright';
 
