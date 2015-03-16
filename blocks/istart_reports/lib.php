@@ -23,12 +23,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// TODO: Add successful report processing to the Moodle event log
-// TODO: Test with multiple istart courses
-// TODO: Add link to page where students can view their last report
-// TODO: Add link to page where trainers can view report for all students
-// TODO: Add backup and restore code
-
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir. '/coursecatlib.php');
@@ -49,6 +43,8 @@ define('COURSEFORMATOPTIONTYPEFORTASKS', 'reportcompletions');
  *
  */
 function istart_reports_cron() {
+
+    core_php_time_limit::raise(300); // terminate if not able to process cron tasks in 5 minutes
 
     clean_reports();
     process_manager_reports();
@@ -78,15 +74,19 @@ function clean_reports() {
  */
 function process_manager_reports() {
     
-    core_php_time_limit::raise(300); // terminate if not able to process manager reports in 5 minutes
-
-    // Record in the Moodle event log that istart manager reports have started processing
+    // TODO: Record in the Moodle event log that istart manager reports have started processing
 
     // Get istart courses that have this block
     $courses = get_courses_with_block(get_blockid(BLOCK_NAME));
-    
+
     foreach ($courses as $course) {
         error_log("1. Started processing reports for course: $course->id"); // TODO remove after testing
+
+        // Only process courses with group mode activated.
+        if (groups_get_course_groupmode($course) == NOGROUPS) {
+            error_log("No groups");
+            continue;
+        }
 
         // Get all current istart intakes as an array containing the $group->idnumber for each intake
         $groups = groups_get_all_groups($course->id);
@@ -113,7 +113,7 @@ function process_manager_reports() {
  * @return TODO true if a report was sent
  */
 function process_manager_report_for_group($course, $group) {
-    // Send out all unsent manager reports from the last six days.
+    // Send out all unsent manager reports from the last NUMPASTREPORTDAYS days.
     // Reports older than NUMPASTREPORTDAYS will not be mailed.  This is to avoid the problem where
     // cron has not been running for a long time or a student moves iStart group,
     // and then suddenly people are flooded with mail from the past few weeks or months
@@ -144,7 +144,7 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
         return false;
     }
 
-    error_log("Started processing reports for group: $group->id ($group->name)"); 
+    error_log("Started processing reports for group: $group->id ($group->name)"); // TODO: remove after testing
 
     // Get information on the istart week
     $reportdate = new DateTime();
