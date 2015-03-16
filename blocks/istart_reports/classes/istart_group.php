@@ -20,25 +20,32 @@ class istart_group {
             $isvalidgroup;
 
     public function __construct($group) {
+        $this->group = $group;
+        $this->setup_start_date();
+        
+    }
+
+    private function setup_start_date() {
         // Check if the group is valid for istart
+        if ($this->validate_group() === true) {
+            $this->startdate = strtotime($this->group->idnumber);
+        }
+    }
+
+   private function validate_group() {
         $this->isvalidgroup = false;
-        if (!isset($group->idnumber)) {
-            $this->isvalidgroup = false;
-            error_log("Cannot process iStart manager report for unknown group.");
-        } else {
-            $date = date_parse($group->idnumber);
-            if ($date["error_count"] == 0 && checkdate($date["month"], $date["day"], $date["year"])) {
+
+        try {
+            $date = date_parse($this->group->idnumber);
+            if ($date["error_count"] == 0 &&
+                    checkdate($date["month"], $date["day"], $date["year"])) {
                 // Valid group
-                $this->startdate = strtotime($group->idnumber);
-                $this->group = $group;
                 $this->isvalidgroup = true;
-                return;
-            } else {
-                //Invalid group
-                error_log("Cannot process iStart manager report for group: $group->id ($group->name) "
-                    . "the group id number '$group->idnumber' is not a valid iStart start date.");
-                $this->isvalidgroup = false;
+                return true;
             }
+        } catch (Exception $e) {
+            error_log($e, DEBUG_NORMAL);
+            return "Cannot process iStart report - iStart group is invalid.";
         }
     }
 
