@@ -27,11 +27,15 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir. '/coursecatlib.php');
 require_once($CFG->dirroot.'/user/profile/lib.php');
-require_once($CFG->dirroot.'/blocks/istart_reports/classes/istart_reports.php');
+//require_once($CFG->dirroot.'/blocks/istart_reports/classes/istart_reports.php');
 
-use block_istart_reports\report\istart_week_report;
+use block_istart_reports\istart_group;
+use block_istart_reports\istart_week;
+use block_istart_reports\istart_week_report;
 
 define('BLOCK_NAME', 'istart_reports');
+define('NUMPASTREPORTDAYS', 6);
+define('MANAGERREPORTTYPE', 1);
 define('COURSEFORMATOPTIONTYPEFORTASKS', 'reportcompletions');
 
 /**
@@ -87,7 +91,7 @@ function process_manager_reports() {
             continue;
         }
 
-        $istart_week_report = new block_istart_reports\istart_week_report(MANAGERREPORTTYPE, $course);
+        $istart_week_report = new istart_week_report(MANAGERREPORTTYPE, $course);
 
         // Get all current istart intakes as an array containing the $group->idnumber for each intake
 //        $groups = groups_get_all_groups($course->id);
