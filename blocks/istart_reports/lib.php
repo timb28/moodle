@@ -27,12 +27,11 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir. '/coursecatlib.php');
 require_once($CFG->dirroot.'/user/profile/lib.php');
+require_once($CFG->dirroot.'/blocks/istart_reports/classes/istart_reports.php');
 
 use block_istart_reports\report\istart_week_report;
 
 define('BLOCK_NAME', 'istart_reports');
-define('NUMPASTREPORTDAYS', 6);
-define('MANAGERREPORT', 1);
 define('COURSEFORMATOPTIONTYPEFORTASKS', 'reportcompletions');
 
 /**
@@ -88,19 +87,22 @@ function process_manager_reports() {
             continue;
         }
 
+        $istart_week_report = new block_istart_reports\istart_week_report(MANAGERREPORTTYPE, $course);
+
         // Get all current istart intakes as an array containing the $group->idnumber for each intake
-        $groups = groups_get_all_groups($course->id);
+//        $groups = groups_get_all_groups($course->id);
 
-        foreach ($groups as $group) {
-            // Check whether the group is valid for istart
-            if (!is_group_valid($group)) {
-                error_log("Cannot process iStart manager report for group: $group->id ($group->name) "
-                        . "the group id number '$group->idnumber' is not a valid iStart start date.");
-                continue;
-            }
-
-            process_manager_report_for_group($course, $group);
-        }
+//        foreach ($groups as $group) {
+//            // Check whether the group is valid for istart
+//            if (!is_group_valid($group)) {
+//                error_log("Cannot process iStart manager report for group: $group->id ($group->name) "
+//                        . "the group id number '$group->idnumber' is not a valid iStart start date.");
+//                continue;
+//            }
+//
+//            process_manager_report_for_group($course, $group);
+//        }
+        $istart_week_report->process_manager_reports();
     }
 
     return true;
@@ -112,22 +114,25 @@ function process_manager_reports() {
  * @param stdClass $group The group to process.
  * @return TODO true if a report was sent
  */
-function process_manager_report_for_group($course, $group) {
-    // Send out all unsent manager reports from the last NUMPASTREPORTDAYS days.
-    // Reports older than NUMPASTREPORTDAYS will not be mailed.  This is to avoid the problem where
-    // cron has not been running for a long time or a student moves iStart group,
-    // and then suddenly people are flooded with mail from the past few weeks or months
-    $daysago = 0;
-
-    while ($daysago <= NUMPASTREPORTDAYS) {
-        $reporttime = strtotime(date("Ymd")) - (DAYSECS * $daysago);
-        error_log("2. Started processing group: $group->id ($group->name),  Days ago: $daysago, Report time: $reporttime"); // TODO remove after testing
-        process_manager_report_for_group_on_date($course, $group, $reporttime);
-        $daysago++;
-    }
-
-    return true;
-}
+//function process_manager_report_for_group($course, $group) {
+//    // Send out all unsent manager reports from the last NUMPASTREPORTDAYS days.
+//    // Reports older than NUMPASTREPORTDAYS will not be mailed.  This is to avoid the problem where
+//    // cron has not been running for a long time or a student moves iStart group,
+//    // and then suddenly people are flooded with mail from the past few weeks or months
+//    $daysago = 0;
+//
+//    if (get_group_istart_week($group)) {
+//
+//        while ($daysago <= NUMPASTREPORTDAYS) {
+//            $reporttime = strtotime(date("Ymd")) - (DAYSECS * $daysago);
+//            error_log("2. Started processing group: $group->id ($group->name),  Days ago: $daysago, Report time: $reporttime"); // TODO remove after testing
+//            process_manager_report_for_group_on_date($course, $group, $reporttime);
+//            $daysago++;
+//        }
+//    }
+//
+//    return true;
+//}
 
 /**
  * Sends istart manager reports for a given istart intake group
@@ -149,7 +154,7 @@ function process_manager_report_for_group_on_date($course, $group, $reporttime) 
     // Get information on the istart week
     $reportdate = new DateTime();
     $reportdate->setTimestamp($reporttime);
-    $istartweek = get_istart_week($course->id, get_istart_week_number($group, $reportdate));
+    $istartweek = new \block_istart_reports\istart_week($course->id, get_istart_week_number($group, $reportdate));
 
     if (!is_array($istartweek)) {
         return false;
@@ -326,7 +331,7 @@ function is_group_valid($group) {
     if ($date["error_count"] == 0 && checkdate($date["month"], $date["day"], $date["year"])) {
         // Valid group
         return true;
-    } else { 
+    } else {
         //Invalid group
         return false;
     }
@@ -353,9 +358,10 @@ function is_istart_report_date($starttime, $reporttime, $totalistartweeks = 24) 
         return false;
     }
 
-    // A report is only due on weeks following an istart week (7 days to 168 days)
-    if ( (($reporttime - $starttime) < (7 * WEEKSECS)) or
-            (( $reporttime - $starttime) > ( ($totalistartweeks + 1) * 7 * WEEKSECS) ) ) {
+
+    // A report is only due on weeks following an istart week (7 days to 175 days)
+    $reportday = ($reporttime - $starttime) / DAYSECS;
+    if ( $reportday < 7 or $reportday > ($totalistartweeks + 1) * 7) {
         error_log(" - No report: date is not within the istart programme"); // TODO remove after testing
         return false;
     }
@@ -470,6 +476,7 @@ function get_istart_week_label($course, $group, $atdate) {
  * @return array The istart week course section
  */
 function get_istart_week($courseid, $istartweeknumber) {
+    // // REPLACED WITH CLASS istart_week
     global $DB;
 
     // Get the course section
