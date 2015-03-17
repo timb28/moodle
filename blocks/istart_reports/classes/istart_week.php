@@ -14,7 +14,8 @@ namespace block_istart_reports;
  */
 class istart_week {
 
-    public  $sectionid,
+    public  $courseid,
+            $sectionid,
             $weeknumber,
             $weekname,
             $tasksections;
@@ -22,7 +23,8 @@ class istart_week {
     public function __construct($courseid, $weeknumber){
         global $DB;
 
-        $this->weeknumber = $weeknumber;
+        $this->courseid     = $courseid;
+        $this->weeknumber   = $weeknumber;
 
         // Get the course section. Note: the lowest cs.section value is the week main section
         try {
@@ -51,5 +53,50 @@ class istart_week {
 
         $this->sectionid = $record->section;
         $this->weekname = $record->name;
+
+        $this->setup_task_sections();
+    }
+
+    private function setup_task_sections() {
+        global $DB;
+
+        // Get all course sections for the istart week
+
+        try {
+
+            $sql = '
+                    SELECT
+                        cs.section, cs.name
+                    FROM
+                        {course_sections} AS cs
+                            JOIN
+                        {course_format_options} AS cfo ON cs.id = cfo.sectionid
+                    WHERE
+                        cs.course = :courseid
+                            AND cs.visible = 1
+                            AND cfo.name = "istartweek"
+                            AND cfo.value = :weeknum';
+            $params = array(
+                            'courseid' => $this->courseid,
+                            'weeknum'  => $this->weeknumber);
+            $records = $DB->get_records_sql($sql, $params);
+
+            error_log(print_r($records,1));
+
+        } catch(Exception $e) {
+            error_log($e, DEBUG_NORMAL);
+            return("iStart manager report not sent because the iStart week section cannot be read "
+                    . "from the database for week: $this->courseid course: $this->courseid");
+        }
+
+        foreach ($records as $record) {
+            // Ignore the parent istart week section.
+            if ($record->section == $this->sectionid) {
+                continue;
+            }
+
+            $tasksection = new istart_task_section($record->section, $record->name);
+            $this->tasksections[] = $tasksection;
+        }
     }
 }
