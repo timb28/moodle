@@ -19,8 +19,10 @@ class istart_week {
             $weekname,
             $tasksections;
 
-    public function __construct($courseid, $istartweeknumber){
+    public function __construct($courseid, $weeknumber){
         global $DB;
+
+        $this->weeknumber = $weeknumber;
 
         // Get the course section
         try {
@@ -39,7 +41,7 @@ class istart_week {
                             AND cfo.value = :weeknum';
             $params = array(
                             'courseid' => $courseid,
-                            'weeknum'  => $istartweeknumber);
+                            'weeknum'  => $weeknumber);
             $record = $DB->get_record_sql($sql, $params, MUST_EXIST);
 
         } catch(Exception $e) {
@@ -48,7 +50,6 @@ class istart_week {
         }
 
         $this->sectionid = $record->section;
-        $this->weeknumber = $istartweeknumber;
         $this->weekname = $record->name;
     }
 }

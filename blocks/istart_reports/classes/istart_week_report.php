@@ -92,36 +92,31 @@ class istart_week_report {
         foreach ($this->istartgroups as $istartgroup) {
 
             // Skip groups who have finished iStart
-            if ($istartgroup->reportweek > $this->totalweeks) {
+            if ($istartgroup->reportweeknum > $this->totalweeks) {
                 error_log(" - 2. Skipping group who have completed iStart: ".$istartgroup->group->id.
-                        " (".$istartgroup->group->name.") iStart week: " . $istartgroup->reportweek);
+                        " (".$istartgroup->group->name.") iStart week: " . $istartgroup->reportweeknum);
                 continue;
             }
 
             // TODO remove testing code below
-            error_log(" - 2. Started processing group: ".$istartgroup->group->id." (".$istartgroup->group->name.") iStart report week: " . $istartgroup->reportweek);
+            error_log(" - 2. Started processing group: ".$istartgroup->group->id." (".$istartgroup->group->name.") iStart report week: " . $istartgroup->reportweeknum);
             error_log("   - group start date: " . date("Y-m-d", $istartgroup->startdate));
-            error_log("   - group report week: " . $istartgroup->reportweek);
+            error_log("   - group report week: " . $istartgroup->reportweeknum);
 
-            $reportsendtime = $istartgroup->startdate + ($istartgroup->reportweek * WEEKSECS) + DAYSECS;
+            $reportsendtime = $istartgroup->startdate + ($istartgroup->reportweeknum * WEEKSECS) + DAYSECS;
 
             error_log("   - group report send date: " . date("Y-m-d", $reportsendtime));
 
             if (date("Ymd", $reportsendtime) == date("Ymd", $this->reporttime)) {
                 error_log(" - 3. Sending report today");
+
+                // Get all group users
+                $istartgroup->setup_group_users();
+                $istartgroup->setup_istart_week($this->course->id, $istartgroup->reportweeknum);
+
+                // Check if reports for those users have been sent
             }
 
-
-//            for ($daysago = 0; $daysago <= NUMPASTREPORTDAYS; $daysago++) {
-//                $reporttime = strtotime(date("Ymd")) - (DAYSECS * $daysago);
-//
-//                // Only process a group with a report due today
-//                error_log('difference: ' . ($istartgroup->reportsendday - $reporttime));
-//                if (($istartgroup->reportsendday - $reporttime) < DAYSECS) {
-//                    error_log("2. Started processing group: ".$istartgroup->group->id." (".$istartgroup->group->name."),  Days ago: $daysago, Report time: $reporttime"); // TODO remove after testing
-////                process_manager_report_for_group_on_date($course, $istartgroup->group, $reporttime);
-//                }
-//            }
         }
 
         return true;

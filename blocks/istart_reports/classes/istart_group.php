@@ -17,7 +17,7 @@ class istart_group {
     public  $group,
             $isvalidgroup,
             $reportsendday,
-            $reportweek,
+            $reportweeknum,
             $startdate,
             $istartusers,
             $istartweek;
@@ -26,7 +26,7 @@ class istart_group {
         $this->group = $group;
         $this->validate_group();
         $this->setup_start_date();
-        $this->setup_report_week();
+        $this->setup_report_week_num();
     }
 
    private function validate_group() {
@@ -53,22 +53,33 @@ class istart_group {
         }
     }
 
-    private function setup_istartweek($courseid) {
-
-        for ($i=1; $i<=$this->totalweeks; $i++) {
-            error_log('setting up istart week: ' . $i);
-            $this->istartweeks[] = new istart_week($courseid, $i);
+    private function setup_report_week_num() {
+        if ($this->isvalidgroup === true && isset($this->startdate)) {
+            $this->reportweeknum = floor( (time() - $this->startdate) / WEEKSECS);
         }
-
-        error_log(print_r($this->istartweeks));
-
-        return true;
     }
 
-    private function setup_report_week() {
-        if ($this->isvalidgroup === true && isset($this->startdate)) {
-            $this->reportweek = floor( (time() - $this->startdate) / WEEKSECS);
+    /**
+     * Creates istart_user objects for group users. Called only when a report is due
+     * @return true or error
+     */
+    public function setup_group_users() {
+        $hasusers = false;
+
+        $groupmembers = groups_get_members($this->group->id);
+
+        foreach ($groupmembers as $user) {
+            $this->istartusers[] = new istart_user($user);
+            $hasusers = true;
         }
+
+        return $hasusers;
+    }
+    
+    public function setup_istart_week($courseid, $weeknum) {
+        error_log('    - setting up istart week: ' . $weeknum);
+        $this->istartweeks[] = new istart_week($courseid, $weeknum);
+        return true;
     }
 
 }
