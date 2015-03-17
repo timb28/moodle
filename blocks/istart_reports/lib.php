@@ -34,7 +34,6 @@ use block_istart_reports\istart_week;
 use block_istart_reports\istart_week_report;
 
 define('BLOCK_NAME', 'istart_reports');
-define('BLOCK_CONFIG_TOTAL_WEEKS','totalweeks');
 define('NUMPASTREPORTDAYS', 6);
 define('MANAGERREPORTTYPE', 1);
 define('COURSEFORMATOPTIONTYPEFORTASKS', 'reportcompletions');
