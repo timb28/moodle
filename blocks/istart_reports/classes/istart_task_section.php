@@ -19,7 +19,7 @@ class istart_task_section {
             $sectionid,
             $sectionnumber,
             $sectionname,
-            $totaltasks;
+            $numtasks;
 
     public function __construct($courseid, $sectionid, $sectionnumber, $sectionname) {
         $this->courseid         = $courseid;
@@ -45,9 +45,10 @@ class istart_task_section {
 
         } catch(Exception $e) {
             error_log($e, DEBUG_NORMAL);
-            return("Could not obtain iStart total tasks in course: $this->courseid section: $this->sectionid because the database could not be read.");
+            return("Could not obtain iStart total tasks in course: $this->courseid "
+                    . "section: $this->sectionid because the database could not be read.");
         }
 
-        $this->totaltasks = $totaltasks;
+        $this->numtasks = $totaltasks;
     }
 }

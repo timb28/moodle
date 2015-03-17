@@ -69,7 +69,7 @@ class istart_group {
         $groupmembers = groups_get_members($this->group->id);
 
         foreach ($groupmembers as $user) {
-            $this->istartusers[] = new istart_user($user);
+            $this->istartusers[] = new istart_user($user, $this->istartweek);
             $hasusers = true;
         }
 

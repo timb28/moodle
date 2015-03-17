@@ -606,34 +606,34 @@ function get_istart_section_total_tasks($courseid, $sectionid) {
  * @param int $userid The user is
  * @return int The count of tasks complete
  */
-function get_istart_tasks_complete($sectionid, $userid) {
-    global $DB;
-
-    try {
-
-        $sql = '
-                SELECT
-                    COUNT(cm.id) as "total"
-                FROM
-                    {course_modules} cm
-                        JOIN
-                    {label} l ON l.id = cm.instance
-                        JOIN
-                    {course_modules_completion} cmc ON cmc.coursemoduleid = cm.id
-                WHERE
-                    cmc.userid = :userid AND cm.section = :sectionid';
-        $params = array(
-                        'sectionid' => $sectionid,
-                        'userid'  => $userid);
-        $taskscomplete = $DB->get_record_sql($sql, $params);
-
-    } catch(Exception $e) {
-        error_log($e, DEBUG_NORMAL);
-        return("Could not obtain istart tasks complete because the database could not be read.");
-    }
-
-    return $taskscomplete->total;
-}
+//function get_istart_tasks_complete($sectionid, $userid) {
+//    global $DB;
+//
+//    try {
+//
+//        $sql = '
+//                SELECT
+//                    COUNT(cm.id) as "total"
+//                FROM
+//                    {course_modules} cm
+//                        JOIN
+//                    {label} l ON l.id = cm.instance
+//                        JOIN
+//                    {course_modules_completion} cmc ON cmc.coursemoduleid = cm.id
+//                WHERE
+//                    cmc.userid = :userid AND cm.section = :sectionid';
+//        $params = array(
+//                        'sectionid' => $sectionid,
+//                        'userid'  => $userid);
+//        $taskscomplete = $DB->get_record_sql($sql, $params);
+//
+//    } catch(Exception $e) {
+//        error_log($e, DEBUG_NORMAL);
+//        return("Could not obtain istart tasks complete because the database could not be read.");
+//    }
+//
+//    return $taskscomplete->total;
+//}
 
 /**
  * Create a message-id string to use in the custom headers of report emails

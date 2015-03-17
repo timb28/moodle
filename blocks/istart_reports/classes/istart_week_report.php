@@ -111,8 +111,8 @@ class istart_week_report {
                 error_log(" - 3. Sending report today");
 
                 // Get all group users
-                $istartgroup->setup_group_users();
                 $istartgroup->setup_istart_week($this->course->id, $istartgroup->reportweeknum);
+                $istartgroup->setup_group_users(); // Must be done after setting up the week
 
                 error_log(print_r($istartgroup->istartweek, 1));
 
