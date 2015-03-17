@@ -15,21 +15,20 @@ namespace block_istart_reports;
 class istart_group {
 
     public  $group,
+            $isvalidgroup,
+            $reporttime,
+            $reportweek,
             $startdate,
             $istartusers,
-            $isvalidgroup;
+            $istartweek;
 
-    public function __construct($group) {
+    public function __construct($group, $reporttime) {
         $this->group = $group;
+        $this->validate_group();
+        $this->reporttime = $reporttime;
         $this->setup_start_date();
-        
-    }
-
-    private function setup_start_date() {
-        // Check if the group is valid for istart
-        if ($this->validate_group() === true) {
-            $this->startdate = strtotime($this->group->idnumber);
-        }
+        $this->setup_report_week();
+//        $this->setup_istartweek($group->courseid);
     }
 
    private function validate_group() {
@@ -49,13 +48,29 @@ class istart_group {
         }
     }
 
-    public function get_istart_week($date) {
-        if ($this->isvalidgroup) {
-            $istartweek = floor( ($date - $this->startdate) / WEEKSECS);
-            error_log("iStart week: " . $istartweek); // TODO remove after testing
-            return $istartweek;
-        } else {
-            return false;
+    private function setup_start_date() {
+        // Check if the group is valid for istart
+        if ($this->isvalidgroup === true) {
+            $this->startdate = strtotime($this->group->idnumber);
+        }
+    }
+
+    private function setup_istartweek($courseid) {
+
+        for ($i=1; $i<=$this->totalweeks; $i++) {
+            error_log('setting up istart week: ' . $i);
+            $this->istartweeks[] = new istart_week($courseid, $i);
+        }
+
+        error_log(print_r($this->istartweeks));
+
+        return true;
+    }
+
+    public function setup_report_week() {
+        if ($this->isvalidgroup === true && isset($this->startdate)) {
+            $this->reportweek = floor( ($this->reporttime - $this->startdate) / WEEKSECS);
+            error_log("iStart report week: " . $this->reportweek); // TODO remove after testing
         }
     }
 }

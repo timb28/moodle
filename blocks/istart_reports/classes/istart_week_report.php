@@ -25,12 +25,10 @@ class istart_week_report {
     
     public function __construct($reporttype, $course) {
         $this->reporttype = $reporttype;
-        $this->reporttime = getdate();
+        $this->reporttime = time(); // today
         $this->course = $course;
         $this->setup_totalweeks($course->id);
         $this->setup_istartgroups($course->id);
-        $this->setup_istartweeks($course->id);
-
 
     } // _construct
 
@@ -61,15 +59,15 @@ class istart_week_report {
         $this->totalweeks = $record->totalweeks;
     }
 
-    private function setup_istartweeks($courseid) {
-        return true;
-    }
-
     private function setup_istartgroups($courseid) {
+        if (!isset($this->reporttime)) {
+            return;
+        }
+
         $allgroups = groups_get_all_groups($courseid);
 
         foreach ($allgroups as $group) {
-            $istartgroup = new istart_group($group);
+            $istartgroup = new istart_group($group, $this->reporttime);
             if ($istartgroup->isvalidgroup) {
                 $this->istartgroups[] = $istartgroup;
             }
@@ -97,7 +95,6 @@ class istart_week_report {
 
             while ($daysago <= NUMPASTREPORTDAYS) {
                 $reporttime = strtotime(date("Ymd")) - (DAYSECS * $daysago);
-                $istartweek = $istartgroup->get_istart_week($reporttime);
                 error_log("2. Started processing group: ".$istartgroup->group->id." (".$istartgroup->group->name."),  Days ago: $daysago, Report time: $reporttime"); // TODO remove after testing
 //                process_manager_report_for_group_on_date($course, $istartgroup->group, $reporttime);
                 $daysago++;
