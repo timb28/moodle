@@ -16,19 +16,18 @@ class istart_group {
 
     public  $group,
             $isvalidgroup,
-            $reporttime,
+            $reportsendday,
             $reportweek,
             $startdate,
             $istartusers,
             $istartweek;
 
-    public function __construct($group, $reporttime) {
+    public function __construct($group) {
         $this->group = $group;
         $this->validate_group();
-        $this->reporttime = $reporttime;
         $this->setup_start_date();
         $this->setup_report_week();
-//        $this->setup_istartweek($group->courseid);
+        $this->setup_report_send_day();
     }
 
    private function validate_group() {
@@ -67,10 +66,17 @@ class istart_group {
         return true;
     }
 
-    public function setup_report_week() {
+    private function setup_report_week() {
         if ($this->isvalidgroup === true && isset($this->startdate)) {
-            $this->reportweek = floor( ($this->reporttime - $this->startdate) / WEEKSECS);
+            $this->reportweek = floor( (time() - $this->startdate) / WEEKSECS);
             error_log("iStart report week: " . $this->reportweek); // TODO remove after testing
+        }
+    }
+
+    private function setup_report_send_day() {
+        if ($this->isvalidgroup === true && isset($this->startdate) && isset($this->reportweek)) {
+            $this->reportsendday = $this->startdate + ($this->reportweek * WEEKSECS) + DAYSECS;
+            error_log("iStart report send day: " . $this->reportsendday); // TODO remove after testing
         }
     }
 }
