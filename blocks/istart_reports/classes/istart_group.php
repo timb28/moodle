@@ -27,7 +27,6 @@ class istart_group {
         $this->validate_group();
         $this->setup_start_date();
         $this->setup_report_week();
-        $this->setup_report_send_day();
     }
 
    private function validate_group() {
@@ -73,10 +72,4 @@ class istart_group {
         }
     }
 
-    private function setup_report_send_day() {
-        if ($this->isvalidgroup === true && isset($this->startdate) && isset($this->reportweek)) {
-            $this->reportsendday = $this->startdate + ($this->reportweek * WEEKSECS) + DAYSECS;
-            error_log("iStart report send day: " . $this->reportsendday); // TODO remove after testing
-        }
-    }
 }

@@ -80,7 +80,7 @@ class istart_week_report {
     * @param stdClass $group The group to process.
     * @return TODO true if a report was sent
     */
-    function process_manager_reports() {
+    public function process_manager_reports() {
         if ($this->reporttype !== MANAGERREPORTTYPE) {
             return;
         }
@@ -89,16 +89,35 @@ class istart_week_report {
         // Reports older than NUMPASTREPORTDAYS will not be mailed.  This is to avoid the problem where
         // cron has not been running for a long time or a student moves iStart group,
         // and then suddenly people are flooded with mail from the past few weeks or months
-        $daysago = 0;
-
         foreach ($this->istartgroups as $istartgroup) {
 
-            while ($daysago <= NUMPASTREPORTDAYS) {
-                $reporttime = strtotime(date("Ymd")) - (DAYSECS * $daysago);
-                error_log("2. Started processing group: ".$istartgroup->group->id." (".$istartgroup->group->name."),  Days ago: $daysago, Report time: $reporttime"); // TODO remove after testing
-//                process_manager_report_for_group_on_date($course, $istartgroup->group, $reporttime);
-                $daysago++;
+            // Skip groups who have finished iStart
+            if ($istartgroup->reportweek > $this->totalweeks) {
+                error_log("2. Skipping group who have completed iStart: ".$istartgroup->group->id.
+                        " (".$istartgroup->group->name.") iStart week: " . $istartgroup->reportweek);
+                continue;
             }
+
+            // TODO remove testing code below
+            error_log("2. Started processing group: ".$istartgroup->group->id." (".$istartgroup->group->name.")");
+            error_log(" - group start date: " . date("Y-m-d", $istartgroup->startdate));
+            error_log(" - group report week: " . $istartgroup->reportweek);
+
+            $reportsendtime = $istartgroup->startdate + ($istartgroup->reportweek * WEEKSECS) + DAYSECS;
+
+            error_log(" - group report send date: " . date("Y-m-d", $reportsendtime));
+
+
+//            for ($daysago = 0; $daysago <= NUMPASTREPORTDAYS; $daysago++) {
+//                $reporttime = strtotime(date("Ymd")) - (DAYSECS * $daysago);
+//
+//                // Only process a group with a report due today
+//                error_log('difference: ' . ($istartgroup->reportsendday - $reporttime));
+//                if (($istartgroup->reportsendday - $reporttime) < DAYSECS) {
+//                    error_log("2. Started processing group: ".$istartgroup->group->id." (".$istartgroup->group->name."),  Days ago: $daysago, Report time: $reporttime"); // TODO remove after testing
+////                process_manager_report_for_group_on_date($course, $istartgroup->group, $reporttime);
+//                }
+//            }
         }
 
         return true;
