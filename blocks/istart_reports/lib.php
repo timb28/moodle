@@ -83,15 +83,17 @@ function process_manager_reports() {
     $courses = get_courses_with_block(get_blockid(BLOCK_NAME));
 
     foreach ($courses as $course) {
-        error_log("1. Started processing reports for course: $course->id"); // TODO remove after testing
+        $reporttime = time() - (DAYSECS * 1);
+
+        error_log("1. Started processing reports for course: $course->id at time: " . date("Y-m-d", $reporttime)); // TODO remove after testing
 
         // Only process courses with group mode activated.
         if (groups_get_course_groupmode($course) == NOGROUPS) {
-            error_log("No groups");
+            error_log(" - Course skipped: No groups");
             continue;
         }
 
-        $istart_week_report = new istart_week_report(MANAGERREPORTTYPE, $course);
+        $istart_week_report = new istart_week_report($course, MANAGERREPORTTYPE, $reporttime);
 
         // Get all current istart intakes as an array containing the $group->idnumber for each intake
 //        $groups = groups_get_all_groups($course->id);

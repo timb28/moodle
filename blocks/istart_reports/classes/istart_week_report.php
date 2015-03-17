@@ -23,9 +23,9 @@ class istart_week_report {
             $istartgroups,
             $istartweeks;
     
-    public function __construct($reporttype, $course) {
+    public function __construct($course, $reporttype, $reporttime) {
         $this->reporttype = $reporttype;
-        $this->reporttime = time(); // today
+        $this->reporttime = $reporttime;
         $this->course = $course;
         $this->setup_totalweeks($course->id);
         $this->setup_istartgroups($course->id);
@@ -93,19 +93,23 @@ class istart_week_report {
 
             // Skip groups who have finished iStart
             if ($istartgroup->reportweek > $this->totalweeks) {
-                error_log("2. Skipping group who have completed iStart: ".$istartgroup->group->id.
+                error_log(" - 2. Skipping group who have completed iStart: ".$istartgroup->group->id.
                         " (".$istartgroup->group->name.") iStart week: " . $istartgroup->reportweek);
                 continue;
             }
 
             // TODO remove testing code below
-            error_log("2. Started processing group: ".$istartgroup->group->id." (".$istartgroup->group->name.")");
-            error_log(" - group start date: " . date("Y-m-d", $istartgroup->startdate));
-            error_log(" - group report week: " . $istartgroup->reportweek);
+            error_log(" - 2. Started processing group: ".$istartgroup->group->id." (".$istartgroup->group->name.") iStart report week: " . $istartgroup->reportweek);
+            error_log("   - group start date: " . date("Y-m-d", $istartgroup->startdate));
+            error_log("   - group report week: " . $istartgroup->reportweek);
 
             $reportsendtime = $istartgroup->startdate + ($istartgroup->reportweek * WEEKSECS) + DAYSECS;
 
-            error_log(" - group report send date: " . date("Y-m-d", $reportsendtime));
+            error_log("   - group report send date: " . date("Y-m-d", $reportsendtime));
+
+            if (date("Ymd", $reportsendtime) == date("Ymd", $this->reporttime)) {
+                error_log(" - 3. Sending report today");
+            }
 
 
 //            for ($daysago = 0; $daysago <= NUMPASTREPORTDAYS; $daysago++) {

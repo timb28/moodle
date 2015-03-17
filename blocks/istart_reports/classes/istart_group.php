@@ -68,7 +68,6 @@ class istart_group {
     private function setup_report_week() {
         if ($this->isvalidgroup === true && isset($this->startdate)) {
             $this->reportweek = floor( (time() - $this->startdate) / WEEKSECS);
-            error_log("iStart report week: " . $this->reportweek); // TODO remove after testing
         }
     }
 
