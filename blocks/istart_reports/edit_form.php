@@ -8,17 +8,17 @@ class block_istart_reports_edit_form extends block_edit_form {
         // Section header title according to language file.
         $mform->addElement('header', 'configheader', get_string('blockconfigheader', 'block_istart_reports'));
 
-        $istartweekoptions  = array();
-        $ministartweeks     = 1;
-        $maxistartweeks     = 52;
-        $defaultistartweeks = 24;
+        $totalweekoptions  = array();
+        $mintotalweeks     = 1;
+        $maxtotalweeks     = 52;
+        $defaulttotalweeks = 24;
 
-        for ($i=$ministartweeks; $i <= $maxistartweeks; $i++) {
-            $istartweekoptions[$i] = $i;
+        for ($i=$mintotalweeks; $i <= $maxtotalweeks; $i++) {
+            $totalweekoptions[$i] = $i;
         }
 
-        $mform->addElement('select', 'config_totalistartweeks', get_string('blockconfigistartweeks', 'block_istart_reports'), $istartweekoptions);
-        $mform->setDefault('config_totalistartweeks', $defaultistartweeks);
+        $mform->addElement('select', 'config_totalweeks', get_string('blockconfigtotalweeks', 'block_istart_reports'), $totalweekoptions);
+        $mform->setDefault('config_totalweeks', $defaulttotalweeks);
 //
 //        $mform->addElement('html', '<p>'.get_string('managerconfigdesc', 'block_istart_reports').'</p>');
 //
