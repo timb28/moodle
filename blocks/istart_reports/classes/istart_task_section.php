@@ -15,14 +15,39 @@ namespace block_istart_reports;
  */
 class istart_task_section {
 
-    public  $sectionid,
+    public  $courseid,
+            $sectionid,
+            $sectionnumber,
             $sectionname,
             $totaltasks;
 
-    public function __construct($sectionid, $sectionname) {
-        $this->sectionid    = $sectionid;
-        $this->sectionname  = $sectionname;
+    public function __construct($courseid, $sectionid, $sectionnumber, $sectionname) {
+        $this->courseid         = $courseid;
+        $this->sectionid        = $sectionid;
+        $this->sectionnumber    = $sectionnumber;
+        $this->sectionname      = $sectionname;
 
-        // TODO get total tasks from DB
+        $this->setup_total_tasks();
+    }
+
+    private function setup_total_tasks() {
+        global $DB;
+
+        // Get all course sections that contain tasks
+        try {
+
+            $table = 'course_modules';
+            $conditions = array(
+                            'course' => $this->courseid,
+                            'completion' => 1,
+                            'section'  => $this->sectionid);
+            $totaltasks = $DB->count_records($table, $conditions);
+
+        } catch(Exception $e) {
+            error_log($e, DEBUG_NORMAL);
+            return("Could not obtain iStart total tasks in course: $this->courseid section: $this->sectionid because the database could not be read.");
+        }
+
+        $this->totaltasks = $totaltasks;
     }
 }

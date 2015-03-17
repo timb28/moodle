@@ -16,6 +16,7 @@ class istart_week {
 
     public  $courseid,
             $sectionid,
+            $sectionnumber,
             $weeknumber,
             $weekname,
             $tasksections;
@@ -31,7 +32,7 @@ class istart_week {
 
             $sql = '
                     SELECT
-                        cs.section, cs.name
+                        cs.id as sectionid, cs.section as sectionnumber, cs.name
                     FROM
                         mdl_course_sections AS cs
                             JOIN
@@ -51,8 +52,9 @@ class istart_week {
             return("iStart manager report not sent because the iStart week section cannot be read from the database.");
         }
 
-        $this->sectionid = $record->section;
-        $this->weekname = $record->name;
+        $this->sectionid        = $record->sectionid;
+        $this->sectionnumber    = $record->sectionnumber;
+        $this->weekname         = $record->name;
 
         $this->setup_task_sections();
     }
@@ -66,7 +68,7 @@ class istart_week {
 
             $sql = '
                     SELECT
-                        cs.section, cs.name
+                        cs.id as sectionid, cs.section as sectionnumber, cs.name
                     FROM
                         {course_sections} AS cs
                             JOIN
@@ -81,8 +83,6 @@ class istart_week {
                             'weeknum'  => $this->weeknumber);
             $records = $DB->get_records_sql($sql, $params);
 
-            error_log(print_r($records,1));
-
         } catch(Exception $e) {
             error_log($e, DEBUG_NORMAL);
             return("iStart manager report not sent because the iStart week section cannot be read "
@@ -91,11 +91,11 @@ class istart_week {
 
         foreach ($records as $record) {
             // Ignore the parent istart week section.
-            if ($record->section == $this->sectionid) {
+            if ($record->sectionid == $this->sectionid) {
                 continue;
             }
 
-            $tasksection = new istart_task_section($record->section, $record->name);
+            $tasksection = new istart_task_section($this->courseid, $record->sectionid, $record->sectionnumber, $record->name);
             $this->tasksections[] = $tasksection;
         }
     }
