@@ -114,6 +114,8 @@ class istart_week_report {
                 $istartgroup->setup_group_users();
                 $istartgroup->setup_istart_week($this->course->id, $istartgroup->reportweeknum);
 
+                error_log(print_r($istartgroup->istartweek, 1));
+
                 // Check if reports for those users have been sent
             }
 

@@ -24,24 +24,24 @@ class istart_week {
 
         $this->weeknumber = $weeknumber;
 
-        // Get the course section
+        // Get the course section. Note: the lowest cs.section value is the week main section
         try {
 
             $sql = '
                     SELECT
-                        cs.name, cs.section
+                        cs.section, cs.name
                     FROM
-                        {course_sections} AS cs
+                        mdl_course_sections AS cs
                             JOIN
-                        {course_format_options} AS cfo ON cs.id = cfo.sectionid
+                        mdl_course_format_options AS cfo ON cs.id = cfo.sectionid
                     WHERE
-                        cs.course = :courseid
-                            AND cs.visible = 1
-                            AND cfo.name = "istartweek"
-                            AND cfo.value = :weeknum';
+                        course = :courseid AND cfo.name = "istartweek"
+                            AND cfo.value = :weeknumber
+                            order by cs.section
+                            limit 0,1;';
             $params = array(
                             'courseid' => $courseid,
-                            'weeknum'  => $weeknumber);
+                            'weeknumber'  => $weeknumber);
             $record = $DB->get_record_sql($sql, $params, MUST_EXIST);
 
         } catch(Exception $e) {

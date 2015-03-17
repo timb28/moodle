@@ -78,7 +78,7 @@ class istart_group {
     
     public function setup_istart_week($courseid, $weeknum) {
         error_log('    - setting up istart week: ' . $weeknum);
-        $this->istartweeks[] = new istart_week($courseid, $weeknum);
+        $this->istartweek = new istart_week($courseid, $weeknum);
         return true;
     }
 
