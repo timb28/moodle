@@ -92,8 +92,6 @@ function process_manager_reports() {
             continue;
         }
 
-        $coursecontext = context_course::instance('48');
-
         $istart_week_report = new istart_week_report(MANAGERREPORTTYPE, $course);
 
         // Get all current istart intakes as an array containing the $group->idnumber for each intake

@@ -19,27 +19,62 @@ class istart_week_report {
     public  $reporttype,
             $reporttime,
             $course,
+            $totalweeks,
             $istartgroups,
-            $totalistartweeks;
+            $istartweeks;
     
     public function __construct($reporttype, $course) {
         $this->reporttype = $reporttype;
         $this->reporttime = getdate();
         $this->course = $course;
+        $this->setup_totalweeks($course->id);
+        $this->setup_istartgroups($course->id);
+        $this->setup_istartweeks($course->id);
 
-        // Get number of istart weeks
-//        $this->totalistartweeks = $this->get_block_config($course->id, BLOCK_NAME, BLOCK_CONFIG_TOTAL_WEEKS);
 
-        $groups = groups_get_all_groups($course->id);
+    } // _construct
 
-        foreach ($groups as $group) {
+    private function setup_totalweeks($courseid) {
+        global $DB;
+
+        // Get total number of istart weeks
+        try {
+
+            $sql = '
+                    SELECT
+                        MAX(CAST(cfo.value AS UNSIGNED)) as totalweeks
+                    FROM
+                        {course_format_options} AS cfo
+                    WHERE
+                        cfo.courseid = :courseid
+                            AND cfo.name = :format_option_name';
+            $params = array(
+                            'courseid' => $courseid,
+                            'format_option_name'  => 'istartweek');
+            $record = $DB->get_record_sql($sql, $params, MUST_EXIST);
+
+        } catch(Exception $e) {
+            error_log($e, DEBUG_NORMAL);
+            return("iStart manager report not sent because the total iStart weeks cannot be read from the database.");
+        }
+
+        $this->totalweeks = $record->totalweeks;
+    }
+
+    private function setup_istartweeks($courseid) {
+        return true;
+    }
+
+    private function setup_istartgroups($courseid) {
+        $allgroups = groups_get_all_groups($courseid);
+
+        foreach ($allgroups as $group) {
             $istartgroup = new istart_group($group);
             if ($istartgroup->isvalidgroup) {
                 $this->istartgroups[] = $istartgroup;
             }
-        } // foreach
-
-    } // _construct
+        }
+    }
 
     /**
     * Sends istart manager reports for a given istart intake group
@@ -71,24 +106,5 @@ class istart_week_report {
 
         return true;
    }
-
-
-    /**
-     * Get a block configuration variable
-     * @param id Course id
-     * @param string Block name
-     * @param string Configuration variable name
-     * @return configuration value
-     */
-    private function get_block_config($courseid, $name, $configvariable) {
-        global $DB;
-
-        $coursecontext = context_course::instance($courseid);
-        $blockrecord = $DB->get_record('block_instances', array('blockname' => $name,
-            'parentcontextid' => $coursecontext->id), '*', MUST_EXIST);
-        $blockinstance = block_instance($name, $blockrecord);
-
-        return $blockinstance->config->{$configvariable};
-    }
 
 }
