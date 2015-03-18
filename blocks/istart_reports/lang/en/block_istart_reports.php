@@ -37,6 +37,9 @@ $string['labeleditreportaddress'] = 'Change';
 $string['headermanageremail'] = 'Edit Manager Email Address';
 $string['intromanageremail'] = 'Enter your manager&rsquo;s email address below to send them a weekly email highlighting your iStart progress.';
 $string['labelmanageremail'] = 'Manager&rsquo;s email address';
+$string['labelmanager'] = 'Your Manager';
+$string['potmanagers'] = 'Harcourts Team Members';
+$string['potmanagersmatching'] = 'Matching Harcourts Team Members';
 
 require_once($CFG->dirroot . '/blocks/istart_reports/lang/en/manager_report.php');
 

@@ -24,6 +24,8 @@
  */
 
 require_once("$CFG->libdir/formslib.php");
+require_once("$CFG->dirroot/blocks/istart_reports/lib.php");
+require_once("$CFG->dirroot/user/selector/lib.php");
 
 class manageremail_form extends moodleform {
     public function definition() {
@@ -34,6 +36,14 @@ class manageremail_form extends moodleform {
         $mform->addElement('text', 'manageremailaddress', get_string('labelmanageremail', 'block_istart_reports'), array('size'=>'30'));
         $mform->setType('manageremailaddress', PARAM_TEXT);
         $mform->setDefault('manageremailaddress',get_manager_email_address($USER));
+
+//        $managerlist = get_all_users();
+//        $mform->addElement('select', 'manager', get_string('labelmanager', 'block_istart_reports'), $managerlist);
+        $context = context_course::instance($COURSE->id, MUST_EXIST);
+        $options = array('accesscontext' => $context);
+        $managerselector = new manager_selector('manager', $options);
+        $managerselectorhtml = $managerselector->display(true);
+        $mform->addElement('html', $managerselectorhtml);
 
 //        $mform->addElement('hidden', 'userid', $USER->id);
 //        $mform->setType('userid',PARAM_INT);
@@ -53,5 +63,61 @@ class manageremail_form extends moodleform {
         }
 
         return array();
+    }
+    
+}
+
+/**
+ * Description of manager_selector
+ *
+ * @author timbutler
+ */
+class manager_selector extends user_selector_base {
+
+
+    public function __construct($name, $options) {
+        parent::__construct($name, $options);
+    }
+
+    /**
+     * Candidate managers
+     * @param string $search
+     * @return array
+     */
+    public function find_users($search) {
+        global $DB;
+        // By default wherecondition retrieves all users except the deleted, not confirmed and guest.
+        list($wherecondition, $params) = $this->search_sql($search, 'u');
+
+        $fields      = 'SELECT ' . $this->required_fields_sql('u');
+        $countfields = 'SELECT COUNT(1)';
+
+        $sql = " FROM {user} u
+                WHERE $wherecondition";
+
+        list($sort, $sortparams) = users_order_by_sql('u', $search, $this->accesscontext);
+        $order = ' ORDER BY ' . $sort;
+
+        if (!$this->is_validating()) {
+            $userscount = $DB->count_records_sql($countfields . $sql, $params);
+            if ($userscount > $this->maxusersperpage) {
+                return $this->too_many_results($search, $userscount);
+            }
+        }
+
+        $availableusers = $DB->get_records_sql($fields . $sql . $order, array_merge($params, $sortparams));
+
+        if (empty($availableusers)) {
+            return array();
+        }
+
+
+        if ($search) {
+            $groupname = get_string('potmanagersmatching', 'block_istart_reports', $search);
+        } else {
+            $groupname = get_string('potmanagers', 'block_istart_reports');
+        }
+
+        return array($groupname => $availableusers);
     }
 }

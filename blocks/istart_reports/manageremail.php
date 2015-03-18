@@ -24,8 +24,8 @@
  */
 
 require_once("../../config.php");
-require_once('manageremail_form.php');
-require_once('lib.php');
+require_once("$CFG->dirroot/blocks/istart_reports/manageremail_form.php");
+require_once("$CFG->dirroot/blocks/istart_reports/lib.php");
 
 require_login();
 
