@@ -24,9 +24,13 @@ class istart_group {
 
     public function __construct($group) {
         $this->group = $group;
+
         $this->validate_group();
         $this->setup_start_date();
         $this->setup_report_week_num();
+
+        $reportsendtime         = $this->startdate + ($this->reportweeknum * WEEKSECS) + DAYSECS;
+        $this->reportsendday    = date("Y-m-d", $reportsendtime);
     }
 
    private function validate_group() {

@@ -94,20 +94,6 @@ function process_manager_reports() {
         }
 
         $istart_week_report = new istart_week_report($course, MANAGERREPORTTYPE, $reporttime);
-
-        // Get all current istart intakes as an array containing the $group->idnumber for each intake
-//        $groups = groups_get_all_groups($course->id);
-
-//        foreach ($groups as $group) {
-//            // Check whether the group is valid for istart
-//            if (!is_group_valid($group)) {
-//                error_log("Cannot process iStart manager report for group: $group->id ($group->name) "
-//                        . "the group id number '$group->idnumber' is not a valid iStart start date.");
-//                continue;
-//            }
-//
-//            process_manager_report_for_group($course, $group);
-//        }
         $istart_week_report->process_manager_reports();
     }
 
@@ -222,7 +208,7 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweek) {
     }
 
     // Get a list of all course sections for the report week that have reportable completion tasks
-    $tasksections = get_istart_child_task_sections($course->id, $istartweek["sectionid"]);
+//    $tasksections = get_istart_child_task_sections($course->id, $istartweek["sectionid"]);
 
     foreach ($tasksections as $sectionid=>$sectionname) {
         // For each course section in the list:
@@ -232,7 +218,7 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweek) {
 
         $tasksection = array(
             "sectionname"   => $sectionname,
-            "totaltasks"    => get_istart_section_total_tasks($course->id, $sectionid),
+            "totaltasks"    => 0, // get_istart_section_total_tasks($course->id, $sectionid),
             "taskscomplete" => get_istart_tasks_complete($sectionid, $user->id)
         );
 
@@ -332,7 +318,7 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweek) {
  * Check if the block is used for istart
  * @return bool whether group is valid for istart
  */
-function is_group_valid($group) {
+/*function is_group_valid($group) {
     $date = date_parse($group->idnumber);
     if ($date["error_count"] == 0 && checkdate($date["month"], $date["day"], $date["year"])) {
         // Valid group
@@ -341,7 +327,7 @@ function is_group_valid($group) {
         //Invalid group
         return false;
     }
-}
+}*/
 
 /**
  * Get whether an istart group has a report due on a date
@@ -350,7 +336,7 @@ function is_group_valid($group) {
  * @param int $totalistartweeks how many istart weeks in the programme
  * @return bool true if a report is due on the given $reporttime day
  */
-function is_istart_report_date($starttime, $reporttime, $totalistartweeks = 24) {
+/*function is_istart_report_date($starttime, $reporttime, $totalistartweeks = 24) {
     $startdate = getdate($starttime);
     $reportdate = getdate($reporttime);
     error_log(" - Start day of the week: ".$startdate["wday"]); // TODO remove after testing
@@ -373,7 +359,7 @@ function is_istart_report_date($starttime, $reporttime, $totalistartweeks = 24) 
     }
 
     return true;
-}
+}*/
 
 /**
  * Get the block id for this block
@@ -382,7 +368,8 @@ function is_istart_report_date($starttime, $reporttime, $totalistartweeks = 24) 
 function get_blockid($name) {
     global $DB;
     
-    if ($block = $DB->get_record('block', array('name'=>$name))) {
+    $block = $DB->get_record('block', array('name'=>$name));
+    if (isset($block)) {
         return $block->id;
     } else {
         // this block can't be found in the database
@@ -481,7 +468,7 @@ function get_istart_week_label($course, $group, $atdate) {
  * @param string $date The date to calculate the week from
  * @return array The istart week course section
  */
-function get_istart_week($courseid, $istartweeknumber) {
+/*function get_istart_week($courseid, $istartweeknumber) {
     // // REPLACED WITH CLASS istart_week
     global $DB;
 
@@ -518,7 +505,7 @@ function get_istart_week($courseid, $istartweeknumber) {
                       );
 
     return $weeksection;
-}
+}*/
 
 /**
  * Gets istart section ids and labels for all child sections flagged as containing
@@ -527,7 +514,7 @@ function get_istart_week($courseid, $istartweeknumber) {
  * @param int $parentsectionid The id of the parent course section
  * @return array An associative array
  */
-function get_istart_child_task_sections($courseid, $parentsectionid) {
+/*function get_istart_child_task_sections($courseid, $parentsectionid) {
     global $DB;
 
     // Calculate the section id of the istart week
@@ -571,7 +558,7 @@ function get_istart_child_task_sections($courseid, $parentsectionid) {
 
 
     return $tasksections;
-}
+}*/
 
 /**
  * Gets the total number of tasks in a section
@@ -579,7 +566,7 @@ function get_istart_child_task_sections($courseid, $parentsectionid) {
  * @param int $sectionid The course section id
  * @return int The total number of tasks
  */
-function get_istart_section_total_tasks($courseid, $sectionid) {
+/*function get_istart_section_total_tasks($courseid, $sectionid) {
     global $DB;
 
     // Get all course sections that contain tasks
@@ -598,7 +585,7 @@ function get_istart_section_total_tasks($courseid, $sectionid) {
     }
 
     return $totaltasks;
-}
+}*/
 
 /**
  * Gets the number of tasks a user has completed in a given section
