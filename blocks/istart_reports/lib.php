@@ -83,7 +83,7 @@ function process_manager_reports() {
     $courses = get_courses_with_block(get_blockid(BLOCK_NAME));
 
     foreach ($courses as $course) {
-        $reporttime = time() - (DAYSECS * 1);
+        $reporttime = time();
 
         error_log("1. Started processing reports for course: $course->id at time: " . date("Y-m-d", $reporttime)); // TODO remove after testing
 

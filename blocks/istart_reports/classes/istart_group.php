@@ -63,7 +63,7 @@ class istart_group {
      * Creates istart_user objects for group users. Called only when a report is due
      * @return true or error
      */
-    public function setup_group_users() {
+    private function setup_group_users() {
         $hasusers = false;
 
         $groupmembers = groups_get_members($this->group->id);
@@ -76,10 +76,18 @@ class istart_group {
         return $hasusers;
     }
     
-    public function setup_istart_week($courseid, $weeknum) {
+    private function setup_istart_week($weeknum) {
         error_log('    - setting up istart week: ' . $weeknum);
-        $this->istartweek = new istart_week($courseid, $weeknum);
+        $this->istartweek = new istart_week($this->group->courseid, $weeknum);
         return true;
+    }
+
+    public function prepare_for_group_report() {
+        // Get all week tasks
+        $this->setup_istart_week($this->reportweeknum);
+
+        // Get all group users
+        $this->setup_group_users(); // Must be done after setting up the week
     }
 
 }
