@@ -34,6 +34,10 @@ class istart_user {
     public function setup_user_tasks() {
         global $DB;
 
+        if (!isset($this->istartweek->tasksections)) {
+            return false;
+        }
+
         try {
 
             $tasksectionids = null;
