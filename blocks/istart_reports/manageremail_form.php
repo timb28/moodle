@@ -39,10 +39,15 @@ class manageremail_form extends moodleform {
 
 //        $managerlist = get_all_users();
 //        $mform->addElement('select', 'manager', get_string('labelmanager', 'block_istart_reports'), $managerlist);
+
+        // Display searchable list of all Moodle users.
         $context = context_course::instance($COURSE->id, MUST_EXIST);
-        $options = array('accesscontext' => $context);
+        $options = array('multiselect'      => false,
+                         'selected'         => true,
+                         'accesscontext'    => $context);
         $managerselector = new manager_selector('manager', $options);
         $managerselectorhtml = $managerselector->display(true);
+        $mform->addElement('html', '<p><label for="manager">'. get_string('labelmanager', 'block_istart_reports') .'</label></p>');
         $mform->addElement('html', $managerselectorhtml);
 
 //        $mform->addElement('hidden', 'userid', $USER->id);
@@ -119,5 +124,11 @@ class manager_selector extends user_selector_base {
         }
 
         return array($groupname => $availableusers);
+    }
+
+    protected function get_options() {
+        $options = parent::get_options();
+        $options['file'] = 'blocks/istart_reports/manageremail_form.php';
+        return $options;
     }
 }
