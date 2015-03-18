@@ -51,7 +51,7 @@ class istart_user {
 
             $sql = "
                     SELECT
-                        COUNT(cm.id) as 'total', cm.section
+                        cm.section as 'sectionid', COUNT(cm.id) as 'numtaskscomplete'
                     FROM
                         {course_modules} cm
                             JOIN
@@ -65,7 +65,11 @@ class istart_user {
             $params['userid'] = $this->user->id;
             $taskscomplete = $DB->get_records_sql($sql, $params);
 
-            error_log("tasks complete: " . print_r($taskscomplete, 1));
+            foreach ($taskscomplete as $section) {
+                $this->usertasks[$section->sectionid] = new istart_user_tasks($section->sectionid, $section->numtaskscomplete);
+            }
+
+            error_log("     - tasks complete objects user ". $this->user->firstname .": " . print_r($this->usertasks, 1));
 
         } catch(Exception $e) {
             error_log($e, DEBUG_NORMAL);

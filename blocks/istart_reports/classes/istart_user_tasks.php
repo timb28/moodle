@@ -15,11 +15,10 @@ namespace block_istart_reports;
  */
 class istart_user_tasks {
     public  $sectionid,
-            $sectionname,
             $numtaskscomplete;
 
-    public function __construct($sectionid, $sectionname) {
+    public function __construct($sectionid, $numtaskscomplete) {
         $this->sectionid = $sectionid;
-        $this->sectionname = $sectionname;
+        $this->numtaskscomplete = $numtaskscomplete;
     }
 }
