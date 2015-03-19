@@ -35,7 +35,12 @@ class manageremail_form extends moodleform {
 
         $mform->addElement('text', 'manageremailaddress', get_string('labelmanageremail', 'block_istart_reports'), array('size'=>'30'));
         $mform->setType('manageremailaddress', PARAM_TEXT);
-        $mform->setDefault('manageremailaddress',get_manager_email_address($USER));
+
+        $manager = get_manager_users($USER);
+//        if (is_array($manager)) {
+//            $manager = reset($manager);
+//        }
+        $mform->setDefault('manageremailaddress',$manager[0]->firstname . ' ' . $manager[0]->lastname);
 
 //        $managerlist = get_all_users();
 //        $mform->addElement('select', 'manager', get_string('labelmanager', 'block_istart_reports'), $managerlist);

@@ -36,6 +36,7 @@ use block_istart_reports\istart_week_report;
 define('BLOCK_NAME', 'istart_reports');
 define('NUMPASTREPORTDAYS', 6);
 define('MANAGERREPORTTYPE', 1);
+define('MANAGERROLEID', 12); // TODO change to shortname for production use
 define('COURSEFORMATOPTIONTYPEFORTASKS', 'reportcompletions');
 
 /**
@@ -395,6 +396,48 @@ function get_courses_with_block($blockid) {
 function get_manager_email_address($user) {
     profile_load_data($user);
     return clean_text($user->profile_field_manageremailaddress);
+}
+
+/**
+ * Gets manager for the given user
+ * @param stdClass $user The user object
+ * @return stdClass The manager's user object
+ */
+function get_manager_users($user) {
+    global $DB;
+
+    $managerusers = null;
+
+    $usercontext = context_user::instance($user->id);
+
+    $params['rncontextid']  = 0;
+    $params['racontextid']  = 529;
+    $params['roleid']       = MANAGERROLEID;
+
+    $sql = 'SELECT DISTINCT
+                u.id,
+                u.firstname,
+                u.lastname,
+                ra.roleid
+            FROM
+                mdl_role_assignments ra
+                    JOIN
+                mdl_user u ON u.id = ra.userid
+                    JOIN
+                mdl_role r ON ra.roleid = r.id
+                    LEFT JOIN
+                mdl_role_names rn ON (rn.contextid = :rncontextid AND rn.roleid = r.id)
+            WHERE
+                (ra.contextid = :racontextid) AND ra.roleid = :roleid
+            ORDER BY u.lastname , u.firstname , u.id';
+
+    $managers = $DB->get_records_sql($sql, $params, 0, 1);
+
+    foreach ($managers as $manager) {
+        $managerusers[] = $manager;
+    }
+
+    return $managerusers;
 }
 
 /**
