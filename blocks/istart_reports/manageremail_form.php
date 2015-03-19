@@ -46,8 +46,16 @@ class manageremail_form extends moodleform {
 
         // Display searchable list of all Moodle users.
         $context = context_course::instance($COURSE->id, MUST_EXIST);
+
+        $selectusers = array();
+        $existingmanagers = get_manager_users($USER);
+        foreach ($existingmanagers as $manager) {
+            $selectusers[$manager->id] = $manager->id;
+        }
         $options = array('multiselect'      => false,
-                         'selected'         => true,
+                         'preserveselected' => true,
+                         'rows'             => 10,
+                         'selected'         => $selectusers,
                          'accesscontext'    => $context);
         $managerselector = new manager_selector('manager', $options);
         $managerselectorhtml = $managerselector->display(true);
