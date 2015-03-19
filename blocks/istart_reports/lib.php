@@ -411,7 +411,7 @@ function get_manager_users($user) {
     $usercontext = context_user::instance($user->id);
 
     $params['rncontextid']  = 0;
-    $params['racontextid']  = 529;
+    $params['racontextid']  = $usercontext->id;
     $params['roleid']       = MANAGERROLEID;
 
     $sql = 'SELECT DISTINCT
