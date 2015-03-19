@@ -40,13 +40,8 @@ class manageremail_form extends moodleform {
         } else {
             $managername = get_string('nomanager', 'block_istart_reports');
         }
-        if (isset($manager)) {
-            $managerstatus = '<i class="icon icon-ok"></i>';
-        } else {
-            $managerstatus = '<i class="icon icon-exclamation-sign"></i>';
-        }
 
-        $mform->addElement('static', 'currentmanager', get_string('labelcurrentmanager', 'block_istart_reports') . $managerstatus);
+        $mform->addElement('static', 'currentmanager', get_string('labelcurrentmanager', 'block_istart_reports'));
         $mform->setDefault('currentmanager', $managername);
 
         // Display searchable list of all Moodle users.
