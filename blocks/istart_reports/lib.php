@@ -36,7 +36,7 @@ use block_istart_reports\istart_week_report;
 define('BLOCK_NAME', 'istart_reports');
 define('NUMPASTREPORTDAYS', 6);
 define('MANAGERREPORTTYPE', 1);
-define('MANAGERROLEID', 12); // TODO change to shortname for production use
+define('MANAGERROLESHORTNAME', 'coach');
 define('COURSEFORMATOPTIONTYPEFORTASKS', 'reportcompletions');
 
 /**
@@ -408,33 +408,20 @@ function get_manager_users($user) {
 
     $managerusers = null;
 
-    $usercontext = context_user::instance($user->id);
+    $context = context_user::instance($user->id);
+    $roleid = $DB->get_field('role', 'id', array('shortname'=>MANAGERROLESHORTNAME), IGNORE_MISSING);
 
-    $params['rncontextid']  = 0;
-    $params['racontextid']  = $usercontext->id;
-    $params['roleid']       = MANAGERROLEID;
+    if (!isset($roleid)) {
+        return false;
+    }
 
-    $sql = 'SELECT DISTINCT
-                u.id,
-                u.firstname,
-                u.lastname,
-                ra.roleid
-            FROM
-                mdl_role_assignments ra
-                    JOIN
-                mdl_user u ON u.id = ra.userid
-                    JOIN
-                mdl_role r ON ra.roleid = r.id
-                    LEFT JOIN
-                mdl_role_names rn ON (rn.contextid = :rncontextid AND rn.roleid = r.id)
-            WHERE
-                (ra.contextid = :racontextid) AND ra.roleid = :roleid
-            ORDER BY u.lastname , u.firstname , u.id';
-
-    $managers = $DB->get_records_sql($sql, $params, 0, 1);
-
-    foreach ($managers as $manager) {
-        $managerusers[] = $manager;
+    $userfields = 'u.id, u.username, u.email, ' . get_all_user_name_fields(true, 'u');
+    $roleusers = get_role_users($roleid, $context, false, $userfields);
+    if (!empty($roleusers)) {
+        $strroleusers = array();
+        foreach ($roleusers as $user) {
+            $managerusers[] = $user;
+        }
     }
 
     return $managerusers;
