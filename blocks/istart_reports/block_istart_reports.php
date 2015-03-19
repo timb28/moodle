@@ -69,21 +69,22 @@ class block_istart_reports extends block_base {
         if (has_capability('block/istart_reports:reporttomanager', $currentcontext)) {
 
             // Have they entered their manager's email address?
-            $manageremailaddress = get_manager_email_address($USER);
-            $a = null;
-            if ($manageremailaddress == NULL) {
-                // If not, display a message and link asking the student to enter their manager's email address
-                $a = '<span class="label label-important">' . get_string('noreportaddress', 'block_istart_reports') . '</span>'
-                        . ' <a href="'.$CFG->wwwroot.'/blocks/istart_reports/manageremail.php?courseid='.$COURSE->id.'"'
-                        . ' class="btn btn-mini">'.get_string('labeleditreportaddress','block_istart_reports').'</a>';
+            $managers = get_manager_users($USER);
+
+            $this->content->text .= '<div class="studentmanager">';
+            if (isset($managers)) {
+                $this->content->text .= '<p>'.get_string('studentmanagerreports', 'block_istart_reports').'</p>';
+                $this->content->text .= '<ul>';
+                foreach ($managers as $manager) {
+                    // Display their manager's name with a link to change it
+                    $this->content->text .= '<li>' . $manager->firstname . ' ' . $manager->lastname . ' </li>';
+                }
+                $this->content->text .= '</ul>';
             } else {
-                // If there is a manager's email address, display their manager's email address with a link to change it
-                $a = '<span class="label label-info">' . $manageremailaddress . '</span>'
-                        . ' <a href="'.$CFG->wwwroot.'/blocks/istart_reports/manageremail.php?courseid='.$COURSE->id.'"'
-                        . ' class="btn btn-mini">'.get_string('labeleditreportaddress','block_istart_reports').'</a>';
+                $this->content->text .= '<p class="text-warning">'.get_string('nostudentmanagerreports', 'block_istart_reports').'</p>';
             }
-            $this->content->text .= "<div>".get_string('studentmanagerreports', 'block_istart_reports', $a)."</div>";
-            unset($a);
+            $this->content->text .= '<p class="text-center"><a href="'.$CFG->wwwroot.'/blocks/istart_reports/manageremail.php?courseid='.$COURSE->id.'"'
+                                                . ' class="btn btn-link">'.get_string('labeleditreportaddress','block_istart_reports').'</a></p></div>';
         }
 
         // Display link to iStart Week Report

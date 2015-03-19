@@ -30,8 +30,8 @@ $string['descfoo'] = 'Config description';
 $string['managerconfigdesc'] = 'Enter information included in manager report emails';
 $string['emailcopyrightconfig'] = 'Email copyright';
 
-$string['studentmanagerreports'] = 'Your weekly progress reports are being sent to<br/>{$a}';
-$string['noreportaddress'] = 'No one';
+$string['studentmanagerreports'] = 'Your weekly progress reports are being sent to:';
+$string['nostudentmanagerreports'] = 'Your weekly progress reports are not being sent to anyone.';
 $string['labeleditreportaddress'] = 'Change';
 
 $string['headermanageremail'] = 'Edit Your Manager';

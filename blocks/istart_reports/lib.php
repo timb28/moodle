@@ -438,7 +438,19 @@ function set_manager($user, $managerid) {
     
     $roleid = $DB->get_field('role', 'id', array('shortname'=>MANAGERROLESHORTNAME), IGNORE_MISSING);
     $context = context_user::instance($user->id, MUST_EXIST);
-    $success = role_assign($roleid, $managerid, $context->id);
+
+    // Unassign the old managers
+    $existingmanagers = get_manager_users($user);
+    if (isset($existingmanagers)) {
+        foreach ($existingmanagers as $existingmanager) {
+            $unassign = role_unassign($roleid, $existingmanager->id, $context->id);
+        }
+    }
+
+    // Assign the new manager (if there is one)
+    if (isset($managerid) && $managerid != '') {
+        $success = role_assign($roleid, $managerid, $context->id);
+    }
     return isset($success);
 }
 
