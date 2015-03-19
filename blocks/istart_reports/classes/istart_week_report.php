@@ -116,11 +116,89 @@ class istart_week_report {
                 error_log(print_r($istartgroup->istartweek, 1));
 
                 // Check if reports for those users have been sent
+                $this->send_manager_report_to_group($istartgroup);
             }
 
         }
 
         return true;
    }
+
+   /**
+    * Sends an istart user a manager report for a given date.
+    * @param int $courseid course ID of the istart course.
+    * @param int $groupid ID of the user's group.
+    * @param stdClass $user user being reported on.
+    * @param string $istartweek The istart week.
+    * @return true or error
+    */
+   function send_manager_report_to_group($istartgroup) {
+        global $CFG, $DB;
+
+        $istartusers = $istartgroup->istartusers;
+
+        foreach ($istartusers as $istartuser) {
+           $user    = $istartuser->user;
+           $group   = $istartgroup->group;
+           error_log(" - Sending manager report for $user->id at $this->reporttime"); // TODO remove after testing
+
+            // Check if already sent
+            if (!$this->is_report_sent($group, $user, MANAGERREPORTTYPE, $this->reporttime)) {
+                $this->send_manager_report_for_user($istartgroup, $istartuser);
+            }
+
+
+
+       }
+    }
+   
+    private function is_report_sent ($group, $user, $reporttype, $reporttime) {
+        global $DB;
+
+        $reportsent = false;
+
+        try {
+            $reportsent = $DB->record_exists_select('block_istart_reports',
+                    'courseid = :courseid AND groupid = :groupid AND userid = :userid'
+                    . ' AND reporttype = :reporttype AND reporttime = :reporttime AND senttime IS NOT NULL',
+                         array(
+                            'courseid' => $group->courseid,
+                            'groupid'  => $group->id,
+                            'userid'   => $user->id,
+                            'reporttype' => $reporttype,
+                            'reporttime' => $reporttime) );
+        } catch(Exception $e) {
+            error_log($e, DEBUG_NORMAL);
+        }
+
+        return $reportsent;
+   }
+
+    private function send_manager_report_for_user($istartgroup, $istartuser) {
+        // Get all the user's managers
+        $managers = $istartuser->managers;
+
+        if(!isset($managers)) {
+            return 'No managers for user: $user->id ($user->firstname $user->lastname).';
+        }
+
+        foreach ($managers as $manager) {
+            // Does the user have a manager's email address set?
+            $manageremailaddress = $manager->email;
+            if ($manageremailaddress == NULL) {
+                $user = $istartuser->user;
+                return 'Manager email is not set for user: $user->id ($user->firstname $user->lastname).';
+            }
+
+            // Is the manager's email address valid?
+            if (!validate_email($manageremailaddress)) {
+                $user = $istartuser->user;
+                return 'Manager email ($manageremailaddress) not valid for user:'
+                        . ' $user->id ($user->firstname $user->lastname).';
+            }
+        }
+
+
+    }
 
 }

@@ -18,12 +18,14 @@ class istart_user {
             $istartweek,
             $usertasks,
             $sentto,
-            $senttime;
+            $senttime,
+            $managers;
 
     public function __construct($user, $istartweek) {
         $this->user         = $user;
         $this->istartweek   = $istartweek;
         
+        $this->setup_managers();
         $this->setup_user_tasks();
     }
 
@@ -77,5 +79,12 @@ class istart_user {
         }
 
 //        return $taskscomplete->total;
+    }
+
+    private function setup_managers() {
+        $existingmanagers = get_manager_users($this->user);
+        foreach ($existingmanagers as $manager) {
+            $this->managers[] = $manager;
+        }
     }
 }
