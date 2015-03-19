@@ -33,17 +33,16 @@ class manageremail_form extends moodleform {
 
         $mform = $this->_form;
 
-        $mform->addElement('text', 'manageremailaddress', get_string('labelmanageremail', 'block_istart_reports'), array('size'=>'30'));
-        $mform->setType('manageremailaddress', PARAM_TEXT);
+//        $mform->addElement('text', 'manageremailaddress', get_string('labelmanageremail', 'block_istart_reports'), array('size'=>'30'));
+//        $mform->setType('manageremailaddress', PARAM_TEXT);
 
         $manager = get_manager_users($USER);
-//        if (is_array($manager)) {
-//            $manager = reset($manager);
-//        }
-        $mform->setDefault('manageremailaddress',$manager[0]->firstname . ' ' . $manager[0]->lastname);
-
-//        $managerlist = get_all_users();
-//        $mform->addElement('select', 'manager', get_string('labelmanager', 'block_istart_reports'), $managerlist);
+        if (isset($manager)) {
+            $managername = '<strong><i class="icon icon-ok"></i> ' . $manager[0]->firstname . ' ' . $manager[0]->lastname . '</strong>';
+        } else {
+            $managername = '<em><i class="icon icon-exclamation-sign"></i> '.get_string('nomanager', 'block_istart_reports').'</em>';
+        }
+        $mform->addElement('html', '<p>'. get_string('labelcurrentmanager', 'block_istart_reports') . $managername . '</p>');
 
         // Display searchable list of all Moodle users.
         $context = context_course::instance($COURSE->id, MUST_EXIST);
@@ -52,7 +51,8 @@ class manageremail_form extends moodleform {
                          'accesscontext'    => $context);
         $managerselector = new manager_selector('manager', $options);
         $managerselectorhtml = $managerselector->display(true);
-        $mform->addElement('html', '<p><label for="manager">'. get_string('labelmanager', 'block_istart_reports') .'</label></p>');
+        $mform->addElement('html', '<p><label for="manager">'.
+                get_string('labelselectmanager', 'block_istart_reports') .'</label></p>');
         $mform->addElement('html', $managerselectorhtml);
 
 //        $mform->addElement('hidden', 'userid', $USER->id);

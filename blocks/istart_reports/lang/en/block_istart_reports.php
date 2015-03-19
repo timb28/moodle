@@ -34,10 +34,12 @@ $string['studentmanagerreports'] = 'Your weekly progress reports are being sent 
 $string['noreportaddress'] = 'No one';
 $string['labeleditreportaddress'] = 'Change';
 
-$string['headermanageremail'] = 'Edit Manager Email Address';
-$string['intromanageremail'] = 'Enter your manager&rsquo;s email address below to send them a weekly email highlighting your iStart progress.';
+$string['headermanageremail'] = 'Edit Your Manager';
+$string['intromanager'] = 'Select your manager below to send them a weekly email report highlighting your iStart progress.';
 $string['labelmanageremail'] = 'Manager&rsquo;s email address';
-$string['labelmanager'] = 'Your Manager';
+$string['labelcurrentmanager'] = 'Your current manager: ';
+$string['labelselectmanager'] = 'Select a new manager: ';
+$string['nomanager'] = '(No manager)';
 $string['potmanagers'] = 'Harcourts Team Members';
 $string['potmanagersmatching'] = 'Matching Harcourts Team Members';
 

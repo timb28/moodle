@@ -68,7 +68,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($header);
 
 echo html_writer::start_tag('div', array('class' => 'no-overflow'));
-echo html_writer::div(get_string('intromanageremail','block_istart_reports'), 'intromanageremail');
+echo html_writer::tag('p', get_string('intromanager','block_istart_reports'), array('class'=>'intromanager'));
 $mform->display();
 echo html_writer::end_tag('div');
 echo $OUTPUT->footer();
