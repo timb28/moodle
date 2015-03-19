@@ -31,7 +31,6 @@ $string['managerconfigdesc'] = 'Enter information included in manager report ema
 $string['emailcopyrightconfig'] = 'Email copyright';
 
 $string['studentmanagerreports'] = 'Your weekly progress reports are being sent to:';
-$string['nostudentmanagerreports'] = 'Your weekly progress reports are not being sent to anyone.';
 $string['labeleditreportaddress'] = 'Change';
 $string['labelnewreportaddress'] = 'Select your manager';
 
