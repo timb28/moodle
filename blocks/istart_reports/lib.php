@@ -434,9 +434,12 @@ function get_manager_users($user) {
  * @return bool true if success
  */
 function set_manager($user, $managerid) {
-    error_log("== Changing the manager for user: ".$user->id.' to be '.$managerid);
-//    role_assign($roleid, $adduser->id, $context->id);
-    return true;
+    global $DB;
+    
+    $roleid = $DB->get_field('role', 'id', array('shortname'=>MANAGERROLESHORTNAME), IGNORE_MISSING);
+    $context = context_user::instance($user->id, MUST_EXIST);
+    $success = role_assign($roleid, $managerid, $context->id);
+    return isset($success);
 }
 
 /**
