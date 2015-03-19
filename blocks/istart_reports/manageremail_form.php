@@ -49,8 +49,10 @@ class manageremail_form extends moodleform {
 
         $selectusers = array();
         $existingmanagers = get_manager_users($USER);
-        foreach ($existingmanagers as $manager) {
-            $selectusers[$manager->id] = $manager->id;
+        if (isset($existingmanagers)) {
+            foreach ($existingmanagers as $manager) {
+                $selectusers[$manager->id] = $manager->id;
+            }
         }
         $options = array('multiselect'      => false,
                          'preserveselected' => true,
