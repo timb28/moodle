@@ -60,7 +60,7 @@ if ($mform->is_cancelled()) {
     redirect($returnurl);
 } else if ( ($fromform = $mform->get_data()) && confirm_sesskey() ) {
     // Process validated form data.
-    $success = set_manager_email_address($USER, $fromform->manageremailaddress);
+    $success = set_manager($USER, optional_param('manager', '', PARAM_ALPHANUM));
     redirect($returnurl);
 }
 

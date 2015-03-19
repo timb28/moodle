@@ -98,7 +98,7 @@ class block_istart_reports extends block_base {
         }
 
         // TODO remove when testing complete
-        istart_reports_cron();
+//        istart_reports_cron();
 
         return $this->content;
     }

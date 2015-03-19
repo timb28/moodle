@@ -40,6 +40,7 @@ $string['labelmanageremail'] = 'Manager&rsquo;s email address';
 $string['labelcurrentmanager'] = 'Your current manager: ';
 $string['labelselectmanager'] = 'Select a new manager: ';
 $string['nomanager'] = '(No manager)';
+$string['invalidmanager'] = 'Please select a different manager';
 $string['potmanagers'] = 'Harcourts Team Members';
 $string['potmanagersmatching'] = 'Matching Harcourts Team Members';
 

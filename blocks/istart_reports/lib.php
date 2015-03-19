@@ -428,6 +428,18 @@ function get_manager_users($user) {
 }
 
 /**
+ * Sets manager for a user
+ * @param stdClass $user The user object
+ * @param int $managerid The manager's user id
+ * @return bool true if success
+ */
+function set_manager($user, $managerid) {
+    error_log("== Changing the manager for user: ".$user->id.' to be '.$managerid);
+//    role_assign($roleid, $adduser->id, $context->id);
+    return true;
+}
+
+/**
  * Gets istart week number
  * @param stdClass $course The course object
  * @param stdClass $group The goup object

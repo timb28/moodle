@@ -28,21 +28,26 @@ require_once("$CFG->dirroot/blocks/istart_reports/lib.php");
 require_once("$CFG->dirroot/user/selector/lib.php");
 
 class manageremail_form extends moodleform {
+
     public function definition() {
         global $CFG, $COURSE, $USER;
 
         $mform = $this->_form;
 
-//        $mform->addElement('text', 'manageremailaddress', get_string('labelmanageremail', 'block_istart_reports'), array('size'=>'30'));
-//        $mform->setType('manageremailaddress', PARAM_TEXT);
-
         $manager = get_manager_users($USER);
         if (isset($manager)) {
-            $managername = '<strong><i class="icon icon-ok"></i> ' . $manager[0]->firstname . ' ' . $manager[0]->lastname . '</strong>';
+            $managername = $manager[0]->firstname . ' ' . $manager[0]->lastname;
         } else {
-            $managername = '<em><i class="icon icon-exclamation-sign"></i> '.get_string('nomanager', 'block_istart_reports').'</em>';
+            $managername = get_string('nomanager', 'block_istart_reports');
         }
-        $mform->addElement('html', '<p>'. get_string('labelcurrentmanager', 'block_istart_reports') . $managername . '</p>');
+        if (isset($manager)) {
+            $managerstatus = '<i class="icon icon-ok"></i>';
+        } else {
+            $managerstatus = '<i class="icon icon-exclamation-sign"></i>';
+        }
+
+        $mform->addElement('static', 'currentmanager', get_string('labelcurrentmanager', 'block_istart_reports') . $managerstatus);
+        $mform->setDefault('currentmanager', $managername);
 
         // Display searchable list of all Moodle users.
         $context = context_course::instance($COURSE->id, MUST_EXIST);
@@ -55,9 +60,6 @@ class manageremail_form extends moodleform {
                 get_string('labelselectmanager', 'block_istart_reports') .'</label></p>');
         $mform->addElement('html', $managerselectorhtml);
 
-//        $mform->addElement('hidden', 'userid', $USER->id);
-//        $mform->setType('userid',PARAM_INT);
-
         $mform->addElement('hidden', 'courseid', $COURSE->id);
         $mform->setType('courseid', PARAM_INT);
 
@@ -66,13 +68,34 @@ class manageremail_form extends moodleform {
 
 
     function validation($data, $files) {
-        // Validate email address
-        if ( ($data['manageremailaddress'] != "") &&
-                (!validate_email($data['manageremailaddress'])) ) {
-            return array('manageremailaddress'=>get_string('err_email', 'form'));
+        global $CFG, $COURSE;
+
+        $errors = array();
+
+        // Validate selected manager
+        if (confirm_sesskey()) {
+            $managerid = optional_param('manager', '', PARAM_ALPHANUM);
+
+            $context = context_course::instance($COURSE->id, MUST_EXIST);
+            $options = array('multiselect'      => false,
+                             'selected'         => true,
+                             'accesscontext'    => $context);
+            $managerselector = new manager_selector('manager', $options);
+            $selectedmanager = $managerselector->get_selected_users();
+
+            if (!empty($selectedmanager)) {
+
+                foreach ($selectedmanager as $manager) {
+                    if ($managerid != $manager->id) {
+                        $errors['currentmanager'] = get_string('invalidmanager', 'block_istart_reports');
+                    }
+                }
+
+                $managerselector->invalidate_selected_users();
+            }
         }
 
-        return array();
+        return $errors;
     }
     
 }
