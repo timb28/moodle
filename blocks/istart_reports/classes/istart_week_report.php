@@ -203,11 +203,13 @@ class istart_week_report {
     }
 
     private function send_manager_report_to_manager ($istartgroup, $istartuser, $manager) {
+        global $CFG, $DB;
         
         error_log("   - To the manager: " . $manager->email);
 
-        $group = $istartgroup->group;
-        $user = $istartuser->user;
+        $course = $this->course;
+        $group  = $istartgroup->group;
+        $user   = $istartuser->user;
 
         // Create the email to send
         $email = new \stdClass();
@@ -220,18 +222,47 @@ class istart_week_report {
         $email->text            = $this->get_email_text($istartgroup, $istartuser);
         $email->html            = $this->get_email_html($istartgroup, $istartuser);
 
-//        foreach ($tasksections as $tasksection) {
-//            // Get the total number of tasks for each section and the
-//            // total number of tasks the student has completed
-//
-//
-//
-//            error_log("   - Task sections: " . $tasksection->sectionid
-//                    . ": " . $tasksection->sectionname
-//                    . ": " . $tasksection->numtasks); // TODO remove after testing
-//
-//
-//        }
+        // Send it from the support email address
+        $fromuser = new \stdClass();
+        $fromuser->id = 99999902;
+        $fromuser->email = $CFG->supportemail;
+        $fromuser->mailformat = 1;
+        $fromuser->maildisplay = 1;
+        $fromuser->customheaders = $email->customheaders;
+
+        // Prepare data for block_istart_report database entry
+        $data = new \stdClass();
+        $data->courseid     = $course->id;
+        $data->groupid      = $group->id;
+        $data->userid       = $user->id;
+        $data->reporttype   = MANAGERREPORTTYPE;
+        $data->reporttime   = $this->reporttime;
+        $data->sentto       = $manager->email;
+        $data->senttime     = 0;
+
+        $mailresult = email_to_user($manager, $fromuser, $email->subject,
+        $email->text, $email->html);
+
+        if (!$mailresult){
+            mtrace("Error: blocks/istart_reports/lib.php istart_send_manager_report(): "
+                    . "Could not send out email for course $course->id group $group->id "
+                    . "for report $this->reporttime about user $user->id"
+                    . "to their manager ($manager->email). Error: $mailresult .. not trying again.");
+            return false;
+        } else {
+            // Record the time that the email was sent
+            $data->senttime = time();
+        }
+
+        // Store that the manager report for the user on the given report date has been sent
+        try {
+            $DB->insert_record('block_istart_reports', $data);
+        } catch(Exception $e) {
+            error_log($e, DEBUG_NORMAL);
+            return false;
+        }
+
+        return true;
     }
 
     private function get_email_headers($emailtype, $reporttime, $group, $user) {
