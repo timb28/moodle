@@ -250,7 +250,8 @@ class istart_week_report {
                     'Return-Path: <>',
                     'List-Id: "iStart Manager Report" <istart.manager.report@'.$hostname.'>',
                     'List-Help: '.$CFG->wwwroot.'/course/view.php?id='.$course->id,
-                    'Message-ID: '.istart_report_get_email_message_id($course->id, $group->id, $user->id, $reporttime, $hostname),
+                    'Message-ID: <'.hash('sha256','Course: '.$course->id.' Group: '.$group->id
+                            .' User: '.$user->id.' Report date: '.$reporttime).'@'.$hostname.'>',
                     'X-Course-Id: '.$course->id,
                     );
                 break;

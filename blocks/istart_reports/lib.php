@@ -689,9 +689,9 @@ function get_istart_week_label($course, $group, $atdate) {
  * @param string $hostname The server's hostname
  * @return string A unique message-id
  */
-function istart_report_get_email_message_id($courseid, $groupid, $userid, $reportdate, $hostname) {
-    return '<'.hash('sha256','Course: '.$courseid.' Group: '.$groupid.' User: '.$userid.' Report date: '.$reportdate).'@'.$hostname.'>';
-}
+//function istart_report_get_email_message_id($courseid, $groupid, $userid, $reportdate, $hostname) {
+//    return '<'.hash('sha256','Course: '.$courseid.' Group: '.$groupid.' User: '.$userid.' Report date: '.$reportdate).'@'.$hostname.'>';
+//}
 
 //function manager_report_make_mail_text($course, $user, $istartweeknumber, $istartweeklabel, $tasksections) {
 //    // Create the email body
