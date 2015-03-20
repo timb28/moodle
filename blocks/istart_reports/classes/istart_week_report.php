@@ -124,16 +124,15 @@ class istart_week_report {
         return true;
    }
 
-   /**
-    * Sends an istart user a manager report for a given date.
-    * @param int $courseid course ID of the istart course.
-    * @param int $groupid ID of the user's group.
-    * @param stdClass $user user being reported on.
-    * @param string $istartweek The istart week.
-    * @return true or error
-    */
-   function send_manager_report_to_group($istartgroup) {
-        global $CFG, $DB;
+    /**
+     * Sends an istart user a manager report for a given date.
+     * @param int $courseid course ID of the istart course.
+     * @param int $groupid ID of the user's group.
+     * @param stdClass $user user being reported on.
+     * @param string $istartweek The istart week.
+     * @return true or error
+     */
+    function send_manager_report_to_group($istartgroup) {
 
         $istartusers = $istartgroup->istartusers;
 
@@ -172,14 +171,15 @@ class istart_week_report {
         }
 
         return $reportsent;
-   }
+    }
 
     private function send_manager_report_for_user($istartgroup, $istartuser) {
         // Get all the user's managers
         $managers = $istartuser->managers;
 
         if(!isset($managers)) {
-            return 'No managers for user: $user->id ($user->firstname $user->lastname).';
+            // 'No managers for user: $user->id ($user->firstname $user->lastname).';
+            return false;
         }
 
         foreach ($managers as $manager) {
@@ -187,18 +187,97 @@ class istart_week_report {
             $manageremailaddress = $manager->email;
             if ($manageremailaddress == NULL) {
                 $user = $istartuser->user;
-                return 'Manager email is not set for user: $user->id ($user->firstname $user->lastname).';
+                // 'Manager email is not set for user: $user->id ($user->firstname $user->lastname).';
+                return false;
             }
 
             // Is the manager's email address valid?
             if (!validate_email($manageremailaddress)) {
                 $user = $istartuser->user;
-                return 'Manager email ($manageremailaddress) not valid for user:'
-                        . ' $user->id ($user->firstname $user->lastname).';
+                // 'Manager email ($manageremailaddress) not valid for user:' . ' $user->id ($user->firstname $user->lastname).';
+                return false;
             }
+
+            return $this->send_manager_report_to_manager($istartgroup, $istartuser, $manager);
         }
-
-
     }
 
+    private function send_manager_report_to_manager ($istartgroup, $istartuser, $manager) {
+        
+        error_log("   - To the manager: " . $manager->email);
+
+        $group = $istartgroup->group;
+        $user = $istartuser->user;
+
+        $istartweek = $istartgroup->istartweek;
+        $tasksections = $istartweek->tasksections;
+
+        if (!isset($tasksections)) {
+            return 'No iStart tasks for group: ' . $istartgroup->name;
+        }
+
+        // Create the email to send
+        $email = new \stdClass();
+
+        $reportdate = new \DateTime();
+        $reportdate->setTimestamp($this->reporttime);
+
+        $email->customheaders = $this->get_email_headers(MANAGERREPORTTYPE, $this->reporttime, $group, $user);
+        $email->subject = $this->get_email_subject(MANAGERREPORTTYPE, $istartweek, $user);
+
+        foreach ($tasksections as $tasksection) {
+            // Get the total number of tasks for each section and the
+            // total number of tasks the student has completed
+
+
+
+            error_log("   - Task sections: " . $tasksection->sectionid
+                    . ": " . $tasksection->sectionname
+                    . ": " . $tasksection->numtasks); // TODO remove after testing
+
+
+        }
+    }
+
+    private function get_email_headers($emailtype, $reporttime, $group, $user) {
+        global $CFG;
+
+        // Create the email headers
+        $urlinfo = parse_url($CFG->wwwroot);
+        $hostname = $urlinfo['host'];
+        $course = $this->course;
+
+        $customheaders = array();
+
+        switch ($emailtype) {
+            case MANAGERREPORTTYPE:
+                $customheaders = array (  // Headers to make emails easier to track
+                    'Return-Path: <>',
+                    'List-Id: "iStart Manager Report" <istart.manager.report@'.$hostname.'>',
+                    'List-Help: '.$CFG->wwwroot.'/course/view.php?id='.$course->id,
+                    'Message-ID: '.istart_report_get_email_message_id($course->id, $group->id, $user->id, $reporttime, $hostname),
+                    'X-Course-Id: '.$course->id,
+                    );
+                break;
+        }
+
+        return $customheaders;
+    }
+
+    private function get_email_subject($emailtype, $istartweek, $user) {
+        $emailsubject = '';
+
+        switch ($emailtype) {
+            case MANAGERREPORTTYPE:
+                // Create the email subject "iStart24 Online [Week #] completion report for [Firstname] [Lastname]"
+                $a = new \stdClass();
+                $a->istartweeknumber = $istartweek->weeknumber;
+                $a->firstname = $user->firstname;
+                $a->lastname = $user->lastname;
+                $emailsubject =  get_string("manageremailsubject", "block_istart_reports", $a);
+                break;
+        }
+
+        return $emailsubject;
+    }
 }

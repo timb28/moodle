@@ -179,74 +179,74 @@ function send_manager_report($course, $group, $user, $reporttime, $istartweek) {
     error_log(" - Sending manager report for $user->id at $reporttime"); // TODO remove after testing
 
     // Check if already sent
-    try {
-        if ($DB->record_exists_select('block_istart_reports',
-                'courseid = :courseid AND groupid = :groupid AND userid = :userid'
-                . ' AND reporttype = :reporttype AND reporttime = :reporttime AND senttime IS NOT NULL',
-                     array(
-                        'courseid' => $course->id,
-                        'groupid'  => $group->id,
-                        'userid'   => $user->id,
-                        'reporttype' => MANAGERREPORT,
-                        'reporttime' => $reporttime) )) {
-//TODO uncomment after testing            return "iStart manager report not sent because it has already been sent";
-        }
-    } catch(Exception $e) {
-        error_log($e, DEBUG_NORMAL);
-        return "iStart manager report not sent because the database cannot be read";
-    }
-
-    // Does the user have a manager's email address set?
-    $manageremailaddress = get_manager_email_address($user);
-    if ($manageremailaddress == NULL) {
-        return 'Manager email is not set for user: $user->id ($user->firstname $user->lastname).';
-    }
-
-    // Is the manager's email address valid?
-    if (!validate_email($manageremailaddress)) {
-        return 'Manager email ($manageremailaddress) not valid for user:'
-                . ' $user->id ($user->firstname $user->lastname).';
-    }
+//    try {
+//        if ($DB->record_exists_select('block_istart_reports',
+//                'courseid = :courseid AND groupid = :groupid AND userid = :userid'
+//                . ' AND reporttype = :reporttype AND reporttime = :reporttime AND senttime IS NOT NULL',
+//                     array(
+//                        'courseid' => $course->id,
+//                        'groupid'  => $group->id,
+//                        'userid'   => $user->id,
+//                        'reporttype' => MANAGERREPORT,
+//                        'reporttime' => $reporttime) )) {
+////TODO uncomment after testing            return "iStart manager report not sent because it has already been sent";
+//        }
+//    } catch(Exception $e) {
+//        error_log($e, DEBUG_NORMAL);
+//        return "iStart manager report not sent because the database cannot be read";
+//    }
+//
+//    // Does the user have a manager's email address set?
+//    $manageremailaddress = get_manager_email_address($user);
+//    if ($manageremailaddress == NULL) {
+//        return 'Manager email is not set for user: $user->id ($user->firstname $user->lastname).';
+//    }
+//
+//    // Is the manager's email address valid?
+//    if (!validate_email($manageremailaddress)) {
+//        return 'Manager email ($manageremailaddress) not valid for user:'
+//                . ' $user->id ($user->firstname $user->lastname).';
+//    }
 
     // Get a list of all course sections for the report week that have reportable completion tasks
 //    $tasksections = get_istart_child_task_sections($course->id, $istartweek["sectionid"]);
 
-    foreach ($tasksections as $sectionid=>$sectionname) {
-        // For each course section in the list:
-        // 1. Get the name of the section
-        // 2. Get the total number of reportable tasks
-        // 3. Get the number of reportable tasks the user has completed.
-
-        $tasksection = array(
-            "sectionname"   => $sectionname,
-            "totaltasks"    => 0, // get_istart_section_total_tasks($course->id, $sectionid),
-            "taskscomplete" => get_istart_tasks_complete($sectionid, $user->id)
-        );
-
-        error_log(" - Task sections: " . $sectionid
-                . ": " . $tasksection['sectionname']
-                . ": " . $tasksection['totaltasks']
-                . ": " . $tasksection['taskscomplete']); // TODO remove after testing
-
-        $tasksections[$sectionid] = $tasksection;
-
-    }
+//    foreach ($tasksections as $sectionid=>$sectionname) {
+//        // For each course section in the list:
+//        // 1. Get the name of the section
+//        // 2. Get the total number of reportable tasks
+//        // 3. Get the number of reportable tasks the user has completed.
+//
+//        $tasksection = array(
+//            "sectionname"   => $sectionname,
+//            "totaltasks"    => 0, // get_istart_section_total_tasks($course->id, $sectionid),
+//            "taskscomplete" => get_istart_tasks_complete($sectionid, $user->id)
+//        );
+//
+//        error_log(" - Task sections: " . $sectionid
+//                . ": " . $tasksection['sectionname']
+//                . ": " . $tasksection['totaltasks']
+//                . ": " . $tasksection['taskscomplete']); // TODO remove after testing
+//
+//        $tasksections[$sectionid] = $tasksection;
+//
+//    }
 
     // Create the email to send
-    $email = new stdClass();
-
-    $reportdate = new DateTime();
-    $reportdate->setTimestamp($reporttime);
-    $istartweeknumber = get_istart_week_number($group, $reportdate);
-    $istartweeklabel = get_istart_week_label($course, $group, $reportdate);
-
-    // Create the email subject "iStart24 Online [Week #] completion report for [Firstname] [Lastname]"
-    $a = new stdClass();
-    $a->istartweeknumber = $istartweeknumber;
-    $a->firstname = $user->firstname;
-    $a->lastname = $user->lastname;
-    $email->subject = get_string("manageremailsubject", "block_istart_reports", $a);
-    unset($a);
+//    $email = new stdClass();
+//
+//    $reportdate = new DateTime();
+//    $reportdate->setTimestamp($reporttime);
+//    $istartweeknumber = get_istart_week_number($group, $reportdate);
+//    $istartweeklabel = get_istart_week_label($course, $group, $reportdate);
+//
+//    // Create the email subject "iStart24 Online [Week #] completion report for [Firstname] [Lastname]"
+//    $a = new stdClass();
+//    $a->istartweeknumber = $istartweeknumber;
+//    $a->firstname = $user->firstname;
+//    $a->lastname = $user->lastname;
+//    $email->subject = get_string("manageremailsubject", "block_istart_reports", $a);
+//    unset($a);
 
     // Create the email headers
     $urlinfo = parse_url($CFG->wwwroot);
