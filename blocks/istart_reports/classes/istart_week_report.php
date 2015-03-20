@@ -209,34 +209,29 @@ class istart_week_report {
         $group = $istartgroup->group;
         $user = $istartuser->user;
 
-        $istartweek = $istartgroup->istartweek;
-        $tasksections = $istartweek->tasksections;
-
-        if (!isset($tasksections)) {
-            return 'No iStart tasks for group: ' . $istartgroup->name;
-        }
-
         // Create the email to send
         $email = new \stdClass();
 
         $reportdate = new \DateTime();
         $reportdate->setTimestamp($this->reporttime);
 
-        $email->customheaders = $this->get_email_headers(MANAGERREPORTTYPE, $this->reporttime, $group, $user);
-        $email->subject = $this->get_email_subject(MANAGERREPORTTYPE, $istartweek, $user);
+        $email->customheaders   = $this->get_email_headers(MANAGERREPORTTYPE, $this->reporttime, $group, $user);
+        $email->subject         = $this->get_email_subject(MANAGERREPORTTYPE, $istartgroup, $user);
+        $email->text            = $this->get_email_text($istartgroup, $istartuser);
+        $email->html            = $this->get_email_html($istartgroup, $istartuser);
 
-        foreach ($tasksections as $tasksection) {
-            // Get the total number of tasks for each section and the
-            // total number of tasks the student has completed
-
-
-
-            error_log("   - Task sections: " . $tasksection->sectionid
-                    . ": " . $tasksection->sectionname
-                    . ": " . $tasksection->numtasks); // TODO remove after testing
-
-
-        }
+//        foreach ($tasksections as $tasksection) {
+//            // Get the total number of tasks for each section and the
+//            // total number of tasks the student has completed
+//
+//
+//
+//            error_log("   - Task sections: " . $tasksection->sectionid
+//                    . ": " . $tasksection->sectionname
+//                    . ": " . $tasksection->numtasks); // TODO remove after testing
+//
+//
+//        }
     }
 
     private function get_email_headers($emailtype, $reporttime, $group, $user) {
@@ -264,12 +259,15 @@ class istart_week_report {
         return $customheaders;
     }
 
-    private function get_email_subject($emailtype, $istartweek, $user) {
+    private function get_email_subject($emailtype, $istartgroup, $user) {
         $emailsubject = '';
 
         switch ($emailtype) {
             case MANAGERREPORTTYPE:
                 // Create the email subject "iStart24 Online [Week #] completion report for [Firstname] [Lastname]"
+
+                $istartweek = $istartgroup->istartweek;
+
                 $a = new \stdClass();
                 $a->istartweeknumber = $istartweek->weeknumber;
                 $a->firstname = $user->firstname;
@@ -279,5 +277,86 @@ class istart_week_report {
         }
 
         return $emailsubject;
+    }
+
+    private function get_email_text($istartgroup, $istartuser) {
+        $course         = $this->course;
+        $istartweek     = $istartgroup->istartweek;
+        $tasksections   = $istartweek->tasksections;
+        $user           = $istartuser->user;
+
+        if (!isset($tasksections)) {
+            return '';
+        }
+
+        // Create the email body
+        // Add welcome message
+        $a = new \stdClass();
+        $a->coursename = $course->fullname;
+        $a->firstname = $user->firstname;
+        $a->lastname = $user->lastname;
+        $a->istartweeknumber = $istartweek->weeknumber;
+        $a->istartweekname = $istartweek->weekname;
+
+        $email = get_string('managerreporttextheader','block_istart_reports', $a);
+        foreach ($tasksections as $tasksection) {
+            $numtasks = $tasksection->numtasks;
+            $numtaskscomplete = $istartuser->get_num_tasks_complete($tasksection->sectionid);
+
+            $percentcomplete = 0;
+            if ($numtasks > 0) {
+                $percentcomplete = ceil( ($numtaskscomplete / $numtasks) * 100);
+            }
+            $graph = ceil($percentcomplete / 10);
+
+            $a->graph = $graph;
+            $a->sectionname = $tasksection->sectionname;
+            $a->percentcomplete = $percentcomplete;
+            $email .= get_string('managerreporttextbody','block_istart_reports', $a);
+        }
+        $email .= get_string('managerreporttextfooter','block_istart_reports', $a);
+        unset($a);
+
+        return $email;
+    }
+
+    private function get_email_html($istartgroup, $istartuser) {
+        $course         = $this->course;
+        $istartweek     = $istartgroup->istartweek;
+        $tasksections   = $istartweek->tasksections;
+        $user           = $istartuser->user;
+
+        if (!isset($tasksections)) {
+            return '';
+        }
+
+        // Create the email body
+        // Add welcome message
+        $a = new \stdClass();
+        $a->coursename = $course->fullname;
+        $a->firstname = $user->firstname;
+        $a->lastname = $user->lastname;
+        $a->istartweeknumber = $istartweek->weeknumber;
+        $a->istartweekname = $istartweek->weekname;
+
+        $email = get_string('managerreporthtmlheader','block_istart_reports', $a);
+        foreach ($tasksections as $tasksection) {
+            $numtasks = $tasksection->numtasks;
+            $numtaskscomplete = $istartuser->get_num_tasks_complete($tasksection->sectionid);
+
+            $percentcomplete = 0;
+            if ($numtasks > 0) {
+                $percentcomplete = ceil( ($numtaskscomplete / $numtasks) * 100);
+            }
+            $graph = ceil($percentcomplete / 10);
+
+            $a->graph = $graph;
+            $a->sectionname = $tasksection->sectionname;
+            $a->percentcomplete = $percentcomplete;
+            $email .= get_string('managerreporthtmlbody','block_istart_reports', $a);
+        }
+        $email .= get_string('managerreporthtmlfooter','block_istart_reports', $a);
+
+        return $email;
     }
 }

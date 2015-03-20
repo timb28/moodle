@@ -78,7 +78,7 @@ class istart_user {
             return("Could not obtain istart tasks complete.");
         }
 
-//        return $taskscomplete->total;
+        return true;
     }
 
     private function setup_managers() {
@@ -86,5 +86,14 @@ class istart_user {
         foreach ($existingmanagers as $manager) {
             $this->managers[] = $manager;
         }
+    }
+
+    public function get_num_tasks_complete($sectionid) {
+        $numtaskscomplete = -1;
+        if (isset($this->usertasks)) {
+            $usertasks = $this->usertasks[$sectionid];
+            $numtaskscomplete = $usertasks->numtaskscomplete;
+        }
+        return $numtaskscomplete;
     }
 }

@@ -693,55 +693,55 @@ function istart_report_get_email_message_id($courseid, $groupid, $userid, $repor
     return '<'.hash('sha256','Course: '.$courseid.' Group: '.$groupid.' User: '.$userid.' Report date: '.$reportdate).'@'.$hostname.'>';
 }
 
-function manager_report_make_mail_text($course, $user, $istartweeknumber, $istartweeklabel, $tasksections) {
-    // Create the email body
-    // Add welcome message
-    $a = new stdClass();
-    $a->coursename = $course->fullname;
-    $a->firstname = $user->firstname;
-    $a->lastname = $user->lastname;
-    $a->istartweeknumber = $istartweeknumber;
-    $a->istartweeklabel = $istartweeklabel;
-
-    $email = get_string('managerreporttextheader','block_istart_reports', $a);
-    foreach ($tasksections as $sectionid=>$section) {
-        $percentcomplete = ceil( ($section["taskscomplete"] / $section["totaltasks"]) * 100);
-        $graph = ceil($percentcomplete / 10);
-
-        $a->graph = $graph;
-        $a->sectionname = $section["sectionname"];
-        $a->percentcomplete = $percentcomplete;
-        $email .= get_string('managerreporttextbody','block_istart_reports', $a);
-    }
-    $email .= get_string('managerreporttextfooter','block_istart_reports', $a);
-
-    return $email;
-}
-
-function manager_report_make_mail_html($course, $user, $istartweeknumber, $istartweeklabel, $tasksections) {
-    // Create the email body
-    // Add welcome message
-    $a = new stdClass();
-    $a->coursename = $course->fullname;
-    $a->firstname = $user->firstname;
-    $a->lastname = $user->lastname;
-    $a->istartweeknumber = $istartweeknumber;
-    $a->istartweeklabel = $istartweeklabel;
-
-    $email = get_string('managerreporthtmlheader','block_istart_reports', $a);
-    foreach ($tasksections as $sectionid=>$section) {
-        $percentcomplete = ceil( ($section["taskscomplete"] / $section["totaltasks"]) * 100);
-        $graph = ceil($percentcomplete / 10);
-
-        $a->graph = $graph;
-        $a->sectionname = $section["sectionname"];
-        $a->percentcomplete = $percentcomplete;
-        $email .= get_string('managerreporthtmlbody','block_istart_reports', $a);
-    }
-    $email .= get_string('managerreporthtmlfooter','block_istart_reports', $a);
-
-    return $email;
-}
+//function manager_report_make_mail_text($course, $user, $istartweeknumber, $istartweeklabel, $tasksections) {
+//    // Create the email body
+//    // Add welcome message
+//    $a = new stdClass();
+//    $a->coursename = $course->fullname;
+//    $a->firstname = $user->firstname;
+//    $a->lastname = $user->lastname;
+//    $a->istartweeknumber = $istartweeknumber;
+//    $a->istartweeklabel = $istartweeklabel;
+//
+//    $email = get_string('managerreporttextheader','block_istart_reports', $a);
+//    foreach ($tasksections as $sectionid=>$section) {
+//        $percentcomplete = ceil( ($section["taskscomplete"] / $section["totaltasks"]) * 100);
+//        $graph = ceil($percentcomplete / 10);
+//
+//        $a->graph = $graph;
+//        $a->sectionname = $section["sectionname"];
+//        $a->percentcomplete = $percentcomplete;
+//        $email .= get_string('managerreporttextbody','block_istart_reports', $a);
+//    }
+//    $email .= get_string('managerreporttextfooter','block_istart_reports', $a);
+//
+//    return $email;
+//}
+//
+//function manager_report_make_mail_html($course, $user, $istartweeknumber, $istartweeklabel, $tasksections) {
+//    // Create the email body
+//    // Add welcome message
+//    $a = new stdClass();
+//    $a->coursename = $course->fullname;
+//    $a->firstname = $user->firstname;
+//    $a->lastname = $user->lastname;
+//    $a->istartweeknumber = $istartweeknumber;
+//    $a->istartweeklabel = $istartweeklabel;
+//
+//    $email = get_string('managerreporthtmlheader','block_istart_reports', $a);
+//    foreach ($tasksections as $sectionid=>$section) {
+//        $percentcomplete = ceil( ($section["taskscomplete"] / $section["totaltasks"]) * 100);
+//        $graph = ceil($percentcomplete / 10);
+//
+//        $a->graph = $graph;
+//        $a->sectionname = $section["sectionname"];
+//        $a->percentcomplete = $percentcomplete;
+//        $email .= get_string('managerreporthtmlbody','block_istart_reports', $a);
+//    }
+//    $email .= get_string('managerreporthtmlfooter','block_istart_reports', $a);
+//
+//    return $email;
+//}
 
 /**
  * Sets manager's email address for a user
