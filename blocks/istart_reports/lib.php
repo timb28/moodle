@@ -415,7 +415,7 @@ function get_manager_users($user) {
         return false;
     }
 
-    $userfields = 'u.id, u.username, u.email, ' . get_all_user_name_fields(true, 'u');
+    $userfields = 'u.id, u.username, u.email, u.mailformat, ' . get_all_user_name_fields(true, 'u');
     $roleusers = get_role_users($roleid, $context, false, $userfields);
     if (!empty($roleusers)) {
         $strroleusers = array();
