@@ -54,10 +54,12 @@ class manageremail_form extends moodleform {
                 $selectusers[$manager->id] = $manager->id;
             }
         }
+        $excludeusers = $this->get_excluded_users();
         $options = array('multiselect'      => false,
                          'preserveselected' => true,
                          'rows'             => 10,
                          'selected'         => $selectusers,
+                         'exclude'          => $excludeusers,
                          'accesscontext'    => $context);
         $managerselector = new manager_selector('manager', $options);
         $managerselectorhtml = $managerselector->display(true);
@@ -101,6 +103,56 @@ class manageremail_form extends moodleform {
         }
 
         return $errors;
+    }
+
+    private function get_excluded_users() {
+        global $DB, $CFG;
+
+        // Exclude site administrators
+        $siteadmins = array();
+        foreach (explode(',', $CFG->siteadmins) as $admin) {
+            $admin = (int)$admin;
+            if ($admin) {
+                $siteadmins[] = $admin;
+            }
+        }
+
+        //Exclude users who cannot login
+        $nologinusers = $DB->get_fieldset_select('user', 'id', 'auth = "nologin"');
+
+        //Exclude other users (e.g webservice users)
+        //Uses profile_field_excludefromuserlists
+        $profilefieldusers = array();
+        if ($DB->record_exists_select('user_info_field', 'shortname = "excludefromuserlists"')) {
+            try {
+
+                $sql = '
+                        SELECT
+                            u.id
+                        FROM
+                            {user} u
+                                JOIN
+                            {user_info_data} uid ON u.id = uid.userid
+                                JOIN
+                            {user_info_field} uif ON uid.fieldid = uif.id
+                        WHERE
+                            uif.shortname = :shortname
+                                AND uid.data = 1';
+                $params['shortname'] = 'excludefromuserlists';
+                $records = $DB->get_records_sql($sql, $params);
+
+                foreach ($records as $record) {
+                    $profilefieldusers[] = $record->id;
+                }
+
+            } catch(Exception $e) {
+                error_log($e, DEBUG_NORMAL);
+            }
+        }
+
+        $excludedusers = array_merge($siteadmins, $nologinusers, $profilefieldusers);
+
+        return $excludedusers;
     }
     
 }
