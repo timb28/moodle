@@ -2,3 +2,7 @@
     padding: 1em 0;
 }
 
+/* Hide the managersform search options */
+#page-istart-reports #userselector_options {
+    display: none;
+}
