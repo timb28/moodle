@@ -27,7 +27,7 @@ require_once("$CFG->libdir/formslib.php");
 require_once("$CFG->dirroot/blocks/istart_reports/lib.php");
 require_once("$CFG->dirroot/user/selector/lib.php");
 
-class manageremail_form extends moodleform {
+class managers_form extends moodleform {
 
     public function definition() {
         global $CFG, $COURSE, $USER;
@@ -213,7 +213,7 @@ class manager_selector extends user_selector_base {
 
     protected function get_options() {
         $options = parent::get_options();
-        $options['file'] = 'blocks/istart_reports/manageremail_form.php';
+        $options['file'] = 'blocks/istart_reports/managers_form.php';
         return $options;
     }
 }

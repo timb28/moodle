@@ -24,7 +24,7 @@
  */
 
 require_once("../../config.php");
-require_once("$CFG->dirroot/blocks/istart_reports/manageremail_form.php");
+require_once("$CFG->dirroot/blocks/istart_reports/managers_form.php");
 require_once("$CFG->dirroot/blocks/istart_reports/lib.php");
 
 require_login();
@@ -52,7 +52,7 @@ $PAGE->set_url('/course/view.php', array('id' => $courseid, 'return' => $returnu
 $PAGE->set_pagetype('istart-reports');
 $PAGE->set_pagelayout('standard');
 
-$mform = new manageremail_form();
+$mform = new managers_form();
 
 //Form processing and displaying is done here
 if ($mform->is_cancelled()) {

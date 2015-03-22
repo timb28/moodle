@@ -80,11 +80,11 @@ class block_istart_reports extends block_base {
                     $this->content->text .= '<li>' . $manager->firstname . ' ' . $manager->lastname . ' </li>';
                 }
                 $this->content->text .= '</ul>';
-                $this->content->text .= '<p class="text-center"><a href="'.$CFG->wwwroot.'/blocks/istart_reports/manageremail.php?courseid='.$COURSE->id.'"'
+                $this->content->text .= '<p class="text-center"><a href="'.$CFG->wwwroot.'/blocks/istart_reports/managers.php?courseid='.$COURSE->id.'"'
                                                 . ' class="btn btn-link">'.get_string('labeleditreportaddress','block_istart_reports').'</a></p></div>';
             } else {
                 $this->content->text .= '<p>'.get_string('intromanager', 'block_istart_reports').'</p>';
-                $this->content->text .= '<p class="text-center"><a href="'.$CFG->wwwroot.'/blocks/istart_reports/manageremail.php?courseid='.$COURSE->id.'"'
+                $this->content->text .= '<p class="text-center"><a href="'.$CFG->wwwroot.'/blocks/istart_reports/managers.php?courseid='.$COURSE->id.'"'
                                                 . ' class="btn btn-primary">'.get_string('labelnewreportaddress','block_istart_reports').'</a></p></div>';
             }
 
