@@ -33,6 +33,9 @@ There, you find TBD sections:
 --------------------------
 In this section, you ...
 
+The list of potential managers that appear in the manager form can be limited
+using the user profile field profile_field_excludefromuserlists. Add it using the
+Administration page: Site administration > Users > Accounts > User profile fields
 
 
 Themes
