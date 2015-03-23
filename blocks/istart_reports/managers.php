@@ -108,19 +108,11 @@ echo $OUTPUT->header();
 
 //echo $OUTPUT->notification(get_string('removeuserwarning', 'core_cohort'));
 
-// Get the user_selector we will need.
-$selectusers = array();
-$existingmanagers = get_manager_users($USER);
-if (isset($existingmanagers)) {
-    foreach ($existingmanagers as $manager) {
-        $selectusers[$manager->id] = $manager->id;
-    }
-}
+// Get the user_selectors we will need.
 $excludeusers = get_excluded_users();
 $options = array('multiselect'      => false,
                  'preserveselected' => true,
                  'rows'             => 10,
-                 'selected'         => $selectusers,
                  'accesscontext'    => $context,
                  'userid'           => $USER->id);
 

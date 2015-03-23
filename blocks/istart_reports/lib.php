@@ -452,7 +452,7 @@ function get_manager_user_ids($userid) {
 
     $manageruserids = '0';
     if (isset($managerusers)) {
-        $manageruserids - implode(",", $managerusers);
+        $manageruserids = implode(",", $managerusers);
     }
 
     return $manageruserids;
