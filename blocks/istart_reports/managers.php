@@ -24,7 +24,6 @@
  */
 
 require_once("../../config.php");
-require_once("$CFG->dirroot/blocks/istart_reports/managers_form.php");
 require_once("$CFG->dirroot/blocks/istart_reports/lib.php");
 
 //require_login();
