@@ -834,7 +834,7 @@ function set_manager_email_address($user, $emailaddress) {
  * @return array user ids of excluded users
  */
 function get_excluded_users() {
-        global $DB, $CFG;
+        global $DB, $CFG, $USER;
 
         // Exclude site administrators
         $siteadmins = array();
@@ -878,7 +878,15 @@ function get_excluded_users() {
             }
         }
 
-        $excludedusers = array_merge($siteadmins, $nologinusers, $profilefieldusers);
+        // Exclude current managers
+        $existingmanagers = array();
+        foreach (get_manager_users($USER) as $manager) {
+            $existingmanagers[] = $manager->id;
+        }
+
+
+        // Merge the arrays containing the excluded users
+        $excludedusers = array_merge($siteadmins, $nologinusers, $profilefieldusers, $existingmanagers);
 
         return $excludedusers;
     }

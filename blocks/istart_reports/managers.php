@@ -109,7 +109,6 @@ echo $OUTPUT->header();
 //echo $OUTPUT->notification(get_string('removeuserwarning', 'core_cohort'));
 
 // Get the user_selectors we will need.
-$excludeusers = get_excluded_users();
 $options = array('multiselect'      => false,
                  'preserveselected' => true,
                  'rows'             => 10,
@@ -117,6 +116,7 @@ $options = array('multiselect'      => false,
                  'userid'           => $USER->id);
 
 $existingmanagerselector = new manager_existing_selector('removeselect', $options);
+$excludeusers = get_excluded_users();
 $options['exclude'] = $excludeusers;
 $candidatemanagerselector = new manager_candidate_selector('addselect', $options);
 
