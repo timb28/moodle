@@ -9,18 +9,17 @@
 YUI.add('moodle-block_istart_reports-managers', function(Y) {
     M.block_istart_reports = {
         init : function() {
-            Y.one('#manager_searchtext').on("keyup",  function(e) {
+            Y.one('#mform1').on("submit",  function(e) {
                 if (e.keyCode == '13') {
-                    e.preventDefault();
-                    e.stopPropagation();
+                    alert('test');
+                }
                     e.stopImmediatePropagation();
                     e.halt(true);
                     alert('the input element never receives this event.');
                     return false;
-                }
             });
         },
       }
 }, '@VERSION@', {
-    requires:['node','event-key']
+    requires:['node','event']
 });
