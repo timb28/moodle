@@ -41,8 +41,11 @@ $string['labelcurrentmanager'] = 'Your current manager: ';
 $string['labelselectmanager'] = 'Select a new manager: ';
 $string['nomanager'] = '(No manager)';
 $string['invalidmanager'] = 'Please select a different manager';
-$string['potmanagers'] = 'Harcourts Team Members';
-$string['potmanagersmatching'] = 'Matching Harcourts Team Members';
+$string['candidatemanagers'] = 'Harcourts Team Members';
+$string['candidatemanagersmatching'] = 'Matching Harcourts Team Members';
+$string['existingmanagers'] = 'Your current managers';
+$string['existingmanagersmatching'] = 'Matching managers';
+$string['backtocourse'] = 'Back to iStart';
 
 require_once($CFG->dirroot . '/blocks/istart_reports/lang/en/manager_report.php');
 

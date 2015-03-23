@@ -162,7 +162,7 @@ class managers_form extends moodleform {
  *
  * @author timbutler
  */
-class manager_selector extends user_selector_base {
+class manager_candidate_selector extends user_selector_base {
 
 
     public function __construct($name, $options) {
@@ -203,9 +203,79 @@ class manager_selector extends user_selector_base {
 
 
         if ($search) {
-            $groupname = get_string('potmanagersmatching', 'block_istart_reports', $search);
+            $groupname = get_string('candidatemanagersmatching', 'block_istart_reports', $search);
         } else {
-            $groupname = get_string('potmanagers', 'block_istart_reports');
+            $groupname = get_string('candidatemanagers', 'block_istart_reports');
+        }
+
+        return array($groupname => $availableusers);
+    }
+
+    protected function get_options() {
+        $options = parent::get_options();
+        $options['file'] = 'blocks/istart_reports/managers_form.php';
+        return $options;
+    }
+}
+
+/**
+ * Description of manager_selector
+ *
+ * @author timbutler
+ */
+class manager_existing_selector extends user_selector_base {
+    protected $userid;
+
+    public function __construct($name, $options) {
+        $this->userid = $options['userid'];
+        parent::__construct($name, $options);
+    }
+
+    /**
+     * Candidate managers
+     * @param string $search
+     * @return array
+     */
+    public function find_users($search) {
+        global $DB;
+        // By default wherecondition retrieves all users except the deleted, not confirmed and guest.
+        list($wherecondition, $params) = $this->search_sql($search, 'u');
+
+        $fields      = 'SELECT ' . $this->required_fields_sql('u');
+        $countfields = 'SELECT COUNT(1)';
+        
+        $manageruserids = get_manager_user_ids($this->userid);
+
+        if ($wherecondition) {
+            $wherecondition = "$wherecondition AND id IN ($manageruserids)";
+        } else {
+            $wherecondition = "id IN ($manageruserids)";
+        }
+
+        $sql = " FROM {user} u
+                WHERE $wherecondition";
+
+        list($sort, $sortparams) = users_order_by_sql('u', $search, $this->accesscontext);
+        $order = ' ORDER BY ' . $sort;
+
+        if (!$this->is_validating()) {
+            $userscount = $DB->count_records_sql($countfields . $sql, $params);
+            if ($userscount > $this->maxusersperpage) {
+                return $this->too_many_results($search, $userscount);
+            }
+        }
+
+        $availableusers = $DB->get_records_sql($fields . $sql . $order, array_merge($params, $sortparams));
+
+        if (empty($availableusers)) {
+            return array();
+        }
+
+
+        if ($search) {
+            $groupname = get_string('existingmanagersmatching', 'block_istart_reports', $search);
+        } else {
+            $groupname = get_string('existingmanagers', 'block_istart_reports');
         }
 
         return array($groupname => $availableusers);

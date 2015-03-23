@@ -401,7 +401,7 @@ function get_manager_email_address($user) {
 /**
  * Gets manager for the given user
  * @param stdClass $user The user object
- * @return stdClass The manager's user object
+ * @return array manager user objects
  */
 function get_manager_users($user) {
     global $DB;
@@ -428,6 +428,37 @@ function get_manager_users($user) {
 }
 
 /**
+ * Gets manager for the given user
+ * @param stdClass $user The user object
+ * @return array manager user objects
+ */
+function get_manager_user_ids($userid) {
+    global $DB;
+
+    $managerusers = null;
+    $usercontext = context_user::instance($userid);
+    $roleid = $DB->get_field('role', 'id', array('shortname'=>MANAGERROLESHORTNAME), IGNORE_MISSING);
+
+    if (!isset($roleid)) {
+        return false;
+    }
+
+    $roleusers = get_role_users($roleid, $usercontext, false, 'u.id');
+    if (!empty($roleusers)) {
+        foreach ($roleusers as $user) {
+            $managerusers[] = $user->id;
+        }
+    }
+
+    $manageruserids = '0';
+    if (isset($managerusers)) {
+        $manageruserids - implode(",", $managerusers);
+    }
+
+    return $manageruserids;
+}
+
+/**
  * Sets manager for a user
  * @param stdClass $user The user object
  * @param int $managerid The manager's user id
@@ -450,6 +481,44 @@ function set_manager($user, $managerid) {
     // Assign the new manager (if there is one)
     if (isset($managerid) && $managerid != '') {
         $success = role_assign($roleid, $managerid, $context->id);
+    }
+    return isset($success);
+}
+
+/**
+ * Adds manager for a user
+ * @param stdClass $user The user object
+ * @param int $managerid The manager's user id
+ * @return bool true if success
+ */
+function add_manager($userid, $managerid) {
+    global $DB;
+
+    $roleid = $DB->get_field('role', 'id', array('shortname'=>MANAGERROLESHORTNAME), IGNORE_MISSING);
+    $context = context_user::instance($userid, MUST_EXIST);
+    
+    // Assign the new manager (if there is one)
+    if (isset($managerid) && $managerid != '') {
+        $success = role_assign($roleid, $managerid, $context->id);
+    }
+    return isset($success);
+}
+
+/**
+ * Removes a manager for a user
+ * @param stdClass $user The user object
+ * @param int $managerid The manager's user id
+ * @return bool true if success
+ */
+function remove_manager($userid, $managerid) {
+    global $DB;
+
+    $roleid = $DB->get_field('role', 'id', array('shortname'=>MANAGERROLESHORTNAME), IGNORE_MISSING);
+    $context = context_user::instance($userid, MUST_EXIST);
+
+    // Assign the new manager (if there is one)
+    if (isset($managerid) && $managerid != '') {
+        $success = role_unassign($roleid, $managerid, $context->id);
     }
     return isset($success);
 }
@@ -759,3 +828,57 @@ function set_manager_email_address($user, $emailaddress) {
     profile_save_data($user);
     return true;
 }
+
+/**
+ * Gets users who should not appear in the candidate manager list
+ * @return array user ids of excluded users
+ */
+function get_excluded_users() {
+        global $DB, $CFG;
+
+        // Exclude site administrators
+        $siteadmins = array();
+        foreach (explode(',', $CFG->siteadmins) as $admin) {
+            $admin = (int)$admin;
+            if ($admin) {
+                $siteadmins[] = $admin;
+            }
+        }
+
+        //Exclude users who cannot login
+        $nologinusers = $DB->get_fieldset_select('user', 'id', 'auth = "nologin"');
+
+        //Exclude other users (e.g webservice users)
+        //Uses profile_field_excludefromuserlists
+        $profilefieldusers = array();
+        if ($DB->record_exists_select('user_info_field', 'shortname = "excludefromuserlists"')) {
+            try {
+
+                $sql = '
+                        SELECT
+                            u.id
+                        FROM
+                            {user} u
+                                JOIN
+                            {user_info_data} uid ON u.id = uid.userid
+                                JOIN
+                            {user_info_field} uif ON uid.fieldid = uif.id
+                        WHERE
+                            uif.shortname = :shortname
+                                AND uid.data = 1';
+                $params['shortname'] = 'excludefromuserlists';
+                $records = $DB->get_records_sql($sql, $params);
+
+                foreach ($records as $record) {
+                    $profilefieldusers[] = $record->id;
+                }
+
+            } catch(Exception $e) {
+                error_log($e, DEBUG_NORMAL);
+            }
+        }
+
+        $excludedusers = array_merge($siteadmins, $nologinusers, $profilefieldusers);
+
+        return $excludedusers;
+    }
