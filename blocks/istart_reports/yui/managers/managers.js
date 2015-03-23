@@ -9,17 +9,46 @@
 YUI.add('moodle-block_istart_reports-managers', function(Y) {
     M.block_istart_reports = {
         init : function() {
-            Y.one('#mform1').on("submit",  function(e) {
+            Y.one('document').on("keyup",  function(e) {
                 if (e.keyCode == '13') {
-                    alert('test');
-                }
+                    e.preventDefault();
+                    e.stopPropagation();
                     e.stopImmediatePropagation();
+                    e.cancelBubble = true;
+                    e.returnValue = false;
                     e.halt(true);
-                    alert('the input element never receives this event.');
+                    alert('the document element never receives this event.');
                     return false;
+                }
+            });
+
+            Y.one('#mform1').on("keyup",  function(e) {
+                if (e.keyCode == '13') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    e.cancelBubble = true;
+                    e.returnValue = false;
+                    e.halt(true);
+                    alert('the form element never receives this event.');
+                    return false;
+                }
+            });
+
+            Y.one('#manager').on("keyup",  function(e) {
+                if (e.keyCode == '13') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    e.cancelBubble = true;
+                    e.returnValue = false;
+                    e.halt(true);
+                    alert('the select element never receives this event.');
+                    return false;
+                }
             });
         },
       }
 }, '@VERSION@', {
-    requires:['node','event']
+    requires:['node','event-key']
 });
