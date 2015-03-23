@@ -71,6 +71,8 @@ echo html_writer::start_tag('div', array('class' => 'no-overflow'));
 echo html_writer::tag('p', get_string('intromanager','block_istart_reports'), array('class'=>'intromanager'));
 $mform->display();
 echo html_writer::end_tag('div');
+
+$PAGE->requires->yui_module('moodle-block_istart_reports-managers','M.block_istart_reports.init', array(), null, true);
 echo $OUTPUT->footer();
 
 
