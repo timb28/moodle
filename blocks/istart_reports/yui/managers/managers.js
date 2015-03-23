@@ -12,11 +12,15 @@ YUI.add('moodle-block_istart_reports-managers', function(Y) {
             Y.one('#manager_searchtext').on("keyup",  function(e) {
                 if (e.keyCode == '13') {
                     e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    e.halt(true);
                     alert('the input element never receives this event.');
+                    return false;
                 }
             });
         },
       }
 }, '@VERSION@', {
-    requires:['node']
+    requires:['node','event-key']
 });
