@@ -26,53 +26,6 @@
 require_once("../../config.php");
 require_once("$CFG->dirroot/blocks/istart_reports/lib.php");
 
-//require_login();
-//
-//$courseid = required_param('courseid', PARAM_INT);
-//
-//if (!$course = $DB->get_record('course', array('id' => $courseid))) {
-//    print_error('nocourse', 'block_istart_reports', '', $courseid);
-//}
-//
-//$context = context_course::instance($courseid);
-//
-//$blockname = get_string('pluginname', 'block_istart_reports');
-//$header = get_string('headermanageremail', 'block_istart_reports');
-//
-//$returnurl = $CFG->wwwroot.'/course/view.php?id=' . $courseid;
-//
-//$PAGE->set_context($context);
-//$PAGE->set_course($course);
-//$PAGE->navbar->add($blockname);
-//$PAGE->navbar->add($header);
-//$PAGE->set_title($blockname . ': ' . $header);
-//$PAGE->set_heading($blockname . ': ' . $header);
-//$PAGE->set_url('/course/view.php', array('id' => $courseid, 'return' => $returnurl));
-//$PAGE->set_pagetype('istart-reports');
-//$PAGE->set_pagelayout('standard');
-//
-//$mform = new managers_form();
-//
-////Form processing and displaying is done here
-//if ($mform->is_cancelled()) {
-//    // Return to the course, if cancel button is pressed
-//    redirect($returnurl);
-//} else if ( ($fromform = $mform->get_data()) && confirm_sesskey() ) {
-//    // Process validated form data.
-//    $success = set_manager($USER, optional_param('manager', '', PARAM_ALPHANUM));
-//    redirect($returnurl);
-//}
-//
-//echo $OUTPUT->header();
-//echo $OUTPUT->heading($header);
-//
-//echo html_writer::start_tag('div', array('class' => 'no-overflow'));
-//echo html_writer::tag('p', get_string('intromanager','block_istart_reports'), array('class'=>'intromanager'));
-//$mform->display();
-//echo html_writer::end_tag('div');
-//
-//echo $OUTPUT->footer();
-
 $courseid = required_param('courseid', PARAM_INT);
 
 require_login();
@@ -81,7 +34,7 @@ if (!$course = $DB->get_record('course', array('id' => $courseid))) {
     print_error('nocourse', 'block_istart_reports', '', $courseid);
 }
 
-$context = context_course::instance($courseid);
+$context = context_user::instance($USER->id);
 
 $blockname = get_string('pluginname', 'block_istart_reports');
 $header = get_string('headermanageremail', 'block_istart_reports');
@@ -110,7 +63,6 @@ echo $OUTPUT->header();
 
 // Get the user_selectors we will need.
 $options = array('multiselect'      => false,
-                 'preserveselected' => true,
                  'rows'             => 10,
                  'accesscontext'    => $context,
                  'userid'           => $USER->id);
@@ -126,16 +78,21 @@ if (optional_param('add', false, PARAM_BOOL) && confirm_sesskey()) {
     $userstoassign = $candidatemanagerselector->get_selected_users();
     if (!empty($userstoassign)) {
 
+        $newmanagerids = array();
+
         foreach ($userstoassign as $addmanager) {
             add_manager($USER->id, $addmanager->id);
+            $newmanagerids[] = $addmanager->id;
         }
+
+        $candidatemanagerselector->exclude($newmanagerids);
 
         $candidatemanagerselector->invalidate_selected_users();
         $existingmanagerselector->invalidate_selected_users();
     }
 }
 
-// Process removing user assignments to the cohort
+// Process removing manager role assignments
 if (optional_param('remove', false, PARAM_BOOL) && confirm_sesskey()) {
     $userstoremove = $existingmanagerselector->get_selected_users();
     if (!empty($userstoremove)) {
