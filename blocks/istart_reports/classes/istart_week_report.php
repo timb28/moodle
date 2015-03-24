@@ -116,7 +116,7 @@ class istart_week_report {
                 error_log(print_r($istartgroup->istartweek, 1));
 
                 // Check if reports for those users have been sent
-                $this->send_manager_report_to_group($istartgroup);
+                $this->prepare_manager_report_for_group($istartgroup);
             }
 
         }
@@ -132,7 +132,7 @@ class istart_week_report {
      * @param string $istartweek The istart week.
      * @return true or error
      */
-    function send_manager_report_to_group($istartgroup) {
+    function prepare_manager_report_for_group($istartgroup) {
 
         $istartusers = $istartgroup->istartusers;
 
@@ -143,7 +143,7 @@ class istart_week_report {
 
             // Check if already sent
             if (!$this->is_report_sent($group, $user, MANAGERREPORTTYPE, $this->reporttime)) {
-                $this->send_manager_report_for_user($istartgroup, $istartuser);
+                $this->prepare_manager_report_for_user($istartgroup, $istartuser);
             }
 
 
@@ -173,7 +173,7 @@ class istart_week_report {
         return $reportsent;
     }
 
-    private function send_manager_report_for_user($istartgroup, $istartuser) {
+    private function prepare_manager_report_for_user($istartgroup, $istartuser) {
         // Get all the user's managers
         $managers = $istartuser->managers;
 
