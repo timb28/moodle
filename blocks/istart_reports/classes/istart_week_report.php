@@ -177,7 +177,7 @@ class istart_week_report {
         // Get all the user's managers
         $managers = $istartuser->managers;
 
-        if(!isset($managers)) {
+        if(empty($managers)) {
             // 'No managers for user: $user->id ($user->firstname $user->lastname).';
             return false;
         }
@@ -186,19 +186,17 @@ class istart_week_report {
             // Does the user have a manager's email address set?
             $manageremailaddress = $manager->email;
             if ($manageremailaddress == NULL) {
-                $user = $istartuser->user;
-                // 'Manager email is not set for user: $user->id ($user->firstname $user->lastname).';
-                return false;
+                // error_log('Manager email is not set for user: $istartuser->id ($istartuser->firstname $istartuser->lastname).');
+                continue;
             }
 
             // Is the manager's email address valid?
             if (!validate_email($manageremailaddress)) {
-                $user = $istartuser->user;
-                // 'Manager email ($manageremailaddress) not valid for user:' . ' $user->id ($user->firstname $user->lastname).';
-                return false;
+                // error_log('Manager email ($manageremailaddress) not valid for user:' . ' $istartuser->id ($istartuser->firstname $istartuser->lastname).');
+                continue;
             }
 
-            return $this->send_manager_report_to_manager($istartgroup, $istartuser, $manager);
+            $this->send_manager_report_to_manager($istartgroup, $istartuser, $manager);
         }
     }
 

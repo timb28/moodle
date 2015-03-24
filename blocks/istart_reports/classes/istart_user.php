@@ -83,9 +83,15 @@ class istart_user {
 
     private function setup_managers() {
         $existingmanagers = get_manager_users($this->user);
+        if (empty($existingmanagers)) {
+            return false;
+        }
+
         foreach ($existingmanagers as $manager) {
             $this->managers[] = $manager;
         }
+
+        return true;
     }
 
     public function get_num_tasks_complete($sectionid) {
