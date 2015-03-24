@@ -139,7 +139,7 @@ class istart_week_report {
         foreach ($istartusers as $istartuser) {
            $user    = $istartuser->user;
            $group   = $istartgroup->group;
-           error_log(" - Sending manager report for $user->id at $this->reporttime"); // TODO remove after testing
+           error_log(" - Preparing to send manager report for $user->id at $this->reporttime"); // TODO remove after testing
 
             // Check if already sent
             if (!$this->is_report_sent($group, $user, MANAGERREPORTTYPE, $this->reporttime)) {
