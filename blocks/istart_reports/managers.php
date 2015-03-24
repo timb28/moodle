@@ -29,9 +29,6 @@ require_once("$CFG->dirroot/blocks/istart_reports/lib.php");
 $courseid = required_param('courseid', PARAM_INT);
 $context = context_user::instance($USER->id);
 
-require_login();
-//require_capability('moodle/role:assign', $context);
-
 if (!$course = $DB->get_record('course', array('id' => $courseid))) {
     print_error('nocourse', 'block_istart_reports', '', $courseid);
 }
@@ -50,6 +47,8 @@ $PAGE->set_heading($blockname . ': ' . $header);
 $PAGE->set_url('/blocks/istart_reports/managers.php', array('courseid'=>$courseid));
 $PAGE->set_pagetype('istart-reports');
 $PAGE->set_pagelayout('standard');
+
+require_login($courseid);
 
 if (optional_param('cancel', false, PARAM_BOOL)) {
     redirect($returnurl);
