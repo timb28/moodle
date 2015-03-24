@@ -27,14 +27,14 @@ require_once("../../config.php");
 require_once("$CFG->dirroot/blocks/istart_reports/lib.php");
 
 $courseid = required_param('courseid', PARAM_INT);
+$context = context_user::instance($USER->id);
 
 require_login();
+//require_capability('moodle/role:assign', $context);
 
 if (!$course = $DB->get_record('course', array('id' => $courseid))) {
     print_error('nocourse', 'block_istart_reports', '', $courseid);
 }
-
-$context = context_user::instance($USER->id);
 
 $blockname = get_string('pluginname', 'block_istart_reports');
 $header = get_string('headermanageremail', 'block_istart_reports');

@@ -46,7 +46,7 @@ class manager_removed extends \core\event\base {
 
     public function get_url() {
         return new \moodle_url("/admin/roles/assign.php",
-                array('contextid' => $this->contextinstanceid,
+                array('contextid' => $this->contextid,
                     'userid' => $this->userid,
                     'courseid' => '1'));
     }
