@@ -501,6 +501,14 @@ function add_manager($userid, $managerid) {
     if (isset($managerid) && $managerid != '') {
         $success = role_assign($roleid, $managerid, $context->id);
     }
+
+    $event = \block_istart_reports\event\manager_added::create(array(
+        'context' => context_user::instance($userid),
+        'objectid' => $userid,
+        'relateduserid' => $managerid,
+    ));
+    $event->trigger();
+
     return isset($success);
 }
 

@@ -55,3 +55,6 @@ $string['nocourse'] = 'Invalid Course with id of {$a}';
 $string['istart_reports:addinstance'] = 'Add a istart_reports block';
 $string['istart_reports:reporttomanager'] = 'Progress reported to a manager';
 $string['pluginname'] = 'iStart Reports';
+
+/* Event Logging */
+$string['eventmanageradded'] = 'A student\'s manager has been assigned.';
