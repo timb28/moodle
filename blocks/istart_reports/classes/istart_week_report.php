@@ -203,7 +203,7 @@ class istart_week_report {
     }
 
     private function send_manager_report_to_manager ($istartgroup, $istartuser, $manager) {
-        global $CFG, $DB;
+        global $CFG, $DB, $COURSE;
         
         error_log("   - To the manager: " . $manager->email);
 
@@ -261,6 +261,15 @@ class istart_week_report {
             error_log($e, DEBUG_NORMAL);
             return false;
         }
+
+        // Log the sending of the manager report
+        $context = \context_course::instance($COURSE->id);
+        $event = \block_istart_reports\event\managerreport_sent::create(array(
+            'context' => $context,
+            'objectid' => $user->id,
+            'relateduserid' => $manager->id,
+        ));
+        $event->trigger();
 
         return true;
     }

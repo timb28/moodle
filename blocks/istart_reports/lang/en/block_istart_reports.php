@@ -59,3 +59,4 @@ $string['pluginname'] = 'iStart Reports';
 /* Event Logging */
 $string['eventmanageradded'] = 'A student\'s manager has been added.';
 $string['eventmanagerremoved'] = 'A student\'s manager has been removed.';
+$string['eventmanagerreportsent'] = 'An iStart manager report has been sent.';
