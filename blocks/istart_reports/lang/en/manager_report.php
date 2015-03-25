@@ -455,7 +455,7 @@ $string['managerreporthtmlheader'] = '
 
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-left: 18px;padding-bottom: 9px;padding-right: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-family: Helvetica;font-size: 11px;line-height: 125%;text-align: left;">
 
-                            {$a->coursename} Progress Report
+                            {$a->coursename} Progress Report for {$a->firstname} {$a->lastname}
                         </td>
                     </tr>
                 </tbody></table>
@@ -551,9 +551,9 @@ $string['managerreporthtmlbody'] = '<table border="0" cellpadding="0" cellspacin
                 <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
                     <tbody><tr>
 
-                        <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">
+                        <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 100px;padding-bottom: 9px;padding-left: 100px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">
 
-                            <div style="text-align:left;"><span style="line-height:20.7999992370605px"><img align="none" alt="Tasks are complete" height="53" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/{$a->graph}.gif" style="width: 52px;height: 53px;vertical-align: middle;margin: 0px 25px 0px 50px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="52">{$a->firstname} completed %{$a->percentcomplete} of {$a->sectionname} tasks</span></div>
+                            <div style="text-align:left;"><span style="line-height:20.7999992370605px"><img align="none" alt="Tasks are complete" height="53" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/{$a->graph}.gif" style="width: 52px;height: 53px;vertical-align: middle;margin: 0px 25px 0px 50px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="52">{$a->firstname} completed {$a->percentcomplete}% of {$a->sectionname} tasks</span></div>
 
                         </td>
                     </tr>

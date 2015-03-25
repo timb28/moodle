@@ -142,9 +142,9 @@ class istart_week_report {
            error_log(" - Preparing to send manager report for $user->id at $this->reporttime"); // TODO remove after testing
 
             // Check if already sent
-            if (!$this->is_report_sent($group, $user, MANAGERREPORTTYPE, $this->reporttime)) {
+//            if (!$this->is_report_sent($group, $user, MANAGERREPORTTYPE, $this->reporttime)) {
                 $this->prepare_manager_report_for_user($istartgroup, $istartuser);
-            }
+//            }
 
 
 
