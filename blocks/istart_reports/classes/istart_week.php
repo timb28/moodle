@@ -66,6 +66,11 @@ class istart_week {
         $this->setup_task_sections();
     }
 
+    /**
+     * Constructs the array of tasksections for this iStart week.
+     *
+     * @return bool True if successful, false otherwise
+     */
     private function setup_task_sections() {
         global $DB;
 
@@ -92,8 +97,7 @@ class istart_week {
 
         } catch(Exception $e) {
             error_log($e, DEBUG_NORMAL);
-            return("iStart manager report not sent because the iStart week section cannot be read "
-                    . "from the database for week: $this->courseid course: $this->courseid");
+            return false;
         }
 
         foreach ($records as $record) {
@@ -105,5 +109,7 @@ class istart_week {
             $tasksection = new istart_task_section($this->courseid, $record->sectionid, $record->sectionnumber, $record->name);
             $this->tasksections[] = $tasksection;
         }
+
+        return true;
     }
 }

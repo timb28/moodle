@@ -38,8 +38,17 @@ class istart_task_section {
         $this->setup_total_tasks();
     }
 
+    /**
+     * Sets-up the total number of task for an iStart week task section.
+     *
+     * @return bool True if successful, false otherwise
+     */
     private function setup_total_tasks() {
         global $DB;
+
+        if (empty($this->courseid) || empty($this->sectionid)) {
+            return false;
+        }
 
         // Get all course sections that contain tasks
         try {
@@ -53,10 +62,11 @@ class istart_task_section {
 
         } catch(Exception $e) {
             error_log($e, DEBUG_NORMAL);
-            return("Could not obtain iStart total tasks in course: $this->courseid "
-                    . "section: $this->sectionid because the database could not be read.");
+            return false;
         }
 
         $this->numtasks = $totaltasks;
+
+        return true;
     }
 }
