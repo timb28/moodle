@@ -9,15 +9,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// TODO: Enable completion tracking on this block so we can prevent access to
-//       week 1 when no manager email address is present.
-// TODO: Change the DB table so that the report week is saved and checked not
-//       the report time - affects db/install.xml
-// TODO: Check managers.php form - do we need to improve the headings?
-// TODO: Change task timings in db/tasks.php
-// TODO: Sort out whether istartweeks property is needed in istart_week_report object
-// TODO: Can istart_user reference istart_week via parent:: rather than having it as a attribute?
-
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/blocks/istart_reports/lib.php');
