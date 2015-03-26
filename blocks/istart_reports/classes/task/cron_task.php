@@ -30,7 +30,7 @@ class cron_task extends \core\task\scheduled_task {
     public function execute() {
         global $CFG;
         require_once($CFG->dirroot . '/blocks/istart_reports/lib.php');
-        error_log(" === Running iStart Reports scheduled task === "); // TODO remove after testing
+        mtrace("Running iStart Reports scheduled tasks");
         istart_reports_cron();
     }
 
