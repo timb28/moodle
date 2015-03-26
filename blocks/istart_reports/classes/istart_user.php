@@ -26,7 +26,7 @@ class istart_user {
      * @param stdClass $user The user object.
      * @param stdClass $istartweek The iStart week object
      */
-    public function __construct($user, $istartweek) {
+    public function __construct($user, istart_week $istartweek) {
         $this->user         = $user;
         $this->istartweek   = $istartweek;
         
