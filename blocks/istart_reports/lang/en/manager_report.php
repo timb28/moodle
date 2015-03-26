@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * iStart Reports block manager email strings
+ *
+ * @package   block_istart_reports
+ * @author    Tim Butler
+ * @copyright 2015 onwards Harcourts Academy {@link http://www.harcourtsacademy.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 $string['manageremailsubject'] = 'iStart24 Online Week {$a->istartweeknumber} completion report for {$a->firstname} {$a->lastname}';
 
 $string["managerreporttextheader"] = '

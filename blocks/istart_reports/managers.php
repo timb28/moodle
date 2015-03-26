@@ -20,7 +20,7 @@ if (!$course = $DB->get_record('course', array('id' => $courseid))) {
 }
 
 $blockname = get_string('pluginname', 'block_istart_reports');
-$header = get_string('headermanageremail', 'block_istart_reports');
+$header = get_string('headermanagerform', 'block_istart_reports');
 
 $returnurl = $CFG->wwwroot.'/course/view.php?id=' . $courseid;
 
@@ -42,9 +42,9 @@ if (optional_param('cancel', false, PARAM_BOOL)) {
 
 
 echo $OUTPUT->header();
-//echo $OUTPUT->heading(get_string('assignto', 'cohort', format_string($cohort->name)));
+echo $OUTPUT->heading($header);
 
-//echo $OUTPUT->notification(get_string('removeuserwarning', 'core_cohort'));
+echo $OUTPUT->notification(get_string('intromanagerform', 'block_istart_reports'), 'notifymessage');
 
 // Get the user_selectors we will need.
 $options = array('multiselect'      => false,
