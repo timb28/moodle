@@ -1,16 +1,17 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 namespace block_istart_reports;
 
 /**
- * Description of istart_week
+ * iStart Week containing the following information about an iStart week:
+ *  - Week number
+ *  - Week name
+ *  - Subsections that contain tasks
  *
- * @author timbutler
+ * @package   block_istart_reports
+ * @author    Tim Butler
+ * @copyright 2015 onwards Harcourts Academy {@link http://www.harcourtsacademy.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class istart_week {
 
@@ -21,6 +22,12 @@ class istart_week {
             $weekname,
             $tasksections;
 
+    /**
+     * Constructs the istart_week for a given course and week.
+     *
+     * @param int $courseid The course id.
+     * @param int $weeknumber The iStart week number
+     */
     public function __construct($courseid, $weeknumber){
         global $DB;
 

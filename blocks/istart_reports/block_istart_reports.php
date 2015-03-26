@@ -1,29 +1,22 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * istart_reports block.
+ * iStart Reports block
  *
- * @package    block_istart_reports
- * @copyright  Harcourts Academy <academy@harcourts.net>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   block_istart_reports
+ * @author    Tim Butler
+ * @copyright 2015 onwards Harcourts Academy {@link http://www.harcourtsacademy.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 // TODO: Enable completion tracking on this block so we can prevent access to
 //       week 1 when no manager email address is present.
+// TODO: Change the DB table so that the report week is saved and checked not
+//       the report time - affects db/install.xml
+// TODO: Check managers.php form - do we need to improve the headings?
+// TODO: Change task timings in db/tasks.php
+// TODO: Sort out whether istartweeks property is needed in istart_week_report object
+// TODO: Can istart_user reference istart_week via parent:: rather than having it as a attribute?
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -55,10 +48,6 @@ class block_istart_reports extends block_base {
 
         // Get the block's context
         $currentcontext = CONTEXT_BLOCK::instance($this->instance->id);
-
-//        if (! empty($this->config->text)) {
-//            $this->content->text = $this->config->text;
-//        }
 
         if (empty($currentcontext)) {
             return $this->content;
@@ -92,9 +81,9 @@ class block_istart_reports extends block_base {
 
         // Display link to iStart Week Report
         $coursecontext = $this->page->context->get_course_context(false);
-                // Check if the users role means their progress gets reported to a manager.
+        // Check if the users role means their progress gets reported to a manager.
         if (has_capability('report/completion:view', $coursecontext)) {
-            $this->content->text .= "<div>TODO: Display link to completion report.</div>";
+//            $this->content->text .= "<div>TODO: Display link to completion report.</div>";
         }
 
         if (! empty($this->config->text)) {
@@ -123,13 +112,13 @@ class block_istart_reports extends block_base {
 
     function has_config() {return false;}
 
-    public function cron() {
-      mtrace( "Hey, my cron script is running" );
-             
-      // 
-                  
-      return true;
-    }
+//    public function cron() {
+//      mtrace( "Hey, my cron script is running" );
+//
+//      //
+//
+//      return true;
+//    }
 
 }
 

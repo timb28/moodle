@@ -1,25 +1,11 @@
 <?php
 
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
  * Support functions for component 'block_istart_reports', language 'en'
  *
  * @package   block_istart_reports
- * @copyright Harcourts Academy <academy@harcourts.net>
+ * @author    Tim Butler
+ * @copyright 2015 onwards Harcourts Academy {@link http://www.harcourtsacademy.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -45,6 +31,7 @@ define('COURSEFORMATOPTIONTYPEFORTASKS', 'reportcompletions');
  * Finds all the iStart reports that have yet to be mailed out, and mails them
  * out to all managers as well as other maintance tasks.
  *
+ * @return void
  */
 function istart_reports_cron() {
 
@@ -53,33 +40,28 @@ function istart_reports_cron() {
     clean_reports();
     process_manager_reports();
 
-
-    return true;
 }
 
 /**
  * Cleans manager report queue
- * @return true or error
+ *
+ * @return void
  */
 function clean_reports() {
     global $DB;
 
-    $oldreportconditions = 'reporttime IS NULL or reporttime < '.(time() - YEARSECS);
-
-    // Clean store of manager report emails sent and reports processed for past students (sent > 1 year ago)
+    // Clean store of manager report emails sent and reports processed for past students (sent > 13 weeks ago)
+    $oldreportconditions = 'reporttime IS NULL or reporttime < '.(time() - (13 * WEEKSECS));
     $DB->delete_records_select('block_istart_reports', $oldreportconditions);
-
-    // TODO: Clean store of manager report emails sent for past students no longer enrolled
 }
 
 /**
  * Queues manager reports for all intake groups for later sending
- * @return true
+ *
+ * @return void
  */
 function process_manager_reports() {
     
-    // TODO: Record in the Moodle event log that istart manager reports have started processing
-
     // Get istart courses that have this block
     $courses = get_courses_with_block(get_blockid(BLOCK_NAME));
 
@@ -91,19 +73,18 @@ function process_manager_reports() {
 
         // Only process courses with group mode activated.
         if (groups_get_course_groupmode($course) == NOGROUPS) {
-            error_log(" - Course skipped: No groups");
+            error_log(" - Course skipped: No groups"); // TODO remove after testing
             continue;
         }
 
         $istart_week_report = new istart_week_report($course, MANAGERREPORTTYPE, $reporttime);
         $istart_week_report->process_manager_reports();
     }
-
-    return true;
 }
 
 /**
  * Get the block id for this block
+ *
  * @return int Block ID
  */
 function get_blockid($name) {
@@ -120,7 +101,8 @@ function get_blockid($name) {
 
 /**
  * Gets all courses that contain this block
- * @return array courses[]
+ *
+ * @return array of courses
  */
 function get_courses_with_block($blockid) {
     $searchcriteria = array('blocklist' => $blockid);
@@ -129,19 +111,10 @@ function get_courses_with_block($blockid) {
 }
 
 /**
- * Gets manager's email address for the given user
- * @param stdClass $user The user object
- * @return string manager's email address
- */
-function get_manager_email_address($user) {
-    profile_load_data($user);
-    return clean_text($user->profile_field_manageremailaddress);
-}
-
-/**
  * Gets manager for the given user
+ * 
  * @param stdClass $user The user object
- * @return array manager user objects
+ * @return array Manager user objects
  */
 function get_manager_users($user) {
     global $DB;
@@ -169,8 +142,9 @@ function get_manager_users($user) {
 
 /**
  * Gets manager for the given user
- * @param stdClass $user The user object
- * @return array manager user objects
+ *
+ * @param int $userid The id of the user
+ * @return array Manager user ids
  */
 function get_manager_user_ids($userid) {
     global $DB;
@@ -200,9 +174,10 @@ function get_manager_user_ids($userid) {
 
 /**
  * Sets manager for a user
+ *
  * @param stdClass $user The user object
  * @param int $managerid The manager's user id
- * @return bool true if success
+ * @return bool true if successful, false otherwise
  */
 function set_manager($user, $managerid) {
     global $DB;
@@ -227,9 +202,10 @@ function set_manager($user, $managerid) {
 
 /**
  * Adds manager for a user
- * @param stdClass $user The user object
+ *
+ * @param int $userid The user's id
  * @param int $managerid The manager's user id
- * @return bool true if success
+ * @return bool true if successful, false otherwise
  */
 function add_manager($userid, $managerid) {
     global $DB;
@@ -238,7 +214,7 @@ function add_manager($userid, $managerid) {
     $context = context_user::instance($userid, MUST_EXIST);
     
     // Assign the new manager (if there is one)
-    if (isset($managerid) && $managerid != '') {
+    if (!empty($managerid)) {
         $success = role_assign($roleid, $managerid, $context->id);
     }
 
@@ -254,7 +230,8 @@ function add_manager($userid, $managerid) {
 
 /**
  * Removes a manager for a user
- * @param stdClass $user The user object
+ *
+ * @param int $userid The user's id
  * @param int $managerid The manager's user id
  * @return bool true if success
  */
@@ -265,7 +242,7 @@ function remove_manager($userid, $managerid) {
     $context = context_user::instance($userid, MUST_EXIST);
 
     // Assign the new manager (if there is one)
-    if (isset($managerid) && $managerid != '') {
+    if (!empty($managerid)) {
         $success = role_unassign($roleid, $managerid, $context->id);
     }
 
@@ -280,24 +257,10 @@ function remove_manager($userid, $managerid) {
 }
 
 /**
- * Sets manager's email address for a user
- * @param stdClass $user The user object
- * @param string $emailaddress The manager's email address to save
- * @return bool true if success
- */
-function set_manager_email_address($user, $emailaddress) {
-    profile_load_data($user);
-    if (strlen($emailaddress) == 0) {
-        $user->profile_field_manageremailaddress = ""; // Avoids it being saved as "0"
-    } else {
-        $user->profile_field_manageremailaddress = substr($emailaddress, 0, 255);
-    }
-    profile_save_data($user);
-    return true;
-}
-
-/**
- * Gets users who should not appear in the candidate manager list
+ * Gets users who should not be selectable in user lists
+ * 
+ * For example - site administrators, webservice users, users who can't login
+ *
  * @return array user ids of excluded users
  */
 function get_excluded_users() {
@@ -359,7 +322,7 @@ function get_excluded_users() {
     }
 
 /**
- * Description of manager_selector
+ * Creates a user_selector form element for iStart students to use to select their manager(s)
  *
  * @author timbutler
  */
@@ -371,7 +334,8 @@ class manager_candidate_selector extends user_selector_base {
     }
 
     /**
-     * Candidate managers
+     * Finds candidate managers
+     *
      * @param string $search
      * @return array
      */
@@ -420,7 +384,7 @@ class manager_candidate_selector extends user_selector_base {
 }
 
 /**
- * Description of manager_selector
+ * Creates a user_selector form element for iStart students to use to view and remove their current manager(s)
  *
  * @author timbutler
  */
@@ -433,7 +397,8 @@ class manager_existing_selector extends user_selector_base {
     }
 
     /**
-     * Candidate managers
+     * Finds existing managers
+     *
      * @param string $search
      * @return array
      */

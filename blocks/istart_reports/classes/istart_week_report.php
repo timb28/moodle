@@ -1,18 +1,16 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 namespace block_istart_reports;
 
 require_once($CFG->dirroot . '/blocks/istart_reports/lib.php');
 
 /**
- * Description of istart_week
+ * iStart Reports block
  *
- * @author timbutler
+ * @package   block_istart_reports
+ * @author    Tim Butler
+ * @copyright 2015 onwards Harcourts Academy {@link http://www.harcourtsacademy.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class istart_week_report {
     
@@ -20,20 +18,37 @@ class istart_week_report {
             $reporttime,
             $course,
             $totalweeks,
-            $istartgroups,
-            $istartweeks;
+            $istartgroups;
     
+    /**
+     * Constructs the istart_week_report for a given course, report type and time.
+     *
+     * @param int $course The course object.
+     * @param int $reporttype The iStart report type.
+     * @param int $reporttime The timestamp of when the report is for.
+     */
     public function __construct($course, $reporttype, $reporttime) {
         $this->reporttype = $reporttype;
         $this->reporttime = $reporttime;
         $this->course = $course;
-        $this->setup_totalweeks($course->id);
-        $this->setup_istartgroups($course->id);
+        $this->setup_totalweeks();
+        $this->setup_istartgroups();
 
     } // _construct
 
-    private function setup_totalweeks($courseid) {
+    /**
+     * Calculates then stores the total number of istart weeks available
+     *
+     * @return bool true if successful, false if not
+     */
+    private function setup_totalweeks() {
         global $DB;
+
+        $course = $this->course;
+
+        if (empty($course)) {
+            return false;
+        }
 
         // Get total number of istart weeks
         try {
@@ -47,24 +62,36 @@ class istart_week_report {
                         cfo.courseid = :courseid
                             AND cfo.name = :format_option_name';
             $params = array(
-                            'courseid' => $courseid,
+                            'courseid' => $course->id,
                             'format_option_name'  => 'istartweek');
             $record = $DB->get_record_sql($sql, $params, MUST_EXIST);
 
         } catch(Exception $e) {
             error_log($e, DEBUG_NORMAL);
-            return("iStart manager report not sent because the total iStart weeks cannot be read from the database.");
+            return false;
         }
 
         $this->totalweeks = $record->totalweeks;
+        return true;
     }
 
-    private function setup_istartgroups($courseid) {
-        if (!isset($this->reporttime)) {
-            return;
+    /**
+     * Finds then stores the istart groups
+     *
+     * @return bool true if successful, false if not
+     */
+    private function setup_istartgroups() {
+        if (empty($this->reporttime)) {
+            return false;
         }
 
-        $allgroups = groups_get_all_groups($courseid);
+        $course = $this->course;
+
+        if (empty($course)) {
+            return false;
+        }
+
+        $allgroups = groups_get_all_groups($course->id);
 
         foreach ($allgroups as $group) {
             $istartgroup = new istart_group($group, $this->reporttime);
@@ -72,26 +99,24 @@ class istart_week_report {
                 $this->istartgroups[] = $istartgroup;
             }
         }
+
+        return true;
     }
 
     /**
-    * Sends istart manager reports for a given istart intake group
-    * @param stdClass $course The istart course object.
-    * @param stdClass $group The group to process.
-    * @return TODO true if a report was sent
-    */
+     * Processes istart manager reports for a given istart intake group
+     *
+     * @return bool true if commpleted successfully
+     */
     public function process_manager_reports() {
         if ($this->reporttype !== MANAGERREPORTTYPE) {
-            return;
+            return false;
         }
 
-        // Send out all unsent manager reports from the last NUMPASTREPORTDAYS days.
-        // Reports older than NUMPASTREPORTDAYS will not be mailed.  This is to avoid the problem where
-        // cron has not been running for a long time or a student moves iStart group,
-        // and then suddenly people are flooded with mail from the past few weeks or months
+        // Send out manager report for groups that finished an istart week yesterday
         foreach ($this->istartgroups as $istartgroup) {
 
-            // Skip groups who have finished iStart
+            // Skip groups who have finished all iStart weeks +1 week
             if ($istartgroup->reportweeknum > $this->totalweeks) {
                 error_log(" - 2. Skipping group who have completed iStart: ".$istartgroup->group->id.
                         " (".$istartgroup->group->name.") iStart week: " . $istartgroup->reportweeknum);
@@ -125,54 +150,33 @@ class istart_week_report {
    }
 
     /**
-     * Sends an istart user a manager report for a given date.
-     * @param int $courseid course ID of the istart course.
-     * @param int $groupid ID of the user's group.
-     * @param stdClass $user user being reported on.
-     * @param string $istartweek The istart week.
-     * @return true or error
+     * Prepares to send manager reports for group members.
+     *
+     * @param stdClass $istartgroup The iStart group.
+     * @return void
      */
-    function prepare_manager_report_for_group($istartgroup) {
-
+    private function prepare_manager_report_for_group($istartgroup) {
         $istartusers = $istartgroup->istartusers;
 
         foreach ($istartusers as $istartuser) {
-           $user    = $istartuser->user;
-           $group   = $istartgroup->group;
-           error_log(" - Preparing to send manager report for $user->id at $this->reporttime"); // TODO remove after testing
+            $user    = $istartuser->user;
+            $group   = $istartgroup->group;
+            error_log(" - Preparing to send manager report for $user->id at $this->reporttime"); // TODO remove after testing
 
             // Check if already sent
-//            if (!$this->is_report_sent($group, $user, MANAGERREPORTTYPE, $this->reporttime)) {
+            if (!$this->is_report_sent($group, $user, MANAGERREPORTTYPE, $this->reporttime)) {
                 $this->prepare_manager_report_for_user($istartgroup, $istartuser);
-//            }
-
-
-
-       }
-    }
-   
-    private function is_report_sent ($group, $user, $reporttype, $reporttime) {
-        global $DB;
-
-        $reportsent = false;
-
-        try {
-            $reportsent = $DB->record_exists_select('block_istart_reports',
-                    'courseid = :courseid AND groupid = :groupid AND userid = :userid'
-                    . ' AND reporttype = :reporttype AND reporttime = :reporttime AND senttime IS NOT NULL',
-                         array(
-                            'courseid' => $group->courseid,
-                            'groupid'  => $group->id,
-                            'userid'   => $user->id,
-                            'reporttype' => $reporttype,
-                            'reporttime' => $reporttime) );
-        } catch(Exception $e) {
-            error_log($e, DEBUG_NORMAL);
+            }
         }
-
-        return $reportsent;
     }
 
+    /**
+     * Prepares to send a manager report for an iStart user
+     *
+     * @param stdClass $istartgroup The iStart group
+     * @param stdClass $istartuser The iStart user
+     * @return bool true if successful, false otherwise
+     */
     private function prepare_manager_report_for_user($istartgroup, $istartuser) {
         // Get all the user's managers
         $managers = $istartuser->managers;
@@ -198,8 +202,18 @@ class istart_week_report {
 
             $this->send_manager_report_to_manager($istartgroup, $istartuser, $manager);
         }
+
+        return true;
     }
 
+    /**
+     * Sends the manager report email to a single manager
+     *
+     * @param stdClass $istartgroup The iStart group
+     * @param stdClass $istartuser The iStart user
+     * @param stdClass $manager The user that is the iStart users' manager
+     * @return bool true if successful, false otherwise
+     */
     private function send_manager_report_to_manager ($istartgroup, $istartuser, $manager) {
         global $CFG, $DB, $COURSE;
         
@@ -215,8 +229,8 @@ class istart_week_report {
         $reportdate = new \DateTime();
         $reportdate->setTimestamp($this->reporttime);
 
-        $email->customheaders   = $this->get_email_headers(MANAGERREPORTTYPE, $this->reporttime, $group, $user);
-        $email->subject         = $this->get_email_subject(MANAGERREPORTTYPE, $istartgroup, $user);
+        $email->customheaders   = $this->get_email_headers($group, $user, MANAGERREPORTTYPE, $this->reporttime);
+        $email->subject         = $this->get_email_subject($user, $istartgroup->istartweek, MANAGERREPORTTYPE);
         $email->text            = $this->get_email_text($istartgroup, $istartuser);
         $email->html            = $this->get_email_html($istartgroup, $istartuser);
 
@@ -242,7 +256,7 @@ class istart_week_report {
         $email->text, $email->html);
 
         if (!$mailresult){
-            mtrace("Error: blocks/istart_reports/lib.php istart_send_manager_report(): "
+            error_log("Error: "
                     . "Could not send out email for course $course->id group $group->id "
                     . "for report $this->reporttime about user $user->id"
                     . "to their manager ($manager->email). Error: $mailresult .. not trying again.");
@@ -272,7 +286,47 @@ class istart_week_report {
         return true;
     }
 
-    private function get_email_headers($emailtype, $reporttime, $group, $user) {
+    /**
+     * Checks if an iStart report has been sent previously.
+     *
+     * @param stdClass $group The course group
+     * @param stdClass $user The user
+     * @param int $reporttype The iStart report type
+     * @param int $reporttime The time (day) the report was created
+     * @return bool true if the report has already been sent, false otherwise
+     */
+    private function is_report_sent ($group, $user, $reporttype, $reporttime) {
+        global $DB;
+
+        $reportsent = false;
+
+        try {
+            $reportsent = $DB->record_exists_select('block_istart_reports',
+                    'courseid = :courseid AND groupid = :groupid AND userid = :userid'
+                    . ' AND reporttype = :reporttype AND reporttime = :reporttime AND senttime IS NOT NULL',
+                         array(
+                            'courseid' => $group->courseid,
+                            'groupid'  => $group->id,
+                            'userid'   => $user->id,
+                            'reporttype' => $reporttype,
+                            'reporttime' => $reporttime) );
+        } catch(Exception $e) {
+            error_log($e, DEBUG_NORMAL);
+        }
+
+        return $reportsent;
+    }
+
+    /**
+     * Creates the report email headers.
+     *
+     * @param stdClass $group The course group
+     * @param stdClass $user The user
+     * @param int $reporttype The iStart report type
+     * @param int $reporttime The time (day) the report was created
+     * @return array The email headers
+     */
+    private function get_email_headers($group, $user, $reporttype, $reporttime) {
         global $CFG;
 
         // Create the email headers
@@ -282,7 +336,7 @@ class istart_week_report {
 
         $customheaders = array();
 
-        switch ($emailtype) {
+        switch ($reporttype) {
             case MANAGERREPORTTYPE:
                 $customheaders = array (  // Headers to make emails easier to track
                     'Return-Path: <>',
@@ -298,14 +352,20 @@ class istart_week_report {
         return $customheaders;
     }
 
-    private function get_email_subject($emailtype, $istartgroup, $user) {
+    /**
+     * Creates the report email subject.
+     *
+     * @param stdClass $user The user
+     * @param stdClass $istartweek The iStart week
+     * @param int $reporttype The iStart report type
+     * @return string The email subject
+     */
+    private function get_email_subject($user, $istartweek, $reporttype) {
         $emailsubject = '';
 
-        switch ($emailtype) {
+        switch ($reporttype) {
             case MANAGERREPORTTYPE:
                 // Create the email subject "iStart24 Online [Week #] completion report for [Firstname] [Lastname]"
-
-                $istartweek = $istartgroup->istartweek;
 
                 $a = new \stdClass();
                 $a->istartweeknumber = $istartweek->weeknumber;
@@ -318,83 +378,113 @@ class istart_week_report {
         return $emailsubject;
     }
 
+    /**
+     * Create the text version of the report email
+     *
+     * @param stdClass $istartgroup The iStart group
+     * @param stdClass $istartuser The iStart user
+     * @return string The text email content
+     */
     private function get_email_text($istartgroup, $istartuser) {
-        $course         = $this->course;
-        $istartweek     = $istartgroup->istartweek;
-        $tasksections   = $istartweek->tasksections;
-        $user           = $istartuser->user;
+        $email = '';
 
-        if (!isset($tasksections)) {
-            return '';
-        }
+        try {
+            $course         = $this->course;
+            $istartweek     = $istartgroup->istartweek;
+            $tasksections   = $istartweek->tasksections;
+            $user           = $istartuser->user;
 
-        // Create the email body
-        // Add welcome message
-        $a = new \stdClass();
-        $a->coursename = $course->fullname;
-        $a->firstname = $user->firstname;
-        $a->lastname = $user->lastname;
-        $a->istartweeknumber = $istartweek->weeknumber;
-        $a->istartweekname = $istartweek->weekname;
-
-        $email = get_string('managerreporttextheader','block_istart_reports', $a);
-        foreach ($tasksections as $tasksection) {
-            $numtasks = $tasksection->numtasks;
-            $numtaskscomplete = $istartuser->get_num_tasks_complete($tasksection->sectionid);
-
-            $percentcomplete = 0;
-            if ($numtasks > 0) {
-                $percentcomplete = ceil( ($numtaskscomplete / $numtasks) * 100);
+            if (!isset($tasksections)) {
+                return '';
             }
-            $graph = ceil($percentcomplete / 10);
 
-            $a->graph = $graph;
-            $a->sectionname = $tasksection->sectionname;
-            $a->percentcomplete = $percentcomplete;
-            $email .= get_string('managerreporttextbody','block_istart_reports', $a);
+            // Create the email body
+            // Add welcome message
+            $a = new \stdClass();
+            $a->coursename = $course->fullname;
+            $a->firstname = $user->firstname;
+            $a->lastname = $user->lastname;
+            $a->istartweeknumber = $istartweek->weeknumber;
+            $a->istartweekname = $istartweek->weekname;
+
+            $email.= get_string('managerreporttextheader','block_istart_reports', $a);
+            foreach ($tasksections as $tasksection) {
+                $numtasks = $tasksection->numtasks;
+                $numtaskscomplete = $istartuser->get_num_tasks_complete($tasksection->sectionid);
+
+                $percentcomplete = 0;
+                if ($numtasks > 0) {
+                    $percentcomplete = ceil( ($numtaskscomplete / $numtasks) * 100);
+                }
+                $graph = ceil($percentcomplete / 10);
+
+                $a->graph = $graph;
+                $a->sectionname = $tasksection->sectionname;
+                $a->percentcomplete = $percentcomplete;
+                $email .= get_string('managerreporttextbody','block_istart_reports', $a);
+            }
+            $email .= get_string('managerreporttextfooter','block_istart_reports', $a);
+            unset($a);
+
+        } catch(Exception $e) {
+            error_log($e, DEBUG_NORMAL);
+            return $email;
         }
-        $email .= get_string('managerreporttextfooter','block_istart_reports', $a);
-        unset($a);
 
         return $email;
     }
 
+    /**
+     * Create the HTML version of the report email
+     * 
+     * @param stdClass $istartgroup The iStart group
+     * @param stdClass $istartuser The iStart user
+     * @return string The HTML email content
+     */
     private function get_email_html($istartgroup, $istartuser) {
-        $course         = $this->course;
-        $istartweek     = $istartgroup->istartweek;
-        $tasksections   = $istartweek->tasksections;
-        $user           = $istartuser->user;
+        $email = '';
 
-        if (!isset($tasksections)) {
-            return '';
-        }
+        try {
+            $course         = $this->course;
+            $istartweek     = $istartgroup->istartweek;
+            $tasksections   = $istartweek->tasksections;
+            $user           = $istartuser->user;
 
-        // Create the email body
-        // Add welcome message
-        $a = new \stdClass();
-        $a->coursename = $course->fullname;
-        $a->firstname = $user->firstname;
-        $a->lastname = $user->lastname;
-        $a->istartweeknumber = $istartweek->weeknumber;
-        $a->istartweekname = $istartweek->weekname;
-
-        $email = get_string('managerreporthtmlheader','block_istart_reports', $a);
-        foreach ($tasksections as $tasksection) {
-            $numtasks = $tasksection->numtasks;
-            $numtaskscomplete = $istartuser->get_num_tasks_complete($tasksection->sectionid);
-
-            $percentcomplete = 0;
-            if ($numtasks > 0) {
-                $percentcomplete = ceil( ($numtaskscomplete / $numtasks) * 100);
+            if (!isset($tasksections)) {
+                return '';
             }
-            $graph = ceil($percentcomplete / 10);
 
-            $a->graph = $graph;
-            $a->sectionname = $tasksection->sectionname;
-            $a->percentcomplete = $percentcomplete;
-            $email .= get_string('managerreporthtmlbody','block_istart_reports', $a);
+            // Create the email body
+            // Add welcome message
+            $a = new \stdClass();
+            $a->coursename = $course->fullname;
+            $a->firstname = $user->firstname;
+            $a->lastname = $user->lastname;
+            $a->istartweeknumber = $istartweek->weeknumber;
+            $a->istartweekname = $istartweek->weekname;
+
+            $email.= get_string('managerreporthtmlheader','block_istart_reports', $a);
+            foreach ($tasksections as $tasksection) {
+                $numtasks = $tasksection->numtasks;
+                $numtaskscomplete = $istartuser->get_num_tasks_complete($tasksection->sectionid);
+
+                $percentcomplete = 0;
+                if ($numtasks > 0) {
+                    $percentcomplete = ceil( ($numtaskscomplete / $numtasks) * 100);
+                }
+                $graph = ceil($percentcomplete / 10);
+
+                $a->graph = $graph;
+                $a->sectionname = $tasksection->sectionname;
+                $a->percentcomplete = $percentcomplete;
+                $email .= get_string('managerreporthtmlbody','block_istart_reports', $a);
+            }
+            $email .= get_string('managerreporthtmlfooter','block_istart_reports', $a);
+
+        } catch(Exception $e) {
+            error_log($e, DEBUG_NORMAL);
+            return $email;
         }
-        $email .= get_string('managerreporthtmlfooter','block_istart_reports', $a);
 
         return $email;
     }

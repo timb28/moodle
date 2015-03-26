@@ -1,26 +1,31 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace block_istart_reports;
 
 /**
- * Description of istart_user
+ * iStart User containing information about the User's:
+ *  - Weekly tasks
+ *  - Report sent to
+ *  - Report sent time
+ *  - Manager(s)
  *
- * @author timbutler
+ * @package   block_istart_reports
+ * @author    Tim Butler
+ * @copyright 2015 onwards Harcourts Academy {@link http://www.harcourtsacademy.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class istart_user {
     public  $user,
             $istartweek,
             $usertasks,
-            $sentto,
-            $senttime,
             $managers;
 
+    /**
+     * Constructs the istart_user for the given user and week.
+     *
+     * @param stdClass $user The user object.
+     * @param stdClass $istartweek The iStart week object
+     */
     public function __construct($user, $istartweek) {
         $this->user         = $user;
         $this->istartweek   = $istartweek;
@@ -31,9 +36,11 @@ class istart_user {
 
     /**
      * Gets the number of tasks a user has completed in the istart week
-     * @return null
+     * from the database.
+     * 
+     * @return bool true if successful, false otherwise
      */
-    public function setup_user_tasks() {
+    private function setup_user_tasks() {
         global $DB;
 
         if (!isset($this->istartweek->tasksections)) {
@@ -81,6 +88,11 @@ class istart_user {
         return true;
     }
 
+    /**
+     * Gets the user's managers.
+     *
+     * @return array Array of manager user objects
+     */
     private function setup_managers() {
         $existingmanagers = get_manager_users($this->user);
         if (empty($existingmanagers)) {
@@ -94,6 +106,12 @@ class istart_user {
         return true;
     }
 
+    /**
+     * Gets the number of tasks a user has completed for a given section id.
+     * 
+     * @return int Number of tasks completed or -1 if no user tasks
+     *             have been set
+     */
     public function get_num_tasks_complete($sectionid) {
         $numtaskscomplete = -1;
         if (isset($this->usertasks)) {

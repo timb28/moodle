@@ -1,15 +1,4 @@
 <?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-namespace block_istart_reports\event;
-
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The manager_added event class.
  *
@@ -18,9 +7,16 @@ defined('MOODLE_INTERNAL') || die();
  * }
  *
  * @since     Moodle 2014051207.00
- * @copyright Harcourts Academy
+ * @package   block_istart_reports
+ * @author    Tim Butler
+ * @copyright 2015 onwards Harcourts Academy {@link http://www.harcourtsacademy.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  **/
+
+namespace block_istart_reports\event;
+
+defined('MOODLE_INTERNAL') || die();
+
 class manager_added extends \core\event\base {
     protected function init() {
         $this->data['crud'] = 'c'; // c(reate), r(ead), u(pdate), d(elete)

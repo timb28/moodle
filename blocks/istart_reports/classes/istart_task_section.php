@@ -1,17 +1,17 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace block_istart_reports;
 
 /**
- * Description of istart_task_section
+ * iStart Task Section containing information about:
+ *  - The course that contains it
+ *  - The section's properties (id, number, name)
+ *  - The total number of tasks in the section
  *
- * @author timbutler
+ * @package   block_istart_reports
+ * @author    Tim Butler
+ * @copyright 2015 onwards Harcourts Academy {@link http://www.harcourtsacademy.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class istart_task_section {
 
@@ -21,6 +21,14 @@ class istart_task_section {
             $sectionname,
             $numtasks;
 
+    /**
+     * Constructs the istart_task_section for the given course and section.
+     *
+     * @param int $courseid The course id.
+     * @param int $sectionid The course section id.
+     * @param int $sectionnumber The course section number.
+     * @param string $sectionname The name of the course section.
+     */
     public function __construct($courseid, $sectionid, $sectionnumber, $sectionname) {
         $this->courseid         = $courseid;
         $this->sectionid        = $sectionid;
