@@ -117,18 +117,18 @@ class istart_week_report {
         foreach ($this->istartgroups as $istartgroup) {
 
             // Skip groups who have finished all iStart weeks +1 week
-            if ($istartgroup->reportweeknum > $this->totalweeks) {
+            if ($istartgroup->reportweek > $this->totalweeks) {
                 error_log(" - 2. Skipping group who have completed iStart: ".$istartgroup->group->id.
-                        " (".$istartgroup->group->name.") iStart week: " . $istartgroup->reportweeknum);
+                        " (".$istartgroup->group->name.") iStart week: " . $istartgroup->reportweek);
                 continue;
             }
 
             // TODO remove testing code below
-            error_log(" - 2. Started processing group: ".$istartgroup->group->id." (".$istartgroup->group->name.") iStart report week: " . $istartgroup->reportweeknum);
+            error_log(" - 2. Started processing group: ".$istartgroup->group->id." (".$istartgroup->group->name.") iStart report week: " . $istartgroup->reportweek);
             error_log("   - group start date: " . date("Y-m-d", $istartgroup->startdate));
-            error_log("   - group report week: " . $istartgroup->reportweeknum);
+            error_log("   - group report week: " . $istartgroup->reportweek);
 
-            $reportsendtime = $istartgroup->startdate + ($istartgroup->reportweeknum * WEEKSECS) + DAYSECS;
+            $reportsendtime = $istartgroup->startdate + ($istartgroup->reportweek * WEEKSECS) + DAYSECS;
 
             error_log("   - group report send date: " . date("Y-m-d", $reportsendtime));
 
@@ -155,16 +155,15 @@ class istart_week_report {
      * @param stdClass $istartgroup The iStart group.
      * @return void
      */
-    private function prepare_manager_report_for_group($istartgroup) {
+    private function prepare_manager_report_for_group(istart_group $istartgroup) {
         $istartusers = $istartgroup->istartusers;
 
         foreach ($istartusers as $istartuser) {
             $user    = $istartuser->user;
-            $group   = $istartgroup->group;
             error_log(" - Preparing to send manager report for $user->id at $this->reporttime"); // TODO remove after testing
 
             // Check if already sent
-            if (!$this->is_report_sent($group, $user, MANAGERREPORTTYPE, $this->reporttime)) {
+            if (!$this->is_report_sent($istartgroup, $user, MANAGERREPORTTYPE)) {
                 $this->prepare_manager_report_for_user($istartgroup, $istartuser);
             }
         }
@@ -249,7 +248,8 @@ class istart_week_report {
         $data->userid       = $user->id;
         $data->managerid    = $manager->id;
         $data->reporttype   = MANAGERREPORTTYPE;
-        $data->reporttime   = $this->reporttime;
+        $data->reportweek   = $istartgroup->reportweek;
+        $data->reportdate   = $istartgroup->reportdate;
         $data->sentto       = $manager->email;
         $data->senttime     = 0;
 
@@ -290,29 +290,29 @@ class istart_week_report {
     /**
      * Checks if an iStart report has been sent previously.
      *
-     * @param stdClass $group The course group
+     * @param stdClass $istartgroup The course group
      * @param stdClass $user The user
      * @param int $reporttype The iStart report type
-     * @param int $reporttime The time (day) the report was created
      * @return bool true if the report has already been sent, false otherwise
      */
-    private function is_report_sent ($group, $user, $reporttype, $reporttime) {
+    private function is_report_sent (istart_group $istartgroup, $user, $reporttype) {
         global $DB;
 
-        $reportsent = false;
+        $group = $istartgroup->group;
 
         try {
             $reportsent = $DB->record_exists_select('block_istart_reports',
                     'courseid = :courseid AND groupid = :groupid AND userid = :userid'
-                    . ' AND reporttype = :reporttype AND reporttime = :reporttime AND senttime IS NOT NULL',
+                    . ' AND reporttype = :reporttype AND reportweek = :reportweek AND senttime IS NOT NULL',
                          array(
-                            'courseid' => $group->courseid,
-                            'groupid'  => $group->id,
-                            'userid'   => $user->id,
-                            'reporttype' => $reporttype,
-                            'reporttime' => $reporttime) );
+                            'courseid'      => $group->courseid,
+                            'groupid'       => $group->id,
+                            'userid'        => $user->id,
+                            'reporttype'    => $reporttype,
+                            'reportweek'    => $istartgroup->reportweek) );
         } catch(Exception $e) {
             error_log($e, DEBUG_NORMAL);
+            $reportsent = false;
         }
 
         return $reportsent;

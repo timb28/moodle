@@ -15,8 +15,8 @@ class istart_group {
 
     public  $group,
             $isvalidgroup,
-            $reportsendday,
-            $reportweeknum,
+            $reportdate,
+            $reportweek,
             $startdate,
             $istartusers,
             $istartweek;
@@ -33,8 +33,8 @@ class istart_group {
         $this->setup_start_date();
         $this->setup_report_week_num();
 
-        $reportsendtime         = $this->startdate + ($this->reportweeknum * WEEKSECS) + DAYSECS;
-        $this->reportsendday    = date("Y-m-d", $reportsendtime);
+        $reportsendtime     = $this->startdate + ($this->reportweek * WEEKSECS) + DAYSECS;
+        $this->reportdate   = date("Ymd", $reportsendtime);
     }
 
     /**
@@ -76,7 +76,7 @@ class istart_group {
      */
     private function setup_report_week_num() {
         if ($this->isvalidgroup === true && isset($this->startdate)) {
-            $this->reportweeknum = floor( (time() - $this->startdate) / WEEKSECS);
+            $this->reportweek = floor( (time() - $this->startdate) / WEEKSECS);
         }
     }
 
@@ -105,7 +105,7 @@ class istart_group {
     public function prepare_for_group_report() {
         try {
             // Get all week tasks
-            $this->istartweek = new istart_week($this->group->courseid, $this->reportweeknum);
+            $this->istartweek = new istart_week($this->group->courseid, $this->reportweek);
 
             // Get all group users
             $this->setup_group_users(); // Must be done after getting all the week tasks
