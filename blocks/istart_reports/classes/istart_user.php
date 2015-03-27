@@ -68,7 +68,7 @@ class istart_user {
                             JOIN
                         {course_modules_completion} cmc ON cmc.coursemoduleid = cm.id
                     WHERE
-                        cmc.userid = :userid AND cm.section $insql
+                        cmc.completionstate = 1 AND cmc.userid = :userid AND cm.section $insql
                     GROUP BY
                         cm.section";
             $params['userid'] = $this->user->id;
