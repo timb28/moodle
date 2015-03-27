@@ -316,7 +316,7 @@ class istart_week_report {
             $reportsent = false;
         }
 
-        return $reportsent;
+        return false;//return $reportsent; // TODO remove after testing
     }
 
     /**
@@ -418,7 +418,7 @@ class istart_week_report {
                 if ($numtasks > 0) {
                     $percentcomplete = ceil( ($numtaskscomplete / $numtasks) * 100);
                 }
-                $graph = ceil($percentcomplete / 10);
+                $graph = floor($percentcomplete / 5);
 
                 $a->graph = $graph;
                 $a->sectionname = $tasksection->sectionname;
@@ -474,7 +474,7 @@ class istart_week_report {
                 if ($numtasks > 0) {
                     $percentcomplete = ceil( ($numtaskscomplete / $numtasks) * 100);
                 }
-                $graph = ceil($percentcomplete / 10);
+                $graph = floor($percentcomplete / 5);
 
                 $a->graph = $graph;
                 $a->sectionname = $tasksection->sectionname;
