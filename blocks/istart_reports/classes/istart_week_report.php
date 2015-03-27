@@ -247,6 +247,7 @@ class istart_week_report {
         $data->courseid     = $course->id;
         $data->groupid      = $group->id;
         $data->userid       = $user->id;
+        $data->managerid    = $manager->id;
         $data->reporttype   = MANAGERREPORTTYPE;
         $data->reporttime   = $this->reporttime;
         $data->sentto       = $manager->email;
