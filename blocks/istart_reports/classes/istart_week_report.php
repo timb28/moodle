@@ -250,6 +250,7 @@ class istart_week_report {
         $data->reporttype   = MANAGERREPORTTYPE;
         $data->reportweek   = $istartgroup->reportweek;
         $data->reportdate   = $istartgroup->reportdate;
+        $data->reporttime   = $this->reporttime;
         $data->sentto       = $manager->email;
         $data->senttime     = 0;
 
