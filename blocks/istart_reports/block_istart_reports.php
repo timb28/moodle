@@ -100,14 +100,4 @@ class block_istart_reports extends block_base {
 
     function has_config() {return false;}
 
-//    public function cron() {
-//      mtrace( "Hey, my cron script is running" );
-//
-//      //
-//
-//      return true;
-//    }
-
 }
-
-opcache_reset(); // TODO: Remove this line
