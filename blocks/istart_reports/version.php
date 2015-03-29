@@ -10,11 +10,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2014112003;
+$plugin->version   = 2015032900;
 $plugin->component = 'block_istart_reports';
-$plugin->release = '0.1 (Build: 2014112003)';
+$plugin->release = '0.8 (Build: 2015032900)';
 $plugin->requires = 2014051200;                     // Requires Moodle 2.7+
-$plugin->maturity = MATURITY_ALPHA;
+$plugin->maturity = MATURITY_RC;
 $plugin->dependencies = array(
     'format_flexsections' => 2014090400,   // The Flexsections course format must be present.
 );
