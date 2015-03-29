@@ -138,6 +138,11 @@ class istart_week_report {
                 // Get all group users
                 $istartgroup->prepare_for_group_report();
 
+                // Skip to next group if this group is invalid
+                if (!$istartgroup->isvalidgroup) {
+                    continue;
+                }
+
                 error_log(print_r($istartgroup->istartweek, 1));
 
                 // Check if reports for those users have been sent
@@ -153,10 +158,14 @@ class istart_week_report {
      * Prepares to send manager reports for group members.
      *
      * @param stdClass $istartgroup The iStart group.
-     * @return void
+     * @return bool True if successful, false otherwise.
      */
     private function prepare_manager_report_for_group(istart_group $istartgroup) {
         $istartusers = $istartgroup->istartusers;
+
+        if (empty($istartgroup || empty($istartusers) || !$istartgroup->isvalidgroup)) {
+            return false;
+        }
 
         foreach ($istartusers as $istartuser) {
             $user    = $istartuser->user;
@@ -167,6 +176,8 @@ class istart_week_report {
                 $this->prepare_manager_report_for_user($istartgroup, $istartuser);
             }
         }
+
+        return true;
     }
 
     /**

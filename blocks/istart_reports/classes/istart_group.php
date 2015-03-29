@@ -82,19 +82,21 @@ class istart_group {
 
     /**
      * Creates istart_user objects for group users. Called only when a report is due
-     * @return bool true or error
+     * @return bool True on succcess, false otherwise
      */
     private function setup_group_users() {
-        $hasusers = false;
-
         $groupmembers = groups_get_members($this->group->id);
+
+        if (empty($groupmembers)) {
+            $this->isvalidgroup = false;
+            return false;
+        }
 
         foreach ($groupmembers as $user) {
             $this->istartusers[] = new istart_user($user, $this->istartweek);
-            $hasusers = true;
         }
 
-        return $hasusers;
+        return true;
     }
 
     /**
