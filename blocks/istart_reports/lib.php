@@ -378,7 +378,7 @@ class manager_candidate_selector extends user_selector_base {
 
     protected function get_options() {
         $options = parent::get_options();
-        $options['file'] = 'blocks/istart_reports/managers.php';
+        $options['file'] = 'blocks/istart_reports/lib.php';
         return $options;
     }
 }
@@ -449,7 +449,7 @@ class manager_existing_selector extends user_selector_base {
 
     protected function get_options() {
         $options = parent::get_options();
-        $options['file'] = 'blocks/istart_reports/managers.php';
+        $options['file'] = 'blocks/istart_reports/lib.php';
         return $options;
     }
 }
