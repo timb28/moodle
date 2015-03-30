@@ -149,6 +149,10 @@ function get_manager_users($user) {
 function get_manager_user_ids($userid) {
     global $DB;
 
+    if (empty($userid)) {
+        return array();
+    }
+
     $managerusers = null;
     $usercontext = context_user::instance($userid);
     $roleid = $DB->get_field('role', 'id', array('shortname'=>MANAGERROLESHORTNAME), IGNORE_MISSING);
@@ -309,14 +313,17 @@ function get_excluded_users() {
         }
 
         // Exclude current managers
-        $existingmanagers = array();
-        foreach (get_manager_users($USER) as $manager) {
-            $existingmanagers[] = $manager->id;
+        $existingmanagerids = array();
+        $existingmanagers = get_manager_users($USER);
+        if (!empty($existingmanagers)) {
+            foreach ($existingmanagers as $manager) {
+                $existingmanagers[] = $manager->id;
+            }
         }
 
 
         // Merge the arrays containing the excluded users
-        $excludedusers = array_merge($siteadmins, $nologinusers, $profilefieldusers, $existingmanagers);
+        $excludedusers = array_merge($siteadmins, $nologinusers, $profilefieldusers, $existingmanagerids);
 
         return $excludedusers;
     }
@@ -366,7 +373,6 @@ class manager_candidate_selector extends user_selector_base {
             return array();
         }
 
-
         if ($search) {
             $groupname = get_string('candidatemanagersmatching', 'block_istart_reports', $search);
         } else {
@@ -379,7 +385,35 @@ class manager_candidate_selector extends user_selector_base {
     protected function get_options() {
         $options = parent::get_options();
         $options['file'] = 'blocks/istart_reports/lib.php';
+        $options['extrafields'] = array('city');
         return $options;
+    }
+
+    /**
+     * Convert a user object to a string suitable for displaying as an option in the list box.
+     *
+     * Adapted to only display the '()' if there is content to display.
+     *
+     * @param object $user the user to display.
+     * @return string a string representation of the user.
+     */
+    public function output_user($user) {
+        $out = fullname($user);
+        if ($this->extrafields) {
+            $displayfields = array();
+            $hascontent = false;
+            foreach ($this->extrafields as $field) {
+                $displayfields[] = $user->{$field};
+
+                if (!empty($user->{$field})) {
+                    $hascontent = true;
+                }
+            }
+            if ($hascontent) {
+                $out .= ' (' . implode(', ', $displayfields) . ')';
+            }
+        }
+        return $out;
     }
 }
 
@@ -389,10 +423,8 @@ class manager_candidate_selector extends user_selector_base {
  * @author timbutler
  */
 class manager_existing_selector extends user_selector_base {
-    protected $userid;
 
     public function __construct($name, $options) {
-        $this->userid = $options['userid'];
         parent::__construct($name, $options);
     }
 
@@ -403,14 +435,19 @@ class manager_existing_selector extends user_selector_base {
      * @return array
      */
     public function find_users($search) {
-        global $DB;
+        global $DB, $USER;
+        
         // By default wherecondition retrieves all users except the deleted, not confirmed and guest.
         list($wherecondition, $params) = $this->search_sql($search, 'u');
 
         $fields      = 'SELECT ' . $this->required_fields_sql('u');
         $countfields = 'SELECT COUNT(1)';
 
-        $manageruserids = get_manager_user_ids($this->userid);
+        $manageruserids = get_manager_user_ids($USER->id);
+
+        if (empty($manageruserids)) {
+            return array();
+        }
 
         if ($wherecondition) {
             $wherecondition = "$wherecondition AND id IN ($manageruserids)";
@@ -450,6 +487,34 @@ class manager_existing_selector extends user_selector_base {
     protected function get_options() {
         $options = parent::get_options();
         $options['file'] = 'blocks/istart_reports/lib.php';
+        $options['extrafields'] = array('city');
         return $options;
+    }
+
+    /**
+     * Convert a user object to a string suitable for displaying as an option in the list box.
+     *
+     * Adapted to only display the '()' if there is content to display.
+     *
+     * @param object $user the user to display.
+     * @return string a string representation of the user.
+     */
+    public function output_user($user) {
+        $out = fullname($user);
+        if ($this->extrafields) {
+            $displayfields = array();
+            $hascontent = false;
+            foreach ($this->extrafields as $field) {
+                $displayfields[] = $user->{$field};
+
+                if (!empty($user->{$field})) {
+                    $hascontent = true;
+                }
+            }
+            if ($hascontent) {
+                $out .= ' (' . implode(', ', $displayfields) . ')';
+            }
+        }
+        return $out;
     }
 }
