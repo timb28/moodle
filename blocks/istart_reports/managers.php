@@ -13,6 +13,9 @@ require_once("../../config.php");
 require_once("$CFG->dirroot/blocks/istart_reports/lib.php");
 
 $courseid = required_param('courseid', PARAM_INT);
+
+require_login($courseid);
+
 $context = context_user::instance($USER->id);
 
 if (!$course = $DB->get_record('course', array('id' => $courseid))) {
@@ -34,12 +37,9 @@ $PAGE->set_url('/blocks/istart_reports/managers.php', array('courseid'=>$coursei
 $PAGE->set_pagetype('istart-reports');
 $PAGE->set_pagelayout('standard');
 
-require_login($courseid);
-
 if (optional_param('cancel', false, PARAM_BOOL)) {
     redirect($returnurl);
 }
-
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($header);
