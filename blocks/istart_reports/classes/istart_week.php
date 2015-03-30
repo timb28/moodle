@@ -41,9 +41,9 @@ class istart_week {
                     SELECT
                         cs.id as sectionid, cs.section as sectionnumber, cs.name
                     FROM
-                        mdl_course_sections AS cs
+                        {course_sections} AS cs
                             JOIN
-                        mdl_course_format_options AS cfo ON cs.id = cfo.sectionid
+                        {course_format_options} AS cfo ON cs.id = cfo.sectionid
                     WHERE
                         course = :courseid AND cfo.name = "istartweek"
                             AND cfo.value = :weeknumber
