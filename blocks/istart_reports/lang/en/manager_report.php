@@ -9,20 +9,20 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['manageremailsubject'] = 'iStart24 Online Week {$a->istartweeknumber} completion report for {$a->firstname} {$a->lastname}';
+$string['manageremailsubject'] = 'iStart24 Online Week {$a->istartweeknumber} Progress Report for {$a->firstname} {$a->lastname}';
 
 $string["managerreporttextheader"] = '
-{$a->coursename} Progress Report
-
-** iStart24 {$a->istartweekname} Report for {$a->firstname} {$a->lastname}
-------------------------------------------------------------';
+{$a->coursename} Progress Report for {$a->firstname} {$a->lastname}
+{$a->istartweekname}
+------------------------------------------------------------
+';
 
 $string['managerreporttextbody'] = '
 {$a->firstname} completed %{$a->percentcomplete} of {$a->sectionname} tasks
 ';
 
 $string['managerreporttextfooter'] = '
-
+------------------------------------------------------------
 Each iStart24 week is structured to include a focus on a particular
 aspect of the real estate business. There are four parts to every week.
 
@@ -536,7 +536,9 @@ $string['managerreporthtmlheader'] = '
             </td>
         </tr>
     </tbody>
-</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnDividerBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+</table>';
+
+$string['managerreporthtmlbody'] = '<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnDividerBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
     <tbody class="mcnDividerBlockOuter">
         <tr>
             <td class="mcnDividerBlockInner" style="padding: 9px 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
@@ -550,9 +552,25 @@ $string['managerreporthtmlheader'] = '
             </td>
         </tr>
     </tbody>
-</table>';
+</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnImageBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+    <tbody class="mcnImageBlockOuter">
+            <tr>
+                <td valign="top" style="padding: 9px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class="mcnImageBlockInner">
+                    <table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" class="mcnImageContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                        <tbody><tr>
+                            <td class="mcnImageContent" valign="top" style="padding-right: 9px;padding-left: 9px;padding-top: 0;padding-bottom: 0;text-align: center;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
 
-$string['managerreporthtmlbody'] = '<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+
+                                        <img align="center" alt="Tasks are complete" height="54" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/{$a->graph}.gif" style="max-width: 54px;padding-bottom: 0;display: inline !important;vertical-align: bottom;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="54" class="mcnImage">
+
+
+                            </td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+    </tbody>
+</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
     <tbody class="mcnTextBlockOuter">
         <tr>
             <td valign="top" class="mcnTextBlockInner" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
@@ -560,10 +578,9 @@ $string['managerreporthtmlbody'] = '<table border="0" cellpadding="0" cellspacin
                 <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
                     <tbody><tr>
 
-                        <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 100px;padding-bottom: 9px;padding-left: 100px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">
+                        <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">
 
-                            <div style="text-align:left;"><span style="line-height:20.7999992370605px"><img align="none" alt="Tasks are complete" height="54" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/{$a->graph}.gif" style="width: 54px;height: 54px;vertical-align: middle;margin: 0px 25px 0px 50px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="54">{$a->firstname} completed {$a->percentcomplete}% of {$a->sectionname} tasks</span></div>
-
+                            {$a->firstname} completed {$a->percentcomplete}% of {$a->sectionname} tasks
                         </td>
                     </tr>
                 </tbody></table>
@@ -595,7 +612,7 @@ $string['managerreporthtmlfooter'] = '<table border="0" cellpadding="0" cellspac
                 <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
                     <tbody><tr>
 
-                        <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">
+                        <td valign="top" class="mcnTextContent" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">
 
                             <p style="margin: 1em 0;padding: 0;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">Each iStart24 week is structured to include a focus on a particular aspect of the real estate business. There are four parts to every week.</p>
 
