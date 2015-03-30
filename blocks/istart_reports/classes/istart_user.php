@@ -54,6 +54,7 @@ class istart_user {
             // Get the section ids for the task sections of the istart week
             foreach ($this->istartweek->tasksections as $tasksection) {
                 $tasksectionids[] = $tasksection->sectionid;
+                $this->usertasks[$tasksection->sectionid] = new istart_user_tasks($tasksection->sectionid, 0);
             }
 
             list($insql, $params) = $DB->get_in_or_equal($tasksectionids, SQL_PARAMS_NAMED);
@@ -75,7 +76,7 @@ class istart_user {
             $taskscomplete = $DB->get_records_sql($sql, $params);
 
             foreach ($taskscomplete as $section) {
-                $this->usertasks[$section->sectionid] = new istart_user_tasks($section->sectionid, $section->numtaskscomplete);
+                $this->usertasks[$section->sectionid]->numtaskscomplete = $section->numtaskscomplete;
             }
 
             error_log("     - tasks complete objects user ". $this->user->firstname .": " . print_r($this->usertasks, 1));

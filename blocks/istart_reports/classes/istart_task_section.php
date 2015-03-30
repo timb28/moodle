@@ -53,12 +53,18 @@ class istart_task_section {
         // Get all course sections that contain tasks
         try {
 
-            $table = 'course_modules';
-            $conditions = array(
-                            'course' => $this->courseid,
-                            'completion' => 1,
-                            'section'  => $this->sectionid);
-            $totaltasks = $DB->count_records($table, $conditions);
+            $sql = '
+                    SELECT
+                        COUNT(id)
+                    FROM
+                        {course_modules}
+                    WHERE
+                        course = :courseid AND completion > 0
+                            AND section = :sectionid';
+            $params = array(
+                            'courseid' => $this->courseid,
+                            'sectionid'  => $this->sectionid);
+            $totaltasks = $DB->count_records_sql($sql, $params);
 
         } catch(Exception $e) {
             error_log($e, DEBUG_NORMAL);
