@@ -562,7 +562,7 @@ $string['managerreporthtmlbody'] = '<table border="0" cellpadding="0" cellspacin
 
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 100px;padding-bottom: 9px;padding-left: 100px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">
 
-                            <div style="text-align:left;"><span style="line-height:20.7999992370605px"><img align="none" alt="Tasks are complete" height="53" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/{$a->graph}.gif" style="width: 52px;height: 53px;vertical-align: middle;margin: 0px 25px 0px 50px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="52">{$a->firstname} completed {$a->percentcomplete}% of {$a->sectionname} tasks</span></div>
+                            <div style="text-align:left;"><span style="line-height:20.7999992370605px"><img align="none" alt="Tasks are complete" height="54" src="'.$CFG->wwwroot.'/blocks/istart_reports/pix/email/{$a->graph}.gif" style="width: 54px;height: 54px;vertical-align: middle;margin: 0px 25px 0px 50px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="54">{$a->firstname} completed {$a->percentcomplete}% of {$a->sectionname} tasks</span></div>
 
                         </td>
                     </tr>
