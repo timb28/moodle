@@ -158,15 +158,20 @@ li.section.main.istart-week-task {
 .istart-week-task.istart-week-task-read h3 a {
     background-image: url([[pix:theme|istart/menu-read]]);
 }
+.istart-week-task.istart-week-task-focus h3 a {
+    background-image: url([[pix:theme|istart/menu-focus]]);
+}
+.istart-week-task.istart-week-task-succeed h3 a {
+    background-image: url([[pix:theme|istart/menu-succeed]]);
+}
+/** TODO: START Remove once all tasks have been split into 'focus' and 'succeed' sections */
 .istart-week-task.istart-week-task-connect h3 a {
     background-image: url([[pix:theme|istart/menu-connect]]);
-}
-.istart-week-task.istart-week-task-success h3 a {
-    background-image: url([[pix:theme|istart/menu-success]]);
 }
 .istart-week-task.istart-week-task-do h3 a {
     background-image: url([[pix:theme|istart/menu-do]]);
 }
+/** TODO: END Remove once all tasks have been split into 'focus' and 'succeed' sections */
 /*** Icons when editing flexsections **/
 .format-flexsections.editing .istart-week-task.istart-week-task-watch h3 {
     background-image: url([[pix:theme|istart/title-watch]]);
@@ -174,15 +179,20 @@ li.section.main.istart-week-task {
 .format-flexsections.editing .istart-week-task.istart-week-task-read h3 {
     background-image: url([[pix:theme|istart/title-read]]);
 }
-.format-flexsections.editing .istart-week-task.istart-week-task-connect h3 {
-    background-image: url([[pix:theme|istart/title-connect]]);
+.format-flexsections.editing .istart-week-task.istart-week-task-focus h3 {
+    background-image: url([[pix:theme|istart/title-focus]]);
 }
-.format-flexsections.editing .istart-week-task.istart-week-task-success h3 {
-    background-image: url([[pix:theme|istart/title-success]]);
+.format-flexsections.editing .istart-week-task.istart-week-task-succeed h3 {
+    background-image: url([[pix:theme|istart/title-succeed]]);
 }
+/** TODO: START Remove once all tasks have been split into 'focus' and 'succeed' sections */
 .format-flexsections.editing .istart-week-task.istart-week-task-do h3 {
     background-image: url([[pix:theme|istart/title-do]]);
 }
+.format-flexsections.editing .istart-week-task.istart-week-task-connect h3 {
+    background-image: url([[pix:theme|istart/title-connect]]);
+}
+/** TODO: END Remove once all tasks have been split into 'focus' and 'succeed' sections */
 .course-content ul li.section.main.istart-week-task {
     border-bottom: 0;
 }
