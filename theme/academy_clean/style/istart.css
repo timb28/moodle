@@ -14,6 +14,9 @@
 .istartaction.istartaction-affirmations {
     background: url([[pix:theme|istart/affirmations]]) top left no-repeat;
 }
+.istartaction.istartaction-connect {
+    background: url([[pix:theme|istart/connect]]) top left no-repeat;
+}
 .istartaction.istartaction-form {
     background: url([[pix:theme|istart/form]]) top left no-repeat;
 }
@@ -158,6 +161,9 @@ li.section.main.istart-week-task {
 .istart-week-task.istart-week-task-connect h3 a {
     background-image: url([[pix:theme|istart/menu-connect]]);
 }
+.istart-week-task.istart-week-task-success h3 a {
+    background-image: url([[pix:theme|istart/menu-success]]);
+}
 .istart-week-task.istart-week-task-do h3 a {
     background-image: url([[pix:theme|istart/menu-do]]);
 }
@@ -170,6 +176,9 @@ li.section.main.istart-week-task {
 }
 .format-flexsections.editing .istart-week-task.istart-week-task-connect h3 {
     background-image: url([[pix:theme|istart/title-connect]]);
+}
+.format-flexsections.editing .istart-week-task.istart-week-task-success h3 {
+    background-image: url([[pix:theme|istart/title-success]]);
 }
 .format-flexsections.editing .istart-week-task.istart-week-task-do h3 {
     background-image: url([[pix:theme|istart/title-do]]);
