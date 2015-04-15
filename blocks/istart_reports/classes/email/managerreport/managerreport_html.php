@@ -9,7 +9,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_istart_reports\email;
+namespace block_istart_reports\email\managerreport;
 
 /**
  * Creates the text/html part of the Manager Report email
@@ -105,7 +105,7 @@ class managerreport_html {
         $headerintro    = get_string('managerreporthtmlheaderintro','block_istart_reports', $a);
         $heading        = get_string('managerreporthtmlheading','block_istart_reports', $a);
 
-        include 'html/managerreport_header.php';
+        include 'managerreport_header.php';
         return $html;
     }
 
@@ -118,7 +118,7 @@ class managerreport_html {
         global $CFG;
         $tasksummary = get_string('managerreporthtmltasksummary','block_istart_reports', $a);
 
-        include 'html/managerreport_body.php';
+        include 'managerreport_body.php';
         return $html;
     }
 
@@ -140,7 +140,7 @@ class managerreport_html {
         $reason         = get_string('managerreporthtmlreason','block_istart_reports', $a);
         $address        = get_string('managerreporthtmladdress','block_istart_reports', $a);
 
-        include 'html/managerreport_footer.php';
+        include 'managerreport_footer.php';
         return $html;
     }
 }

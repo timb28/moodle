@@ -12,9 +12,9 @@ namespace block_istart_reports;
 
 require_once($CFG->dirroot . '/blocks/istart_reports/lib.php');
 
-use block_istart_reports\email\managerreport;
-use block_istart_reports\email\managerreport_text;
-use block_istart_reports\email\managerreport_html;
+use block_istart_reports\email\managerreport\managerreport;
+use block_istart_reports\email\managerreport\managerreport_text;
+use block_istart_reports\email\managerreport\managerreport_html;
 
 class istart_week_report {
     
@@ -243,9 +243,9 @@ class istart_week_report {
         $reportdate = new \DateTime();
         $reportdate->setTimestamp($this->reporttime);
 
-        $managerreport      = new email\managerreport($course, $istartgroup->istartweek, $group, $user, $this->reporttime);
-        $managerreport_text = new email\managerreport_text($course, $istartgroup, $istartuser);
-        $managerreport_html = new email\managerreport_html($course, $istartgroup, $istartuser);
+        $managerreport      = new managerreport($course, $istartgroup->istartweek, $group, $user, $this->reporttime);
+        $managerreport_text = new managerreport_text($course, $istartgroup, $istartuser);
+        $managerreport_html = new managerreport_html($course, $istartgroup, $istartuser);
 
         $email->customheaders   = $managerreport->get_email_headers();
         $email->subject         = $managerreport->get_email_subject();

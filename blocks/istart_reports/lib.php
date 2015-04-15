@@ -18,7 +18,7 @@ require_once($CFG->dirroot.'/user/selector/lib.php');
 use block_istart_reports\istart_group;
 use block_istart_reports\istart_week;
 use block_istart_reports\istart_week_report;
-use block_istart_reports\email\managerreport;
+use block_istart_reports\email\managerreport\managerreport;
 
 define('BLOCK_NAME', 'istart_reports');
 define('NUMPASTREPORTDAYS', 6);
