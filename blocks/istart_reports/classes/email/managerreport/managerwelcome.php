@@ -18,8 +18,7 @@ namespace block_istart_reports\email\managerreport;
  */
 class managerwelcome {
 
-    private $course,
-            $user,
+    private $user,
             $manager;
 
 
