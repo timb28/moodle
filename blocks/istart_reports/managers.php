@@ -49,7 +49,7 @@ echo $OUTPUT->notification(get_string('intromanagerform', 'block_istart_reports'
 // Get the user_selectors we will need.
 $options = array('multiselect'      => false,
                  'rows'             => 10,
-                 'extrafields'      => array('city','email'),
+                 'extrafields'      => array('city'),
                  'accesscontext'    => $context);
 
 $existingmanagerselector = new manager_existing_selector('removeselect', $options);

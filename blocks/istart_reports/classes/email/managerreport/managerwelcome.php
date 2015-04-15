@@ -30,8 +30,12 @@ class managerwelcome {
      * @param stdClass $manager The manager user
      */
     public function __construct($user, $manager) {
+        global $DB;
+
         $this->user     = $user;
-        $this->manager  = $manager;
+
+        // Get the full USER object for manager
+        $this->manager  = $DB->get_record('user', array('id' => $manager->id));
     }
 
     /**

@@ -57,7 +57,7 @@ class managerwelcome_html {
             $a->lastname            = $this->user->lastname;
 
             $this->email.= $this->create_email_header($a);
-            $this->email .= $this->create_email_footer($a);
+            $this->email.= $this->create_email_footer($a);
 
         } catch(Exception $e) {
             error_log($e, DEBUG_NORMAL);
@@ -76,6 +76,7 @@ class managerwelcome_html {
         $title          = get_string('managerwelcomeemailsubject','block_istart_reports', $a);
         $headerintro    = get_string('managerwelcomehtmlheaderintro','block_istart_reports', $a);
         $heading        = get_string('managerwelcomehtmlheading','block_istart_reports', $a);
+        $content        = get_string('managerwelcomehtmlcontent','block_istart_reports', $a);
 
         include 'managerwelcome_header.php';
         return $html;

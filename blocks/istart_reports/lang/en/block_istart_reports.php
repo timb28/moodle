@@ -82,8 +82,17 @@ Our mailing address is:
 Eagle Farm, QLD 4009
 Australia';
 
-$string['managerwelcomehtmlheaderintro'] = 'iStart Progress Report';
-$string['managerwelcomehtmlheading']     = 'Report for {$a->firstname} {$a->lastname}';
+$string['managerwelcomehtmlheaderintro']    = 'iStart Progress Report';
+$string['managerwelcomehtmlheading']        = 'Report for {$a->firstname} {$a->lastname}';
+$string['managerwelcomehtmlcontent']        = 'Great news! {$a->firstname} {$a->lastname} is completing iStart24 Online,
+    the 24 week coaching programme for real estate sales. They have selected you as their manager who is keeping them
+    accountable for completing their iStart24 tasks each week.<br>
+    <br>
+    A progress report for {$a->firstname} will be emailed to you weekly. We recommend referring to the report during
+    your weekly one-on-one meetings.<br>
+    <br>
+    For more information, refer to our <a href="http://www.academyrealestatetraining.com/index.php?option=com_k2&amp;view=item&amp;id=184:istart24-for-managers&amp;Itemid=242" target="_blank" style="word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #6DC6DD;font-weight: normal;text-decoration: underline;">iStart24 Managers Guide</a>.
+';
 
 
 /**
