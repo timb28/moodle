@@ -19,25 +19,76 @@ namespace block_istart_reports\email\managerreport;
 class managerwelcome {
 
     private $course,
-            $user;
+            $user,
+            $manager;
 
 
     /**
      * Constructs the managerreport.
      *
-     * @param stdClass $course The iStart course
-     * @param stdClass $istartweek The iStart week
-     * @param stdClass $group The course group
      * @param stdClass $user The user
-     * @param int $reporttime The time (day) the report was created
+     * @param stdClass $manager The manager user
      */
-    public function __construct($course, $user) {
-        $this->course       = $course;
-        $this->user         = $user;
+    public function __construct($user, $manager) {
+        $this->user     = $user;
+        $this->manager  = $manager;
     }
 
     /**
-     * Creates the report email headers.
+     * Sends the manager welcome email to a single manager
+     *
+     * @param stdClass $istartgroup The iStart group
+     * @param stdClass $istartuser The iStart user
+     * @param stdClass $manager The user that is the iStart users' manager
+     * @return bool true if successful, false otherwise
+     */
+    public function send_manager_welcome_to_manager () {
+        global $CFG, $DB;
+
+        if (empty($this->user) || empty($this->manager)) {
+            return false;
+        }
+
+        $user           = $this->user;
+        $manager        = $this->manager;
+
+        error_log("   - Send manager welcome email to: " . $manager->email);
+
+        // Create the email to send
+        $email = new \stdClass();
+
+        $managerwelcome_text = new managerwelcome_text($user, $manager);
+        $managerwelcome_html = new managerwelcome_html($user, $manager);
+
+        $email->customheaders   = $this->get_email_headers();
+        $email->subject         = $this->get_email_subject();
+        $email->text            = $managerwelcome_text->get_email_content();
+        $email->html            = $managerwelcome_html->get_email_content();
+
+        // Send it from the support email address
+        $fromuser = new \stdClass();
+        $fromuser->id = 99999902;
+        $fromuser->email = $CFG->supportemail;
+        $fromuser->mailformat = 1;
+        $fromuser->maildisplay = 1;
+        $fromuser->customheaders = $email->customheaders;
+
+        $mailresult = email_to_user($manager, $fromuser, $email->subject,
+        $email->text, $email->html);
+
+        if (!$mailresult){
+            error_log("Error: "
+                    . "Could not send out manager welcome email for user "
+                    . "$manager->id ($manager->email) becoming the manager of "
+                    . "user $user->id. Error: $mailresult .. not trying again.");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Creates the welcome email headers.
      *
      * @return array The email headers
      */
@@ -47,16 +98,15 @@ class managerwelcome {
         // Create the email headers
         $urlinfo    = parse_url($CFG->wwwroot);
         $hostname   = $urlinfo['host'];
-        $course     = $this->course;
         $user       = $this->user;
+        $manager    = $this->manager;
 
         return array (  // Headers to make emails easier to track
             'Return-Path: <>',
             'List-Id: "iStart Manager Welcome" <istart.manager.welcome@'.$hostname.'>',
-            'List-Help: '.$CFG->wwwroot.'/course/view.php?id='.$course->id,
-            'Message-ID: <'.hash('sha256','Course: '.$course->id
-                    .' User: '.$user->id.' Date: '.now()).'@'.$hostname.'>',
-            'X-Course-Id: '.$course->id,
+            'List-Help: '.$CFG->wwwroot.'/user/profile.php?id='.$user->id,
+            'Message-ID: <'.hash('sha256','Manager: '.$manager->id
+                    .' User: '.$user->id.' Date: '.strftime('%F %T')).'@'.$hostname.'>',
             );
     }
 

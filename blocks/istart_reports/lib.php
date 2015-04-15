@@ -19,6 +19,7 @@ use block_istart_reports\istart_group;
 use block_istart_reports\istart_week;
 use block_istart_reports\istart_week_report;
 use block_istart_reports\email\managerreport\managerreport;
+use block_istart_reports\email\managerreport\managerwelcome;
 
 define('BLOCK_NAME', 'istart_reports');
 define('NUMPASTREPORTDAYS', 6);
@@ -211,24 +212,25 @@ function set_manager($user, $managerid) {
  * @param int $managerid The manager's user id
  * @return bool true if successful, false otherwise
  */
-function add_manager($userid, $managerid) {
+function add_manager($user, $manager) {
     global $DB;
 
     $roleid = $DB->get_field('role', 'id', array('shortname'=>MANAGERROLESHORTNAME), IGNORE_MISSING);
-    $context = context_user::instance($userid, MUST_EXIST);
+    $context = context_user::instance($user->id, MUST_EXIST);
     
     // Assign the new manager (if there is one)
-    if (!empty($managerid)) {
-        $success = role_assign($roleid, $managerid, $context->id);
+    if (!empty($manager->id)) {
+        $success = role_assign($roleid, $manager->id, $context->id);
     }
 
     // Send the manager the Manager Report welcome email
-
+    $managerwelcome = new \block_istart_reports\email\managerreport\managerwelcome($user, $manager);
+    $managerwelcome->send_manager_welcome_to_manager();
 
     $event = \block_istart_reports\event\manager_added::create(array(
         'context' => $context,
-        'objectid' => $userid,
-        'relateduserid' => $managerid,
+        'objectid' => $user->id,
+        'relateduserid' => $manager->id,
     ));
     $event->trigger();
 

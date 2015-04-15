@@ -50,7 +50,7 @@ class managerreport {
         $this->reporttime   = $reporttime;
     }
 
-        /**
+    /**
      * Sends the manager report email to a single manager
      *
      * @param stdClass $istartgroup The iStart group
@@ -104,7 +104,7 @@ class managerreport {
         $data->sentto       = $manager->email;
         $data->senttime     = 0;
 
-        $mailresult = email_to_user($this->manager, $fromuser, $email->subject,
+        $mailresult = email_to_user($manager, $fromuser, $email->subject,
         $email->text, $email->html);
 
         if (!$mailresult){

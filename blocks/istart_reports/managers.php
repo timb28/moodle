@@ -49,7 +49,7 @@ echo $OUTPUT->notification(get_string('intromanagerform', 'block_istart_reports'
 // Get the user_selectors we will need.
 $options = array('multiselect'      => false,
                  'rows'             => 10,
-                 'extrafields'      => array('city'),
+                 'extrafields'      => array('city','email'),
                  'accesscontext'    => $context);
 
 $existingmanagerselector = new manager_existing_selector('removeselect', $options);
@@ -66,7 +66,7 @@ if (optional_param('add', false, PARAM_BOOL) && confirm_sesskey()) {
         $newmanagerids = array();
 
         foreach ($userstoassign as $addmanager) {
-            add_manager($USER->id, $addmanager->id);
+            add_manager($USER, $addmanager);
             $newmanagerids[] = $addmanager->id;
         }
 

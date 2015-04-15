@@ -40,13 +40,58 @@ $string['eventmanagerremoved'] = 'A student\'s manager has been removed.';
 $string['eventmanagerreportsent'] = 'An iStart manager report has been sent.';
 
 /**
- * Manager email strings
+ * Manager Welcome Email strings
  */
 
 $string['managerwelcomeemailsubject']   = 'iStart24 Progress Reports for {$a->firstname} {$a->lastname} start soon';
+$string['managerwelcometextheader']     = 'Your weekly iStart24 Progress Report for {$a->firstname} {$a->lastname} starts soon
+
+Great news! {$a->firstname} {$a->lastname} is completing iStart24 Online, 
+the 24 week coaching programme for real estate sales. They have selected you 
+as their manager who is keeping them accountable for completing their iStart24 tasks each week.
+
+A progress report for {$a->firstname} will be emailed to you weekly.
+We recommend referring to the report during your weekly one-on-one meetings.
+
+For more information, refer to our iStart24 Managers Guide.
+(http://www.academyrealestatetraining.com/index.php?option=com_k2&view=item&id=184:istart24-for-managers&Itemid=242)
+';
+
+$string['managerwelcometextfooter'] = '
+------------------------------------------------------------
+Each iStart24 week is structured to include a focus on a particular
+aspect of the real estate business. There are four parts to every week.
+
+1. Video to watch
+2. Content to read
+3. Forum to share
+4. Tasks to do
+
+-------------------------------------------------------------------
+ Find out more
+ (http://www.academyrealestatetraining.com/sales/istart24-online)
+-------------------------------------------------------------------
+
+Copyright Harcourts International, All rights reserved.
+
+This email was sent to you because {$a->firstname} {$a->lastname}
+nominated you as their manager.
+
+Our mailing address is:
+31 Amy Johnson Place
+Eagle Farm, QLD 4009
+Australia';
+
+$string['managerwelcomehtmlheaderintro'] = 'iStart Progress Report';
+$string['managerwelcomehtmlheading']     = 'Report for {$a->firstname} {$a->lastname}';
+
+
+/**
+ * Manager Welcome Report strings
+ */
 $string['managerreportemailsubject']    = 'iStart24 Online Week {$a->istartweeknumber} Progress Report for {$a->firstname} {$a->lastname}';
 
-$string["managerreporttextheader"] = '
+$string['managerreporttextheader'] = '
 {$a->coursename} Progress Report for {$a->firstname} {$a->lastname}
 {$a->istartweekname}
 ------------------------------------------------------------
