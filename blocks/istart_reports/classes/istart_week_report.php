@@ -4,6 +4,8 @@ namespace block_istart_reports;
 
 require_once($CFG->dirroot . '/blocks/istart_reports/lib.php');
 
+use block_istart_reports\email\managerreport_text;
+
 /**
  * iStart Reports block
  *
@@ -239,10 +241,15 @@ class istart_week_report {
         $reportdate = new \DateTime();
         $reportdate->setTimestamp($this->reporttime);
 
+        $managerreport_text = new email\managerreport_text($course, $istartgroup, $istartuser);
+        $managerreport_html = new email\managerreport_html($course, $istartgroup, $istartuser);
+
         $email->customheaders   = $this->get_email_headers($group, $user, MANAGERREPORTTYPE, $this->reporttime);
         $email->subject         = $this->get_email_subject($user, $istartgroup->istartweek, MANAGERREPORTTYPE);
-        $email->text            = $this->get_email_text($istartgroup, $istartuser);
-        $email->html            = $this->get_email_html($istartgroup, $istartuser);
+//        $email->text            = $this->get_email_text($istartgroup, $istartuser);
+//        $email->html            = $this->get_email_html($istartgroup, $istartuser);
+        $email->text            = $managerreport_text->email;
+        $email->html            = $managerreport_html->email;
 
         // Send it from the support email address
         $fromuser = new \stdClass();
