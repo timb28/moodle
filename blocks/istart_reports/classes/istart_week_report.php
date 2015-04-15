@@ -214,95 +214,9 @@ class istart_week_report {
                 continue;
             }
 
-            $this->send_manager_report_to_manager($istartgroup, $istartuser, $manager);
+            $managerreport = new managerreport($this->course, $istartgroup, $istartuser, $manager, $this->reporttime);
+            $managerreport->send_manager_report_to_manager();
         }
-
-        return true;
-    }
-
-    /**
-     * Sends the manager report email to a single manager
-     *
-     * @param stdClass $istartgroup The iStart group
-     * @param stdClass $istartuser The iStart user
-     * @param stdClass $manager The user that is the iStart users' manager
-     * @return bool true if successful, false otherwise
-     */
-    private function send_manager_report_to_manager ($istartgroup, $istartuser, $manager) {
-        global $CFG, $DB, $COURSE;
-        
-        error_log("   - To the manager: " . $manager->email);
-
-        $course = $this->course;
-        $group  = $istartgroup->group;
-        $user   = $istartuser->user;
-
-        // Create the email to send
-        $email = new \stdClass();
-
-        $reportdate = new \DateTime();
-        $reportdate->setTimestamp($this->reporttime);
-
-        $managerreport      = new managerreport($course, $istartgroup->istartweek, $group, $user, $this->reporttime);
-        $managerreport_text = new managerreport_text($course, $istartgroup, $istartuser);
-        $managerreport_html = new managerreport_html($course, $istartgroup, $istartuser);
-
-        $email->customheaders   = $managerreport->get_email_headers();
-        $email->subject         = $managerreport->get_email_subject();
-        $email->text            = $managerreport_text->get_email_content();
-        $email->html            = $managerreport_html->get_email_content();
-
-        // Send it from the support email address
-        $fromuser = new \stdClass();
-        $fromuser->id = 99999902;
-        $fromuser->email = $CFG->supportemail;
-        $fromuser->mailformat = 1;
-        $fromuser->maildisplay = 1;
-        $fromuser->customheaders = $email->customheaders;
-
-        // Prepare data for block_istart_report database entry
-        $data = new \stdClass();
-        $data->courseid     = $course->id;
-        $data->groupid      = $group->id;
-        $data->userid       = $user->id;
-        $data->managerid    = $manager->id;
-        $data->reporttype   = managerreport::REPORTTYPE;
-        $data->reportweek   = $istartgroup->reportweek;
-        $data->reportdate   = $istartgroup->reportdate;
-        $data->reporttime   = $this->reporttime;
-        $data->sentto       = $manager->email;
-        $data->senttime     = 0;
-
-        $mailresult = email_to_user($manager, $fromuser, $email->subject,
-        $email->text, $email->html);
-
-        if (!$mailresult){
-            error_log("Error: "
-                    . "Could not send out email for course $course->id group $group->id "
-                    . "for report $this->reporttime about user $user->id"
-                    . "to their manager ($manager->email). Error: $mailresult .. not trying again.");
-            return false;
-        } else {
-            // Record the time that the email was sent
-            $data->senttime = time();
-        }
-
-        // Store that the manager report for the user on the given report date has been sent
-        try {
-            $DB->insert_record('block_istart_reports', $data);
-        } catch(Exception $e) {
-            error_log($e, DEBUG_NORMAL);
-            return false;
-        }
-
-        // Log the sending of the manager report
-        $context = \context_course::instance($COURSE->id);
-        $event = \block_istart_reports\event\managerreport_sent::create(array(
-            'context' => $context,
-            'objectid' => $user->id,
-            'relateduserid' => $manager->id,
-        ));
-        $event->trigger();
 
         return true;
     }

@@ -43,7 +43,8 @@ $string['eventmanagerreportsent'] = 'An iStart manager report has been sent.';
  * Manager email strings
  */
 
-$string['manageremailsubject'] = 'iStart24 Online Week {$a->istartweeknumber} Progress Report for {$a->firstname} {$a->lastname}';
+$string['managerwelcomeemailsubject']   = 'iStart24 Progress Reports for {$a->firstname} {$a->lastname} start soon';
+$string['managerreportemailsubject']    = 'iStart24 Online Week {$a->istartweeknumber} Progress Report for {$a->firstname} {$a->lastname}';
 
 $string["managerreporttextheader"] = '
 {$a->coursename} Progress Report for {$a->firstname} {$a->lastname}

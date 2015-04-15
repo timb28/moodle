@@ -222,6 +222,9 @@ function add_manager($userid, $managerid) {
         $success = role_assign($roleid, $managerid, $context->id);
     }
 
+    // Send the manager the Manager Report welcome email
+
+
     $event = \block_istart_reports\event\manager_added::create(array(
         'context' => $context,
         'objectid' => $userid,
