@@ -1,20 +1,23 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * iStart Reports block
+ *
+ * @package   block_istart_reports
+ * @author    Tim Butler
+ * @copyright 2015 onwards Harcourts Academy {@link http://www.harcourtsacademy.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace block_istart_reports\email;
 
 /**
- * Description of managerreport_text
+ * Creates the text/html part of the Manager Report email
  *
  * @author timbutler
  */
 class managerreport_html {
-    public  $course,
+    private $course,
             $istartweek,
             $tasksections,
             $istartuser,
@@ -36,10 +39,24 @@ class managerreport_html {
         $this->create_email();
     }
 
+    /**
+     * Gets the manager HTML email content
+     *
+     * @return string The contents of the text/html part of the email
+     */
+    public function get_email_content() {
+        return $this->email;
+    }
+
+    /**
+     * Gets the manager text/html part of the email
+     *
+     * @return bool True if successful, false otherwise
+     */
     private function create_email() {
         try {
             if (!isset($this->tasksections)) {
-                return '';
+                return false;
             }
 
             // Create the email body
@@ -72,10 +89,16 @@ class managerreport_html {
 
         } catch(Exception $e) {
             error_log($e, DEBUG_NORMAL);
-            return '';
+            return false;
         }
+        return true;
     }
 
+    /**
+     * Create the manager email header
+     *
+     * @return string Contents of the email header
+     */
     private function create_email_header($a) {
         global $CFG;
         $title          = get_string('managerreporthtmltitle','block_istart_reports', $a);
@@ -86,6 +109,11 @@ class managerreport_html {
         return $html;
     }
 
+    /**
+     * Create the manager email body
+     *
+     * @return string Contents of the email body
+     */
     private function create_email_body($a) {
         global $CFG;
         $tasksummary = get_string('managerreporthtmltasksummary','block_istart_reports', $a);
@@ -94,6 +122,11 @@ class managerreport_html {
         return $html;
     }
 
+    /**
+     * Create the manager email footer
+     *
+     * @return string Contents of the email footer
+     */
     private function create_email_footer($a) {
         global $CFG;
         $istartinfo     = get_string('managerreporthtmlistartinfo','block_istart_reports', $a);

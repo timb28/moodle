@@ -1,11 +1,4 @@
 <?php
-
-namespace block_istart_reports;
-
-require_once($CFG->dirroot . '/blocks/istart_reports/lib.php');
-
-use block_istart_reports\email\managerreport_text;
-
 /**
  * iStart Reports block
  *
@@ -14,6 +7,15 @@ use block_istart_reports\email\managerreport_text;
  * @copyright 2015 onwards Harcourts Academy {@link http://www.harcourtsacademy.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+namespace block_istart_reports;
+
+require_once($CFG->dirroot . '/blocks/istart_reports/lib.php');
+
+use block_istart_reports\email\managerreport;
+use block_istart_reports\email\managerreport_text;
+use block_istart_reports\email\managerreport_html;
+
 class istart_week_report {
     
     public  $reporttype,
@@ -111,7 +113,7 @@ class istart_week_report {
      * @return bool true if commpleted successfully
      */
     public function process_manager_reports() {
-        if ($this->reporttype !== MANAGERREPORTTYPE) {
+        if ($this->reporttype !== managerreport::REPORTTYPE) {
             return false;
         }
 
@@ -174,7 +176,7 @@ class istart_week_report {
             error_log(" - Preparing to send manager report for $user->id at $this->reporttime"); // TODO remove after testing
 
             // Check if already sent
-            if (!$this->is_report_sent($istartgroup, $user, MANAGERREPORTTYPE)) {
+            if (!$this->is_report_sent($istartgroup, $user, managerreport::REPORTTYPE)) {
                 $this->prepare_manager_report_for_user($istartgroup, $istartuser);
             }
         }
@@ -241,13 +243,14 @@ class istart_week_report {
         $reportdate = new \DateTime();
         $reportdate->setTimestamp($this->reporttime);
 
+        $managerreport      = new email\managerreport($course, $istartgroup->istartweek, $group, $user, $this->reporttime);
         $managerreport_text = new email\managerreport_text($course, $istartgroup, $istartuser);
         $managerreport_html = new email\managerreport_html($course, $istartgroup, $istartuser);
 
-        $email->customheaders   = $this->get_email_headers($group, $user, MANAGERREPORTTYPE, $this->reporttime);
-        $email->subject         = $this->get_email_subject($user, $istartgroup->istartweek, MANAGERREPORTTYPE);
-        $email->text            = $managerreport_text->email;
-        $email->html            = $managerreport_html->email;
+        $email->customheaders   = $managerreport->get_email_headers();
+        $email->subject         = $managerreport->get_email_subject();
+        $email->text            = $managerreport_text->get_email_content();
+        $email->html            = $managerreport_html->get_email_content();
 
         // Send it from the support email address
         $fromuser = new \stdClass();
@@ -263,7 +266,7 @@ class istart_week_report {
         $data->groupid      = $group->id;
         $data->userid       = $user->id;
         $data->managerid    = $manager->id;
-        $data->reporttype   = MANAGERREPORTTYPE;
+        $data->reporttype   = managerreport::REPORTTYPE;
         $data->reportweek   = $istartgroup->reportweek;
         $data->reportdate   = $istartgroup->reportdate;
         $data->reporttime   = $this->reporttime;
@@ -333,67 +336,6 @@ class istart_week_report {
         }
 
         return false;//return $reportsent; // TODO remove after testing
-    }
-
-    /**
-     * Creates the report email headers.
-     *
-     * @param stdClass $group The course group
-     * @param stdClass $user The user
-     * @param int $reporttype The iStart report type
-     * @param int $reporttime The time (day) the report was created
-     * @return array The email headers
-     */
-    private function get_email_headers($group, $user, $reporttype, $reporttime) {
-        global $CFG;
-
-        // Create the email headers
-        $urlinfo = parse_url($CFG->wwwroot);
-        $hostname = $urlinfo['host'];
-        $course = $this->course;
-
-        $customheaders = array();
-
-        switch ($reporttype) {
-            case MANAGERREPORTTYPE:
-                $customheaders = array (  // Headers to make emails easier to track
-                    'Return-Path: <>',
-                    'List-Id: "iStart Manager Report" <istart.manager.report@'.$hostname.'>',
-                    'List-Help: '.$CFG->wwwroot.'/course/view.php?id='.$course->id,
-                    'Message-ID: <'.hash('sha256','Course: '.$course->id.' Group: '.$group->id
-                            .' User: '.$user->id.' Report date: '.$reporttime).'@'.$hostname.'>',
-                    'X-Course-Id: '.$course->id,
-                    );
-                break;
-        }
-
-        return $customheaders;
-    }
-
-    /**
-     * Creates the report email subject.
-     *
-     * @param stdClass $user The user
-     * @param stdClass $istartweek The iStart week
-     * @param int $reporttype The iStart report type
-     * @return string The email subject
-     */
-    private function get_email_subject($user, $istartweek, $reporttype) {
-        $emailsubject = '';
-
-        switch ($reporttype) {
-            case MANAGERREPORTTYPE:
-                // Create the email subject "iStart24 Online [Week #] completion report for [Firstname] [Lastname]"
-
-                $a = new \stdClass();
-                $a->istartweeknumber = $istartweek->weeknumber;
-                $a->firstname = $user->firstname;
-                $a->lastname = $user->lastname;
-                $emailsubject =  get_string("manageremailsubject", "block_istart_reports", $a);
-                break;
-        }
-
-        return $emailsubject;
     }
 
 }

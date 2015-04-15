@@ -18,10 +18,10 @@ require_once($CFG->dirroot.'/user/selector/lib.php');
 use block_istart_reports\istart_group;
 use block_istart_reports\istart_week;
 use block_istart_reports\istart_week_report;
+use block_istart_reports\email\managerreport;
 
 define('BLOCK_NAME', 'istart_reports');
 define('NUMPASTREPORTDAYS', 6);
-define('MANAGERREPORTTYPE', 1);
 define('MANAGERROLESHORTNAME', 'coach');
 define('COURSEFORMATOPTIONTYPEFORTASKS', 'reportcompletions');
 
@@ -77,7 +77,7 @@ function process_manager_reports() {
             continue;
         }
 
-        $istart_week_report = new istart_week_report($course, MANAGERREPORTTYPE, $reporttime);
+        $istart_week_report = new istart_week_report($course, managerreport::REPORTTYPE, $reporttime);
         $istart_week_report->process_manager_reports();
     }
 }

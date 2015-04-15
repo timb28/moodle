@@ -1,20 +1,23 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * iStart Reports block
+ *
+ * @package   block_istart_reports
+ * @author    Tim Butler
+ * @copyright 2015 onwards Harcourts Academy {@link http://www.harcourtsacademy.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace block_istart_reports\email;
 
 /**
- * Description of managerreport_text
+ * Creates the text/plain part of the Manager Report email
  *
  * @author timbutler
  */
 class managerreport_text {
-    public  $course,
+    private $course,
             $istartweek,
             $tasksections,
             $istartuser,
@@ -36,10 +39,24 @@ class managerreport_text {
         $this->create_email();
     }
 
+    /**
+     * Gets the manager text email content
+     *
+     * @return string The contents of the text/plain part of the email
+     */
+    public function get_email_content() {
+        return $this->email;
+    }
+
+    /**
+     * Gets the manager text/plain part of the email
+     *
+     * @return bool True if successful, false otherwise
+     */
     private function create_email() {
         try {
             if (!isset($this->tasksections)) {
-                return '';
+                return false;
             }
 
             // Create the email body
@@ -72,9 +89,9 @@ class managerreport_text {
 
         } catch(Exception $e) {
             error_log($e, DEBUG_NORMAL);
-            return '';
+            return false;
         }
+        return true;
     }
-
     
 }
