@@ -45,13 +45,14 @@ class managerreport_html {
             // Create the email body
             // Add welcome message
             $a = new \stdClass();
-            $a->coursename = $this->course->fullname;
-            $a->firstname = $this->user->firstname;
-            $a->lastname = $this->user->lastname;
-            $a->istartweeknumber = $this->istartweek->weeknumber;
-            $a->istartweekname = $this->istartweek->weekname;
+            $a->coursename          = $this->course->fullname;
+            $a->firstname           = $this->user->firstname;
+            $a->lastname            = $this->user->lastname;
+            $a->istartweeknumber    = $this->istartweek->weeknumber;
+            $a->istartweekname      = $this->istartweek->weekname;
 
-            $this->email.= get_string('managerreporthtmlheader','block_istart_reports', $a);
+            $this->email.= $this->create_email_header($a);
+
             foreach ($this->tasksections as $tasksection) {
                 $numtasks = $tasksection->numtasks;
                 $numtaskscomplete = $this->istartuser->get_num_tasks_complete($tasksection->sectionid);
@@ -65,9 +66,9 @@ class managerreport_html {
                 $a->graph = $graph;
                 $a->sectionname = $tasksection->sectionname;
                 $a->percentcomplete = $percentcomplete;
-                $this->email .= get_string('managerreporthtmlbody','block_istart_reports', $a);
+                $this->email .= $this->create_email_body($a);
             }
-            $this->email .= get_string('managerreporthtmlfooter','block_istart_reports', $a);
+            $this->email .= $this->create_email_footer($a);
 
         } catch(Exception $e) {
             error_log($e, DEBUG_NORMAL);
@@ -75,5 +76,38 @@ class managerreport_html {
         }
     }
 
-    
+    private function create_email_header($a) {
+        global $CFG;
+        $title          = get_string('managerreporthtmltitle','block_istart_reports', $a);
+        $headerintro    = get_string('managerreporthtmlheaderintro','block_istart_reports', $a);
+        $heading        = get_string('managerreporthtmlheading','block_istart_reports', $a);
+
+        include 'html/managerreport_header.php';
+        return $html;
+    }
+
+    private function create_email_body($a) {
+        global $CFG;
+        $tasksummary = get_string('managerreporthtmltasksummary','block_istart_reports', $a);
+
+        include 'html/managerreport_body.php';
+        return $html;
+    }
+
+    private function create_email_footer($a) {
+        global $CFG;
+        $istartinfo     = get_string('managerreporthtmlistartinfo','block_istart_reports', $a);
+        $watchlabel     = get_string('managerreporthtmlwatchlabel','block_istart_reports', $a);
+        $readlabel      = get_string('managerreporthtmlreadlabel','block_istart_reports', $a);
+        $connectlabel   = get_string('managerreporthtmlconnectlabel','block_istart_reports', $a);
+        $dolabel        = get_string('managerreporthtmldolabel','block_istart_reports', $a);
+        $actionlabel    = get_string('managerreporthtmlactionlabel','block_istart_reports', $a);
+        $actionurl      = get_string('managerreporthtmlactionurl','block_istart_reports', $a);
+        $copyright      = get_string('managerreporthtmlcopyright','block_istart_reports', $a);
+        $reason         = get_string('managerreporthtmlreason','block_istart_reports', $a);
+        $address        = get_string('managerreporthtmladdress','block_istart_reports', $a);
+
+        include 'html/managerreport_footer.php';
+        return $html;
+    }
 }

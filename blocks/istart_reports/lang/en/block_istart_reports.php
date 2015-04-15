@@ -39,5 +39,59 @@ $string['eventmanageradded'] = 'A student\'s manager has been added.';
 $string['eventmanagerremoved'] = 'A student\'s manager has been removed.';
 $string['eventmanagerreportsent'] = 'An iStart manager report has been sent.';
 
-/* Report email contents */
-require_once($CFG->dirroot . '/blocks/istart_reports/lang/en/manager_report.php');
+/**
+ * Manager email strings
+ */
+
+$string['manageremailsubject'] = 'iStart24 Online Week {$a->istartweeknumber} Progress Report for {$a->firstname} {$a->lastname}';
+
+$string["managerreporttextheader"] = '
+{$a->coursename} Progress Report for {$a->firstname} {$a->lastname}
+{$a->istartweekname}
+------------------------------------------------------------
+';
+
+$string['managerreporttextbody'] = '
+%{$a->percentcomplete} of {$a->sectionname} tasks complete
+';
+
+$string['managerreporttextfooter'] = '
+------------------------------------------------------------
+Each iStart24 week is structured to include a focus on a particular
+aspect of the real estate business. There are four parts to every week.
+
+1. Video to watch
+2. Content to read
+3. Forum to share
+4. Tasks to do
+
+-------------------------------------------------------------------
+ Find out more
+ (http://www.academyrealestatetraining.com/sales/istart24-online)
+-------------------------------------------------------------------
+
+Copyright Harcourts International, All rights reserved.
+
+This email was sent to you because {$a->firstname} {$a->lastname}
+nominated you as their manager.
+
+Our mailing address is:
+31 Amy Johnson Place
+Eagle Farm, QLD 4009
+Australia';
+
+$string['managerreporthtmltitle']       = 'iStart24 Online Week {$a->istartweeknumber} progress report for {$a->firstname} {$a->lastname}';
+$string['managerreporthtmlheaderintro'] = '{$a->coursename} Progress Report for {$a->firstname} {$a->lastname}';
+$string['managerreporthtmlheading']     = '{$a->coursename} Report for {$a->firstname} {$a->lastname}';
+$string['managerreporthtmltasksummary'] = '{$a->percentcomplete}% of {$a->sectionname} tasks complete';
+$string['managerreporthtmlistartinfo']  = 'Each iStart24 week is structured to include a focus on a particular aspect of the real estate business. '
+                                        . 'There are four parts to every week.';
+$string['managerreporthtmlwatchlabel']  = 'Video to watch';
+$string['managerreporthtmlreadlabel']   = 'Content to read';
+$string['managerreporthtmlconnectlabel']= 'Forum to share';
+$string['managerreporthtmldolabel']     = 'Tasks to do';
+$string['managerreporthtmlactionlabel'] = 'Find out more';
+$string['managerreporthtmlactionurl']   = 'http://www.academyrealestatetraining.com/sales/istart24-online';
+$string['managerreporthtmlcopyright']   = 'Copyright © Harcourts International, All rights reserved.';
+$string['managerreporthtmlreason']      = 'This email was sent to you because {$a->firstname} {$a->lastname} nominated you as their manager.';
+$string['managerreporthtmladdress']     = '<strong>Our mailing address is:</strong><br>31 Amy Johnson Place<br>Eagle Farm, QLD 4009<br>Australia';
