@@ -10,9 +10,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2015033003;
+$plugin->version   = 2015041600;
 $plugin->component = 'block_istart_reports';
-$plugin->release = '0.9 (Build: 2015032900)';
+$plugin->release = '1.0 (Build: 2015041600)';
 $plugin->requires = 2014051200;                     // Requires Moodle 2.7+
 $plugin->maturity = MATURITY_RC;
 $plugin->dependencies = array(
