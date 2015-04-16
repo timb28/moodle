@@ -46,15 +46,17 @@ $string['eventmanagerreportsent'] = 'An iStart manager report has been sent.';
 $string['managerwelcomeemailsubject']   = 'iStart24 Progress Reports for {$a->firstname} {$a->lastname} start soon';
 $string['managerwelcometextheader']     = 'Your weekly iStart24 Progress Report for {$a->firstname} {$a->lastname} starts soon
 
-Great news! {$a->firstname} {$a->lastname} is completing iStart24 Online, 
-the 24 week coaching programme for real estate sales. They have selected you 
-as their manager who is keeping them accountable for completing their iStart24 tasks each week.
+Great news! {$a->firstname} {$a->lastname} is completing iStart24 Online,
+the 24 week coaching programme for real estate sales. They have selected
+you as their manager who is keeping them accountable for completing their
+iStart24 tasks each week.
 
 A progress report for {$a->firstname} will be emailed to you weekly.
-We recommend referring to the report during your weekly one-on-one meetings.
+We recommend referring to the report during your weekly
+one-on-one meetings.
 
 For more information, refer to our iStart24 Managers Guide.
-(http://www.academyrealestatetraining.com/index.php?option=com_k2&view=item&id=184:istart24-for-managers&Itemid=242)
+(http://www.harcourtsacademy.com/courses/sales/istart24/istart24-managers-guide)
 ';
 
 $string['managerwelcometextfooter'] = '
@@ -69,7 +71,7 @@ aspect of the real estate business. There are four parts to every week.
 
 -------------------------------------------------------------------
  Find out more
- (http://www.academyrealestatetraining.com/sales/istart24-online)
+ (http://www.harcourtsacademy.com/sales/istart24-online)
 -------------------------------------------------------------------
 
 Copyright Harcourts International, All rights reserved.
@@ -91,7 +93,7 @@ $string['managerwelcomehtmlcontent']        = 'Great news! {$a->firstname} {$a->
     A progress report for {$a->firstname} will be emailed to you weekly. We recommend referring to the report during
     your weekly one-on-one meetings.<br>
     <br>
-    For more information, refer to our <a href="http://www.academyrealestatetraining.com/index.php?option=com_k2&amp;view=item&amp;id=184:istart24-for-managers&amp;Itemid=242" target="_blank" style="word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #6DC6DD;font-weight: normal;text-decoration: underline;">iStart24 Managers Guide</a>.
+    For more information, refer to our <a href="http://www.harcourtsacademy.com/courses/sales/istart24/istart24-managers-guide" target="_blank" style="word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #6DC6DD;font-weight: normal;text-decoration: underline;">iStart24 Managers Guide</a>.
 ';
 
 
@@ -122,7 +124,7 @@ aspect of the real estate business. There are four parts to every week.
 
 -------------------------------------------------------------------
  Find out more
- (http://www.academyrealestatetraining.com/sales/istart24-online)
+ (http://www.harcourtsacademy.com/sales/istart24-online)
 -------------------------------------------------------------------
 
 Copyright Harcourts International, All rights reserved.
@@ -146,7 +148,7 @@ $string['managerreporthtmlreadlabel']   = 'Content to read';
 $string['managerreporthtmlconnectlabel']= 'Forum to share';
 $string['managerreporthtmldolabel']     = 'Tasks to do';
 $string['managerreporthtmlactionlabel'] = 'Find out more';
-$string['managerreporthtmlactionurl']   = 'http://www.academyrealestatetraining.com/sales/istart24-online';
+$string['managerreporthtmlactionurl']   = 'http://www.harcourtsacademy.com/sales/istart24-online';
 $string['managerreporthtmlcopyright']   = 'Copyright © Harcourts International, All rights reserved.';
 $string['managerreporthtmlreason']      = 'This email was sent to you because {$a->firstname} {$a->lastname} nominated you as their manager.';
 $string['managerreporthtmladdress']     = '<strong>Our mailing address is:</strong><br>31 Amy Johnson Place<br>Eagle Farm, QLD 4009<br>Australia';
