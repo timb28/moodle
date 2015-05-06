@@ -8,4 +8,4 @@ echo "Cloning Drag and Drop Image or Text Question Type"
 (cd .. && echo /question/type/ddimageortext/ >> .git/info/exclude)
 (cd .. && git --git-dir=question/type/ddimageortext/.git remote add upstream https://github.com/moodleou/moodle-qtype_ddimageortext.git)
 (cd ../question/type/ddimageortext && git branch --track master origin/master)
-(cd ../question/type/ddimageortext && git checkout master)
+(cd ../question/type/ddimageortext && git checkout HA-master)
