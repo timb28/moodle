@@ -73,6 +73,16 @@ if ($ADMIN->fulltree) {
         set_config('pathdvisvgm', trim($pathdvisvgm, " '\""), 'filter_tex');
     }
 
+    $pathlatex = get_config('filter_tex', 'pathlatex');
+    $pathdvips = get_config('filter_tex', 'pathdvips');
+    $pathconvert = get_config('filter_tex', 'pathconvert');
+    if (strrpos($pathlatex . $pathdvips . $pathconvert, '"') or
+            strrpos($pathlatex . $pathdvips . $pathconvert, "'")) {
+        set_config('pathlatex', trim($pathlatex, " '\""), 'filter_tex');
+        set_config('pathdvips', trim($pathdvips, " '\""), 'filter_tex');
+        set_config('pathconvert', trim($pathconvert, " '\""), 'filter_tex');
+    }
+
     $items[] = new admin_setting_configexecutable('filter_tex/pathlatex', get_string('pathlatex', 'filter_tex'), '', $default_filter_tex_pathlatex);
     $items[] = new admin_setting_configexecutable('filter_tex/pathdvips', get_string('pathdvips', 'filter_tex'), '', $default_filter_tex_pathdvips);
     $items[] = new admin_setting_configexecutable('filter_tex/pathconvert', get_string('pathconvert', 'filter_tex'), '', $default_filter_tex_pathconvert);

@@ -388,9 +388,14 @@ function assign_print_overview($courses, &$htmlarray) {
         $context = context_module::instance($assignment->coursemodule);
         if (has_capability('mod/assign:grade', $context)) {
             if (!isset($unmarkedsubmissions)) {
+                $submissionmaxattempt = 'SELECT mxs.userid, MAX(mxs.attemptnumber) AS maxattempt, mxs.assignment
+                                         FROM {assign_submission} mxs
+                                         WHERE mxs.assignment ' . $sqlassignmentids . '
+                                         GROUP BY mxs.userid, mxs.assignment';
+
                 // Build up and array of unmarked submissions indexed by assignment id/ userid
                 // for use where the user has grading rights on assignment.
-                $dbparams = array_merge(array(ASSIGN_SUBMISSION_STATUS_SUBMITTED), $assignmentidparams);
+                $dbparams = array_merge($assignmentidparams, array(ASSIGN_SUBMISSION_STATUS_SUBMITTED), $assignmentidparams);
                 $rs = $DB->get_recordset_sql('SELECT
                                                   s.assignment as assignment,
                                                   s.userid as userid,
@@ -398,6 +403,9 @@ function assign_print_overview($courses, &$htmlarray) {
                                                   s.status as status,
                                                   g.timemodified as timegraded
                                               FROM {assign_submission} s
+                                              LEFT JOIN ( ' . $submissionmaxattempt . ' ) smx ON
+                                                           smx.userid = s.userid AND
+                                                           smx.assignment = s.id
                                               LEFT JOIN {assign_grades} g ON
                                                   s.userid = g.userid AND
                                                   s.assignment = g.assignment AND
@@ -473,6 +481,8 @@ function assign_print_overview($courses, &$htmlarray) {
                     $submission->status == 'draft' ||
                     $submission->status == 'new') {
                 $str .= $strnotsubmittedyet;
+            } else if ($submission->nosubmissions) {
+                $str .= get_string('offline', 'assign');
             } else {
                 $str .= get_string('submissionstatus_' . $submission->status, 'assign');
             }

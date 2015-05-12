@@ -255,6 +255,21 @@ M.mod_quiz.secure_window = {
         return false;
     },
 
+    is_content_editable: function(n) {
+        if (n.test('[contenteditable=true]')) {
+            return true;
+        }
+        n = n.get('parentNode');
+        if (n === null) {
+            return false;
+        }
+        return M.mod_quiz.secure_window.is_content_editable(n);
+    },
+
+    prevent_selection: function(e) {
+        return false;
+    },
+
     prevent: function(e) {
         alert(M.str.quiz.functiondisabledbysecuremode);
         e.halt();

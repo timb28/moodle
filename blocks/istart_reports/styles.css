@@ -1,0 +1,17 @@
+/**
+ * Styles for block_istart_reports
+ *
+ * @package    block_istart_reports
+ * @author     Tim Butler
+ * @copyright  2015 onwards Harcourts Academy {@link http://www.harcourtsacademy.com}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+#page-istart-reports .intromanageremail {
+    padding: 1em 0;
+}
+
+/* Hide the managersform search options */
+#page-istart-reports #userselector_options {
+    display: none;
+}

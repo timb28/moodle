@@ -1952,7 +1952,7 @@ class core_course_courselib_testcase extends advanced_testcase {
      * Tests for event related to course module creation.
      */
     public function test_course_module_created_event() {
-        global $USER, $DB;
+        global $USER, $DB, $CFG;
         $this->resetAfterTest();
 
         // Create an assign module.

@@ -183,6 +183,13 @@ class external_api {
             }
             $debuginfo = 'Invalid external api parameter: the value is "' . $params .
                     '", the server was expecting "' . $description->type . '" type';
+            /* START Academy Patch M#22 Clean tags from H1 web service calls */
+            if ($description->type == PARAM_NOTAGS) {
+                if (!is_null($params) and !is_array($params) and !is_object($params)) {
+                    $params = clean_param($params, $description->type);
+                }
+            }
+            /* END Academy Patch M#22 Clean tags from H1 web service calls */
             return validate_param($params, $description->type, $description->allownull, $debuginfo);
 
         } else if ($description instanceof external_single_structure) {
