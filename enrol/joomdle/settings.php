@@ -46,13 +46,14 @@ if ($ADMIN->fulltree) {
                               'JPY' => 'Japanese Yen',
                               'GBP' => 'British Pounds',
                               'CAD' => 'Canadian Dollars',
-                              'NZ$' => 'New Zealand Dollars',
                               'AUD' => 'Australian Dollars',
 							  'CNY' => 'Renminbi'
                              );
     $settings->add(new admin_setting_configselect('enrol_joomdle/currency', get_string('currency', 'enrol_joomdle'), '', 'USD', $paypalcurrencies));
 
     $settings->add(new admin_setting_configtextarea('enrol_joomdle/enrol_message', get_string('enrol_message', 'enrol_joomdle'), '', 0, PARAM_RAW));
+
+    $settings->add(new admin_setting_configtextarea('enrol_joomdle/guest_enrol_message', get_string('guest_enrol_message', 'enrol_joomdle'), '', 0, PARAM_RAW));
 
     if (!during_initial_install()) {
         $options = get_default_enrol_roles(context_system::instance());

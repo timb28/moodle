@@ -28,5 +28,5 @@ if (array_key_exists ($name_session, $_COOKIE))
 				setcookie($name_session, '', time() - 3600, $CFG->sessioncookiepath, $CFG->sessioncookiedomain, $CFG->cookiesecure, $CFG->cookiehttponly);
                 unset($_SESSION);
 }
-$redirect_url = get_config (NULL, 'joomla_url');
+$redirect_url = get_config ('auth/joomdle', 'joomla_url');
 redirect($redirect_url);

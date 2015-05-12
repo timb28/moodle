@@ -1,9 +1,8 @@
 <?php
 
-$plugin->version  = 2008080232;
-//$plugin->requires = 2010000000;
+$plugin->version  = 2008080246;
 $plugin->requires = 2010112400;
-$plugin->maturity = MATURITY_BETA;
-$plugin->release = "0.95";
+$plugin->maturity = MATURITY_STABLE;
+$plugin->release = "1.0.1";
 
 ?>

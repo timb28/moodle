@@ -22,7 +22,7 @@ Password: <input type=password name="password">
 <?php
 } else {
 	//REDIRECT TO JOOMLA
-    $url = get_config('', 'joomla_url');
+    $url = get_config('auth/joomdle', 'joomla_url');
     header ("Location: $url");
 }
 

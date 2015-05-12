@@ -2,7 +2,7 @@
 $string['enrol_message'] = 'Mensaje a mostrar al usuario cuando aún no ha comprado el curso';
 $string['enrol_message_desc'] = 'Mensaje a mostrar al usuario cuando aún no ha comprado el curso';
 $string['pluginname'] = 'Joomdle';
-$string['pluginname_desc'] = 'Muestra un mensaje para informar al usuario de que deberían comprar el curso a través de Joomla.\nVersion 0.9';
+$string['pluginname_desc'] = 'Muestra un mensaje para informar al usuario de que deberían comprar el curso a través de Joomla.\nVersion 1.0';
 
 $string['enrolname'] = 'Joomdle';
 
@@ -25,5 +25,6 @@ $string['nocost'] = 'No hay un precio asociado a este curso!';
 $string['status'] = 'Permitir inscripciones Joomdle';
 $string['status_desc'] = 'Permitir a los usuarios comprar el curso a través de Joomla.';
 $string['unenrolselfconfirm'] = 'Realmente desea dejar este curso "{$a}"?';
+$string['guest_enrol_message'] = 'Mensaje a mostrar a los invitados';
 
 ?>

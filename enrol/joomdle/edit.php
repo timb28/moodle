@@ -73,12 +73,31 @@ if ($mform->is_cancelled()) {
         $instance->enrolperiod    = $data->enrolperiod;
         $instance->enrolstartdate = $data->enrolstartdate;
         $instance->enrolenddate   = $data->enrolenddate;
+        $instance->customtext1   = $data->customtext1;
+        $instance->customtext2   = $data->customtext2['text'];
+    //    $instance->customtext2   = $data->customtext2;
+
+/*
+		 if (!empty($data->customtext2) && is_array($data->customtext2)) {
+            $data->format = $data->description['format'];
+            $data->description = $data->description['text'];
+        } else if (empty($data->description)) {
+            $data->description = '';
+            $data->format = editors_get_preferred_format();
+        }
+        // Ensure form is defaulted correctly
+        if (empty($data->format)) {
+            $data->format = editors_get_preferred_format();
+        }
+*/
+
+
         $instance->timemodified   = time();
         $DB->update_record('enrol', $instance);
 
     } else {
         $fields = array('status'=>$data->status, 'name'=>$data->name, 'cost'=>$data->cost, 'currency'=>$data->currency, 'roleid'=>$data->roleid,
-                        'enrolperiod'=>$data->enrolperiod, 'enrolstartdate'=>$data->enrolstartdate, 'enrolenddate'=>$data->enrolenddate);
+                        'enrolperiod'=>$data->enrolperiod, 'enrolstartdate'=>$data->enrolstartdate, 'enrolenddate'=>$data->enrolenddate, 'customtext1'=>$data->customtext1, 'customtext2'=>$data->customtext2['text']);
         $plugin->add_instance($course, $fields);
     }
 

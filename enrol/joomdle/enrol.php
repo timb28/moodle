@@ -51,47 +51,16 @@ function print_entry($course) {
     $strloginto = get_string('loginto', '', $course->shortname);
     $strcourses = get_string('courses');
 
-    $context = context_system::instance();
+    $context = context_system::get_context();
 
     $navlinks = array();
     $navlinks[] = array('name' => $strcourses, 'link' => ".", 'type' => 'misc');
     $navlinks[] = array('name' => $strloginto, 'link' => null, 'type' => 'misc');
     $navigation = build_navigation($navlinks);
 
-    /* XXX Esto es para ver si el usuario ha pagado. Ya no es necesario con el IPN de paypal */
-    if (0) {   // XXX aki va el rdo de chekar ek nuevo serv web en joomla q dice si se ha pagado el curso
-
-	    /* XXX Esto pa decir q no tienes pagao el curso, detras de este if
-         if (empty($_GET['confirm']) && empty($_GET['cancel'])) {
-
-            print_header($strloginto, $course->fullname, $navigation);
-            echo '<br />';
-            notice_yesno(get_string('enrolmentconfirmation'), "enrol.php?id=$course->id&amp;confirm=1&amp;sesskey=".sesskey(),
-                                                              "enrol.php?id=$course->id&amp;cancel=1");
-            print_footer();
-            exit;
-*/
-            if (!enrol_into_course($course, $USER, 'manual')) {
-                print_error('couldnotassignrole');
-            }
-            // force a refresh of mycourses
-            unset($USER->mycourses);
-
-            if (!empty($SESSION->wantsurl)) {
-                $destination = $SESSION->wantsurl;
-                unset($SESSION->wantsurl);
-            } else {
-                $destination = "$CFG->wwwroot/course/view.php?id=$course->id";
-            }
-
-            redirect($destination);
-    }
-
     // if we get here we are going to display the BUY COURSE message
 
     print_header($strloginto, $course->fullname, $navigation, "form.password");
-
- //   print_course($course, "80%");
 
     include("$CFG->dirroot/enrol/joomdle/enrol.html");
 

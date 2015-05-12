@@ -3,7 +3,7 @@ $string['enrol_message'] = 'Enrol message to show when the user has not yet boug
 $string['enrol_message_desc'] = 'Enrol message to show when the user has not yet bought the course';
 $string['enrolname'] = 'Joomdle';
 $string['pluginname'] = 'Joomdle';
-$string['pluginname_desc'] = 'Shows a message to the user to tell them they should buy the course through Joomla.\nVersion 0.9';
+$string['pluginname_desc'] = 'Shows a message to the user to tell them they should buy the course through Joomla.\nVersion 1.0';
 
 $string['assignrole'] = 'Assign role';
 $string['cost'] = 'Enrol Cost';
@@ -30,5 +30,5 @@ $string['sendpaymentbutton'] = 'Send payment via PayPal';
 $string['status'] = 'Allow Joodmle enrolments';
 $string['status_desc'] = 'Allow users to buy courses through Joomla e-commerce.';
 $string['unenrolselfconfirm'] = 'Do you really want to unenrol yourself from course "{$a}"?';
-$string['buycourse'] = "Buy Course";
+$string['guest_enrol_message'] = 'Enrol message to show to guests';
 ?>

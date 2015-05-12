@@ -33,6 +33,8 @@ require_once($CFG->dirroot.'/group/lib.php');
 require_once($CFG->dirroot.'/lib/grouplib.php');
 require_once($CFG->dirroot.'/cohort/lib.php');
 require_once $CFG->dirroot.'/grade/report/user/lib.php';
+require_once $CFG->dirroot.'/lib/coursecatlib.php';
+
 
 
 
@@ -46,19 +48,15 @@ class auth_plugin_joomdle extends auth_plugin_manual {
      */
     function auth_plugin_joomdle() {
         $this->authtype = 'joomdle';
-        $this->config = get_config('', 'joomla_url');
-	$this->config = get_config('auth/joomdle'); //XXX
-        if (empty($this->config->extencoding)) {
-            $this->config->extencoding = 'utf-8';
-        }
+		$this->config = get_config('auth/joomdle');
     }
 
-       function can_signup() {
+	function can_signup() {
         return true;
     }
 
-  function user_signup($user, $notify=true) 
-  {
+	function user_signup($user, $notify=true) 
+	{
         global $CFG, $DB;
         require_once($CFG->dirroot.'/user/profile/lib.php');
 
@@ -157,15 +155,14 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 	    if (!$password)
 		    return false;
 
-	$user = get_complete_user_data ('username', $username);
+		$user = get_complete_user_data ('username', $username);
 
-	if (!$user)
-		return false;
+		if (!$user)
+			return false;
 
-	$logged = $this->call_method ("login", $username, $password);
+		$logged = $this->call_method ("login", $username, $password);
 
-	return $logged;
-
+		return $logged;
     }
 
 	/**
@@ -199,7 +196,6 @@ class auth_plugin_joomdle extends auth_plugin_manual {
      * @param array $page An object containing all the data for this page.
      */
     function config_form($config, $err, $user_fields) {
-        $this->config = get_config('', 'joomla_url');
         include "config.html";
     }
 
@@ -208,19 +204,19 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 		global $DB;
 
 		if (!isset($config->joomla_url)) {
-			$config->joomla_url = 'http://localhost/joomla';
+			$config->joomla_url = '';
 								}
-		set_config('joomla_url', $config->joomla_url); 
-
-		if (!isset($config->joomla_version)) {
-			$config->joomla_version = 'j16';
-		}
-		set_config('joomla_version', $config->joomla_version, 'auth/joomdle'); 
+		set_config('joomla_url', $config->joomla_url, 'auth/joomdle'); 
 
 		if (!isset($config->connection_method)) {
 			$config->connection_method = 'fgc';
 		}
 		set_config('connection_method', $config->connection_method, 'auth/joomdle'); 
+
+		if (!isset($config->joomla_auth_token)) {
+			$config->joomla_auth_token = '';
+		}
+		set_config('joomla_auth_token', $config->joomla_auth_token, 'auth/joomdle'); 
 
 		if (!isset($config->sync_to_joomla)) {
 			$config->sync_to_joomla = 0;
@@ -241,6 +237,11 @@ class auth_plugin_joomdle extends auth_plugin_manual {
             $config->redirectless_sso = '';
         }
         set_config('redirectless_sso', $config->redirectless_sso, 'auth/joomdle');
+
+		if (!isset($config->logout_redirect_to_joomla)) {
+            $config->logout_redirect_to_joomla = '';
+        }
+        set_config('logout_redirect_to_joomla', $config->logout_redirect_to_joomla, 'auth/joomdle');
 
 		if (!isset($config->jomsocial_activities)) {
 			$config->jomsocial_activities = 0;
@@ -480,6 +481,19 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 
 				$DB->insert_record ('events_handlers', $handler);
 			}
+			$conditions = array ('eventname' => 'user_deleted', 'component' => 'joomdle');
+			if (!$DB->record_exists ('events_handlers', $conditions))
+			{
+				$event = 'user_deleted';
+				$handler->eventname = $event;
+				$handler->handlermodule = 'auth/joomdle';
+				$handler->component = 'joomdle';
+				$handler->handlerfunction = serialize ('joomdle_'.$event);
+				$handler->schedule = 'instant';
+				$handler->status = 0;
+
+				$DB->insert_record ('events_handlers', $handler);
+			}
 		}
 		else
 		{
@@ -488,163 +502,141 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 			$DB->delete_records ('events_handlers', $conditions);
 			$conditions = array ('eventname' => 'user_updated', 'component' => 'joomdle');
 			$DB->delete_records ('events_handlers', $conditions);
+			$conditions = array ('eventname' => 'user_deleted', 'component' => 'joomdle');
+			$DB->delete_records ('events_handlers', $conditions);
 		}
 
 		return true;
     }
 
 	function _get_xmlrpc_url () {
-		$joomla_version = get_config('auth/joomdle', 'joomla_version');
         $joomla_lang = get_config('auth/joomdle', 'joomla_lang');
         $joomla_sef = get_config('auth/joomdle', 'joomla_sef');
+        $joomla_auth_token = get_config('auth/joomdle', 'joomla_auth_token');
 
-		switch ($joomla_version)
-		{
+		if ($joomla_lang == '')
+			$joomla_xmlrpc_server_url = get_config ('auth/joomdle', 'joomla_url').'/index.php?option=com_joomdle&task=ws.server&format=xmlrpc';
+		else
+			if ($joomla_sef)
+				$joomla_xmlrpc_server_url = get_config ('auth/joomdle', 'joomla_url').'/index.php/'.$joomla_lang.'/?option=com_joomdle&task=ws.server&format=xmlrpc';
+			else
+				$joomla_xmlrpc_server_url = get_config ('auth/joomdle', 'joomla_url').'/index.php?lang='.$joomla_lang.'&option=com_joomdle&task=ws.server&format=xmlrpc';
 
-				case "j15":
-						$joomla_xmlrpc_server_url = get_config (NULL, 'joomla_url').'/xmlrpc/index.php';
-						break;
-				case "j16":
-						if ($joomla_lang == '')
-							$joomla_xmlrpc_server_url = get_config (NULL, 'joomla_url').'/index.php?option=com_joomdle&task=ws.server&format=xmlrpc';
-						else
-                            if ($joomla_sef)
-                                $joomla_xmlrpc_server_url = get_config (NULL, 'joomla_url').'/index.php/'.$joomla_lang.'/?option=com_joomdle&task=ws.server&format=xmlrpc';
-                            else
-                                $joomla_xmlrpc_server_url = get_config (NULL, 'joomla_url').'/index.php?lang='.$joomla_lang.'&option=com_joomdle&task=ws.server&format=xmlrpc';
-                        break;
-		}
+		// Add auth token
+		$joomla_xmlrpc_server_url .= "&token=" . $joomla_auth_token;
+
 		return $joomla_xmlrpc_server_url;
 	}
 
 
     function call_method ($method, $params = '', $params2 = '', $params3 = '' , $params4 = '', $params5 = '')
     {
-	$connection_method = get_config('auth/joomdle', 'connection_method');
+		$connection_method = get_config('auth/joomdle', 'connection_method');
 
-	if ($connection_method == 'fgc')
-		$response = $this->call_method_fgc ($method, $params, $params2, $params3, $params4, $params5);
-	else
-		$response = $this->call_method_curl ($method, $params, $params2, $params3, $params4, $params5);
+		if ($connection_method == 'fgc')
+			$response = $this->call_method_fgc ($method, $params, $params2, $params3, $params4, $params5);
+		else
+			$response = $this->call_method_curl ($method, $params, $params2, $params3, $params4, $params5);
 
-	return $response;
+		return $response;
     }
 
     function call_method_fgc ($method, $params = '', $params2 = '', $params3 = '' , $params4 = '', $params5 = '')
     {
-//	$joomla_xmlrpc_url = get_config (NULL, 'joomla_url').'/xmlrpc/index.php';
-	
-	$joomla_xmlrpc_url = $this->_get_xmlrpc_url ();
+		$joomla_xmlrpc_url = $this->_get_xmlrpc_url ();
 
-	$joomla_version = get_config('auth/joomdle', 'joomla_version');
-
-	if ($joomla_version == 'j15')
-	//	$options = array ('encoding' => 'utf8');
-		$options = array ('encoding' => 'UTF-8');
-	else
 		$options = array ();
 
-	if ($params == '')
-		$request = xmlrpc_encode_request("joomdle.".$method, array (), $options);
-	else if ($params2 == '')
-		$request = xmlrpc_encode_request("joomdle.".$method, array ($params), $options);
-	else if ($params3 == '')
-		$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2), $options);
-	else if ($params4 == '')
-		$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3), $options);
-	else if ($params5 == '')
-		$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3, $params4), $options);
-	else
-		$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3, $params4, $params5), $options);
+		if ($params == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array (), $options);
+		else if ($params2 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params), $options);
+		else if ($params3 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2), $options);
+		else if ($params4 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3), $options);
+		else if ($params5 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3, $params4), $options);
+		else
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3, $params4, $params5), $options);
 
-	$context = stream_context_create(array('http' => array(
-	    'method' => "POST",
-	    'header' => "Content-Type: text/xml ",
-	    'content' => $request
-	)));
-	$response = file_get_contents($joomla_xmlrpc_url, false, $context);
+		$context = stream_context_create(array('http' => array(
+			'method' => "POST",
+			'header' => "Content-Type: text/xml ",
+			'content' => $request
+		)));
+		$response = file_get_contents($joomla_xmlrpc_url, false, $context);
 
-	if ($joomla_version == 'j15')
-		$data = xmlrpc_decode($response, 'utf8');
-	else 
 		$data = xmlrpc_decode($response);
 
-	if (is_array ($data))
-		if (xmlrpc_is_fault ($data))
-		{
-			return  "XML-RPC Error (".$data['faultCode']."): ".$data['faultString'];
-		}
+		if (is_array ($data))
+			if (xmlrpc_is_fault ($data))
+			{
+				return  "XML-RPC Error (".$data['faultCode']."): ".$data['faultString'];
+			}
 
-	return $data;
+		return $data;
     }
 
     function call_method_curl ($method, $params = '', $params2 = '', $params3 = '' , $params4 = '', $params5 = '')
     {
 		global $CFG;
 
-	$joomla_xmlrpc_url = $this->_get_xmlrpc_url ();
+		$joomla_xmlrpc_url = $this->_get_xmlrpc_url ();
 
-	$joomla_version = get_config('auth/joomdle', 'joomla_version');
 
-	if ($joomla_version == 'j15')
-		$options = array ('encoding' => 'UTF-8');
-	else
 		$options = array ();
 
-	if ($params == '')
-		$request = xmlrpc_encode_request("joomdle.".$method, array (), $options);
-	else if ($params2 == '')
-		$request = xmlrpc_encode_request("joomdle.".$method, array ($params), $options);
-	else if ($params3 == '')
-		$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2), $options);
-	else if ($params4 == '')
-		$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3), $options);
-	else if ($params5 == '')
-		$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3, $params4), $options);
-	else
-		$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3, $params4, $params5), $options);
+		if ($params == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array (), $options);
+		else if ($params2 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params), $options);
+		else if ($params3 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2), $options);
+		else if ($params4 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3), $options);
+		else if ($params5 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3, $params4), $options);
+		else
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3, $params4, $params5), $options);
 
-	$headers = array();
-	array_push($headers,"Content-Type: text/xml");
-	array_push($headers,"Content-Length: ".strlen($request));
-	array_push($headers,"\r\n");
+		$headers = array();
+		array_push($headers,"Content-Type: text/xml");
+		array_push($headers,"Content-Length: ".strlen($request));
+		array_push($headers,"\r\n");
 
-	$ch = curl_init();
-	curl_setopt( $ch, CURLOPT_URL, $joomla_xmlrpc_url); # URL to post to
-	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 ); # return into a variable
-	curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers ); # custom headers, see above
-	curl_setopt( $ch, CURLOPT_POSTFIELDS, $request );
-	curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' ); # This POST is special, and uses its specified Content-type
+		$ch = curl_init();
+		curl_setopt( $ch, CURLOPT_URL, $joomla_xmlrpc_url); # URL to post to
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 ); # return into a variable
+		curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers ); # custom headers, see above
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, $request );
+		curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' ); # This POST is special, and uses its specified Content-type
 
-	 // use proxy if one is configured
-	if (!empty($CFG->proxyhost)) {
-        if (empty($CFG->proxyport)) {
-            curl_setopt($ch, CURLOPT_PROXY, $CFG->proxyhost);
-        } else {
+		 // use proxy if one is configured
+		if (!empty($CFG->proxyhost)) {
+			if (empty($CFG->proxyport)) {
+				curl_setopt($ch, CURLOPT_PROXY, $CFG->proxyhost);
+			} else {
 
-            curl_setopt($ch, CURLOPT_PROXY, $CFG->proxyhost.':'.$CFG->proxyport);
-        }
-        curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, false);
-    }
-
-	$response = curl_exec( $ch ); # run!
-	curl_close($ch);
-
-	if ($joomla_version == 'j15')
-		$data = xmlrpc_decode($response, 'utf8');
-	else 
-		$data = xmlrpc_decode($response);
-
-	if (is_array ($response))
-		if (xmlrpc_is_fault ($response))
-		{
-			return  "XML-RPC Error (".$response['faultCode']."): ".$response['faultString'];
+				curl_setopt($ch, CURLOPT_PROXY, $CFG->proxyhost.':'.$CFG->proxyport);
+			}
+			curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, false);
 		}
 
-	return $data;
+		$response = curl_exec( $ch ); # run!
+		curl_close($ch);
 
-}
+		$data = xmlrpc_decode($response);
 
+		if (is_array ($response))
+			if (xmlrpc_is_fault ($response))
+			{
+				return  "XML-RPC Error (".$response['faultCode']."): ".$response['faultString'];
+			}
+
+		return $data;
+
+	}
 
 	function get_file ($file)
 	{
@@ -701,7 +693,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 		/* Web services and XMLRPC enabled */
 	//	$system['enablewebservices'] =  get_config (NULL, 'enablewebservices');
 
-		$joomla_url = get_config (NULL, 'joomla_url');
+		$joomla_url = get_config ('auth/joomdle', 'joomla_url');
 		if ($joomla_url == '')
 		{
 			$system['joomdle_configured'] = 0;
@@ -761,6 +753,13 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 			$record['fullname'] = $course->fullname;
 			$record['category'] = $course->category;
 			$record['cat_name'] = $this->get_cat_name ($course->category);
+
+            // Check if user can self-unenrol
+            $context = context_course::instance($course->id);
+            if ((has_capability('enrol/manual:unenrolself', $context, $user->id)) || (has_capability('enrol/self:unenrolself', $context, $user->id)))
+                $record['can_unenrol'] = 1;
+            else
+                $record['can_unenrol'] = 0;
 
 			$courses[$i] = $record;
 			$i++;
@@ -884,7 +883,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
     /**
       * Returns course list
       * 
-      * @param int $available If true, return only enrollable courses
+      * @param int $available If true, return only self enrollable courses
       */
     function list_courses ($available = 0, $sortby = 'created', $guest = 0, $username = '')
 	{
@@ -962,6 +961,9 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 				// Self-enrolment
 				if ($instance->enrol == 'self')
 					$c['self_enrolment'] = 1;
+				else
+					$c['self_enrolment'] = 0;
+
 
 				// Guest access
 				if ($instance->enrol == 'guest')
@@ -991,6 +993,10 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 			if (($guest) && (!$course_info['guest']))
 				continue;
 
+			// Skip not self-enrolable courses if param says so
+			if (($available) && (!$c['self_enrolment']))
+				continue;
+
 
 			$c['in_enrol_date'] = $in;
 
@@ -1010,6 +1016,24 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 			$c['summary'] = str_replace ('pluginfile.php', '/auth/joomdle/pluginfile_joomdle.php', $c['summary']);
 			$c['summary'] = format_text($c['summary'], FORMAT_MOODLE, $options);
 
+			$context = context_coursecat::instance($curso->cat_id);
+			$c['cat_description'] = file_rewrite_pluginfile_urls ($c['cat_description'], 'pluginfile.php', $context->id, 'coursecat', 'description', NULL);
+			$c['cat_description'] = str_replace ('pluginfile.php', '/auth/joomdle/pluginfile_joomdle.php', $c['cat_description']);
+			$c['cat_description'] = format_text($c['cat_description'], FORMAT_MOODLE, $options);
+
+			$c['summary_files'] = array ();
+            $course = new course_in_list(get_course($curso->remoteid));
+            foreach ($course->get_course_overviewfiles() as $file) 
+            {
+                $isimage = $file->is_valid_image();
+                $url = file_encode_url("$CFG->wwwroot/auth/joomdle/pluginfile_joomdle.php",
+                    '/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
+                    $file->get_filearea(). $file->get_filepath(). $file->get_filename(), !$isimage);
+
+				$url_item = array ();
+				$url_item['url'] = $url;
+                $c['summary_files'][] =  $url_item;
+            }
 
 			$cursos[$i] = $c;
 
@@ -1146,6 +1170,20 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 			$c['summary'] = file_rewrite_pluginfile_urls ($c['summary'], 'pluginfile.php', $context->id, 'course', 'summary', NULL);
 			$c['summary'] = str_replace ('pluginfile.php', '/auth/joomdle/pluginfile_joomdle.php', $c['summary']);
 			$c['summary'] = format_text($c['summary'], FORMAT_MOODLE, $options);
+
+			$c['summary_files'] = array ();
+            $course = new course_in_list(get_course($curso->remoteid));
+            foreach ($course->get_course_overviewfiles() as $file) 
+            {
+                $isimage = $file->is_valid_image();
+                $url = file_encode_url("$CFG->wwwroot/auth/joomdle/pluginfile_joomdle.php",
+                    '/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
+                    $file->get_filearea(). $file->get_filepath(). $file->get_filename(), !$isimage);
+
+				$url_item = array ();
+				$url_item['url'] = $url;
+                $c['summary_files'][] =  $url_item;
+            }
 
 			$cursos[] = $c;
 		}
@@ -1321,6 +1359,20 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 			$c['summary'] = str_replace ('pluginfile.php', '/auth/joomdle/pluginfile_joomdle.php', $c['summary']);
 			$c['summary'] = format_text($c['summary'], FORMAT_MOODLE, $options);
 
+			$c['summary_files'] = array ();
+            $course = new course_in_list(get_course($curso->remoteid));
+            foreach ($course->get_course_overviewfiles() as $file) 
+            {
+                $isimage = $file->is_valid_image();
+                $url = file_encode_url("$CFG->wwwroot/auth/joomdle/pluginfile_joomdle.php",
+                    '/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
+                    $file->get_filearea(). $file->get_filepath(). $file->get_filename(), !$isimage);
+
+				$url_item = array ();
+				$url_item['url'] = $url;
+                $c['summary_files'][] =  $url_item;
+			}
+
 			$cursos[] = $c;
 		}
 
@@ -1468,6 +1520,20 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 				$course_info['enroled'] = 1;
 		}
 
+		$course_info['summary_files'] = array ();
+		$course = new course_in_list(get_course($id));
+		foreach ($course->get_course_overviewfiles() as $file) 
+		{
+			$isimage = $file->is_valid_image();
+			$url = file_encode_url("$CFG->wwwroot/auth/joomdle/pluginfile_joomdle.php",
+				'/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
+				$file->get_filearea(). $file->get_filepath(). $file->get_filename(), !$isimage);
+
+			$url_item = array ();
+			$url_item['url'] = $url;
+			$course_info['summary_files'][] =  $url_item;
+
+		}
 
 		return $course_info;
     }
@@ -2125,7 +2191,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
             return array();
 
         $gpr = new grade_plugin_return(array('type'=>'report', 'plugin'=>'user', 'courseid'=>$id, 'userid'=>$user->id));
-        $context = context_course::instance($id);
+		$context = context_course::instance($id);
         $report = new grade_report_user($id, $gpr, $context, $user->id);
 
         // Get course total
@@ -2171,9 +2237,24 @@ class auth_plugin_joomdle extends auth_plugin_manual {
                 ";
         $cats = $DB->get_records_sql($query);
 
+		if (count ($cats) == 0)
+        {
+            // No cats, get items  in "main"
+            $query =
+                "select {$CFG->prefix}grade_categories.fullname, {$CFG->prefix}grade_items.id, {$CFG->prefix}grade_items.grademax, {$CFG->prefix}grade_categories.id
+                from {$CFG->prefix}grade_categories, {$CFG->prefix}grade_items 
+                where {$CFG->prefix}grade_categories.id = {$CFG->prefix}grade_items.iteminstance 
+                and {$CFG->prefix}grade_items.courseid='$id' and itemtype='course';
+                    ";
+            $cats = $DB->get_records_sql($query);
+        }
+
+
         foreach ($cats as $r)
         {
-            $e['fullname'] = $r->fullname;
+			if ($r->fullname != '?')
+				$e['fullname'] = $r->fullname;
+			else $e['fullname'] = '';
             $e['grademax'] = (float) $r->grademax;
 
             $cat_id = $r->id;
@@ -2216,6 +2297,9 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 
             $items = $DB->get_records_sql($query);
             $category_items = array ();
+
+            if (count ($items) == 0)
+                continue;
 
             foreach ($items as $item)
             {
@@ -2338,6 +2422,110 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 
         return $course_grades;
     }
+
+    function get_user_grade ($user_id, $item_id)
+    {
+        global $CFG, $DB;
+
+        $SQL = "SELECT rawgrade 
+                      FROM {$CFG->prefix}grade_grades" .
+                " WHERE itemid = ? and userid = ?";
+        $params = array ($item_id, $user_id);
+        $grade = $DB->get_records_sql($SQL, $params);
+
+        return $grade;
+    }
+
+
+    // Returns grades for each course task, for all students in course
+    function get_course_grades ($id, $search)
+    {
+        global $CFG, $DB;
+
+        if ($search)
+            $students = $this->get_course_students  ($id, $search);
+        else
+            $students = $this->get_course_students  ($id);
+
+        // Get grade items
+        $SQL = "SELECT id, itemname, grademax
+                      FROM {$CFG->prefix}grade_items gi" .
+                " WHERE courseid = ? and categoryid is not NULL";
+        $params = array ($id);
+        $items = $DB->get_records_sql($SQL, $params);
+
+        $return_grades = array ();
+
+        foreach ($students as $student)
+        {
+            $conditions = array("username" => $student['username']);
+            $user = $DB->get_record("user", $conditions);
+
+            $course_grades = array ();
+            foreach ($items as $item)
+            {
+                $grades = $this->get_user_grade ($user->id, $item->id);
+                $grade = array_shift ($grades);
+                $value = $grade->rawgrade;
+                $cg = array ();
+                $cg['rawgrade'] = $grade->rawgrade;
+                $cg['grademax'] = $item->grademax;
+                $course_grades[] = $cg;
+            }
+
+            // Get course total
+            $query =
+                "select id 
+                from  {$CFG->prefix}grade_items 
+                where courseid = '$id' 
+                AND itemtype='course'
+                    ";
+            $cat_item = $DB->get_record_sql($query);
+
+            $query = "SELECT g.finalgrade,g.rawgrademax
+              FROM {$CFG->prefix}grade_grades g
+             WHERE g.itemid = ?
+               AND g.userid =  ?";
+            $params = array ($cat_item->id, $user->id);
+
+            $grade = $DB->get_record_sql($query, $params);
+
+            $cg['rawgrade'] = (float) $grade->finalgrade;
+            $cg['grademax'] = (float) $grade->rawgrademax;
+
+            $course_grades[] = $cg;
+
+            $student['grades'] = $course_grades;
+            $student['email'] = $user->email;
+            $return_grades[] = $student;
+        }
+
+        return $return_grades;
+    }
+
+    function get_course_grades_items ($id)
+    {
+        global $CFG, $DB;
+
+        // Get grade items
+        $SQL = "SELECT id, itemname, grademax
+                      FROM {$CFG->prefix}grade_items gi" .
+                " WHERE courseid = ? and categoryid is not NULL";
+        $params = array ($id);
+        $items = $DB->get_records_sql($SQL, $params);
+
+        // Item names
+        $grade_items = array ();
+        foreach ($items as $item)
+        {
+            $gi = array ();
+            $gi['itemname'] = $item->itemname;
+            $grade_items[] = $gi;
+        }
+
+        return $grade_items;
+    }
+
 
 
 	function get_children_grades ($username)
@@ -2497,21 +2685,45 @@ class auth_plugin_joomdle extends auth_plugin_manual {
       * 
       * @param int $id Course identifier
       */
-    function get_upcoming_events ($id) 
-	{
-		global $CFG;
-
-		$id = addslashes ($id);
-		$courseshown = $id;
-		$filtercourse    = array($courseshown => $id);
-		$groupeventsfrom = array($courseshown => 1);
-
-		$true = true;
-		if ($CFG->version >= 2011070100)
+	function get_upcoming_events ($id, $username = '')
+    {
+        global $CFG;
+ 
+        $id = addslashes ($id);
+        $courseshown = $id;
+        $filtercourse    = array($courseshown => $id);
+        $groupeventsfrom = array($courseshown => 1);
+ 
+        $true = true;
+        if ($CFG->version >= 2011070100)
         {
             list($courses, $group, $user) = calendar_set_filters($filtercourse, $true);
             $courses = array ($id => $id);
-            $events = calendar_get_upcoming($courses, true, true, 
+ 
+            if ($username != '')
+            {
+                // Show only events for groups where user is a member
+                $groups = groups_get_all_groups($id);
+                $gs = array ();
+                foreach ($groups as $group)
+                {
+                    $found = false;
+                    // Check is user is a member of the group
+                    $members = $this->get_group_members ($group->id);
+                    foreach ($members as $member)
+                    {
+                        if ($member['username'] == $username)
+                        {
+                            $found = true;
+                            break;
+                        }
+                    }
+                    if ($found)
+                        $gs[$group->id] = $group->id;
+                }
+            }
+ 
+            $events = calendar_get_upcoming($courses, $gs, true,
                  CALENDAR_DEFAULT_UPCOMING_LOOKAHEAD,
                  CALENDAR_DEFAULT_UPCOMING_MAXEVENTS);
         }
@@ -2522,20 +2734,20 @@ class auth_plugin_joomdle extends auth_plugin_manual {
                  CALENDAR_UPCOMING_DAYS,
                  CALENDAR_UPCOMING_MAXEVENTS);
         }
-
-		$data = array ();
-		foreach ($events as $r)
-		{
-			$e['name'] = $r->name;
-			$e['timestart'] = $r->timestart;
-			$e['courseid'] = $r->courseid;
-
-			$data[] = $e;
-		}
-
-		return $data;
+ 
+        $data = array ();
+        foreach ($events as $r)
+        {
+            $e['name'] = $r->name;
+            $e['timestart'] = $r->timestart;
+            $e['courseid'] = $r->courseid;
+ 
+            $data[$i] = $e;
+            $i++;
+        }
+ 
+        return $data;
     }
-
     /**
       * Returns last news for a course
       * 
@@ -3061,9 +3273,11 @@ function create_joomdle_user ($username, $app = '')
 	{
 		if ($juser_info['pic_url'] != 'none')
 		{
-			$joomla_url = get_config (NULL, 'joomla_url');
-			$pic_url = $joomla_url.'/'.$juser_info['pic_url'];
-			//$pic = @file_get_contents ($pic_url, false, NULL);
+			$joomla_url = get_config ('auth/joomdle', 'joomla_url');
+			if (strncmp ($juser_info['pic_url'], 'http', 4) != 0)
+				$pic_url = $joomla_url.'/'.$juser_info['pic_url'];  // Only add joomla_url if it is not a full URL already
+			else $pic_url = $juser_info['pic_url'];
+
 			$pic = $this->get_file ($pic_url);
 			if ($pic)
 			{
@@ -3106,6 +3320,54 @@ function create_joomdle_user ($username, $app = '')
 	}
 
 	return 1;
+}
+
+function create_moodle_only_user ($user_data)
+{
+    global $CFG, $DB;
+
+    $username = $user_data['username'];
+    $username = utf8_decode ($username);
+    $username = strtolower ($username);
+    /* Creamos el nuevo usuario de Moodle si no está creado */
+    $conditions = array ('username' => $username);
+    $user = $DB->get_record('user',$conditions);
+    if (!$user)
+        $user = create_user_record($username, "", "manual");
+
+    if (array_key_exists ('password', $user_data))
+        $password = utf8_decode ($user_data['password']);
+    else  $password = '';
+    if (array_key_exists ('email', $user_data))
+        $email = utf8_decode ($user_data['email']);
+    else  $email = '';
+    if (array_key_exists ('firstname', $user_data))
+        $firstname = utf8_decode ($user_data['firstname']);
+    else  $firstname = '';
+    if (array_key_exists ('lastname', $user_data))
+        $lastname = utf8_decode ($user_data['lastname']);
+    else  $lastname = '';
+    if (array_key_exists ('city', $user_data))
+        $city = utf8_decode ($user_data['city']);
+    else  $city = '';
+	if (array_key_exists ('country', $user_data))
+		$country = utf8_decode ($user_data['country']);
+	else  $country = '';
+
+    $conditions = array ('id' => $user->id);
+    if ($firstname)
+        $DB->set_field('user', 'firstname', $firstname, $conditions);
+    if ($lastname)
+        $DB->set_field('user', 'lastname', $lastname, $conditions);
+    if ($email)
+        $DB->set_field('user', 'email', $email, $conditions);
+    if ($city)
+        $DB->set_field('user', 'city', ($city), $conditions);
+	if ($country)
+		$DB->set_field('user', 'country', $country, $conditions);
+
+    update_internal_user_password($user, $password);
+
 }
 
 function search_courses ($text, $phrase, $ordering, $limit)
@@ -3658,7 +3920,7 @@ function multiple_enrol ($username, $courses, $roleid = 5)
         $conditions = array ('username' => $username);
         $user = $DB->get_record('user',$conditions);
 
-		if (!$user)
+		 if (!$user)
             $this->create_joomdle_user ($username);
         $user = $DB->get_record('user',$conditions);
 
@@ -3679,7 +3941,7 @@ function multiple_enrol ($username, $courses, $roleid = 5)
         return 0;
 }
 
-function enrol_user ($username, $course_id, $roleid = 5)
+function enrol_user ($username, $course_id, $roleid = 5, $timestart = 0, $timeend = 0)
 {
     global $CFG, $DB, $PAGE;
 
@@ -3708,10 +3970,14 @@ function enrol_user ($username, $course_id, $roleid = 5)
     $plugins = $manager->get_enrolment_plugins();
     $enrolid = 1; //manual
 
-    $today = time();
-    $today = make_timestamp(date('Y', $today), date('m', $today), date('d', $today), date ('H', $today), date ('i', $today), date ('s', $today));
-    $timestart = $today;
-    $timeend = 0;
+	if (!$timestart)
+    {
+        // Set NOW as enrol start if not one defined
+        $today = time();
+        $today = make_timestamp(date('Y', $today), date('m', $today), date('d', $today), date ('H', $today), date ('i', $today), date ('s', $today));
+        $timestart = $today; 
+    }
+  //  $timeend = 0;
 
     $found = false;
     foreach ($instances as $instance)
@@ -3728,8 +3994,8 @@ function enrol_user ($username, $course_id, $roleid = 5)
 
     $plugin = $plugins['manual'];
 
-    if ( $instance->enrolperiod)
-        $timeend   = $timestart + $instance->enrolperiod;
+    if ( $instance->enrolperiod != 0)
+ 		$timeend   = $timestart + $instance->enrolperiod;
 
     // First, check if user is already enroled but suspended, so we just need to enable it
 
@@ -3767,95 +4033,6 @@ function enrol_user ($username, $course_id, $roleid = 5)
 }
 
 
-function enrol_user_old ($username, $course_id, $roleid = 5)
-{
-	global $CFG, $DB, $PAGE;
-
-	$username = utf8_decode ($username);
-	$username = strtolower ($username);
-	/* Create the user before if it is not created yet */
-	$conditions = array ('username' => $username);
-	$user = $DB->get_record('user',$conditions);
-	if (!$user)
-		$this->create_joomdle_user ($username);
-
-	$user = $DB->get_record('user',$conditions);
-	$conditions = array ('id' => $course_id);
-	$course = $DB->get_record('course', $conditions);
-
-	if (!$course)
-		return 0;
-
-	// Get enrol start and end dates of manual enrolment plugin
-	$today = time();
-	$today = make_timestamp(date('Y', $today), date('m', $today), date('d', $today), 0, 0, 0);
-	$timestart = $today;
-	$timeend = 0;
-
-	$found = false;
-	foreach ($instances as $instance)
-	{
-		if ($instance->enrol == 'manual')
-		{
-			$found = true;
-			break;
-		}
-	}
-
-	if (!$found)
-		return 0;
-
-	$plugin = $plugins['manual'];
-
-	if ( $instance->enrolperiod)
-		$timeend   = $timestart + $instance->enrolperiod;
-
-	// First, check if user is already enroled but suspended, so we just need to enable it
-
-	$conditions = array ('courseid' => $course_id, 'enrol' => 'manual');
-	$enrol = $DB->get_record('enrol', $conditions);
-
-	if (!$enrol)
-		return 0;
-
-	$conditions = array ('username' => $username);
-	$user = $DB->get_record('user', $conditions);
-
-	if (!$user)
-		return 0;
-
-	$conditions = array ('enrolid' => $enrol->id, 'userid' => $user->id);
-	$ue = $DB->get_record('user_enrolments', $conditions);
-
-	if ($ue)
-	{
-		// User already enroled
-		// Can be suspended, or maybe enrol time passed
-		// Just activate enrolment and set new dates
-		$ue->status = 0; //active
-		$ue->timestart = $timestart;
-		$ue->timeend = $timeend;
-		$DB->update_record('user_enrolments', $ue);
-		return 1;
-	}
-
-
-	if ($CFG->version >= 2011061700)
-		$manager = new course_enrolment_manager($PAGE, $course);
-	else
-		$manager = new course_enrolment_manager($course);
-
-	$instances = $manager->get_enrolment_instances();
-	$plugins = $manager->get_enrolment_plugins();
-	$enrolid = 1; //manual
-
-
-	$plugin->enrol_user($instance, $user->id, $roleid, $timestart, $timeend);
-
-	return 1;
-}
-
-
 // Assigns role to user, to appear in "other users" course section
 function add_user_role ($username, $course_id, $role_id)
 {
@@ -3872,7 +4049,7 @@ function add_user_role ($username, $course_id, $role_id)
     $params = array ('id' => $course_id);
     $course = $DB->get_record('course', $params);
 
-    $context   = context_course::instance($course->id);
+	$context = context_course::instance($course->id);
 
     if (!$context)
         return;
@@ -3882,6 +4059,87 @@ function add_user_role ($username, $course_id, $role_id)
     }
 }
 
+function remove_user_role ($username, $course_id, $role_id)
+{
+    global $DB;
+
+    $username = utf8_decode ($username);
+    $username = strtolower ($username);
+
+    $params = array ('username' => $username);
+    $user = $DB->get_record('user',$params);
+    if (!$user)
+        return;
+
+    $params = array ('id' => $course_id);
+    $course = $DB->get_record('course', $params);
+
+	$context = context_course::instance($course->id);
+
+    if (!$context)
+        return;
+
+    if (!role_unassign($role_id, $user->id, $context->id)) {
+        return;
+    }
+}
+
+function add_system_role ($username, $role_id)
+{
+	global $DB;
+
+	$username = utf8_decode ($username);
+	$username = strtolower ($username);
+
+	$params = array ('username' => $username);
+	$user = $DB->get_record('user',$params);
+	if (!$user)
+		return;
+
+	$context = context_system::instance();
+
+	if (!$context)
+		return;
+
+	role_assign($role_id, $user->id, $context->id);
+
+	return true;
+}
+
+
+function update_course_enrolments_dates ($course_id,  $timestart, $timeend)
+{   
+    global $CFG, $DB;
+
+    $context = context_course::instance($course_id);
+    /* 5 indica estudiantes (table mdl_role) */
+    $students = get_role_users(5 , $context);
+
+    $conditions = array ('courseid' => $course_id, 'enrol' => 'manual');
+    $enrol = $DB->get_record('enrol', $conditions);
+
+    if (!$enrol)
+        return 0;
+
+    foreach ($students as $user)
+    {
+        $conditions = array ('enrolid' => $enrol->id, 'userid' => $user->id);
+        $ue = $DB->get_record('user_enrolments', $conditions);
+
+        if ($ue)
+        {
+            // User already enroled
+            // Can be suspended, or maybe enrol time passed
+            // Just activate enrolment and set new dates
+            $ue->status = 0; //active
+            $ue->timestart = $timestart;
+            $ue->timeend = $timeend;
+            $ue->timemodified = $timestart;
+            $DB->update_record('user_enrolments', $ue);
+            return 1;
+        }
+    }   
+}
 
 
 function get_cat_name ($cat_id)
@@ -4104,8 +4362,6 @@ function get_moodle_only_users ($users, $search)
 	foreach ($users as $user)
 	{
 		$username = utf8_decode ($user['username']);
-		/* Academy Patch #23 Escape apostrophes in H1 usernames before Joomdle SQL queries. */
-		$username = str_replace("'","''",$username);
 		$username = strtolower ($username);
         $usernames[] = $username;
 	}
@@ -4232,7 +4488,7 @@ function user_details ($username)
 	$u['picture'] = $user->picture;
 
 	$id = $user->id;
-	$usercontext = context_user::instance($id, MUST_EXIST);
+	$usercontext = context_user::instance($id);
 	$context_id = $usercontext->id;
 
 	if ($user->picture)
@@ -4389,31 +4645,31 @@ function migrate_to_joomdle ($username)
 		return $data;
     }
 
-    function get_my_events ($username)
+	function get_my_events ($username)
     {
         global $CFG, $DB;
-
+ 
         $username = utf8_decode ($username);
         $username = strtolower ($username);
-
+ 
         $user = get_complete_user_data ('username', $username);
-
-  
+ 
+ 
         if (!$user)
             return array();
-
+ 
         $courses = enrol_get_users_courses ($user->id, true);
-
+ 
         $news = array ();
         foreach ($courses as $c)
         {
             $course_news['remoteid'] = $c->id;
             $course_news['fullname'] = $c->fullname;
-            $course_news['events'] = $this->get_upcoming_events ($c->id);
-
+            $course_news['events'] = $this->get_upcoming_events ($c->id, $username);
+ 
             $news[] = $course_news;
         }
-
+ 
         return $news;
     }
 
@@ -4438,7 +4694,7 @@ function migrate_to_joomdle ($username)
             return false;
 
 
-		$context   = context_user::instance($child_user->id);
+		$context = context_user::instance($child_user->id);
 		
 		role_assign($parent_role_id, $parent_user->id, $context->id ); //, $timestart, 0, $hidden);
 
@@ -4480,30 +4736,57 @@ function migrate_to_joomdle ($username)
 		return $users;
 	}
 
-	function get_roles ()
-	{
-		global $CFG, $DB ,$PAGE;
+    function get_roles ()
+    {
+        global $CFG, $DB ,$PAGE;
 
-		$roles = $DB->get_records_sql("SELECT id, name, shortname
+        $roles = $DB->get_records_sql("SELECT id, name, shortname
                                          FROM {$CFG->prefix}role");
 
-		$data = array ();
-		foreach ($roles as $role)
-		{
-			// Only return roles assignables in course context
-			$contextlevels = get_role_contextlevels($role->id);
-			if (!in_array (CONTEXT_COURSE, $contextlevels))
-				continue;
+        $rolenames = role_fix_names($roles, NULL, ROLENAME_BOTH, true);
 
-			$r['id'] = $role->id;
-			$r['name'] = $role->name;
-			$r['name'] = get_string($role->shortname);
+        $data = array ();
+        foreach ($roles as $role)
+        {
+            // Only return roles assignables in course context
+            $contextlevels = get_role_contextlevels($role->id);
+            if (!in_array (CONTEXT_COURSE, $contextlevels))
+                continue;
 
-			$data[] = $r;
-		}
+            $r['id'] = $role->id;
+            $r['name'] = $rolenames[$role->id];
 
-		return $data;
-	}
+            $data[] = $r;
+        }
+
+        return $data;
+    }
+
+    function get_system_roles ()
+    {
+        global $CFG, $DB ,$PAGE;
+
+        $roles = $DB->get_records_sql("SELECT id, name, shortname
+                                         FROM {$CFG->prefix}role");
+
+        $rolenames = role_fix_names($roles, NULL, ROLENAME_BOTH, true);
+
+        $data = array ();
+        foreach ($roles as $role)
+        {
+            // Only return roles assignables in course context
+            $contextlevels = get_role_contextlevels($role->id);
+            if (!in_array (CONTEXT_SYSTEM, $contextlevels))
+                continue;
+
+            $r['id'] = $role->id;
+            $r['name'] = $rolenames[$role->id];
+
+            $data[] = $r;
+        }
+
+        return $data;
+    }
 
 	function get_parents ($username)
 	{
@@ -4514,7 +4797,7 @@ function migrate_to_joomdle ($username)
 		$username = strtolower ($username);
 		$user = get_complete_user_data ('username', $username);
 		/* Get mentors for the student */
-		$usercontext   = context_user::instance($user->id);
+		$usercontext = context_user::instance($user->id);
 		$usercontextid = $usercontext->id;
 
 		$query =
@@ -4574,7 +4857,7 @@ function migrate_to_joomdle ($username)
         $students = $this->get_course_students ($id);
         foreach ($students as $student)
         {
-            $context = context_user::instance($student['id']);
+			$context = context_user::instance($student['id']);
 
             $conditions = array ('contextid' => $context->id);
             $parents = $DB->get_records('role_assignments',$conditions);
@@ -4700,8 +4983,8 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
             $r = get_object_vars ($record);
 
 			$r['fraction'] = (float) $r['fraction'];
-			$r['answer'] = format_text($r['answer'], FORMAT_HTML, $options);
             $r['answer'] = $this->question_rewrite_question_urls($r['answer'], 'pluginfile.php', 1, 'question', 'answer', array(), $r['id']);
+			$r['answer'] = format_text($r['answer'], FORMAT_HTML, $options);
             $r['answer'] = str_replace ('pluginfile.php', '/auth/joomdle/pluginfile_joomdle.php', $r['answer']);
 			$r['answer'] = $this->make_html_inline ($r['answer']);
 
@@ -5007,9 +5290,13 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
         if ($username)
                 $user = get_complete_user_data ('username', $username);
 
-        $sections = get_all_sections($id);
+        $modinfo = get_fast_modinfo($id);
+        $sections = $modinfo->get_section_info_all();
 
-        get_all_mods($id, $mods, $modnames, $modnamesplural, $modnamesused);
+		$mods = get_fast_modinfo($id)->get_cms();
+		$modnames = get_module_types_names();
+		$modnamesplural = get_module_types_names(true);
+		$modnamesused = get_fast_modinfo($id)->get_used_module_names();
 
         foreach ($sections as $section)
         {
@@ -5136,12 +5423,18 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
         if ($username)
                 $user = get_complete_user_data ('username', $username);
 
-        $sections = get_all_sections($id);
+		$modinfo = get_fast_modinfo($id);
+		$sections = $modinfo->get_section_info_all();
+
 
 		$forum = forum_get_course_forum($id, 'news');
         $news_forum_id = $forum->id;
 
-        get_all_mods($id, $mods, $modnames, $modnamesplural, $modnamesused);
+		$mods = get_fast_modinfo($id)->get_cms();
+		$modnames = get_module_types_names();
+		$modnamesplural = get_module_types_names(true);
+		$modnamesused = get_fast_modinfo($id)->get_used_module_names();
+
 
 		$context = context_course::instance($id);
 
@@ -5199,6 +5492,19 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
                         $resource['type'] = 'news';
                 }
 
+/*
+				if ($mod->modname == 'resource')
+                {
+                    // Get display options for resource
+                    $params = array ($mod->instance);
+                    $query = "SELECT display from  {$CFG->prefix}resource where id = ?";
+                    $record = $DB->get_record_sql ($query, $params);
+                    
+                    $resource['display'] = $record->display;
+                }
+                else $resource['display'] = 0;
+*/
+				$resource['display'] = $this->get_display ($mod->modname, $mod->instance);
 
 				$e[$section->section]['mods'][] = $resource;
             }
@@ -5206,7 +5512,51 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 		return $e;
 	}
 
-    function my_certificates ($username)
+	function get_display ($modname, $instance)
+	{
+		global $CFG, $DB;
+
+		switch ( $modname )
+		{
+			case 'resource':
+				// Get display options for resource
+				$params = array ($instance);
+				$query = "SELECT display from  {$CFG->prefix}resource where id = ?";
+				$record = $DB->get_record_sql ($query, $params);
+
+				$display = $record->display;
+				break;
+			case 'url':
+				// Get display options for url
+				$params = array ($instance);
+				$query = "SELECT display from  {$CFG->prefix}url where id = ?";
+				$record = $DB->get_record_sql ($query, $params);
+
+				$display = $record->display;
+				break;
+			default:
+				$display = 0;
+				break;
+		}
+
+		return $display;
+	}
+
+
+    function my_certificates ($username, $type = 'normal')
+    {
+		switch ($type)
+		{
+			case "normal":
+				return $this->my_certificates_normal ($username);
+				break;
+			case "simple":
+				return $this->my_certificates_simple ($username);
+				break;
+		}
+	}
+
+    function my_certificates_normal ($username)
     {
         global $CFG, $DB;
 
@@ -5229,16 +5579,6 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
         }
         $ids_str = implode (',', $c_ids);
 
-/*
-		// Code for old version of certificate module
-        $certs = $DB->get_records_sql("SELECT  c.name, c.id, ci.certdate
-                        FROM {$CFG->prefix}certificate c
-                        LEFT JOIN {$CFG->prefix}certificate_issues ci ON c.id = ci.certificateid
-                        WHERE ci.userid = $user_id
-                        AND c.course  in ($ids_str)
-                        ORDER BY ci.certdate DESC");
-*/
-
 		$certs = $DB->get_records_sql("SELECT  c.name, c.id, ci.timecreated as certdate
 				FROM {$CFG->prefix}certificate c
 				LEFT JOIN {$CFG->prefix}certificate_issues ci ON c.id = ci.certificateid
@@ -5260,40 +5600,48 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
         return $c;
     }
 
-	function my_certificates_old ($username)
+    function my_certificates_simple ($username)
     {
         global $CFG, $DB;
 
-		$username = utf8_decode ($username);
-		$username = strtolower ($username);
+        $username = utf8_decode ($username);
+        $username = strtolower ($username);
 
         $user = get_complete_user_data ('username', $username);
-		$cursos = enrol_get_users_courses ($user->id, true);
-        $certs = array ();
+        $user_id = $user->id;
+
+
+        $cursos = enrol_get_users_courses ($user->id, true);
+
+        if (!count ($cursos))
+            return array ();
+
+        $c_ids = array ();
         foreach ($cursos as $curso)
         {
-			$conditions = array ('id' => $curso->id);
-			$course = $DB->get_record ('course', $conditions);
-            if (! $certificates = get_all_instances_in_course("certificate", $course))
-                continue;
+            $c_ids[] = $curso->id;
+        }
+        $ids_str = implode (',', $c_ids);
 
-            foreach ($certificates as $certificate)
-            {
-                // Hide not received certificates
-				$conditions = array ('certificateid' => $certificate->id, 'userid' => $user->id);
-				$certrecord = $DB->get_record ('certificate_issues', $conditions);
-                if(!$certrecord)
-                    continue;
+		$certs = $DB->get_records_sql("SELECT  c.name, c.id, ci.timecreated as certdate
+				FROM {$CFG->prefix}simplecertificate c
+				LEFT JOIN {$CFG->prefix}simplecertificate_issues ci ON c.id = ci.certificateid
+				WHERE ci.userid = $user_id
+				AND c.course  in ($ids_str)
+				ORDER BY ci.timecreated DESC");
 
+        $c = array ();
+        foreach ($certs as $cert)
+        {
+            $coursemodule = get_coursemodule_from_instance ("simplecertificate", $cert->id);
+            $certificate['id'] =  $coursemodule->id;
+            $certificate['name']  = $cert->name;
+            $certificate['date']  = $cert->certdate;
 
-                $cert['name'] = $certificate->name;
-                $cert['id'] = $certificate->coursemodule;
-
-                $certs[] = $cert;
-            }
+            $c[] = $certificate;
         }
 
-        return $certs;
+        return $c;
     }
 
 	function get_page ($id)
@@ -5325,10 +5673,11 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
             
 		$options['noclean'] = true;
         $mylabel['name'] = $label->name;
-        $context = context_module::instance($cm->id);
+		$context = context_module::instance($cm->id);
         $mylabel['content'] = $label->intro;
 		$mylabel['content'] = format_text($mylabel['content'], FORMAT_MOODLE, $options);
-
+		$mylabel['content'] = file_rewrite_pluginfile_urls ($mylabel['content'], 'pluginfile.php', $context->id, 'mod_label', 'intro');
+		$mylabel['content'] = str_replace ('pluginfile.php', '/auth/joomdle/pluginfile_joomdle.php', $mylabel['content']);
 
         return $mylabel;
     }
@@ -5463,6 +5812,21 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
         return $rdo;
     }
 
+    function get_themes ()
+	{
+		$availablethemes = core_component::get_plugin_list('theme');
+
+		$themes = array ();
+		foreach ($availablethemes as $name => $path)
+		{
+			$theme = array ();
+			$theme['name'] = $name;
+			$themes[] = $theme;
+		}
+
+		return $themes;
+	}
+
 
     function create_course ($course_ext,$skip_fix_course_sortorder=0){
         global $CFG, $DB;
@@ -5536,7 +5900,8 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
         $course->lang     = utf8_decode ( $course_ext['course_lang'] );
         $course->startdate     =   $course_ext['startdate'] ;
         $course->category     =   $course_ext['category'] ;
-        $course->idnumber  = $course_ext['idnumber'];
+        if ($course_ext['idnumber']) // Don't touch idnumber if not set, in case it is used by an external application
+			$course->idnumber  = $course_ext['idnumber'];
 
         $DB->update_record('course', $course);
 
@@ -5566,8 +5931,119 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 
 		setcookie($r, false,  time() - 3600, '/');
 
-		$redirect = get_config (NULL, 'joomla_url').'/components/com_joomdle/views/wrapper/getout.php';
+		$logout_redirect_to_joomla = get_config('auth/joomdle', 'logout_redirect_to_joomla');
+
+		if ($logout_redirect_to_joomla)
+			$redirect = get_config ('auth/joomdle', 'joomla_url').'/components/com_joomdle/views/wrapper/getout.php';
 	}
+
+	function get_scorm_item_track_data ($id, $username, $item)
+	{
+        global $CFG, $DB;
+        $user = get_complete_user_data ('username', $username);
+
+        $query =
+            "SELECT
+            value
+            FROM
+            {$CFG->prefix}scorm_scoes_track
+            WHERE
+            userid = ?
+            and scormid = ?
+            and element = ?
+            ";
+
+        $params = array ($user->id, $id, $item);
+        $record =  $DB->get_record_sql($query, $params);
+
+        $data = $record->value;
+
+        return $data;
+	}
+
+	function get_scorm_track_data ($id, $username)
+	{
+		$data = array ();
+		$data['start_time'] = $this->get_scorm_item_track_data ($id, $username, 'x.start.time');
+		$data['total_time'] = $this->get_scorm_item_track_data ($id, $username, 'cmi.core.total_time');
+		$data['lesson_status'] = $this->get_scorm_item_track_data ($id, $username, 'cmi.core.lesson_status');
+		$data['score'] = $this->get_scorm_item_track_data ($id, $username, 'cmi.core.score.raw');
+
+		return $data;
+	}
+
+	function get_scorm_data ($course_id, $username)
+	{
+		$sections = $this->get_course_mods ($course_id, $username);
+
+		foreach ($sections as $section)
+        {
+            foreach ($section['mods'] as $mod)
+            {
+                if ($mod['mod'] == 'scorm')
+                {
+                    // Scorm object found, we return its info, as we assume only one scorm object per course
+                    $cm = get_coursemodule_from_id('scorm', $mod['id']);
+                    $scorm_track = $this->get_scorm_track_data ($cm->instance, $username);
+
+                    return ($scorm_track);
+                }
+                else
+                    continue;
+            }
+        }
+	}
+
+	function list_courses_scorm ($available = 0, $sortby = 'created', $guest = 0, $username = '')
+	{
+		$courses = $this->list_courses ($available, $sortby, $guest, $username);
+
+		$scorm_courses = array ();
+		foreach ($courses as $c)
+		{
+			$c['scorm_data'] = $this->get_scorm_data ($c['remoteid'], 'pepe');
+
+			if (!$c['scorm_data'])
+				continue; // Skip non scorm courses
+
+			$scorm_courses[] = $c;
+		}
+
+		return $scorm_courses;
+
+	}
+
+    function my_badges ($username, $n = 10)
+    {
+        global $CFG;
+		require_once($CFG->libdir . "/badgeslib.php");
+
+        $username = utf8_decode ($username);
+        $username = strtolower ($username);
+
+        $user = get_complete_user_data ('username', $username);
+
+        if (!$user)
+            return array ();
+
+        $badges = badges_get_user_badges($user->id, NULL, 0, $n);
+
+        $bs = array ();
+        foreach ($badges as $badge)
+        {
+            $b = array ();
+            $b['name'] = $badge->name;
+            $b['hash'] = $badge->uniquehash;
+
+            $context = ($badge->type == BADGE_TYPE_SITE) ? context_system::instance() : context_course::instance($badge->courseid);
+            $image_url = moodle_url::make_pluginfile_url($context->id, 'badges', 'badgeimage', $badge->id, '/', 'f1', false);
+            $b['image_url'] = (string) $image_url;
+
+            $bs[] = $b;
+        }
+
+        return $bs;
+    }
 
 	/* Logs the user in both Joomla and Moodle once auth is passed */
 	function user_authenticated_hook (&$user, $username, $password)
@@ -5596,7 +6072,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 		// Normal login
 		$login_data = base64_encode ($username.':'.$password);
 
-		$redirect_url = get_config (NULL, 'joomla_url').'/index.php?option=com_joomdle&view=joomdle&task=login&data='.$login_data.'&wantsurl='. urlencode ($SESSION->wantsurl);
+		$redirect_url = get_config ('auth/joomdle', 'joomla_url').'/index.php?option=com_joomdle&view=joomdle&task=login&data='.$login_data.'&wantsurl='. urlencode ($SESSION->wantsurl);
 
 		redirect($redirect_url);
 	}
@@ -5610,7 +6086,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 
         $username = str_replace (' ', '%20', $username);
 		$login_data = base64_encode ($username.':'.$password);
-		$url = get_config (NULL, 'joomla_url').'/index.php?option=com_joomdle&view=joomdle&task=login&data='.$login_data;
+		$url = get_config ('auth/joomdle', 'joomla_url').'/index.php?option=com_joomdle&view=joomdle&task=login&data='.$login_data;
 
         $ch = curl_init();
         // set url
@@ -5687,6 +6163,10 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 
 } //class
 
+
+
+// Events handlers
+
 	function joomdle_user_updated ($user)
 	{
                 global $CFG, $DB;
@@ -5724,7 +6204,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
                 $userinfo['picture'] = $user->picture;
 
                 $id = $user->id;
-				$usercontext = context_user::instance($id, MUST_EXIST);
+				$usercontext = context_user::instance($id);
 				$context_id = $usercontext->id;
 
 				if ($user->picture)
@@ -5759,7 +6239,6 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 	function joomdle_user_created ($user)
 	{
 		global $CFG, $DB;
-
 
 		if ($user->auth != 'joomdle')
 			return true;
@@ -5800,7 +6279,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 		$userinfo['picture'] = $user->picture;
 
 		$id = $user->id;
-		$usercontext = context_user::instance($id, MUST_EXIST);
+		$usercontext = context_user::instance($id);
 		$context_id = $usercontext->id;
 
 		if ($user->picture)
@@ -5830,6 +6309,19 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 		return true;
 	}
 
+	function joomdle_user_deleted ($user)
+	{
+		global $CFG, $DB;
+
+		if ($user->auth != 'joomdle')
+			return true;
+
+		$auth_joomdle = new auth_plugin_joomdle ();
+
+		$auth_joomdle->call_method ("deleteUser", $user->username);
+		return true;
+	}
+
 	function joomdle_course_created ($course)
 	{
 		global $DB;
@@ -5855,7 +6347,8 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 		if ($activities)
 			$auth_joomdle->call_method ('addActivityCourse', (int) $course->id, $course->fullname,  $course->summary, (int) $course->category, $cat->name);
 		if ($groups)
-		 	$auth_joomdle->call_method ('addJSGroup', $course->fullname,  get_string('auth_joomla_group_for_course', 'auth_joomdle') . ' ' .$course->fullname,  (int) $course->id, "x");
+		 	$auth_joomdle->call_method ('addSocialGroup', $course->fullname,  get_string('auth_joomla_group_for_course', 'auth_joomdle') . ' ' .$course->fullname,  (int) $course->id);
+	//	 	$auth_joomdle->call_method ('addJSGroup', $course->fullname,  get_string('auth_joomla_group_for_course', 'auth_joomdle') . ' ' .$course->fullname,  (int) $course->id, "x");
 
 		if ($autosell)
 		{
@@ -5889,7 +6382,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 		$auth_joomdle = new auth_plugin_joomdle ();
 
 		if ($groups_delete)
-			$auth_joomdle->call_method ('removeJSGroup', $course->fullname);
+			$auth_joomdle->call_method ('deleteSocialGroup', $course->id);
 
 		if ($autosell)
 		{
@@ -5914,7 +6407,8 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 		$auth_joomdle = new auth_plugin_joomdle ();
 
 		if ($groups)
-		 	$auth_joomdle->call_method ('updateJSGroup', $course->fullname,  get_string('auth_joomla_group_for_course', 'auth_joomdle') . ' ' .$course->fullname,  (int) $course->id, "x");
+		 	$auth_joomdle->call_method ('updateSocialGroup', $course->fullname,  get_string('auth_joomla_group_for_course', 'auth_joomdle') . ' ' .$course->fullname,  (int) $course->id);
+		 //	$auth_joomdle->call_method ('updateJSGroup', $course->fullname,  get_string('auth_joomla_group_for_course', 'auth_joomdle') . ' ' .$course->fullname,  (int) $course->id, "x");
 
 		if ($autosell)
 		{
@@ -5941,7 +6435,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 
 		$auth_joomdle = new auth_plugin_joomdle ();
 
-		$context = context::instance_by_id($role->contextid);
+		$context = context::instance_by_id ($role->contextid);
 		/* If a course enrolment, publish */
 		if ($context->contextlevel == CONTEXT_COURSE)
 		{
@@ -5965,9 +6459,11 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 			{
 				/* Join teachers as group admins, and students as regular members */
 				if ($role->roleid == 3) //XXX not hardcoded value?
-					$auth_joomdle->call_method ('addJSGroupMember', $course->fullname, $user->username, 1, (int) $courseid);
+	//				$auth_joomdle->call_method ('addJSGroupMember', $course->fullname, $user->username, 1, (int) $courseid);
+					$auth_joomdle->call_method ('addSocialGroupMember', $user->username, 1, (int) $courseid);
 				else 
-					$auth_joomdle->call_method ('addJSGroupMember', $course->fullname, $user->username, -1, (int) $courseid);
+					$auth_joomdle->call_method ('addSocialGroupMember', $user->username, -1, (int) $courseid);
+				//	$auth_joomdle->call_method ('addJSGroupMember', $course->fullname, $user->username, -1, (int) $courseid);
 			}
 			
 			// Enrol parents
@@ -5976,7 +6472,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 				if ($role->roleid == 5) //XXX not hardcoded value?
 				{
 					/* Get mentors for the student */
-					$usercontext   = context_user::instance($role->userid);
+					$usercontext = context_user::instance($role->userid);
 					$usercontextid = $usercontext->id;
 
 					$query =
@@ -6014,7 +6510,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 					$type = 'course_students';
 
 					/* Get mentors for the student */
-					$usercontext   = context_user::instance($role->userid);
+					$usercontext = context_user::instance($role->userid);
 					$usercontextid = $usercontext->id;
 
 					$query =
@@ -6075,7 +6571,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 
 		$auth_joomdle = new auth_plugin_joomdle ();
 
-		$context = context::instance_by_id($role->contextid);
+		$context = context::instance_by_id ($role->contextid);
 		/* If a course unenrolment, remove from group */
 		if ($context->contextlevel == CONTEXT_COURSE)
 		{
@@ -6088,7 +6584,8 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 			$user = $DB->get_record('user', $conditions);
 
 			if ($groups)
-				$auth_joomdle->call_method ('removeJSGroupMember', $course->fullname, $user->username);
+				$auth_joomdle->call_method ('removeSocialGroupMember', $user->username, $courseid);
+			//	$auth_joomdle->call_method ('removeJSGroupMember', $course->fullname, $user->username);
 
 			if ($auto_mailing_lists)
 			{
@@ -6099,7 +6596,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 					$type = 'course_students';
 
 					/* Get mentors for the student */
-					$usercontext   = context_user::instance($role->userid);
+					$usercontext = context_user::instance($role->userid);
 					$usercontextid = $usercontext->id;
 
 					$query =

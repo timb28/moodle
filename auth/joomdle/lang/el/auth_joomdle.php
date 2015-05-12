@@ -28,7 +28,5 @@ $string['auth_joomla_sync_to_joomla'] = 'Συγχρονίζει τους χρή�
 $string['auth_joomla_sync_to_joomla_description'] = 'Συγχρονίζει τους νέους χρήστες και τις ενημερώσεις των προφίλ με το Joomla';
 $string['auth_joomla_auto_sell'] = 'Auto courses<br>';
 $string['auth_joomla_auto_sell_description'] = 'Δημιουργία/ενημέρωση/διαγραφή μαθημάτων στο κατάστημα του Joomla αυτό συμβαίνει στο Moodle<br>';
-$string['auth_joomla_joomla_version'] = 'Έκδοση Joomla<br>';
-$string['auth_joomla_version_description'] = 'Έκδοση Joomla<br>';
 $string['auth_joomla_group_for_course'] = 'Ομάδα για το μάθημα';
 ?>

@@ -28,7 +28,5 @@ $string['auth_joomla_sync_to_joomla'] = 'Sincronizar usuários no Joomla';
 $string['auth_joomla_sync_to_joomla_description'] = 'Sincronizar novos usuários e atualizar perfis no Joomla';
 $string['auth_joomla_auto_sell'] = 'Venda automática de cursos<br>';
 $string['auth_joomla_auto_sell_description'] = 'Criar/Alterar/Remover cursos na loja virtual do Joomla quando feito no Moodle<br>';
-$string['auth_joomla_joomla_version'] = 'Versão do Joomla<br>';
-$string['auth_joomla_version_description'] = 'Versão do Joomla<br>';
 
 ?>

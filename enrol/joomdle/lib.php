@@ -97,7 +97,7 @@ class enrol_joomdle_plugin extends enrol_plugin {
         if ($instance->enrol !== 'joomdle') {
             throw new coding_exception('invalid enrol instance!');
         }
-        $context = context_course::instance($instance->courseid);
+        $context = context_course::instance ($instance->courseid);
 
         $icons = array();
 
@@ -151,16 +151,10 @@ class enrol_joomdle_plugin extends enrol_plugin {
 
         $course = $DB->get_record('course', array('id'=>$instance->courseid));
 
-        /* Academy Patch #25 Students can easily open or buy courses sold through Joomla. */
-        if (!isloggedin() || isguestuser()) {
-            redirect(get_login_url()); // Make the guest user login before the enrolment page appears
-            exit; // never reached
-        }
-
         $strloginto = get_string("loginto", "", $course->shortname);
         $strcourses = get_string("courses");
 
-        $context = context_course::instance($course->id);
+        $context = context_course::instance ($course->id);
         // Pass $view=true to filter hidden caps if the user cannot see them
         if ($users = get_users_by_capability($context, 'moodle/course:update', 'u.*', 'u.id ASC',
                                              '', '', '', '', false, true)) {
@@ -171,9 +165,9 @@ class enrol_joomdle_plugin extends enrol_plugin {
         }
 
         if ( (float) $instance->cost <= 0 ) {
-            $cost = number_format($this->get_config('cost'), 2, '.', '');
+            $cost = (float) $this->get_config('cost');
         } else {
-            $cost = number_format($instance->cost, 2, '.', '');
+            $cost = (float) $instance->cost;
         }
 
         if (abs($cost) < 0.01) { // no cost, other enrolment methods (instances) should be used
@@ -188,10 +182,10 @@ class enrol_joomdle_plugin extends enrol_plugin {
                     // in unencrypted connection...
                     $wwwroot = str_replace("http://", "https://", $CFG->wwwroot);
                 }
-                echo '<div class="mdl-align"><p>'.get_string('paymentrequired').'</p>';
-                echo '<p><b>'.get_string('cost').": $instance->currency $cost".'</b></p>';
-                include($CFG->dirroot.'/enrol/joomdle/enrol.html');
-                echo '<p><a href="'.$wwwroot.'/login/">'.get_string('loginsite').'</a></p>';
+
+                echo '<div class="mdl-align"><p>'.$instance->customtext2.'</p>';
+       //         echo '<p><b>'.get_string('cost').": $instance->currency $cost".'</b></p>';
+       //         echo '<p><a href="'.$wwwroot.'/login/">'.get_string('loginsite').'</a></p>';
                 echo '</div>';
             } else {
                 //Sanitise some fields before building the PayPal form
@@ -204,11 +198,7 @@ class enrol_joomdle_plugin extends enrol_plugin {
                 $usercity        = $USER->city;
                 $instancename    = $this->get_instance_name($instance);
 
-                /* Academy Patch #25 Students can easily open or buy courses sold through Joomla. */
-                echo '<div class="mdl-align">';
                 include($CFG->dirroot.'/enrol/joomdle/enrol.html');
-                echo '<p><b>'.get_string('cost').": $instance->currency $cost".'</b></p>';
-                echo '</div>';
             }
 
         }

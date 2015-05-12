@@ -53,7 +53,6 @@ class enrol_joomdle_edit_form extends moodleform {
                                   'JPY' => 'Japanese Yen',
                                   'GBP' => 'British Pounds',
                                   'CAD' => 'Canadian Dollars',
-                                  'NZ$' => 'New Zealand Dollars',
                                   'AUD' => 'Australian Dollars'
                                  );
         $mform->addElement('select', 'currency', get_string('currency', 'enrol_joomdle'), $paypalcurrencies);
@@ -78,6 +77,17 @@ class enrol_joomdle_edit_form extends moodleform {
 
         $mform->addElement('date_selector', 'enrolenddate', get_string('enrolenddate', 'enrol_joomdle'), array('optional' => true));
         $mform->setDefault('enrolenddate', 0);
+
+        $mform->addElement('textarea', 'customtext1', get_string('enrol_message', 'enrol_joomdle'), array('optional' => true, 'cols'=>'60', 'rows'=>'8'));
+        $mform->setDefault('customtext1', $plugin->get_config('enrol_message'));
+
+        $mform->addElement('editor', 'customtext2', get_string('guest_enrol_message', 'enrol_joomdle'), array('optional' => true, 'cols'=>'60', 'rows'=>'8', 'maxfiles'   => EDITOR_UNLIMITED_FILES));
+		if ($this->_customdata[0]->customtext2)
+			$a['text'] = $this->_customdata[0]->customtext2;
+		else
+			$a['text'] = $plugin->get_config('guest_enrol_message');
+        $mform->setDefault('customtext2', $a);
+		$mform->setType('customtext2', PARAM_RAW);
 
         $mform->addElement('hidden', 'id');
         $mform->addElement('hidden', 'courseid');

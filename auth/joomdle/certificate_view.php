@@ -47,7 +47,9 @@ $PAGE->set_context($context);
 $PAGE->set_cm($cm);
 
 // Create new certrecord
-certificate_prepare_issue($course, $USER, $certificate);
+//certificate_prepare_issue($course, $USER, $certificate);
+//$certrecord = certificate_get_issue($course, $USER, $certificate, $cm);
+
 
 // Get previous certrecord
 $sql = "SELECT MAX(timecreated) AS latest " .
@@ -71,6 +73,7 @@ $filename = clean_filename($certificate->name.'.pdf');
 // Load the specific certificatetype
 require ("$CFG->dirroot/mod/certificate/type/$certificate->certificatetype/certificate.php");
 
+/*
 if ($certificate->reissuecert) { // Reissue certificate every time
     if (empty($action)) {
         view_header($course, $certificate, $cm);
@@ -98,6 +101,7 @@ if ($certificate->reissuecert) { // Reissue certificate every time
     }
     certificate_issue($course, $certificate, $certrecord, $cm); // update certrecord as issued
 } else if ($certrecord->certdate > 0) { // Review certificate
+*/
     if (empty($action)) {
         view_header($course, $certificate, $cm);
         $link = new moodle_url('/mod/certificate/view.php?id='.$cm->id.'&action=get');
@@ -111,6 +115,7 @@ if ($certificate->reissuecert) { // Reissue certificate every time
         echo $OUTPUT->footer($course);
         exit;
     }
+/*
 } else if ($certrecord->certdate == 0) { //Create certificate
     if (empty($action)) {
         view_header($course, $certificate, $cm);
@@ -133,9 +138,9 @@ if ($certificate->reissuecert) { // Reissue certificate every time
         echo $OUTPUT->footer($course);
         exit;
     }
-    certificate_issue($course, $certificate, $certrecord, $cm); // update certrecord as issued
+   // certificate_issue($course, $certificate, $certrecord, $cm); // update certrecord as issued
 }
-
+*/
 if ($action) {
     // Output to pdf
     if ($certificate->savecert == 1){

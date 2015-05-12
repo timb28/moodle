@@ -19,15 +19,7 @@ require_once($CFG->dirroot.'/auth/joomdle/auth.php');
 
 // it gives a warning if no context set, I guess it does nor matter which we use
 $PAGE->set_context(context_system::instance());
-/*
-if (!$site = get_site()) {
-    print_error('mnet_session_prohibited', 'mnet', '', '');
-}
 
-if (!is_enabled_auth('mnet')) {
-    error('mnet is disabled');
-}
-*/
 // grab the GET params
 $token         = optional_param('token',  '',  PARAM_TEXT);
 $username = optional_param('username',   '',   PARAM_TEXT);
@@ -73,7 +65,7 @@ if (($username != 'guest') && (!isloggedin()))
 				else
 				{
 					/* If the user does not exists and we don't have to create it, we are done */
-					$redirect_url = get_config (NULL, 'joomla_url');
+					$redirect_url = get_config ('auth/joomdle', 'joomla_url');
 					redirect($redirect_url);
 				}
 
@@ -81,17 +73,12 @@ if (($username != 'guest') && (!isloggedin()))
 			$user = get_complete_user_data('username', $username);
 			complete_user_login($user);
 
-			/*
-			if (!empty($localuser->mnet_foreign_host_array)) {
-			    $user->mnet_foreign_host_array = $localuser->mnet_foreign_host_array;
-			}
-			*/
 	} //logged
 } //username != guest
 			// redirect
 			if ($use_wrapper)
 			{
-				$redirect_url = get_config (NULL, 'joomla_url');
+				$redirect_url = get_config ('auth/joomdle', 'joomla_url');
 				switch ($mtype) 
 				{
 					case "event":
@@ -137,7 +124,7 @@ if (($username != 'guest') && (!isloggedin()))
 							if ($wantsurl)
 								$redirect_url =  urldecode ($wantsurl) ;
 							else
-								$redirect_url = get_config (NULL, 'joomla_url');
+								$redirect_url = get_config ('auth/joomdle', 'joomla_url');
 						}
 				} 
 				if ($redirect)
@@ -187,7 +174,7 @@ if (($username != 'guest') && (!isloggedin()))
 						else
 						{
 							preg_match('@^(?:https?://)?([^/]+)@i',
-								get_config (NULL, 'joomla_url'), $matches);
+								get_config ('auth/joomdle', 'joomla_url'), $matches);
 							$host = $matches[0];
 
 
@@ -199,17 +186,15 @@ if (($username != 'guest') && (!isloggedin()))
 								/* If no initial slash, it is a joomla relative path. We add path */
 								if ($wantsurl[0] != '/')
 								{
-									$path = parse_url (get_config (NULL, 'joomla_url'), PHP_URL_PATH);
+									$path = parse_url (get_config ('auth/joomdle', 'joomla_url'), PHP_URL_PATH);
 									$wantsurl = $path.'/'.$wantsurl;
 								}
 
 
 								if ($wantsurl)
 									$redirect_url =  $host.urldecode ($wantsurl) ;
-									//$redirect_url =  urldecode ($wantsurl) ;
 								else
-									$redirect_url = get_config (NULL, 'joomla_url');
-									//$redirect_url = get_config (NULL, 'joomla_url');
+									$redirect_url = get_config ('auth/joomdle', 'joomla_url');
 							}
 							else $redirect_url = $wantsurl;
 						}
