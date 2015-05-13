@@ -6787,17 +6787,15 @@ class assign {
     }
 
     /**
-     * Save grade update.
+     * If the requirements are met - reopen the submission for another attempt.
+     * Only call this function when grading the latest attempt.
      *
-     * @param int $userid
-     * @param  stdClass $data
-     * @return bool - was the grade saved
+     * @param int $userid The userid.
+     * @param stdClass $submission The submission (may be a group submission).
+     * @param bool $addattempt - True if the "allow another attempt" checkbox was checked.
+     * @return bool - true if another attempt was added.
      */
-    public function save_grade($userid, $data) {
-
-        // Need grade permission.
-        require_capability('mod/assign:grade', $this->context);
-
+    protected function reopen_submission_if_required($userid, $submission, $addattempt) {
         $instance = $this->get_instance();
         $submission = null;
         if ($instance->teamsubmission) {
