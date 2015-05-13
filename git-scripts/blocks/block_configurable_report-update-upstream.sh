@@ -3,4 +3,5 @@
 ##
 echo "Updating Configurable Reports Block from Upstream"
 (cd ../blocks/configurable_reports && git fetch upstream)
+(cd ../blocks/configurable_reports && git checkout -b HA-Moodle28)
 (cd ../blocks/configurable_reports && git merge upstream/CR_23_STABLE)

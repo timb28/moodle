@@ -4,6 +4,6 @@
 
 echo "Updating Moodle from Upstream"
 (cd ../ && git fetch upstream)
-(cd ../ && git checkout upstream/MOODLE_27_STABLE)
-(cd ../ && git merge HA-Moodle27)
+(cd ../ && git checkout upstream/MOODLE_28_STABLE)
+(cd ../ && git merge HA-Moodle28)
 ## Then manually resolve the merge conflicts.
