@@ -26,6 +26,9 @@ class joomdle_helpers_external extends external_api {
 		$auth = new  auth_plugin_joomdle ();
 		$id = $auth->user_id ($username);
 
+        /* START Academy Patch M#028 joomdle_user_id web service function should return null when a student doesn't exist */
+        $id = ($id === 0 ? null : $id);
+        /* END Academy Patch M#028 */
         return $id;
     }
 
