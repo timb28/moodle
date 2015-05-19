@@ -78,11 +78,6 @@ if ($filearea !== 'private' and $filearea !== 'draft') {
     throw new file_exception('error');
 }
 
-if ($filearea !== 'private' and $filearea !== 'draft') {
-    // Do not dare to allow more areas here!
-    throw new file_exception('error');
-}
-
 $fs = get_file_storage();
 
 $totalsize = 0;

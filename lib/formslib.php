@@ -2146,7 +2146,6 @@ function qf_errorHandler(element, _qfMsg) {
     return true;
   }
 
-
   if (_qfMsg != \'\') {
     var errorSpan = document.getElementById(\'id_error_\'+element.name);
     if (!errorSpan) {

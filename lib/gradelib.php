@@ -340,11 +340,6 @@ function grade_update_outcomes($source, $courseid, $itemtype, $itemmodule, $item
 function grade_get_grades($courseid, $itemtype, $itemmodule, $iteminstance, $userid_or_ids=null) {
     global $CFG;
 
-    if (empty($itemtype) or empty($itemmodule) or empty($iteminstance)) {
-        debugging('itemtype, itemmodule or iteminstance parameters should not be empty. For Moodle 2.8 and onwards are required',
-                    DEBUG_DEVELOPER);
-    }
-
     $return = new stdClass();
     $return->items    = array();
     $return->outcomes = array();
