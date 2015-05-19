@@ -39,7 +39,7 @@ $THEME->sheets = array('academy','bootstrapbase','course','content','form','ques
     'joomla','print','custom','videofile','istart','mod_feedback');
 $THEME->supportscssoptimisation = false;
 $THEME->yuicssmodules = array();
-
+$THEME->enable_dock = false;
 $THEME->editor_sheets = array('content','istart');
 
 $THEME->plugins_exclude_sheets = array(
