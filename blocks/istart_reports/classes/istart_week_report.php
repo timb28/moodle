@@ -251,7 +251,7 @@ class istart_week_report {
             $reportsent = false;
         }
 
-        return $reportsent;//return $reportsent; // TODO remove after testing
+        return $reportsent;
     }
 
 }
