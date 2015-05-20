@@ -4,4 +4,4 @@
 ##
 ## OU Drag and Drop Images Quiz Question Type
 echo "Updating Drag and Drop Image or Text Question Type from Origin"
-(cd ../question/type/ddimageortext && git fetch origin && git pull origin HA-Moodle28)
+(cd ../question/type/ddimageortext && git fetch origin && git checkout HA-Moodle28)

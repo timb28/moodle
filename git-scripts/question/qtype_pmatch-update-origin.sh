@@ -4,4 +4,4 @@
 ##
 echo "Cloning Pattern Patching Question Type from Origin"
 (cd ../question/type/pmatch && git fetch origin)
-(cd ../question/type/pmatch && git pull origin master)
+(cd ../question/type/pmatch && git checkout HA-Moodle28)
