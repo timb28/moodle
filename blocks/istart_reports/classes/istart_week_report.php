@@ -178,6 +178,8 @@ class istart_week_report {
             // Check if already sent
             if (!$this->is_report_sent($istartgroup, $user, managerreport::REPORTTYPE)) {
                 $this->prepare_manager_report_for_user($istartgroup, $istartuser);
+            } else {
+                error_log(" - Manager report for $user->id at $this->reporttime already sent"); // TODO remove after testing
             }
         }
 
@@ -249,7 +251,7 @@ class istart_week_report {
             $reportsent = false;
         }
 
-        return false;//return $reportsent; // TODO remove after testing
+        return $reportsent;//return $reportsent; // TODO remove after testing
     }
 
 }
