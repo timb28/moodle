@@ -100,6 +100,17 @@ div#page {
   text-shadow: none;
 }
 
+/* Usermenu */
+.jsenabled .navbar-inverse .usermenu .moodle-actionmenu.show {
+  background-color: transparent;
+}
+.navbar-inverse .usermenu .moodle-actionmenu:hover .usertext {
+    color: #fff;
+}
+.usermenu .moodle-actionmenu .toggle-display:hover .usertext {
+    text-decoration: underline;
+}
+
 /* Breadcrumbs */
 .breadcrumb {
   background: none;
