@@ -63,13 +63,13 @@
  *    - istart-week-task istart-week-task-do
  *
  */
-.course-shortname-iStart24.format-flexsections .course-content-header {
+.format-flexsections .course-content-header {
     display: none;
 }
-.course-shortname-iStart24.format-flexsections .course-content-footer {
+.format-flexsections .course-content-footer {
     clear: both;
 }
-.course-shortname-iStart24.format-flexsections .header.backto {
+.format-flexsections .header.backto {
     background-color: #f5f5f5;
     background-image: linear-gradient(to bottom, #fff, #e6e6e6);
     background-repeat: repeat-x;
@@ -89,22 +89,19 @@
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
     vertical-align: middle;
 }
-.course-shortname-iStart24.format-flexsections .header.backto:hover {
+.format-flexsections .header.backto:hover {
     background-position: 0 -15px;
     background-color: #e6e6e6;
     color: #333;
     text-decoration: none;
     transition: background-position 0.1s linear 0s;
 }
-.course-shortname-iStart24.format-flexsections .course-content-footer {
+.format-flexsections .course-content-footer {
     margin: 1em 0;
 }
-.course-shortname-iStart24 .course-content > .flexsections > .section > .content > h3 {
+.course-content > .flexsections > .section > .content > h3 {
     margin-top: 0;
     font-weight: bold;
-}
-.course-shortname-iStart24 .section h3 {
-    font-weight: normal;
 }
 .format-flexsections .course-content ul.flexsections.flexsections-level-1
 li.section.main.istart-week-task {
@@ -204,7 +201,7 @@ li.section.main.istart-week-task {
     border-bottom: 0;
 }
 
-/* iStart24 hide course resources */
+/* Full iStart24 hide course resources */
 body.course-shortname-iStart24 .istart-welcome li.activity.lesson,
 body.course-shortname-iStart24 .istart-welcome li.activity.forum,
 body.course-shortname-iStart24 .istart-welcome li.activity.certificate,
@@ -230,6 +227,10 @@ h1 {
 body.course-shortname-iStart24 .course-content
 ul.section {
     margin: 0;
+}
+/* Only used for the list of weeks in the full iStart24 Online */
+.course-shortname-iStart24 .section h3 {
+    font-weight: normal;
 }
 /** iStart24 Read pictures. Note: Also use the 'img-responsive' class. */
 img.istart-read-hero {
