@@ -123,7 +123,7 @@ li.section.main.istart-week-task {
     padding-top: 0;
     padding-left: 5px;
 }
-.istart-week-task h3 a {
+.istart-week-task > h3 a {
     background-position: left 32px;
     background-repeat: no-repeat;
     background-size: contain;
@@ -134,14 +134,14 @@ li.section.main.istart-week-task {
     text-align: center;
     width: 100px;
 }
-.format-flexsections.editing .istart-week-task h3 {
+.format-flexsections.editing .istart-week-task > h3 {
     background-position: left center;
     background-repeat: no-repeat;
     background-size: contain;
     padding-left: 1.2em;
     max-height: 24px;
 }
-.format-flexsections.editing .istart-week-task h3 a {
+.format-flexsections.editing .istart-week-task > h3 a {
     background: none;
     display: inline;
     width: auto;
@@ -149,51 +149,51 @@ li.section.main.istart-week-task {
     text-align: left;
     font-size: inherit;
 }
-.istart-week-task.istart-week-task-watch h3 a {
+.istart-week-task.istart-week-task-watch > h3 a {
     background-image: url([[pix:theme|istart/menu-watch]]);
 }
-.istart-week-task.istart-week-task-read h3 a {
+.istart-week-task.istart-week-task-read > h3 a {
     background-image: url([[pix:theme|istart/menu-read]]);
 }
-.istart-week-task.istart-week-task-do h3 a {
+.istart-week-task.istart-week-task-do > h3 a {
     background-image: url([[pix:theme|istart/menu-do]]);
 }
-.istart-week-task.istart-week-task-commit h3 a {
+.istart-week-task.istart-week-task-commit > h3 a {
     background-image: url([[pix:theme|istart/menu-commit]]);
 }
 /** TODO: START Remove once all tasks have been split into 'do' and 'commit' sections */
-.istart-week-task.istart-week-task-succeed h3 a {
+.istart-week-task.istart-week-task-succeed > h3 a {
     background-image: url([[pix:theme|istart/menu-succeed]]);
 }
-.istart-week-task.istart-week-task-connect h3 a {
+.istart-week-task.istart-week-task-connect > h3 a {
     background-image: url([[pix:theme|istart/menu-connect]]);
 }
-.istart-week-task.istart-week-task-focus h3 a {
+.istart-week-task.istart-week-task-focus > h3 a {
     background-image: url([[pix:theme|istart/menu-focus]]);
 }
 
 /** TODO: END Remove once all tasks have been split into 'do' and 'commit' sections */
 /*** Icons when editing flexsections **/
-.format-flexsections.editing .istart-week-task.istart-week-task-watch h3 {
+.format-flexsections.editing .istart-week-task.istart-week-task-watch > h3 {
     background-image: url([[pix:theme|istart/title-watch]]);
 }
-.format-flexsections.editing .istart-week-task.istart-week-task-read h3 {
+.format-flexsections.editing .istart-week-task.istart-week-task-read > h3 {
     background-image: url([[pix:theme|istart/title-read]]);
 }
-.format-flexsections.editing .istart-week-task.istart-week-task-do h3 {
+.format-flexsections.editing .istart-week-task.istart-week-task-do > h3 {
     background-image: url([[pix:theme|istart/title-do]]);
 }
-.format-flexsections.editing .istart-week-task.istart-week-task-commit h3 {
+.format-flexsections.editing .istart-week-task.istart-week-task-commit > h3 {
     background-image: url([[pix:theme|istart/title-commit]]);
 }
 /** TODO: START Remove once all tasks have been split into 'do' and 'commit' sections */
-.format-flexsections.editing .istart-week-task.istart-week-task-focus h3 {
+.format-flexsections.editing .istart-week-task.istart-week-task-focus > h3 {
     background-image: url([[pix:theme|istart/title-focus]]);
 }
-.format-flexsections.editing .istart-week-task.istart-week-task-succeed h3 {
+.format-flexsections.editing .istart-week-task.istart-week-task-succeed > h3 {
     background-image: url([[pix:theme|istart/title-succeed]]);
 }
-.format-flexsections.editing .istart-week-task.istart-week-task-connect h3 {
+.format-flexsections.editing .istart-week-task.istart-week-task-connect > h3 {
     background-image: url([[pix:theme|istart/title-connect]]);
 }
 /** TODO: END Remove once all tasks have been split into 'do' and 'commit' sections */
