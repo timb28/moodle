@@ -4,14 +4,17 @@
  *   Author     : timbutler
  */
 
+.format-flexsections .section li.activity.resource {
+    margin: 0;
+}
 .istartaction {
     padding: 4px 0 4px 58px;
+    margin: 1rem 0 0 0;
     min-height: 46px;
     font-style: italic;
     background-repeat: no-repeat;
     background-position: 0 4px;
 }
-
 .istartaction.istartaction-affirmations {
     background-image: url([[pix:theme|istart/affirmations]]);
 }
