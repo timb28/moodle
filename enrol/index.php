@@ -103,7 +103,12 @@ foreach ($forms as $form) {
 
 if (!$forms) {
     if (isguestuser()) {
-        notice(get_string('noguestaccess', 'enrol'), get_login_url());
+        /* Start: Academy Patch M#029 Skip the “Guests can not access this course, please try to log in.” notice and open the login page when not logged in when opening a course.
+         notice(get_string('noguestaccess', 'enrol'), get_login_url());
+         */
+         
+        redirect(get_login_url());
+        /* END: Academy Patch M#029 */
     } else {
         notice(get_string('notenrollable', 'enrol'), "$CFG->wwwroot/index.php");
     }
