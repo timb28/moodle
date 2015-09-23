@@ -5,53 +5,54 @@
  */
 
 .istartaction {
-    padding: 0 0 4px 58px;
-    border-bottom: 1px solid #eee;
-    min-height: 60px;
+    padding: 4px 0 4px 58px;
+    min-height: 46px;
     font-style: italic;
+    background-repeat: no-repeat;
+    background-position: 0 4px;
 }
 
 .istartaction.istartaction-affirmations {
-    background: url([[pix:theme|istart/affirmations]]) top left no-repeat;
+    background-image: url([[pix:theme|istart/affirmations]]);
 }
 .istartaction.istartaction-connect {
-    background: url([[pix:theme|istart/connect]]) top left no-repeat;
+    background-image: url([[pix:theme|istart/connect]]);
 }
 .istartaction.istartaction-form {
-    background: url([[pix:theme|istart/form]]) top left no-repeat;
+    background-image: url([[pix:theme|istart/form]]);
 }
 .istartaction.istartaction-h1 {
-    background: url([[pix:theme|istart/h1]]) top left no-repeat;
+    background-image: url([[pix:theme|istart/h1]]);
 }
 .istartaction.istartaction-letter {
-    background: url([[pix:theme|istart/letter]]) top left no-repeat;
+    background-image: url([[pix:theme|istart/letter]]);
 }
 .istartaction.istartaction-material {
-    background: url([[pix:theme|istart/material]]) top left no-repeat;
+    background-image: url([[pix:theme|istart/material]]);
 }
 .istartaction.istartaction-online {
-    background: url([[pix:theme|istart/online]]) top left no-repeat;
+    background-image: url([[pix:theme|istart/online]]);
 }
 .istartaction.istartaction-purchase {
-    background: url([[pix:theme|istart/purchase]]) top left no-repeat;
+    background-image: url([[pix:theme|istart/purchase]]);
 }
 .istartaction.istartaction-read {
-    background: url([[pix:theme|istart/read]]) top left no-repeat;
+    background-image: url([[pix:theme|istart/read]]);
 }
 .istartaction.istartaction-schedule {
-    background: url([[pix:theme|istart/schedule]]) top left no-repeat;
+    background-image: url([[pix:theme|istart/schedule]]);
 }
 .istartaction.istartaction-script {
-    background: url([[pix:theme|istart/script]]) top left no-repeat;
+    background-image: url([[pix:theme|istart/script]]);
 }
 .istartaction.istartaction-tutorial {
-    background: url([[pix:theme|istart/tutorial]]) top left no-repeat;
+    background-image: url([[pix:theme|istart/tutorial]]);
 }
 .istartaction.istartaction-video {
-    background: url([[pix:theme|istart/video]]) top left no-repeat;
+    background-image: url([[pix:theme|istart/video]]);
 }
 .istartaction.istartaction-write {
-    background: url([[pix:theme|istart/write]]) top left no-repeat;
+    background-image: url([[pix:theme|istart/write]]);
 }
 /** iStart24 Flex Sections
  *  Requirements:
