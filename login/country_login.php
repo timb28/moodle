@@ -24,6 +24,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// Requires $CFG->alternateloginurl = https://SERVER/login/country_login.php
+
 require('../config.php');
 require_once('lib.php');
 
@@ -262,6 +264,11 @@ if (empty($SESSION->wantsurl)) {
                           clean_param($_SERVER['HTTP_REFERER'], PARAM_LOCALURL) != '')
                           // There might be some extra params such as ?lang=.
         ? $_SERVER["HTTP_REFERER"] : NULL;
+}
+
+$directlogin = optional_param('directlogin', 0, PARAM_BOOL); // redirect to standard login with directlogin=1
+if ($directlogin) {
+    redirect(get_login_url() . '?directlogin=1');
 }
 
 // make sure we really are on the https page when https login required

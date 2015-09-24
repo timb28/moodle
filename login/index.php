@@ -264,7 +264,11 @@ if (empty($SESSION->wantsurl)) {
 }
 
 /// Redirect to alternative login URL if needed
-if (!empty($CFG->alternateloginurl)) {
+/* START Academy Patch M#030 Don't redirect Moodle login to alternative login url when directlogin=1 */
+$directlogin = optional_param('directlogin', 0, PARAM_BOOL); // don't redirect to alternative login
+if (!empty($CFG->alternateloginurl) && !$directlogin) {
+//if (!empty($CFG->alternateloginurl)) {
+/* END Academy Patch M#030 */
     $loginurl = $CFG->alternateloginurl;
 
     if (strpos($SESSION->wantsurl, $loginurl) === 0) {
