@@ -1,0 +1,21 @@
+<?php
+
+// Countries that are linked to the Global Moodle
+$countries = array(
+    "au"=>"Australia",
+    "nz"=>"New Zealand",
+    "za"=>"South Africa",
+    "us"=>"USA"
+);
+
+?>
+<div class="loginbox clearfix">
+  <div class="loginpanel">
+    <h2>Select your country to login</h2>
+    <div class="subcontent loginsub">
+      <?php foreach($countries as $countrycode => $countryname) { ?>
+      <div class="big-button-wrapper"><a href="http://www.academyrealestatetraining.com/<?= $countrycode ?>/moodle/auth/mnet/jump.php?hostwwwroot=http%3A%2F%2Fwww.academyrealestatetraining.com%2Fmoodle&wantsurl=<?= $SESSION->wantsurl; ?>&remoteurl=1"><img alt="<?= $countryname ?>" src="http://media.academyrealestatetraining.com/images/buttons/country-<?= $countrycode ?>.gif" height="132" width="200"><span class="big-button-text-overlay"><?= $countryname ?></span></a></div>
+      <?php } ?>
+    </div>
+  </div>
+</div>
