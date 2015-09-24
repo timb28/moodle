@@ -27,5 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 $string['forgotten'] = 'Forgotten your details?';
 $string['home'] = 'Online Learning';
 $string['mycourses'] = 'My Online Learning';
+$string['myhome'] = 'My courses';
 $string['sections'] = 'Topics';
 $string['sitepages'] = 'Pages';
