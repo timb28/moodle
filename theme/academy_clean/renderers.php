@@ -16,8 +16,16 @@ class theme_academy_clean_core_renderer extends theme_bootstrapbase_core_rendere
      * Uses bootstrap compatible html.
      */
     public function navbar() {
+        $this->page->navbar->prepend('Online Learning', 'http://'.$_SERVER['SERVER_NAME'].'/online-learning');
         $items = $this->page->navbar->get_items();
         $breadcrumbs = array();
+                /*new navigation_node(array(
+            'text'=>'Online Learning',
+            'shorttext'=>'Online Learning',
+            'key'=>-1,
+            'action'=>'/online-learning'
+        )));*/
+                
         foreach ($items as $item) {
             $item->hideicon = true;
             $breadcrumbs[] = $this->render($item);
