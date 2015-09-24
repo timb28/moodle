@@ -3,6 +3,11 @@
 ## Shell script to download all the third party Moodle plugins used by Harcourts Academy
 ##
 
+## Atto plugins ##
+.atto/atto_fullscreen-install.sh
+.atto/atto_htmlplus-install.sh
+.atto/atto_styles-install.sh
+
 ## Blocks ##
 ./blocks/block_configurable_report-install.sh
 ./blocks/block_forum_aggregator-install.sh
