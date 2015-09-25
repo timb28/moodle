@@ -10,7 +10,7 @@
 a:link { transition: color .1s ease-out; }
 
 a.logo {
-    background: url([[pix:theme|logo]]) no-repeat 0 0;
+    background: url([[pix:theme|logo]]) no-repeat 0 0 / 128px 42px;
     display: block;
     float: left;
     height: 42px;
