@@ -25,18 +25,20 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-/** gradedtask_MAX_NAME_LENGTH = 50 */
-define("gradedtask_MAX_NAME_LENGTH", 50);
+/** GRADEDTASK_MAX_NAME_LENGTH = 50 */
+define("GRADEDTASK_MAX_NAME_LENGTH", 50);
+define("CHECKLIST_TEACHERMARK_YES", 1);
+define("CHECKLIST_TEACHERMARK_UNDECIDED", 0);
 
 /**
- * @uses gradedtask_MAX_NAME_LENGTH
+ * @uses GRADEDTASK_MAX_NAME_LENGTH
  * @param object $gradedtask
  * @return string
  */
 function get_gradedtask_name($gradedtask) {
     $name = strip_tags(format_string($gradedtask->intro,true));
-    if (core_text::strlen($name) > gradedtask_MAX_NAME_LENGTH) {
-        $name = core_text::substr($name, 0, gradedtask_MAX_NAME_LENGTH)."...";
+    if (core_text::strlen($name) > GRADEDTASK_MAX_NAME_LENGTH) {
+        $name = core_text::substr($name, 0, GRADEDTASK_MAX_NAME_LENGTH)."...";
     }
 
     if (empty($name)) {
