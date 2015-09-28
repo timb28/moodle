@@ -36,8 +36,10 @@ class mod_gradedtask_mod_form extends moodleform_mod {
         $mform->addElement('header', 'generalhdr', get_string('general'));
         $this->add_intro_editor(true, get_string('gradedtasktext', 'gradedtask'));
 
-        $this->standard_coursemodule_elements();
+        $this->standard_grading_coursemodule_elements();
 
+        $this->standard_coursemodule_elements();
+        
 //-------------------------------------------------------------------------------
 // buttons
         $this->add_action_buttons(true, false, null);

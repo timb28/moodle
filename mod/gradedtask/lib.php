@@ -158,6 +158,62 @@ function gradedtask_get_extra_capabilities() {
 }
 
 /**
+ * Delete grade item for given graded task
+ *
+ * @category grade
+ * @param object $gradedtask object
+ * @return object gradedtask
+ */
+function gradedtask_grade_item_delete($gradedtask) {
+    global $CFG;
+    require_once($CFG->libdir . '/gradelib.php');
+
+    return grade_update('mod/gradedtask', $gradedtask->course, 'mod', 'gradedtask', $gradedtask->id, 0,
+            null, array('deleted' => 1));
+}
+
+/**
+ * Create or update the grade item for given graded task
+ *
+ * @category grade
+ * @param object $gradedtask object with extra cmidnumber
+ * @param mixed $grades optional array/object of grade(s); 'reset' means reset grades in gradebook
+ * @return int 0 if ok, error code otherwise
+ */
+function gradedtask_grade_item_update($gradedtask, $grades = null) {
+  /* TODO: Create gradedtask_grade_item_update */
+}
+
+/**
+ * Update grades in central gradebook
+ *
+ * @category grade
+ * @param object $gradedtask the graded task settings.
+ * @param int $userid specific user only, 0 means all users.
+ * @param bool $nullifnone If a single user is specified and $nullifnone is true a grade item with a null rawgrade will be inserted
+ */
+function gradedtask_update_grades($gradedtask, $userid = 0, $nullifnone = true) {
+    global $CFG;
+    require_once($CFG->libdir . '/gradelib.php');
+
+    if ($gradedtask->grade == 0) {
+        gradedtask_grade_item_update($gradedtask);
+
+    } else if ($grades = gradedtask_get_user_grades($gradedtask, $userid)) {
+        gradedtask_grade_item_update($gradedtask, $grades);
+
+    } else if ($userid && $nullifnone) {
+        $grade = new stdClass();
+        $grade->userid = $userid;
+        $grade->rawgrade = null;
+        gradedtask_grade_item_update($gradedtask, $grade);
+
+    } else {
+        gradedtask_grade_item_update($gradedtask);
+    }
+}
+
+/**
  * @uses FEATURE_IDNUMBER
  * @uses FEATURE_GROUPS
  * @uses FEATURE_GROUPINGS
