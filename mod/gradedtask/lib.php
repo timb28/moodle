@@ -27,8 +27,8 @@ defined('MOODLE_INTERNAL') || die;
 
 /** GRADEDTASK_MAX_NAME_LENGTH = 50 */
 define("GRADEDTASK_MAX_NAME_LENGTH", 50);
-define("CHECKLIST_TEACHERMARK_YES", 1);
-define("CHECKLIST_TEACHERMARK_UNDECIDED", 0);
+define("GRADEDTASK_STATUS_COMPLETE", 1);
+define("GRADEDTASK_STATUS_INCOMPLETE", 0);
 
 /**
  * @uses GRADEDTASK_MAX_NAME_LENGTH
@@ -235,7 +235,6 @@ function gradedtask_supports($feature) {
         case FEATURE_COMPLETION_TRACKS_VIEWS: return false;
         case FEATURE_GRADE_HAS_GRADE:         return true;
         case FEATURE_GRADE_OUTCOMES:          return false;
-        case FEATURE_MOD_ARCHETYPE:           return MOD_ARCHETYPE_RESOURCE;
         case FEATURE_BACKUP_MOODLE2:          return true;
         case FEATURE_NO_VIEW_LINK:            return true;
 
