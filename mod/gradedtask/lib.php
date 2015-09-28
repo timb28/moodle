@@ -135,7 +135,7 @@ function gradedtask_get_coursemodule_info($coursemodule) {
             $DB->set_field('gradedtask', 'name', $gradedtask->name, array('id'=>$gradedtask->id));
         }
         $info = new cached_cm_info();
-        // no filtering hre because this info is cached and filtered later
+        // no filtering here because this info is cached and filtered later
         $info->content = format_module_intro('gradedtask', $gradedtask, $coursemodule->id, false);
         $info->name  = $gradedtask->name;
         return $info;
@@ -318,4 +318,27 @@ function gradedtask_generate_resized_image(stored_file $file, $maxwidth, $maxhei
     } else {
         return $img;
     }
+}
+
+function course_module_completion_updated(\core\event\course_module_completion_updated $event) {
+  global $DB;
+  
+  error_log("course module completion updated");
+  //error_log(print_r($event, true));
+  
+  // Get the details of the event from the event's record snapshot
+  $record_snapshot = $event->get_record_snapshot($event->objecttable, $event->objectid);
+  //error_log(print_r($record_snapshot, true));
+  
+  
+  
+  // Ignore events that aren't related to graded task course modules
+  //$modinfo = get_fast_modinfo($DB->get_field('course_modules', 'course', array('id' => $cm->id), MUST_EXIST));
+  $cm = get_fast_modinfo($event->courseid)->cms[$record_snapshot->coursemoduleid];
+  //error_log(print_r($cm, true));
+  
+  if ($gradedtask = $DB->get_record('gradedtask', array('id'=>$cm->instance), 'id, name, intro, introformat')) {
+    // Update the grades for the student
+  }
+  
 }
