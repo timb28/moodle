@@ -82,6 +82,8 @@ function gradedtask_update_instance($gradedtask) {
     $gradedtask->name = get_gradedtask_name($gradedtask);
     $gradedtask->timemodified = time();
     $gradedtask->id = $gradedtask->instance;
+    
+    //gradedtask_grade_item_update($gradedtask);
 
     return $DB->update_record("gradedtask", $gradedtask);
 }
@@ -187,7 +189,28 @@ function gradedtask_grade_item_delete($gradedtask) {
  * @return int 0 if ok, error code otherwise
  */
 function gradedtask_grade_item_update($gradedtask, $grades = null) {
-  /* TODO: Create gradedtask_grade_item_update */
+    global $CFG;
+    require_once($CFG->libdir.'/gradelib.php');
+
+    if (!isset($gradedtask->courseid)) {
+        $gradedtask->courseid = $gradedtask->course;
+    }
+
+    $params = array('itemname' => $gradedtask->name);
+    if ($gradedtask->maxgrade > 0) {
+        $params['gradetype'] = GRADE_TYPE_VALUE;
+        $params['grademax'] = $gradedtask->maxgrade;
+        $params['grademin'] = 0;
+    } else {
+        $params['gradetype'] = GRADE_TYPE_NONE;
+    }
+
+    if ($grades === 'reset') {
+        $params['reset'] = true;
+        $grades = null;
+    }
+
+    return grade_update('mod/gradedtask', $gradedtask->courseid, 'mod', 'gradedtask', $gradedtask->id, 0, $grades, $params);
 }
 
 /**
@@ -232,7 +255,7 @@ function gradedtask_update_grades($gradedtask, $userid = 0, $nullifnone = true) 
  */
 function gradedtask_supports($feature) {
     switch($feature) {
-        case FEATURE_IDNUMBER:                return false;
+        case FEATURE_IDNUMBER:                return true;
         case FEATURE_GROUPS:                  return false;
         case FEATURE_GROUPINGS:               return false;
         case FEATURE_MOD_INTRO:               return true;
@@ -321,14 +344,14 @@ function gradedtask_generate_resized_image(stored_file $file, $maxwidth, $maxhei
 }
 
 function course_module_completion_updated(\core\event\course_module_completion_updated $event) {
-  global $DB;
+  /*global $DB;
   
   error_log("course module completion updated");
   //error_log(print_r($event, true));
   
   // Get the details of the event from the event's record snapshot
   $record_snapshot = $event->get_record_snapshot($event->objecttable, $event->objectid);
-  //error_log(print_r($record_snapshot, true));
+  // error_log(print_r($record_snapshot, true));
   
   
   
@@ -337,8 +360,16 @@ function course_module_completion_updated(\core\event\course_module_completion_u
   $cm = get_fast_modinfo($event->courseid)->cms[$record_snapshot->coursemoduleid];
   //error_log(print_r($cm, true));
   
-  if ($gradedtask = $DB->get_record('gradedtask', array('id'=>$cm->instance), 'id, name, intro, introformat')) {
+  if ($cm->modname == 'gradedtask' && $gradedtask = $DB->get_record('gradedtask', array('id'=>$cm->instance), 'id, name, intro, introformat')) {
     // Update the grades for the student
-  }
+    
+    if ($record_snapshot->completionstate === 1) {
+      error_log("Increasing grades for student: ");
+    } else if ($record_snapshot->completionstate === 0) {
+      error_log("Decreasing grades for student: ");
+    }
+    
+    error_log("Updating grades for student: ");
+  }*/
   
 }

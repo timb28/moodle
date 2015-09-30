@@ -25,6 +25,7 @@
 
 $string['gradedtask:addinstance'] = 'Add a new graded task';
 $string['gradedtasktext'] = 'Graded Task text';
+$string['gradedtasksettings'] = 'Settings';
 $string['modulename'] = 'Graded Task';
 $string['modulename_help'] = 'The graded task module enables text and multimedia to be inserted into the course page in between links to other resources and activities. Student manually select when a Graded Task is complete. Graded Tasks are very versatile and can help to improve the appearance of a course if used thoughtfully.
 

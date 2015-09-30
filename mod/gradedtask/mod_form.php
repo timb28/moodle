@@ -36,7 +36,12 @@ class mod_gradedtask_mod_form extends moodleform_mod {
         $mform->addElement('header', 'generalhdr', get_string('general'));
         $this->add_intro_editor(true, get_string('gradedtasktext', 'gradedtask'));
 
-        $this->standard_grading_coursemodule_elements();
+        $mform->addElement('header', 'gradedtasksettings', get_string('gradedtasksettings', 'gradedtask'));
+        $mform->setExpanded('gradedtasksettings', true);
+        
+        $mform->addElement('text', 'maxgrade', get_string('maximumgrade'), array('size' => '10'));
+        $mform->setDefault('maxgrade', 100);
+        $mform->setType('maxgrade', PARAM_INT);
 
         $this->standard_coursemodule_elements();
         
@@ -45,5 +50,5 @@ class mod_gradedtask_mod_form extends moodleform_mod {
         $this->add_action_buttons(true, false, null);
 
     }
-
+    
 }
