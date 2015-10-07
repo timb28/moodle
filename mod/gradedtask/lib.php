@@ -267,8 +267,25 @@ function gradedtask_get_user_grades($gradedtask, $userid = 0) {
  * @param bool $nullifnone If a single user is specified and $nullifnone is true a grade item with a null rawgrade will be inserted
  */
 function gradedtask_update_grades($gradedtask, $userid = 0, $nullifnone = true) {
-    global $CFG;
+    global $CFG, $DB;
     require_once($CFG->libdir . '/gradelib.php');
+    
+    if (!$course = $DB->get_record('course', array('id' => $gradedtask->course))) {
+        return;
+    }
+    
+    if (!$cm = get_coursemodule_from_instance('gradedtask', $gradedtask->id, $course->id)) {
+        return;
+    }
+    
+    // Check if completion is enabled for the course and on the gradedtask activity
+    $ci = new completion_info($course);
+    if (!$ci->is_enabled()) {
+        return;
+    }
+    if ($cm->completion != COMPLETION_TRACKING_MANUAL) {
+        return;
+    }
 
     if ($userid == 0) {
         // Get all users with a gradedtask grade
@@ -280,11 +297,19 @@ function gradedtask_update_grades($gradedtask, $userid = 0, $nullifnone = true) 
         foreach ($grades as $grade) {
             $newgrade = new stdClass();
             $newgrade->userid = $grade->userid;
-            $newgrade->rawgrade = $grade->rawgrade;
+            
+            // Check if the user has completed the graded task activity
+            $completion = $ci->get_data($cm, false, $grade->userid);
+            
+            if ($completion->completionstate == 1) {
+                $newgrade->rawgrade = $gradedtask->maxgrade;
+            } else {
+                $newgrade->rawgrade = 0;
+            }
+            
             $newgrades[$grade->userid] = $newgrade;
         }
         
-        // Check if the user has completed the gradedtask activity
         error_log("gradedtask_update_grades: newgrades: " . print_r($newgrades, true));
         
         gradedtask_grade_item_update($gradedtask, $newgrades);
@@ -321,6 +346,7 @@ function gradedtask_supports($feature) {
         case FEATURE_GROUPINGS:               return false;
         case FEATURE_MOD_INTRO:               return true;
         case FEATURE_COMPLETION_TRACKS_VIEWS: return false;
+        case FEATURE_COMPLETION_HAS_RULES:    return false;
         case FEATURE_GRADE_HAS_GRADE:         return true;
         case FEATURE_GRADE_OUTCOMES:          return false;
         case FEATURE_BACKUP_MOODLE2:          return true;
