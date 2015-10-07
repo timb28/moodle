@@ -187,6 +187,7 @@ function grade_update($source, $courseid, $itemtype, $itemmodule, $iteminstance,
     }
 
 /// normalize and verify grade array
+    error_log("gradelib: " . print_r($grades, true));
     foreach($grades as $k=>$g) {
         if (!is_array($g)) {
             $g = (array)$g;

@@ -82,8 +82,16 @@ function gradedtask_update_instance($gradedtask) {
     $gradedtask->name = get_gradedtask_name($gradedtask);
     $gradedtask->timemodified = time();
     $gradedtask->id = $gradedtask->instance;
+    $gradedtask->grade = 0;
     
-    //gradedtask_grade_item_update($gradedtask);
+    $newmaxgrade = $gradedtask->maxgrade;
+    $oldmaxgrade = $DB->get_field('gradedtask', 'maxgrade', array('id' => $gradedtask->id));
+    
+    gradedtask_grade_item_update($gradedtask);
+    if ($newmaxgrade != $oldmaxgrade) {
+        // Update existin student grades
+        gradedtask_update_grades($gradedtask);
+    }
 
     return $DB->update_record("gradedtask", $gradedtask);
 }
@@ -214,6 +222,43 @@ function gradedtask_grade_item_update($gradedtask, $grades = null) {
 }
 
 /**
+ * Return grade for given user or all users.
+ *
+ * @global object
+ * @global object
+ * @param object $forum
+ * @param int $userid optional user id, 0 means all users
+ * @return array array of grades, false if none
+ */
+function gradedtask_get_user_grades($gradedtask, $userid = 0) {
+    global $CFG, $DB;
+    
+    // If userid is not 0 we only want the grade for a single user.
+    $singleuserwhere = '';
+    if ($userid != 0) {
+        $singleuserwhere = "AND gg.userid = :userid";
+    }
+
+    $sql = "SELECT gg.userid as userid,
+                   gg.rawgrade as rawgrade
+            FROM {grade_grades} gg
+       LEFT JOIN {grade_items} gi on gg.itemid = gi.id
+       LEFT JOIN {gradedtask} gt on gi.iteminstance = gt.id
+           WHERE gi.itemtype = 'mod'
+           AND gi.itemmodule = 'gradedtask'
+           AND gi.courseid = gt.course
+           AND gt.id=:gradedtaskid
+           $singleuserwhere";
+    $params = array('gradedtaskid' => $gradedtask->id, 'userid' => $userid);
+    $records = $DB->get_records_sql($sql, $params);
+    
+    error_log("gradedtask_get_user_grades" . print_r($records, true));
+    
+
+    return $records;
+}
+
+/**
  * Update grades in central gradebook
  *
  * @category grade
@@ -225,10 +270,26 @@ function gradedtask_update_grades($gradedtask, $userid = 0, $nullifnone = true) 
     global $CFG;
     require_once($CFG->libdir . '/gradelib.php');
 
-    if ($gradedtask->grade == 0) {
-        gradedtask_grade_item_update($gradedtask);
+    if ($userid == 0) {
+        // Get all users with a gradedtask grade
+        $grades = gradedtask_get_user_grades($gradedtask, $userid);
+        error_log("gradedtask_update_grades: grades: " . print_r($grades, true));
 
-    } else if ($grades = gradedtask_get_user_grades($gradedtask, $userid)) {
+        // Update the grades of all users
+        $newgrades = array();
+        foreach ($grades as $grade) {
+            $newgrade = new stdClass();
+            $newgrade->userid = $grade->userid;
+            $newgrade->rawgrade = $grade->rawgrade;
+            $newgrades[$grade->userid] = $newgrade;
+        }
+        
+        // Check if the user has completed the gradedtask activity
+        error_log("gradedtask_update_grades: newgrades: " . print_r($newgrades, true));
+        
+        gradedtask_grade_item_update($gradedtask, $newgrades);
+
+    } else if ($userid && !$nullifnone) {
         gradedtask_grade_item_update($gradedtask, $grades);
 
     } else if ($userid && $nullifnone) {
@@ -346,19 +407,11 @@ function gradedtask_generate_resized_image(stored_file $file, $maxwidth, $maxhei
 function course_module_completion_updated(\core\event\course_module_completion_updated $event) {
   global $DB;
   
-  error_log("course module completion updated");
-  //error_log(print_r($event, true));
-  
   // Get the details of the event from the event's record snapshot
   $recordsnapshot = $event->get_record_snapshot($event->objecttable, $event->objectid);
-  error_log(print_r($recordsnapshot, true));
-  
-  
   
   // Ignore events that aren't related to graded task course modules
-  //$modinfo = get_fast_modinfo($DB->get_field('course_modules', 'course', array('id' => $cm->id), MUST_EXIST));
   $cm = get_fast_modinfo($event->courseid)->cms[$recordsnapshot->coursemoduleid];
-  //error_log(print_r($cm, true));
   
   if ($cm->modname == 'gradedtask' && $gradedtask = $DB->get_record('gradedtask', array('id'=>$cm->instance), 'id, course, name, intro, introformat, maxgrade')) {
     // Update the grades for the student
@@ -366,17 +419,14 @@ function course_module_completion_updated(\core\event\course_module_completion_u
     $grade->userid = $recordsnapshot->userid;
     
     if ($recordsnapshot->completionstate === 1) {
-      error_log("Increasing grades for student: ");
+      // Increasing grades for student
       $grade->rawgrade = $gradedtask->maxgrade;
       gradedtask_grade_item_update($gradedtask, $grade);
     } else if ($recordsnapshot->completionstate === 0) {
-      error_log("Decreasing grades for student: ");
+      // Decreasing grades for student
       $grade->rawgrade = 0;
     }
     
     gradedtask_grade_item_update($gradedtask, $grade);
-    
-    error_log("Updating grades for student: ");
   }
-  
 }
