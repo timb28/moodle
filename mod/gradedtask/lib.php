@@ -290,7 +290,6 @@ function gradedtask_update_grades($gradedtask, $userid = 0, $nullifnone = true) 
     if ($userid == 0) {
         // Get all users with a gradedtask grade
         $grades = gradedtask_get_user_grades($gradedtask, $userid);
-        error_log("gradedtask_update_grades: grades: " . print_r($grades, true));
 
         // Update the grades of all users
         $newgrades = array();
@@ -309,8 +308,6 @@ function gradedtask_update_grades($gradedtask, $userid = 0, $nullifnone = true) 
             
             $newgrades[$grade->userid] = $newgrade;
         }
-        
-        error_log("gradedtask_update_grades: newgrades: " . print_r($newgrades, true));
         
         gradedtask_grade_item_update($gradedtask, $newgrades);
 
