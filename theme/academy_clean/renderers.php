@@ -58,10 +58,15 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
         global $CFG;
 
         /* Modules other than mod/videofile appear as normal. */
-        if ($mod->modname !== "videofile") {
-            return core_course_renderer::course_section_cm_name($mod, $displayoptions);
+        if ($mod->modname == "videofile") {
+            return $this->videofile_renderer($mod, $displayoptions);
         }
 
+        return core_course_renderer::course_section_cm_name($mod, $displayoptions);
+    }
+    
+    private function videofile_renderer(cm_info $mod, $displayoptions = array()) {
+        
         /* Non-embeded video files should also appear as normal. */
         $customdata = $mod->customdata;
         $display = $customdata['display'];
