@@ -252,9 +252,6 @@ function gradedtask_get_user_grades($gradedtask, $userid = 0) {
     $params = array('gradedtaskid' => $gradedtask->id, 'userid' => $userid);
     $records = $DB->get_records_sql($sql, $params);
     
-    error_log("gradedtask_get_user_grades" . print_r($records, true));
-    
-
     return $records;
 }
 
@@ -312,7 +309,22 @@ function gradedtask_update_grades($gradedtask, $userid = 0, $nullifnone = true) 
         gradedtask_grade_item_update($gradedtask, $newgrades);
 
     } else if ($userid && !$nullifnone) {
-        gradedtask_grade_item_update($gradedtask, $grades);
+        // Update the grade for a single user
+        $newgrade = new stdClass();
+        $newgrade->userid = $userid;
+
+        // Check if the user has completed the graded task activity
+        $completion = $ci->get_data($cm, false, $userid);
+
+        if ($completion->completionstate == 1) {
+            $newgrade->rawgrade = $gradedtask->maxgrade;
+        } else {
+            $newgrade->rawgrade = 0;
+        }
+
+        $newgrades[$userid] = $newgrade;
+        
+        gradedtask_grade_item_update($gradedtask, $newgrades);
 
     } else if ($userid && $nullifnone) {
         $grade = new stdClass();
