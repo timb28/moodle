@@ -37,7 +37,7 @@ class backup_gradedtask_activity_structure_step extends backup_activity_structur
 
         // Define each element separated
         $gradedtask = new backup_nested_element('gradedtask', array('id'), array(
-            'name', 'intro', 'introformat', 'timemodified'));
+            'name', 'intro', 'introformat', 'maxgrade', 'timemodified'));
 
         // Build the tree
         // (love this)
