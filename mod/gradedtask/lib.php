@@ -25,10 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-/** GRADEDTASK_MAX_NAME_LENGTH = 50 */
 define("GRADEDTASK_MAX_NAME_LENGTH", 50);
-define("GRADEDTASK_STATUS_COMPLETE", 1);
-define("GRADEDTASK_STATUS_INCOMPLETE", 0);
 
 /**
  * @uses GRADEDTASK_MAX_NAME_LENGTH
@@ -114,10 +111,6 @@ function gradedtask_delete_instance($id) {
 
     $result = true;
     
-    if (! $DB->delete_records("gradedtask_status", array("gradedtask"=>$gradedtask->id))) {
-        $result = false;
-    }
-
     if (! $DB->delete_records("gradedtask", array("id"=>$gradedtask->id))) {
         $result = false;
     }
