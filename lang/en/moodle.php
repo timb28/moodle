@@ -1139,6 +1139,9 @@ $string['minute'] = 'minute';
 $string['minutes'] = 'minutes';
 $string['miscellaneous'] = 'Miscellaneous';
 $string['missingcategory'] = 'You need to choose a category';
+/* START Academy Patch M#033 Country is a required field for Moodle user accounts */
+$string['missingcountry'] = 'You must choose a country';
+/* END Academy Patch M#033 */
 $string['missingdescription'] = 'Missing description';
 $string['missingemail'] = 'Missing email address';
 $string['missingfirstname'] = 'Missing given name';

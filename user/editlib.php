@@ -227,6 +227,9 @@ function useredit_shared_definition(&$mform, $editoroptions = null, $filemanager
     $choices = get_string_manager()->get_list_of_countries();
     $choices = array('' => get_string('selectacountry') . '...') + $choices;
     $mform->addElement('select', 'country', get_string('selectacountry'), $choices);
+    /* START Academy Patch M#033 Country is a required field for Moodle user accounts */
+    $mform->addRule('country', get_string('missingcountry'), 'required', null, 'server');
+    /* END Academy Patch M#033 */
     if (!empty($CFG->country)) {
         $mform->setDefault('country', $CFG->country);
     }
