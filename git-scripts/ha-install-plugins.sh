@@ -4,9 +4,12 @@
 ##
 
 ## Atto plugins ##
-.atto/atto_fullscreen-install.sh
-.atto/atto_htmlplus-install.sh
-.atto/atto_styles-install.sh
+./atto/atto_fullscreen-install.sh
+./atto/atto_htmlplus-install.sh
+./atto/atto_styles-install.sh
+
+## Authentication ##
+./auth/auth_googleoauth2-install.sh
 
 ## Blocks ##
 ./blocks/block_configurable_report-install.sh
