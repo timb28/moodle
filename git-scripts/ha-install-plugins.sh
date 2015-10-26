@@ -9,7 +9,7 @@
 ./atto/atto_styles-install.sh
 
 ## Authentication ##
-./auth/auth_googleoauth2-install.sh
+./auth/auth_lenauth-install.sh
 
 ## Blocks ##
 ./blocks/block_configurable_report-install.sh
