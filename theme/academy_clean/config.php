@@ -35,7 +35,7 @@ $THEME->name = 'academy_clean';
 //
 $THEME->doctype = 'html5';
 $THEME->parents = array('bootstrapbase');
-$THEME->sheets = array('academy','bootstrapbase','course','content','form','questionnaire',
+$THEME->sheets = array('academy','auth_lenauth','bootstrapbase','course','content','form','questionnaire',
     'joomla','print','custom','videofile','istart','mod_feedback');
 $THEME->supportscssoptimisation = false;
 $THEME->yuicssmodules = array();
@@ -113,7 +113,7 @@ $THEME->layouts = array(
         'defaultregion' => 'side-pre',
     ),
     'login' => array(
-        'file' => 'columns1.php',
+        'file' => 'login.php',
         'regions' => array(),
         'options' => array('langmenu'=>true),
     ),
