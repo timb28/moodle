@@ -60,8 +60,11 @@ function gradedtask_add_instance($gradedtask) {
 
     $gradedtask->name = get_gradedtask_name($gradedtask);
     $gradedtask->timemodified = time();
-
-    return $DB->insert_record("gradedtask", $gradedtask);
+    $gradedtask->id = $DB->insert_record("gradedtask", $gradedtask);
+            
+    gradedtask_grade_item_update($gradedtask);
+    
+    return $gradedtask->id;
 }
 
 /**
