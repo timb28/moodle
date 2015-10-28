@@ -31,6 +31,30 @@ class enrol_snipcart_plugin extends enrol_plugin {
         // Users with manage cap may tweak period and status.
         return true;
     }
+    
+    /**
+     * Creates course enrol form, checks if form submitted
+     * and enrols user if necessary. It can also redirect.
+     *
+     * @param stdClass $instance
+     * @return string html text, usually a form in a text box
+     */
+    public function enrol_page_hook(stdClass $instance) {
+        // Todo: Build product page.
+        
+        return null;
+    }
+    
+    /**
+     * Student's can self-enrol buy paying for the course
+     *
+     * @param stdClass $instance course enrol instance
+     *
+     * @return bool - true means show "Enrol me in this course" link in course UI
+     */
+    public function show_enrolme_link(stdClass $instance) {
+        return ($instance->status == ENROL_INSTANCE_ENABLED);
+    }
 
 }
 
