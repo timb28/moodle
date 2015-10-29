@@ -44,7 +44,7 @@ if ($instanceid) {
     $instance->courseid = $course->id;
 }
 
-$mform = new enrol_paypal_edit_form(NULL, array($instance, $plugin, $context));
+$mform = new enrol_snipcart_edit_form(NULL, array($instance, $plugin, $context));
 
 if ($mform->is_cancelled()) {
     redirect($return);
@@ -58,10 +58,10 @@ if ($mform->is_cancelled()) {
         // Todo: check if we need this PayPal code:
 //        $instance->cost           = unformat_float($data->cost);
 //        $instance->currency       = $data->currency;
-//        $instance->roleid         = $data->roleid;
-//        $instance->enrolperiod    = $data->enrolperiod;
-//        $instance->enrolstartdate = $data->enrolstartdate;
-//        $instance->enrolenddate   = $data->enrolenddate;
+        $instance->roleid         = $data->roleid;
+        $instance->enrolperiod    = $data->enrolperiod;
+        $instance->enrolstartdate = $data->enrolstartdate;
+        $instance->enrolenddate   = $data->enrolenddate;
         $instance->timemodified   = time();
         $DB->update_record('enrol', $instance);
 
@@ -70,7 +70,7 @@ if ($mform->is_cancelled()) {
         }
 
     } else {
-        // Todo: PayPal code: $fields = array('status'=>$data->status, 'name'=>$data->name, 'cost'=>unformat_float($data->cost), 'currency'=>$data->currency, 'roleid'=>$data->roleid, 'enrolperiod'=>$data->enrolperiod, 'enrolstartdate'=>$data->enrolstartdate, 'enrolenddate'=>$data->enrolenddate);
+        $fields = array('status'=>$data->status, 'name'=>$data->name, 'roleid'=>$data->roleid, 'enrolperiod'=>$data->enrolperiod, 'enrolstartdate'=>$data->enrolstartdate, 'enrolenddate'=>$data->enrolenddate);
         $plugin->add_instance($course, $fields);
     }
 

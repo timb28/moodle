@@ -21,12 +21,46 @@ class enrol_snipcart_edit_form extends moodleform {
         
         list($instance, $plugin, $context) = $this->_customdata;
 
-        $mform->addElement('header', 'header', get_string('pluginname', 'enrol_paypal'));
+        $mform->addElement('header', 'header', get_string('pluginname', 'enrol_snipcart'));
 
         $mform->addElement('text', 'name', get_string('custominstancename', 'enrol'));
         $mform->setType('name', PARAM_TEXT);
         
         // Todo: Add custom form code
+        
+        $options = array(ENROL_INSTANCE_ENABLED  => get_string('yes'),
+                         ENROL_INSTANCE_DISABLED => get_string('no'));
+        $mform->addElement('select', 'status', get_string('status', 'enrol_snipcart'), $options);
+        $mform->setDefault('status', $plugin->get_config('status'));
+
+//        $mform->addElement('text', 'cost', get_string('cost', 'enrol_paypal'), array('size'=>4));
+//        $mform->setType('cost', PARAM_RAW); // Use unformat_float to get real value.
+//        $mform->setDefault('cost', format_float($plugin->get_config('cost'), 2, true));
+//
+//        $paypalcurrencies = $plugin->get_currencies();
+//        $mform->addElement('select', 'currency', get_string('currency', 'enrol_paypal'), $paypalcurrencies);
+//        $mform->setDefault('currency', $plugin->get_config('currency'));
+
+        if ($instance->id) {
+            $roles = get_default_enrol_roles($context, $instance->roleid);
+        } else {
+            $roles = get_default_enrol_roles($context, $plugin->get_config('roleid'));
+        }
+        $mform->addElement('select', 'roleid', get_string('assignrole', 'enrol_snipcart'), $roles);
+        $mform->setDefault('roleid', $plugin->get_config('roleid'));
+
+
+        $mform->addElement('duration', 'enrolperiod', get_string('enrolperiod', 'enrol_snipcart'), array('optional' => true, 'defaultunit' => 86400));
+        $mform->setDefault('enrolperiod', $plugin->get_config('enrolperiod'));
+        $mform->addHelpButton('enrolperiod', 'enrolperiod', 'enrol_snipcart');
+
+        $mform->addElement('date_time_selector', 'enrolstartdate', get_string('enrolstartdate', 'enrol_snipcart'), array('optional' => true));
+        $mform->setDefault('enrolstartdate', 0);
+        $mform->addHelpButton('enrolstartdate', 'enrolstartdate', 'enrol_snipcart');
+
+        $mform->addElement('date_time_selector', 'enrolenddate', get_string('enrolenddate', 'enrol_snipcart'), array('optional' => true));
+        $mform->setDefault('enrolenddate', 0);
+        $mform->addHelpButton('enrolenddate', 'enrolenddate', 'enrol_snipcart');
         
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
@@ -49,7 +83,7 @@ class enrol_snipcart_edit_form extends moodleform {
         
         // Todo: Add custom validation code
         
-        return errors;
+        return $errors;
     }
 }
 
