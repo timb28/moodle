@@ -53,16 +53,17 @@ if ($mform->is_cancelled()) {
     if ($instance->id) {
         $reset = ($instance->status != $data->status);
 
-        $instance->status         = $data->status;
-        $instance->name           = $data->name;
+        $instance->status           = $data->status;
+        $instance->name             = $data->name;
+        $instance->customint1       = $data->customint1;
         // Todo: check if we need this PayPal code:
 //        $instance->cost           = unformat_float($data->cost);
 //        $instance->currency       = $data->currency;
-        $instance->roleid         = $data->roleid;
-        $instance->enrolperiod    = $data->enrolperiod;
-        $instance->enrolstartdate = $data->enrolstartdate;
-        $instance->enrolenddate   = $data->enrolenddate;
-        $instance->timemodified   = time();
+        $instance->roleid           = $data->roleid;
+        $instance->enrolperiod      = $data->enrolperiod;
+        $instance->enrolstartdate   = $data->enrolstartdate;
+        $instance->enrolenddate     = $data->enrolenddate;
+        $instance->timemodified     = time();
         $DB->update_record('enrol', $instance);
 
         if ($reset) {
@@ -70,7 +71,14 @@ if ($mform->is_cancelled()) {
         }
 
     } else {
-        $fields = array('status'=>$data->status, 'name'=>$data->name, 'roleid'=>$data->roleid, 'enrolperiod'=>$data->enrolperiod, 'enrolstartdate'=>$data->enrolstartdate, 'enrolenddate'=>$data->enrolenddate);
+        $fields = array(
+            'status'=>$data->status, 
+            'name'=>$data->name, 
+            'customint1'=>$data->customint1, 
+            'roleid'=>$data->roleid, 
+            'enrolperiod'=>$data->enrolperiod, 
+            'enrolstartdate'=>$data->enrolstartdate, 
+            'enrolenddate'=>$data->enrolenddate);
         $plugin->add_instance($course, $fields);
     }
 

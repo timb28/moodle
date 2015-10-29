@@ -15,7 +15,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir.'/formslib.php');
 
 class enrol_snipcart_edit_form extends moodleform {
-
+    
     function definition() {
         $mform = $this->_form;
         
@@ -27,6 +27,11 @@ class enrol_snipcart_edit_form extends moodleform {
         $mform->setType('name', PARAM_TEXT);
         
         // Todo: Add custom form code
+        
+        $options = array(ENROL_INSTANCE_ENABLED  => get_string('yes'),
+                         ENROL_INSTANCE_DISABLED => get_string('no'));
+        $mform->addElement('select', 'customint1', get_string('socialenrolments', 'enrol_snipcart'), $options);
+        $mform->setDefault('customint1', $plugin->get_config('customint1'));
         
         $options = array(ENROL_INSTANCE_ENABLED  => get_string('yes'),
                          ENROL_INSTANCE_DISABLED => get_string('no'));
