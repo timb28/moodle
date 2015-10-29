@@ -19,4 +19,24 @@
 
 </form>
 
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.snipcart.com/scripts/snipcart.js" id="snipcart"
+  data-api-key="<?php echo( $plugin->get_config('publicapikey') ); ?>"></script>
+
+<link type="text/css" href="https://cdn.snipcart.com/themes/base/snipcart.min.css" rel="stylesheet" />
+
+<a href="#"
+    class='snipcart-add-item'
+    data-item-id='<?php echo "{$USER->id}-{$course->id}-{$instance->id}" ?>'
+    data-item-name='<?php p($coursefullname) ?>'
+    data-item-price='3.00'
+    data-item-max-quantity='1'
+    data-item-quantity='1'
+    data-item-shippable='false'
+    data-item-url='<?php p($itemurl) ?>'
+    data-item-description='Some fresh bacon'>
+    <?php print_string("buybutton", "enrol_snipcart") ?>
+</a>
+
 </div>

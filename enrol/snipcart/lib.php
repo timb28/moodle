@@ -162,6 +162,8 @@ class enrol_snipcart_plugin extends enrol_plugin {
         
         $course = $DB->get_record('course', array('id'=>$instance->courseid));
         $context = context_course::instance($course->id);
+        $plugin = enrol_get_plugin('snipcart');
+        $itemurl = str_replace("http://", "https://", new moodle_url("/enrol/snipcart/validate.php"));
                 
         // Todo: skip if enrolment is free
         
