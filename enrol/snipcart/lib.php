@@ -72,6 +72,11 @@ class enrol_snipcart_plugin extends enrol_plugin {
         return has_capability('enrol/snipcart:config', $context);
     }
     
+    public function cron() {
+        $trace = new text_progress_trace();
+        $this->process_expirations($trace);
+    }
+    
     /**
      * Returns edit icons for the page with list of instances
      * @param stdClass $instance

@@ -10,6 +10,7 @@
  */
 
 $string['assignrole'] = 'Assign role';
+$string['crontask'] = 'Snipcart enrolment scheduled tasks';
 $string['enrolenddate'] = 'End date';
 $string['enrolenddate_help'] = 'If enabled, users can be enrolled until this date only.';
 $string['enrolperiod'] = 'Enrolment duration';
