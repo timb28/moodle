@@ -30,31 +30,17 @@ $usercountry     = $user->country;
 <div align="center">
 
 <p><?php print_string("paymentrequired") ?></p>
-<p><b><?php // echo get_string("cost").": {$instance->currency} {$localisedcost}"; ?></b></p>
-<p><?php print_string("paymentinstant") ?></p>
-<form action="#todo" method="post">
-
-<input type="hidden" name="custom" value="<?php echo "$userid-$courseid-{$instance->id}" ?>" />
-
-<input type="hidden" name="first_name" value="<?php p($userfirstname) ?>" />
-<input type="hidden" name="last_name" value="<?php p($userlastname) ?>" />
-<input type="hidden" name="address" value="<?php p($useraddress) ?>" />
-<input type="hidden" name="city" value="<?php p($usercity) ?>" />
-<input type="hidden" name="email" value="<?php p($USER->email) ?>" />
-<input type="hidden" name="country" value="<?php p($USER->country) ?>" />
-
-<input type="submit" value="<?php print_string("buybutton", "enrol_snipcart") ?>" />
-
-</form>
+<p><b><?php echo get_string("cost").": {$localisedcost}"; ?></b></p>
 
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
 <script type="text/javascript" src="https://cdn.snipcart.com/scripts/snipcart.js" id="snipcart"
+  data-autopop='false'
   data-api-key="<?php echo( $plugin->get_config('publicapikey') ); ?>"></script>
 
 <link type="text/css" href="https://cdn.snipcart.com/themes/base/snipcart.min.css" rel="stylesheet" />
 
-<a href="#"
+<a href='#'
     class='snipcart-add-item btn btn-primary'
     data-item-id='<?php echo "{$USER->id}-{$course->id}-{$instance->id}" ?>'
     data-item-name='<?php p($coursefullname) ?>'
@@ -65,7 +51,7 @@ $usercountry     = $user->country;
     data-item-url='<?php echo $itemurl ?>'
     data-item-description='Some fresh bacon'>
 
-    <?php echo "AUD $$localisedcost" ?>
+    <?php print_string('addtocart', 'enrol_snipcart') ?>
 </a>
 
 <script type="text/javascript">
@@ -82,5 +68,12 @@ $usercountry     = $user->country;
 });
 
 </script>
+
+<div class="snipcart-summary">
+    Number of items: <span class="snipcart-total-items"></span>
+    Total price: <span class="snipcart-total-price"></span>
+</div>
+
+<a href="#" class="snipcart-checkout btn btn-success"><?php print_string('checkout', 'enrol_snipcart') ?></a>
 
 </div>

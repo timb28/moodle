@@ -9,7 +9,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['addtocart'] = '<i class="icon-shopping-cart icon-white"></i> Add to cart';
 $string['assignrole'] = 'Assign role';
+$string['checkout'] = 'Proceed to Checkout';
 $string['crontask'] = 'Snipcart enrolment scheduled tasks';
 $string['defaultrole'] = 'Default role assignment';
 $string['defaultrole_desc'] = 'Select role which should be assigned to users during Snipcart enrolments';
@@ -26,7 +28,6 @@ $string['pluginname'] = 'Snipcart';
 $string['pluginname_desc'] = 'The Snipcart module allows you to set up paid courses.  If the cost for any course is zero, then students are not asked to pay for entry.';
 $string['publicapikey'] = 'Snipcart Public API Key';
 $string['publicapikey_desc'] = 'The public API key is the key you need to add on your website. This key can be shared without security issues because it only allows a specific subset of API operations.';
-$string['buybutton'] = 'Buy';
 $string['snipcart:config'] = 'Configure Snipcart enrol instances';
 $string['snipcart:manage'] = 'Manage enrolled users';
 $string['snipcart:unenrol'] = 'Unenrol users from course';
