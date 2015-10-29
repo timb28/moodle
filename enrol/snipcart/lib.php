@@ -35,11 +35,6 @@ class enrol_snipcart_plugin extends enrol_plugin {
         }
     }
 
-    public function allow_enrol(stdClass $instance) {
-        // Users with enrol cap may unenrol other users manually.
-        return false;
-    }
-
     public function allow_unenrol(stdClass $instance) {
         // Users with unenrol cap may unenrol other users manually.
         return true;
@@ -151,6 +146,37 @@ class enrol_snipcart_plugin extends enrol_plugin {
         // Todo: Build product page.
         
         return null;
+    }
+    
+    /**
+     * Restore instance and map settings.
+     *
+     * @param restore_enrolments_structure_step $step
+     * @param stdClass $data
+     * @param stdClass $course
+     * @param int $oldid
+     */
+    public function restore_instance(restore_enrolments_structure_step $step, stdClass $data, $course, $oldid) {
+        global $DB;
+        if ($step->get_task()->get_target() == backup::TARGET_NEW_COURSE) {
+            $merge = false;
+        } else {
+            $merge = array(
+                'courseid'   => $data->courseid,
+                'enrol'      => $this->get_name(),
+                'roleid'     => $data->roleid,
+// Todo: Update or remove
+//                'cost'       => $data->cost,
+//                'currency'   => $data->currency,
+            );
+        }
+        if ($merge and $instances = $DB->get_records('enrol', $merge, 'id')) {
+            $instance = reset($instances);
+            $instanceid = $instance->id;
+        } else {
+            $instanceid = $this->add_instance($course, (array)$data);
+        }
+        $step->set_mapping('enrol', $oldid, $instanceid);
     }
     
     /**
