@@ -143,9 +143,41 @@ class enrol_snipcart_plugin extends enrol_plugin {
      * @return string html text, usually a form in a text box
      */
     public function enrol_page_hook(stdClass $instance) {
+        global $CFG, $USER, $OUTPUT, $DB;
         // Todo: Build product page.
         
-        return null;
+        ob_start();
+
+        if ($DB->record_exists('user_enrolments', array('userid'=>$USER->id, 'enrolid'=>$instance->id))) {
+            return ob_get_clean();
+        }
+        
+        if ($instance->enrolstartdate != 0 && $instance->enrolstartdate > time()) {
+            return ob_get_clean();
+        }
+
+        if ($instance->enrolenddate != 0 && $instance->enrolenddate < time()) {
+            return ob_get_clean();
+        }
+        
+        $course = $DB->get_record('course', array('id'=>$instance->courseid));
+        $context = context_course::instance($course->id);
+                
+        // Todo: skip if enrolment is free
+        
+        //Sanitise some fields before building the PayPal form
+        $coursefullname  = format_string($course->fullname, true, array('context'=>$context));
+        $courseshortname = format_string($course->shortname, true, array('context' => $context));
+        $userfullname    = fullname($USER);
+        $userfirstname   = $USER->firstname;
+        $userlastname    = $USER->lastname;
+        $useraddress     = $USER->address;
+        $usercity        = $USER->city;
+        $instancename    = $this->get_instance_name($instance);
+        
+        include($CFG->dirroot.'/enrol/snipcart/enrol.html');
+        
+        return $OUTPUT->box(ob_get_clean());;
     }
     
     /**

@@ -1,0 +1,22 @@
+<div align="center">
+
+<p><?php print_string("paymentrequired") ?></p>
+<p><b><?php echo $instancename; ?></b></p>
+<p><b><?php // echo get_string("cost").": {$instance->currency} {$localisedcost}"; ?></b></p>
+<p><?php print_string("paymentinstant") ?></p>
+<form action="#todo" method="post">
+
+<input type="hidden" name="custom" value="<?php echo "{$USER->id}-{$course->id}-{$instance->id}" ?>" />
+
+<input type="hidden" name="first_name" value="<?php p($userfirstname) ?>" />
+<input type="hidden" name="last_name" value="<?php p($userlastname) ?>" />
+<input type="hidden" name="address" value="<?php p($useraddress) ?>" />
+<input type="hidden" name="city" value="<?php p($usercity) ?>" />
+<input type="hidden" name="email" value="<?php p($USER->email) ?>" />
+<input type="hidden" name="country" value="<?php p($USER->country) ?>" />
+
+<input type="submit" value="<?php print_string("buybutton", "enrol_snipcart") ?>" />
+
+</form>
+
+</div>
