@@ -161,21 +161,14 @@ class enrol_snipcart_plugin extends enrol_plugin {
         }
         
         $course = $DB->get_record('course', array('id'=>$instance->courseid));
-        $context = context_course::instance($course->id);
+        $user = $USER;
         $plugin = enrol_get_plugin('snipcart');
-        $itemurl = str_replace("http://", "https://", new moodle_url("/enrol/snipcart/validate.php"));
-                
-        // Todo: skip if enrolment is free
+        $userid = $USER->id;
+        $courseid = $course->id;
+        $instanceid = $instance->id;
         
-        //Sanitise some fields before building the PayPal form
-        $coursefullname  = format_string($course->fullname, true, array('context'=>$context));
-        $courseshortname = format_string($course->shortname, true, array('context' => $context));
-        $userfullname    = fullname($USER);
-        $userfirstname   = $USER->firstname;
-        $userlastname    = $USER->lastname;
-        $useraddress     = $USER->address;
-        $usercity        = $USER->city;
-        $instancename    = $this->get_instance_name($instance);
+        
+        // Todo: skip if enrolment is free
         
         include($CFG->dirroot.'/enrol/snipcart/enrol.html');
         

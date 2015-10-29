@@ -1,12 +1,37 @@
+<?php
+
+$context = context_course::instance($courseid);
+
+$params = array('uid' => $userid,
+                'cid' => $courseid,
+                'id'  => $instanceid);
+$itemurl = str_replace("http://", "https://", new moodle_url("/enrol/snipcart/validate.php", $params));
+$cost = 13.00; // Todo configure in settings
+
+// Calculate localised and "." cost, make sure we send PayPal the same value,
+// please note PayPal expects amount with 2 decimal places and "." separator.
+$localisedcost = format_float($cost, 2, true);
+$cost = format_float($cost, 2, false);
+
+
+//Sanitise some fields before building the PayPal form
+$coursefullname  = format_string($course->fullname, true, array('context'=>$context));
+$courseshortname = format_string($course->shortname, true, array('context' => $context));
+$userfullname    = fullname($user);
+$userfirstname   = $user->firstname;
+$userlastname    = $user->lastname;
+$useraddress     = $user->address;
+$usercity        = $user->city;
+
+?>
 <div align="center">
 
 <p><?php print_string("paymentrequired") ?></p>
-<p><b><?php echo $instancename; ?></b></p>
 <p><b><?php // echo get_string("cost").": {$instance->currency} {$localisedcost}"; ?></b></p>
 <p><?php print_string("paymentinstant") ?></p>
 <form action="#todo" method="post">
 
-<input type="hidden" name="custom" value="<?php echo "{$USER->id}-{$course->id}-{$instance->id}" ?>" />
+<input type="hidden" name="custom" value="<?php echo "$userid-$courseid-{$instance->id}" ?>" />
 
 <input type="hidden" name="first_name" value="<?php p($userfirstname) ?>" />
 <input type="hidden" name="last_name" value="<?php p($userlastname) ?>" />
@@ -27,16 +52,17 @@
 <link type="text/css" href="https://cdn.snipcart.com/themes/base/snipcart.min.css" rel="stylesheet" />
 
 <a href="#"
-    class='snipcart-add-item'
+    class='snipcart-add-item btn btn-primary'
     data-item-id='<?php echo "{$USER->id}-{$course->id}-{$instance->id}" ?>'
     data-item-name='<?php p($coursefullname) ?>'
-    data-item-price='3.00'
+    data-item-price='<?php p($cost) ?>'
     data-item-max-quantity='1'
     data-item-quantity='1'
     data-item-shippable='false'
-    data-item-url='<?php p($itemurl) ?>'
+    data-item-url='<?php echo $itemurl ?>'
     data-item-description='Some fresh bacon'>
-    <?php print_string("buybutton", "enrol_snipcart") ?>
+
+    <?php echo "AUD $$localisedcost" ?>
 </a>
 
 </div>

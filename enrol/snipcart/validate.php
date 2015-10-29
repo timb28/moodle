@@ -15,9 +15,19 @@ define('NO_DEBUG_DISPLAY', true);
 
 require('../../config.php');
 
+global $DB;
+
 require_once("lib.php");
 
 $plugin = enrol_get_plugin('snipcart');
+
+$userid     = required_param('uid', PARAM_INT);
+$courseid   = required_param('cid', PARAM_INT);
+$instanceid = required_param('id',  PARAM_INT);
+
+$user = $DB->get_record('user', array('id'=>$userid));
+$course = $DB->get_record('course', array('id'=>$courseid));
+$instance = $DB->get_record('enrol', array('id'=>$instanceid));
 
 ?>
 <!DOCTYPE html>
