@@ -117,6 +117,30 @@ class enrol_snipcart_plugin extends enrol_plugin {
     }
     
     /**
+     * Gets an array of the user enrolment actions
+     *
+     * @param course_enrolment_manager $manager
+     * @param stdClass $ue A user enrolment object
+     * @return array An array of user_enrolment_actions
+     */
+    public function get_user_enrolment_actions(course_enrolment_manager $manager, $ue) {
+        $actions = array();
+        $context = $manager->get_context();
+        $instance = $ue->enrolmentinstance;
+        $params = $manager->get_moodlepage()->url->params();
+        $params['ue'] = $ue->id;
+        if ($this->allow_unenrol($instance) && has_capability("enrol/snipcart:unenrol", $context)) {
+            $url = new moodle_url('/enrol/unenroluser.php', $params);
+            $actions[] = new user_enrolment_action(new pix_icon('t/delete', ''), get_string('unenrol', 'enrol'), $url, array('class'=>'unenrollink', 'rel'=>$ue->id));
+        }
+        if ($this->allow_manage($instance) && has_capability("enrol/snipcart:manage", $context)) {
+            $url = new moodle_url('/enrol/editenrolment.php', $params);
+            $actions[] = new user_enrolment_action(new pix_icon('t/edit', ''), get_string('edit'), $url, array('class'=>'editenrollink', 'rel'=>$ue->id));
+        }
+        return $actions;
+    }
+    
+    /**
      * Creates course enrol form, checks if form submitted
      * and enrols user if necessary. It can also redirect.
      *
@@ -127,6 +151,19 @@ class enrol_snipcart_plugin extends enrol_plugin {
         // Todo: Build product page.
         
         return null;
+    }
+    
+    /**
+     * Restore user enrolment.
+     *
+     * @param restore_enrolments_structure_step $step
+     * @param stdClass $data
+     * @param stdClass $instance
+     * @param int $oldinstancestatus
+     * @param int $userid
+     */
+    public function restore_user_enrolment(restore_enrolments_structure_step $step, $data, $instance, $userid, $oldinstancestatus) {
+        $this->enrol_user($instance, $userid, null, $data->timestart, $data->timeend, $data->status);
     }
     
     /**
