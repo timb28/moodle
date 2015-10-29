@@ -78,7 +78,7 @@ div#page {
   margin-bottom: 0;
 }
 .navbar-fixed-top {
-    
+    z-index: 100; // display behind the snipcart pop-up
 }
 .navbar-inverse .navbar-inner,
 .navbar-inner {
