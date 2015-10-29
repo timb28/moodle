@@ -20,8 +20,11 @@ $courseshortname = format_string($course->shortname, true, array('context' => $c
 $userfullname    = fullname($user);
 $userfirstname   = $user->firstname;
 $userlastname    = $user->lastname;
+$useremail       = $user->email;
+$userphone       = $user->phone1;
 $useraddress     = $user->address;
 $usercity        = $user->city;
+$usercountry     = $user->country;
 
 ?>
 <div align="center">
@@ -64,5 +67,20 @@ $usercity        = $user->city;
 
     <?php echo "AUD $$localisedcost" ?>
 </a>
+
+<script type="text/javascript">
+    Snipcart.execute('setBillingAddress', {
+    email: '<?php p($useremail) ?>',
+    name: '<?php p($userfullname) ?>',
+    address1: '<?php p($useraddress) ?>',
+    address2: '',
+    country: '<?php p($usercountry) ?>',
+    province: '',
+    city: '<?php p($usercity) ?>',
+    phone: '<?php p($userphone) ?>',
+    postalCode: ''
+});
+
+</script>
 
 </div>
