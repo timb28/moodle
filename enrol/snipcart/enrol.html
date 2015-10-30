@@ -7,10 +7,6 @@ $params = array('uid' => $userid,
                 'id'  => $instanceid);
 $itemurl = str_replace("http://", "https://", new moodle_url("/enrol/snipcart/validate.php", $params));
 
-// Todo: remove after testing =====================================================
-$itemurl = str_replace($_SERVER['SERVER_NAME'], gethostbyname($_SERVER['SERVER_NAME']), $itemurl);
-// ================================================================================
-
 // Calculate localised and "." cost, make sure we send Snipcart the same value,
 // please note Snipcart expects amount with 2 decimal places and "." separator.
 $snipcart = new \enrol_snipcart_plugin();
