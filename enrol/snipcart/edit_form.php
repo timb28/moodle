@@ -35,7 +35,7 @@ class enrol_snipcart_edit_form extends moodleform {
         $mform->addElement('select', 'status', get_string('status', 'enrol_snipcart'), $options);
         $mform->setDefault('status', $plugin->get_config('status'));
 
-        $mform->addElement('text', 'cost', get_string('cost', 'enrol_snipcart'), array('size'=>4));
+        $mform->addElement('text', 'cost', get_string('cost', 'enrol_snipcart'), array('size'=>5));
         $mform->setType('cost', PARAM_RAW); // Use unformat_float to get real value.
         $mform->setDefault('cost', format_float($plugin->get_config('cost'), 2, true));
 
