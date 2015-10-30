@@ -12,7 +12,9 @@
 $string['addtocart'] = '<i class="icon-shopping-cart icon-white"></i> Add to cart';
 $string['assignrole'] = 'Assign role';
 $string['checkout'] = 'Proceed to Checkout';
+$string['cost'] = 'Enrol cost';
 $string['crontask'] = 'Snipcart enrolment scheduled tasks';
+$string['currency'] = 'Currency';
 $string['defaultrole'] = 'Default role assignment';
 $string['defaultrole_desc'] = 'Select role which should be assigned to users during Snipcart enrolments';
 $string['enrolenddate'] = 'End date';

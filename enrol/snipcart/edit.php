@@ -34,7 +34,7 @@ $plugin = enrol_get_plugin('snipcart');
 
 if ($instanceid) {
     $instance = $DB->get_record('enrol', array('courseid'=>$course->id, 'enrol'=>'snipcart', 'id'=>$instanceid), '*', MUST_EXIST);
-    // Todo: Check if we need this PayPal code: $instance->cost = format_float($instance->cost, 2, true);
+    $instance->cost = format_float($instance->cost, 2, true);
 } else {
     require_capability('moodle/course:enrolconfig', $context);
     // no instance yet, we have to add new instance
@@ -56,9 +56,8 @@ if ($mform->is_cancelled()) {
         $instance->status           = $data->status;
         $instance->name             = $data->name;
         $instance->customint1       = $data->customint1;
-        // Todo: check if we need this PayPal code:
-//        $instance->cost           = unformat_float($data->cost);
-//        $instance->currency       = $data->currency;
+        $instance->cost             = unformat_float($data->cost);
+        $instance->currency         = $data->currency;
         $instance->roleid           = $data->roleid;
         $instance->enrolperiod      = $data->enrolperiod;
         $instance->enrolstartdate   = $data->enrolstartdate;
@@ -73,7 +72,9 @@ if ($mform->is_cancelled()) {
     } else {
         $fields = array(
             'status'=>$data->status, 
-            'name'=>$data->name, 
+            'name'=>$data->name,
+            'cost'=>unformat_float($data->cost),
+            'currency'=>$data->currency,
             'customint1'=>$data->customint1, 
             'roleid'=>$data->roleid, 
             'enrolperiod'=>$data->enrolperiod, 

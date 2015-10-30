@@ -38,13 +38,13 @@ class enrol_snipcart_edit_form extends moodleform {
         $mform->addElement('select', 'status', get_string('status', 'enrol_snipcart'), $options);
         $mform->setDefault('status', $plugin->get_config('status'));
 
-//        $mform->addElement('text', 'cost', get_string('cost', 'enrol_paypal'), array('size'=>4));
-//        $mform->setType('cost', PARAM_RAW); // Use unformat_float to get real value.
-//        $mform->setDefault('cost', format_float($plugin->get_config('cost'), 2, true));
-//
-//        $paypalcurrencies = $plugin->get_currencies();
-//        $mform->addElement('select', 'currency', get_string('currency', 'enrol_paypal'), $paypalcurrencies);
-//        $mform->setDefault('currency', $plugin->get_config('currency'));
+        $mform->addElement('text', 'cost', get_string('cost', 'enrol_snipcart'), array('size'=>4));
+        $mform->setType('cost', PARAM_RAW); // Use unformat_float to get real value.
+        $mform->setDefault('cost', format_float($plugin->get_config('cost'), 2, true));
+
+        $snipcartcurrencies = $plugin->get_currencies();
+        $mform->addElement('select', 'currency', get_string('currency', 'enrol_snipcart'), $snipcartcurrencies);
+        $mform->setDefault('currency', $plugin->get_config('currency'));
 
         if ($instance->id) {
             $roles = get_default_enrol_roles($context, $instance->roleid);

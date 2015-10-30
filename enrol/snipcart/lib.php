@@ -119,6 +119,17 @@ class enrol_snipcart_plugin extends enrol_plugin {
         return $icons;
     }
     
+    public function get_currencies() {
+        $codes = array(
+            'AUD', 'NZD', 'USD', 'ZAR');
+        $currencies = array();
+        foreach ($codes as $c) {
+            $currencies[$c] = new lang_string($c, 'core_currencies');
+        }
+
+        return $currencies;
+    }
+    
     /**
      * Returns link to page which may be used to add new instance of enrolment plugin in course.
      * @param int $courseid
@@ -187,17 +198,25 @@ class enrol_snipcart_plugin extends enrol_plugin {
             return ob_get_clean();
         }
         
-        $course = $DB->get_record('course', array('id'=>$instance->courseid));
-        $user = $USER;
-        $plugin = enrol_get_plugin('snipcart');
-        $userid = $USER->id;
-        $courseid = $course->id;
-        $instanceid = $instance->id;
+        if ( (float) $instance->cost <= 0 ) {
+            $cost = (float) $this->get_config('cost');
+        } else {
+            $cost = (float) $instance->cost;
+        }
+
+        if (abs($cost) < 0.01) { // no cost, other enrolment methods (instances) should be used
+            echo '<p>'.get_string('nocost', 'enrol_paypal').'</p>';
+        } else {
+
+            $course = $DB->get_record('course', array('id'=>$instance->courseid));
+            $user = $USER;
+            $plugin = enrol_get_plugin('snipcart');
+            $userid = $USER->id;
+            $courseid = $course->id;
+            $instanceid = $instance->id;
         
-        
-        // Todo: skip if enrolment is free
-        
-        include($CFG->dirroot.'/enrol/snipcart/enrol.html');
+            include($CFG->dirroot.'/enrol/snipcart/enrol.html');
+        }
         
         return $OUTPUT->box(ob_get_clean());
     }

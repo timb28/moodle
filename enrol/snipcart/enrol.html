@@ -6,15 +6,13 @@ $params = array('uid' => $userid,
                 'cid' => $courseid,
                 'id'  => $instanceid);
 $itemurl = str_replace("http://", "https://", new moodle_url("/enrol/snipcart/validate.php", $params));
-$cost = 13.00; // Todo configure in settings
 
-// Calculate localised and "." cost, make sure we send PayPal the same value,
-// please note PayPal expects amount with 2 decimal places and "." separator.
+// Calculate localised and "." cost, make sure we send Snipcart the same value,
+// please note Snipcart expects amount with 2 decimal places and "." separator.
 $localisedcost = format_float($cost, 2, true);
 $cost = format_float($cost, 2, false);
 
-
-//Sanitise some fields before building the PayPal form
+//Sanitise some fields before building the Snipcart code
 $coursefullname  = format_string($course->fullname, true, array('context'=>$context));
 $courseshortname = format_string($course->shortname, true, array('context' => $context));
 $userfullname    = fullname($user);
@@ -30,7 +28,7 @@ $usercountry     = $user->country;
 <div align="center">
 
 <p><?php print_string("paymentrequired") ?></p>
-<p><b><?php echo get_string("cost").": {$localisedcost}"; ?></b></p>
+<p><b><?php echo get_string("cost").": {$instance->currency} $localisedcost"; ?></b></p>
 
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
@@ -49,7 +47,7 @@ $usercountry     = $user->country;
     data-item-quantity='1'
     data-item-shippable='false'
     data-item-url='<?php echo $itemurl ?>'
-    data-item-description='Some fresh bacon'>
+    data-item-description='<?php echo $course->summary ?>'>
 
     <?php print_string('addtocart', 'enrol_snipcart') ?>
 </a>
