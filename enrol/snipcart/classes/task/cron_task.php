@@ -28,7 +28,8 @@ class cron_task extends \core\task\scheduled_task {
         global $CFG;
         require_once($CFG->dirroot . '/enrol/snipcart/lib.php');
         mtrace("Running Snipcart enrolment scheduled tasks");
-        cron();
+        $snipcart = new \enrol_snipcart_plugin();
+        $snipcart->cron();
     }
 
 }
