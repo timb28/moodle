@@ -26,12 +26,9 @@ class enrol_snipcart_edit_form extends moodleform {
         $mform->addElement('text', 'name', get_string('custominstancename', 'enrol'));
         $mform->setType('name', PARAM_TEXT);
         
-        // Todo: Add custom form code
-        
         $options = array(ENROL_INSTANCE_ENABLED  => get_string('yes'),
                          ENROL_INSTANCE_DISABLED => get_string('no'));
         $mform->addElement('select', 'customint1', get_string('socialenrolments', 'enrol_snipcart'), $options);
-        $mform->setDefault('customint1', $plugin->get_config('customint1'));
         
         $options = array(ENROL_INSTANCE_ENABLED  => get_string('yes'),
                          ENROL_INSTANCE_DISABLED => get_string('no'));

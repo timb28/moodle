@@ -130,6 +130,17 @@ class enrol_snipcart_plugin extends enrol_plugin {
         return $currencies;
     }
     
+    public function get_localised_currency($currency, $cost) {
+        $symbols = array(
+            'AUD'=>'$%c',
+            'NZD'=>'$%c',
+            'USD'=>'$%c',
+            'ZAR'=>'R%c',
+        );
+        
+        return str_replace('%c', $cost, $symbols[$currency]);
+    }
+    
     /**
      * Returns link to page which may be used to add new instance of enrolment plugin in course.
      * @param int $courseid

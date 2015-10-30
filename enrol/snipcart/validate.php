@@ -28,6 +28,14 @@ $instanceid = required_param('id',  PARAM_INT);
 $user = $DB->get_record('user', array('id'=>$userid));
 $course = $DB->get_record('course', array('id'=>$courseid));
 $instance = $DB->get_record('enrol', array('id'=>$instanceid));
+$cost = $instance->cost;
+
+        
+if ( (float) $instance->cost <= 0 ) {
+    $cost = (float) $instance->get_config('cost');
+} else {
+    $cost = (float) $instance->cost;
+}
 
 ?>
 <!DOCTYPE html>
