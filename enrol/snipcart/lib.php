@@ -10,8 +10,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+define('SOCIAL_USERNAME_PREFIX', 'social_user_');
+
 class enrol_snipcart_plugin extends enrol_plugin {
-    
+
     public function roles_protected() {
         // Users may tweak the roles later.
         return false;
@@ -65,6 +67,27 @@ class enrol_snipcart_plugin extends enrol_plugin {
     public function can_hide_show_instance($instance) {
         $context = context_course::instance($instance->courseid);
         return has_capability('enrol/snipcart:config', $context);
+    }
+    
+    /**
+     * Is it possible for the user to buy access using this instance?
+     *
+     * @param stdClass $instance
+     * @return bool
+     */
+    public function can_user_access_instance($instance) {
+
+        global $DB, $USER;
+        
+        $enrol = $DB->get_record('enrol', array('id'=>$instance->id));
+        
+        // Social (public) users are prevented from accessing
+        // the course if so configured and this user is a social user.
+        if ($enrol->customint1 == ENROL_INSTANCE_DISABLED && 
+                stripos($USER->username, SOCIAL_USERNAME_PREFIX) === 0) {
+            return false;
+        }
+        return true;
     }
     
     public function cron() {
@@ -160,6 +183,10 @@ class enrol_snipcart_plugin extends enrol_plugin {
             return ob_get_clean();
         }
         
+        if (!$this->can_user_access_instance($instance)) {
+            return ob_get_clean();
+        }
+        
         $course = $DB->get_record('course', array('id'=>$instance->courseid));
         $user = $USER;
         $plugin = enrol_get_plugin('snipcart');
@@ -172,7 +199,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
         
         include($CFG->dirroot.'/enrol/snipcart/enrol.html');
         
-        return $OUTPUT->box(ob_get_clean());;
+        return $OUTPUT->box(ob_get_clean());
     }
     
     /**
