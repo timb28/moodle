@@ -76,17 +76,23 @@ class enrol_snipcart_plugin extends enrol_plugin {
      * @return bool
      */
     public function can_user_access_instance($instance) {
-
         global $DB, $USER;
         
         $enrol = $DB->get_record('enrol', array('id'=>$instance->id));
+        $user = $DB->get_record('user', array('id'=>$USER->id)); // ensure current user info
         
         // Social (public) users are prevented from accessing
         // the course if so configured and this user is a social user.
         if ($enrol->customint1 == ENROL_INSTANCE_DISABLED && 
-                stripos($USER->username, SOCIAL_USERNAME_PREFIX) === 0) {
+                stripos($user->username, SOCIAL_USERNAME_PREFIX) === 0) {
             return false;
         }
+        
+        // Only let users pay for courses in their own currency
+        if (stripos($enrol->currency, $user->country) !== 0) {
+            return false;
+        }
+        
         return true;
     }
     
