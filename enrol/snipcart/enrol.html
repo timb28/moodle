@@ -16,14 +16,6 @@ $cost = format_float($cost, 2, false);
 //Sanitise some fields before building the Snipcart code
 $coursefullname  = format_string($course->fullname, true, array('context'=>$context));
 $courseshortname = format_string($course->shortname, true, array('context' => $context));
-$userfullname    = fullname($user);
-$userfirstname   = $user->firstname;
-$userlastname    = $user->lastname;
-$useremail       = $user->email;
-$userphone       = $user->phone1;
-$useraddress     = $user->address;
-$usercity        = $user->city;
-$usercountry     = $user->country;
 
 ?>
 <div align="center">
@@ -53,6 +45,19 @@ $usercountry     = $user->country;
     <?php print_string('addtocart', 'enrol_snipcart') ?>
 </a>
 
+<?php
+
+if ($USER === $user) { 
+    $userfullname    = fullname($user);
+    $userfirstname   = $user->firstname;
+    $userlastname    = $user->lastname;
+    $useremail       = $user->email;
+    $userphone       = $user->phone1;
+    $useraddress     = $user->address;
+    $usercity        = $user->city;
+    $usercountry     = $user->country;
+
+?>
 <script type="text/javascript">
     Snipcart.execute('setBillingAddress', {
     email: '<?php p($useremail) ?>',
@@ -65,8 +70,9 @@ $usercountry     = $user->country;
     phone: '<?php p($userphone) ?>',
     postalCode: ''
 });
-
 </script>
+<?php } ?>
+
 
 <div class="snipcart-summary">
     Number of items: <span class="snipcart-total-items"></span>
