@@ -12,6 +12,8 @@ defined('MOODLE_INTERNAL') || die();
 
 define('SOCIAL_USERNAME_PREFIX', 'social_user_');
 
+require_once($CFG->libdir . '/filelib.php'); // curl
+
 class enrol_snipcart_plugin extends enrol_plugin {
 
     public function roles_protected() {
@@ -238,6 +240,27 @@ class enrol_snipcart_plugin extends enrol_plugin {
         return $OUTPUT->box(ob_get_clean());
     }
     
+    function message_error_to_admin($subject, $data) {
+        echo $subject;
+        $admin = get_admin();
+        $site = get_site();
+
+        $message = "$site->fullname:  Transaction failed.\n\n$subject\n\n";
+
+        $eventdata = new stdClass();
+        $eventdata->modulename        = 'moodle';
+        $eventdata->component         = 'enrol_snipcart';
+        $eventdata->name              = 'snipcart_enrolment';
+        $eventdata->userfrom          = $admin;
+        $eventdata->userto            = $admin;
+        $eventdata->subject           = "Snipcart Error: ".$subject;
+        $eventdata->fullmessage       = $message . print_r($data, true);
+        $eventdata->fullmessageformat = FORMAT_PLAIN;
+        $eventdata->fullmessagehtml   = '';
+        $eventdata->smallmessage      = '';
+        message_send($eventdata);
+    }
+    
     /**
      * Restore instance and map settings.
      *
@@ -291,6 +314,101 @@ class enrol_snipcart_plugin extends enrol_plugin {
      */
     public function show_enrolme_link(stdClass $instance) {
         return ($instance->status == ENROL_INSTANCE_ENABLED);
+    }
+    
+    /**
+     * Validates a Snipcart order is valid by calling their API
+     *
+     * @param string[] $order
+     *
+     * @return string[] - array containing the validated order
+     */
+    public function snipcart_validate_order(array $order) {
+        // Contact Snipcart to confirm the order is valid
+        
+        /// Open a connection back to PayPal to validate the data
+        $c = new curl();
+        $headers[] = 'Accept: application/json';
+        $headers[] = 'Authorization: Basic <<>>';
+        $c->setHeader($headers);
+        $result = $c->get("https://app.snipcart.com/api/orders/{$order['token']}");
+        
+//        error_log('result: ' . print_r($result, true));
+        
+        $snipcartorder =  json_decode($result, true);
+        
+//        error_log('snipcartorder: ' . print_r($snipcartorder, true));
+        
+        if (is_null($snipcartorder) or !isset($snipcartorder['status'])) {
+            die;
+        }
+        
+//        error_log('array diff: ' . print_r(array_diff($snipcartorder, $order), true));
+        
+        return $snipcartorder;
+    }
+    
+    /**
+     * Gets the Moodle user for a given Snipcart order
+     *
+     * @param string $itemid
+     *
+     * @return stdClass Moodle user
+     */
+    public function snipcart_get_user_from_itemid($itemid) {
+        global $DB;
+        
+        $ids = explode("-", $itemid);
+        
+        return $DB->get_record('user', array('id'=>$ids[0]));
+    }
+    
+    /**
+     * Enrols student in the course they purchased
+     *
+     * @param string[] $orderitem
+     *
+     * @return stdClass Moodle course
+     */
+    public function snipcart_enrol_user($orderitem) {
+        global $DB;
+        
+        $oids = explode("-", $orderitem['id']);
+        
+        /// get the user and course records
+
+        if (! $user = $DB->get_record("user", array("id"=>$oids[0]))) {
+            $this->message_error_to_admin("Not a valid user id", $orderitem);
+            die;
+        }
+
+        if (! $course = $DB->get_record("course", array("id"=>$oids[1]))) {
+            $this->message_error_to_admin("Not a valid course id", $orderitem);
+            die;
+        }
+
+        if (! $context = context_course::instance($course->id, IGNORE_MISSING)) {
+            $this->message_error_to_admin("Not a valid context id", $orderitem);
+            die;
+        }
+
+        if (! $plugin_instance = $DB->get_record("enrol", array("id"=>$oids[2], "status"=>0))) {
+            $this->message_error_to_admin("Not a valid instance id", $orderitem);
+            die;
+        }
+        
+        if ($plugin_instance->enrolperiod) {
+            $timestart = time();
+            $timeend   = $timestart + $plugin_instance->enrolperiod;
+        } else {
+            $timestart = 0;
+            $timeend   = 0;
+        }
+        
+        // Todo: Save the purchase to the database?
+                
+        // Enrol the student in each of the course they have purchased
+        return $this->enrol_user($plugin_instance, $user->id, $plugin_instance->roleid, $timestart, $timeend);
     }
 
 }

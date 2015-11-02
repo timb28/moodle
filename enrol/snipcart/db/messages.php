@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Snipcart enrolment plugin
+ * Defines message providers (types of message sent) for the Snipcart enrolment plugin.
  *
  * @package   enrol_snipcart
  * @author    Tim Butler
@@ -10,8 +11,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2015110200;
-$plugin->component = 'enrol_snipcart';
-$plugin->release = '0.2 (Build: 2015110200)';
-$plugin->requires = 2014051200;                     // Requires Moodle 2.7+
-$plugin->maturity = MATURITY_ALPHA;
+$messageproviders = array(
+    'snipcart_enrolment' => array(),
+);
