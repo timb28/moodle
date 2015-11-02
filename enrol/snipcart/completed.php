@@ -37,7 +37,7 @@ $PAGE->set_context($context);
 
 switch ($validatedorder['status']) {
     case 'Processed':
-        include($CFG->dirroot.'/enrol/snipcart/orderprocessed.php');
+        include($CFG->dirroot.'/enrol/snipcart/orderprocessed.html');
         break;
     default:
         die;
