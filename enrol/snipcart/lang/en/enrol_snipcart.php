@@ -26,6 +26,7 @@ $string['enrolstartdate'] = 'Start date';
 $string['enrolstartdate_help'] = 'If enabled, users can be enrolled from this date onward only.';
 $string['expiredaction'] = 'Enrolment expiration action';
 $string['expiredaction_help'] = 'Select action to carry out when user enrolment expires. Please note that some user data and settings are purged from course during course unenrolment.';
+$string['ordercomplete'] = 'Order Complete';
 $string['pluginname'] = 'Snipcart';
 $string['pluginname_desc'] = 'The Snipcart module allows you to set up paid courses.  If the cost for any course is zero, then students are not asked to pay for entry.';
 $string['privateapikey'] = 'Snipcart Private API Key';

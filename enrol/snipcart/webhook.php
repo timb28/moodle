@@ -53,7 +53,7 @@ switch ($body['eventName']) {
         $plugin = enrol_get_plugin('snipcart');
 //        error_log('body content: ' . print_r($body['content'], true));
         
-        $validatedorder = $plugin->snipcart_validate_order($body['content']);
+        $validatedorder = $plugin->snipcart_get_order($body['content']['token']);
         
         if (empty($validatedorder)) {
             error_log('Invalid Snipcart order: ' . print_r($body, true));

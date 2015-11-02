@@ -72,7 +72,8 @@ if ($USER === $user) {
     });
     
     Snipcart.execute('bind', 'order.completed', function (order) {
-        var url = document.location;
+        var path = location.pathname.substring(0, location.pathname.lastIndexOf("/"));
+        var url = path + '/confirmed.php?order=' + order.token;
         window.location.href = url;
     });
     

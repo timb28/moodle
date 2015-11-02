@@ -317,13 +317,13 @@ class enrol_snipcart_plugin extends enrol_plugin {
     }
     
     /**
-     * Validates a Snipcart order is valid by calling their API
+     * Get a Snipcart order using the order token by calling their API
      *
-     * @param string[] $order
+     * @param string $token
      *
      * @return string[] - array containing the validated order
      */
-    public function snipcart_validate_order(array $order) {
+    public function snipcart_get_order($token) {
         // Contact Snipcart to confirm the order is valid
         
         /// Open a connection back to PayPal to validate the data
@@ -331,19 +331,13 @@ class enrol_snipcart_plugin extends enrol_plugin {
         $headers[] = 'Accept: application/json';
         $headers[] = 'Authorization: Basic ' . base64_encode($this->get_config('privateapikey') . ':');
         $c->setHeader($headers);
-        $result = $c->get("https://app.snipcart.com/api/orders/{$order['token']}");
-        
-//        error_log('result: ' . print_r($result, true));
+        $result = $c->get("https://app.snipcart.com/api/orders/{$token}");
         
         $snipcartorder =  json_decode($result, true);
-        
-//        error_log('snipcartorder: ' . print_r($snipcartorder, true));
         
         if (is_null($snipcartorder) or !isset($snipcartorder['status'])) {
             die;
         }
-        
-//        error_log('array diff: ' . print_r(array_diff($snipcartorder, $order), true));
         
         return $snipcartorder;
     }
