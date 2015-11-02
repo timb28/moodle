@@ -14,22 +14,30 @@ require('../../config.php');
 
 require_login();
 
+if (isguestuser()) {
+    redirect(new moodle_url('/', array('redirect' => 0)));
+}
+
 $order = required_param('order', PARAM_ALPHANUMEXT);
 
 $plugin = enrol_get_plugin('snipcart');
 
-$validatedorder = $plugin->snipcart_get_order($order);
+$validatedorder = '';//$plugin->snipcart_get_order($order);
+
+$userid = $USER->id;  // Owner of the page
+$context = context_system::instance();
 
 // todo: record event in the Moodle event log
 
-$context = context_system::instance();
-
 $PAGE->set_url('/enrol/snipcart/confirmed.php', array('order'=>$order));
+$PAGE->set_pagelayout('mydashboard');
+$PAGE->blocks->add_region('content');
 $PAGE->set_cacheable(false);
 $PAGE->set_context($context);
 
-$PAGE->set_heading(get_string('ordercomplete', 'enrol_snipcart'));
 $PAGE->set_title(get_string('ordercomplete', 'enrol_snipcart'));
+$PAGE->navbar->add(get_string('ordercomplete', 'enrol_snipcart'));
+$PAGE->set_heading(get_string('ordercomplete', 'enrol_snipcart'));
 echo $OUTPUT->header();
 
 
