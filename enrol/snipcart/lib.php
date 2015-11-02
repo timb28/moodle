@@ -343,6 +343,36 @@ class enrol_snipcart_plugin extends enrol_plugin {
     }
     
     /**
+     * Gets the Moodle course instance for a given Snipcart order
+     *
+     * @param string $itemid
+     *
+     * @return stdClass Moodle course
+     */
+    public function snipcart_get_course_from_itemid($itemid) {
+        global $DB;
+        
+        $ids = explode("-", $itemid);
+        
+        return $DB->get_record('course', array('id'=>$ids[1]));
+    }
+    
+    /**
+     * Gets the Snipcart enrolment instance for a given Snipcart order
+     *
+     * @param string $itemid
+     *
+     * @return stdClass Moodle user
+     */
+    public function snipcart_get_instance_from_itemid($itemid) {
+        global $DB;
+        
+        $ids = explode("-", $itemid);
+        
+        return $DB->get_record('enrol', array('id'=>$ids[2]));
+    }
+    
+    /**
      * Gets the Moodle user for a given Snipcart order
      *
      * @param string $itemid
