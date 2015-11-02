@@ -60,16 +60,21 @@ if ($USER === $user) {
 ?>
 <script type="text/javascript">
     Snipcart.execute('setBillingAddress', {
-    email: '<?php p($useremail) ?>',
-    name: '<?php p($userfullname) ?>',
-    address1: '<?php p($useraddress) ?>',
-    address2: '',
-    country: '<?php p($usercountry) ?>',
-    province: '',
-    city: '<?php p($usercity) ?>',
-    phone: '<?php p($userphone) ?>',
-    postalCode: ''
-});
+        email: '<?php p($useremail) ?>',
+        name: '<?php p($userfullname) ?>',
+        address1: '<?php p($useraddress) ?>',
+        address2: '',
+        country: '<?php p($usercountry) ?>',
+        province: '',
+        city: '<?php p($usercity) ?>',
+        phone: '<?php p($userphone) ?>',
+        postalCode: ''
+    });
+    
+    Snipcart.execute('bind', 'order.completed', function (order) {
+        var url = document.location;
+        window.location.href = url;
+    });
 </script>
 <?php } ?>
 
