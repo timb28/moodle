@@ -39,10 +39,10 @@ if (is_null($body) or !isset($body['eventName'])) {
 }
 
 // Todo: Remove logging of all requests
-//error_log('-----------------');
-//error_log('New Snipcart call');
-//error_log(print_r($body, true));
-//error_log('-----------------');
+error_log('-----------------');
+error_log('New Snipcart call');
+error_log(print_r($body, true));
+error_log('-----------------');
 
 switch ($body['eventName']) {
     case 'order.completed':

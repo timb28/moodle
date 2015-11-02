@@ -406,6 +406,8 @@ class enrol_snipcart_plugin extends enrol_plugin {
         }
         
         // Todo: Save the purchase to the database?
+        
+        // Todo: Email the student a link to get started
                 
         // Enrol the student in each of the course they have purchased
         return $this->enrol_user($plugin_instance, $user->id, $plugin_instance->roleid, $timestart, $timeend);
