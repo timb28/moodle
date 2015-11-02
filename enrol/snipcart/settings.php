@@ -17,6 +17,8 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_heading('enrol_snipcart_settings', '', get_string('pluginname_desc', 'enrol_snipcart')));
 
     $settings->add(new admin_setting_configtext('enrol_snipcart/publicapikey', get_string('publicapikey', 'enrol_snipcart'), get_string('publicapikey_desc', 'enrol_snipcart'), '', PARAM_ALPHANUM));
+    
+    $settings->add(new admin_setting_configpasswordunmask('enrol_snipcart/privateapikey', get_string('privateapikey', 'enrol_snipcart'), get_string('privateapikey_desc', 'enrol_snipcart'), '', PARAM_ALPHANUMEXT));
 
     // Note: let's reuse the ext sync constants and strings here, internally it is very similar,
     //       it describes what should happen when users are not supposed to be enrolled any more.

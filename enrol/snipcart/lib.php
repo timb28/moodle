@@ -329,7 +329,8 @@ class enrol_snipcart_plugin extends enrol_plugin {
         /// Open a connection back to PayPal to validate the data
         $c = new curl();
         $headers[] = 'Accept: application/json';
-        $headers[] = 'Authorization: Basic <<>>';
+        $headers[] = 'Authorization: Basic ' . base64_encode($this->get_config('privateapikey') . ':');
+        error_log('Basic auth: ' . base64_encode($this->get_config('privateapikey') . ':'));
         $c->setHeader($headers);
         $result = $c->get("https://app.snipcart.com/api/orders/{$order['token']}");
         
