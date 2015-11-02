@@ -75,6 +75,11 @@ if ($USER === $user) {
         var url = document.location;
         window.location.href = url;
     });
+    
+    // todo: Remove after debugging
+    Snipcart.execute('registerLocale', 'en', {
+        "my_cart": "--Javascript run--"
+      });
 </script>
 <?php } ?>
 
