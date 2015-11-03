@@ -452,6 +452,55 @@ class enrol_snipcart_plugin extends enrol_plugin {
         // Enrol the student in each of the course they have purchased
         return $this->enrol_user($plugin_instance, $user->id, $plugin_instance->roleid, $timestart, $timeend);
     }
+    
+    /**
+     * Unenrols student in the course they purchased when the order is cancelled
+     *
+     * @param string[] $orderitem
+     *
+     * @return stdClass Moodle course
+     */
+    public function snipcart_unenrol_user($orderitem) {
+        global $DB;
+        
+        $oids = explode("-", $orderitem['id']);
+        
+        /// get the user and course records
+
+        if (! $user = $DB->get_record("user", array("id"=>$oids[0]))) {
+            $this->message_error_to_admin("Not a valid user id", $orderitem);
+            die;
+        }
+
+        if (! $course = $DB->get_record("course", array("id"=>$oids[1]))) {
+            $this->message_error_to_admin("Not a valid course id", $orderitem);
+            die;
+        }
+
+        if (! $context = context_course::instance($course->id, IGNORE_MISSING)) {
+            $this->message_error_to_admin("Not a valid context id", $orderitem);
+            die;
+        }
+
+        if (! $plugin_instance = $DB->get_record("enrol", array("id"=>$oids[2], "status"=>0))) {
+            $this->message_error_to_admin("Not a valid instance id", $orderitem);
+            die;
+        }
+        
+        // Log the purchase of the course enrolment
+//        $context = \context_course::instance($course->id);
+//        $event = \enrol_snipcart\event\snipcartorder_completed::create(array(
+//            'context' => $context,
+//            'userid' => $user->id,
+//            'courseid' => $course->id,
+//            'objectid' => $plugin_instance->id,
+//            'other' => $orderitem['token'],
+//        ));
+//        $event->trigger();
+
+        // Enrol the student in each of the course they have purchased
+        return $this->unenrol_user($plugin_instance, $user->id);
+    }
 
 }
 

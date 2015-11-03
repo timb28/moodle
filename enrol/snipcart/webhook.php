@@ -59,6 +59,7 @@ switch ($body['eventName']) {
         
         if (empty($validatedorder)) {
             error_log('Invalid Snipcart order: ' . print_r($body, true));
+            die;
         }
         
         foreach ($validatedorder['items'] as $orderitem) {
@@ -73,12 +74,15 @@ switch ($body['eventName']) {
         break;
         
     case 'order.status.changed':
+        $plugin = enrol_get_plugin('snipcart');
+        
 //        $validatedorder = $plugin->snipcart_get_order($body['content']['token']);
         
         $validatedorder = $body['content']; // todo: remove after local testing
         
         if (empty($validatedorder)) {
             error_log('Invalid Snipcart order: ' . print_r($body, true));
+            die;
         }
         
         // Unenrol the student if the order was cancelled
@@ -86,14 +90,9 @@ switch ($body['eventName']) {
             error_log('Order cancelled');
         
             foreach ($validatedorder['items'] as $orderitem) {
-
-//                $plugin->snipcart_unenrol_user($orderitem);
-
+                $plugin->snipcart_unenrol_user($orderitem);
             }
-            
-            
         }
-        
         
         break;
 }
