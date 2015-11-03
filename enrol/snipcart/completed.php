@@ -76,7 +76,7 @@ foreach($validatedorder['items'] as $item) {
     $instance = $plugin->snipcart_get_instance_from_itemid($item['id']);
     error_log('instance: ' . print_r($instance, true));
     $course = $plugin->snipcart_get_course_from_itemid($item['id']);
-    $courselink = new moodle_url('/course/index.php', array('id' => $course->id));
+    $courselink = new moodle_url('/course/view.php', array('id' => $course->id));
 
     $localisedcost = $plugin->get_localised_currency($instance->currency, format_float($courseprice, 2, true));
     $totalpaid+= $courseprice;
