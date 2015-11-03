@@ -13,6 +13,7 @@ defined('MOODLE_INTERNAL') || die();
 define('SOCIAL_USERNAME_PREFIX', 'social_user_');
 
 require_once($CFG->libdir . '/filelib.php'); // curl
+require_once("classes/event/snipcartorder_completed.php");
 
 class enrol_snipcart_plugin extends enrol_plugin {
 
@@ -434,7 +435,17 @@ class enrol_snipcart_plugin extends enrol_plugin {
             $timeend   = 0;
         }
         
-        // Todo: Save the purchase to the database?
+        // Log the purchase of the course enrolment
+        $context = \context_course::instance($course->id);
+        $event = \enrol_snipcart\event\snipcartorder_completed::create(array(
+            'context' => $context,
+            'userid' => $user->id,
+            'courseid' => $course->id,
+            'objectid' => $plugin_instance->id,
+            'other' => $orderitem['token'],
+        ));
+        $event->trigger();
+
         
         // Todo: Email the student a link to get started
                 
