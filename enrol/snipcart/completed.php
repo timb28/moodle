@@ -35,10 +35,72 @@ $PAGE->blocks->add_region('content');
 $PAGE->set_cacheable(false);
 $PAGE->set_context($context);
 
+$ordermessage = '';
 switch ($validatedorder['status']) {
     case 'Processed':
-        include($CFG->dirroot.'/enrol/snipcart/orderprocessed.html');
+        $ordermessage = get_string('orderthankyou', 'enrol_snipcart');
         break;
-    default:
-        die;
+    case 'Cancelled':
+        $ordermessage = get_string('ordercancelled', 'enrol_snipcart');
+        break;
+    case 'Disputed':
+        $ordermessage = get_string('orderdisputed', 'enrol_snipcart');
+        break;
+    case 'Pending':
+        $ordermessage = get_string('orderpending', 'enrol_snipcart');
+        break;
 }
+
+$PAGE->set_title(get_string('ordercomplete', 'enrol_snipcart'));
+$PAGE->navbar->add(get_string('ordercomplete', 'enrol_snipcart'));
+$PAGE->set_heading(get_string('ordercomplete', 'enrol_snipcart'));
+echo $OUTPUT->header();
+
+?>
+
+<p class="lead"><?= $ordermessage ?></p>
+
+<div class="row-fluid">
+    <div class="span8"><h4><?= get_string('orderitem', 'enrol_snipcart') ?></h4></div>
+    <div class="span4"><h4><?= get_string('orderprice', 'enrol_snipcart') ?></h4></div>
+</div>
+<?php
+
+$totalpaid = 0;
+
+foreach($validatedorder['items'] as $item) { 
+    $coursename = $item['name'];
+    $courseprice = $item['totalPrice'];
+    $localisedcost = format_float($courseprice, 2, true);
+    $totalpaid+= $courseprice;
+    
+    $instance = $plugin->snipcart_get_instance_from_itemid($item['id']);
+    $course = $plugin->snipcart_get_course_from_itemid($item['id']);
+    $courselink = new moodle_url('/course/index.php', array('id' => $course->id));
+?>
+
+<div class="row-fluid">
+  <div class="span8"><?= "<a href='$courselink'>$coursename</a>" ?></div>
+  <div class="span4"><?= $localisedcost ?></div>  
+</div>
+
+<?php
+
+}
+
+$localisedtotalpaid = format_float($totalpaid, 2, true);
+
+?>
+
+<div class="row-fluid">
+    <div class="span8"><h5><?= get_string('ordertotal', 'enrol_snipcart') ?></h5></div>
+    <div class="span4"><h5><?= $localisedtotalpaid ?></h5></div>  
+</div>
+
+<?php
+
+echo $OUTPUT->footer();
+
+?>
+
+
