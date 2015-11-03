@@ -26,6 +26,7 @@ $string['enrolstartdate'] = 'Start date';
 $string['enrolstartdate_help'] = 'If enabled, users can be enrolled from this date onward only.';
 
 $string['eventsnipcartordercompleted'] = 'Snipcart order completed';
+$string['eventsnipcartordercancelled'] = 'Snipcart order cancelled';
 
 $string['expiredaction'] = 'Enrolment expiration action';
 $string['expiredaction_help'] = 'Select action to carry out when user enrolment expires. Please note that some user data and settings are purged from course during course unenrolment.';

@@ -487,18 +487,18 @@ class enrol_snipcart_plugin extends enrol_plugin {
             die;
         }
         
-        // Log the purchase of the course enrolment
-//        $context = \context_course::instance($course->id);
-//        $event = \enrol_snipcart\event\snipcartorder_completed::create(array(
-//            'context' => $context,
-//            'userid' => $user->id,
-//            'courseid' => $course->id,
-//            'objectid' => $plugin_instance->id,
-//            'other' => $orderitem['token'],
-//        ));
-//        $event->trigger();
+        // Log the order cancellation
+        $context = \context_course::instance($course->id);
+        $event = \enrol_snipcart\event\snipcartorder_cancelled::create(array(
+            'context' => $context,
+            'userid' => $user->id,
+            'courseid' => $course->id,
+            'objectid' => $plugin_instance->id,
+            'other' => $orderitem['token'],
+        ));
+        $event->trigger();
 
-        // Enrol the student in each of the course they have purchased
+        // Unenrol the student in each of the courses they purchased
         return $this->unenrol_user($plugin_instance, $user->id);
     }
 
