@@ -67,16 +67,20 @@ echo $OUTPUT->header();
 <?php
 
 $totalpaid = 0;
+$ordercurrency = '';
 
 foreach($validatedorder['items'] as $item) { 
     $coursename = $item['name'];
     $courseprice = $item['totalPrice'];
-    $localisedcost = format_float($courseprice, 2, true);
-    $totalpaid+= $courseprice;
     
     $instance = $plugin->snipcart_get_instance_from_itemid($item['id']);
+    error_log('instance: ' . print_r($instance, true));
     $course = $plugin->snipcart_get_course_from_itemid($item['id']);
     $courselink = new moodle_url('/course/index.php', array('id' => $course->id));
+
+    $localisedcost = $plugin->get_localised_currency($instance->currency, format_float($courseprice, 2, true));
+    $totalpaid+= $courseprice;
+    $ordercurrency = $instance->currency;
 ?>
 
 <div class="row-fluid">
@@ -88,7 +92,7 @@ foreach($validatedorder['items'] as $item) {
 
 }
 
-$localisedtotalpaid = format_float($totalpaid, 2, true);
+$localisedtotalpaid = $plugin->get_localised_currency($ordercurrency, format_float($totalpaid, 2, true));
 
 ?>
 

@@ -139,6 +139,11 @@ class enrol_snipcart_plugin extends enrol_plugin {
     }
     
     public function get_localised_currency($currency, $cost) {
+        
+        if (empty($currency) or empty($cost)) {
+            return;
+        }
+        
         $symbols = array(
             'AUD'=>'$%c',
             'NZD'=>'$%c',
