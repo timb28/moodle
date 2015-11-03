@@ -230,7 +230,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
         }
 
         if (abs($cost) < 0.01) { // no cost, other enrolment methods (instances) should be used
-            echo '<p>'.get_string('nocost', 'enrol_paypal').'</p>';
+            echo '<p>'.get_string('nocost', 'enrol_snipcart').'</p>';
         } else {
 
             $course = $DB->get_record('course', array('id'=>$instance->courseid));
@@ -247,7 +247,6 @@ class enrol_snipcart_plugin extends enrol_plugin {
     }
     
     function message_error_to_admin($subject, $data) {
-        echo $subject;
         $admin = get_admin();
         $site = get_site();
 
@@ -330,9 +329,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
      * @return string[] - array containing the validated order
      */
     public function snipcart_get_order($token) {
-        // Contact Snipcart to confirm the order is valid
-        
-        /// Open a connection back to PayPal to validate the data
+        // Open a connection back to Snipcart to validate the data
         $c = new curl();
         $headers[] = 'Accept: application/json';
         $headers[] = 'Authorization: Basic ' . base64_encode($this->get_config('privateapikey') . ':');
@@ -342,6 +339,8 @@ class enrol_snipcart_plugin extends enrol_plugin {
         $snipcartorder =  json_decode($result, true);
         
         if (is_null($snipcartorder) or !isset($snipcartorder['status'])) {
+            error_log('Invalid Snipcart order: ' . $token);
+            header('HTTP/1.1 400 BAD REQUEST');
             die;
         }
         
@@ -409,21 +408,25 @@ class enrol_snipcart_plugin extends enrol_plugin {
 
         if (! $user = $DB->get_record("user", array("id"=>$oids[0]))) {
             $this->message_error_to_admin("Not a valid user id", $orderitem);
+            header('HTTP/1.1 400 BAD REQUEST');
             die;
         }
 
         if (! $course = $DB->get_record("course", array("id"=>$oids[1]))) {
             $this->message_error_to_admin("Not a valid course id", $orderitem);
+            header('HTTP/1.1 400 BAD REQUEST');
             die;
         }
 
         if (! $context = context_course::instance($course->id, IGNORE_MISSING)) {
             $this->message_error_to_admin("Not a valid context id", $orderitem);
+            header('HTTP/1.1 400 BAD REQUEST');
             die;
         }
 
         if (! $plugin_instance = $DB->get_record("enrol", array("id"=>$oids[2], "status"=>0))) {
             $this->message_error_to_admin("Not a valid instance id", $orderitem);
+            header('HTTP/1.1 400 BAD REQUEST');
             die;
         }
         
@@ -469,21 +472,25 @@ class enrol_snipcart_plugin extends enrol_plugin {
 
         if (! $user = $DB->get_record("user", array("id"=>$oids[0]))) {
             $this->message_error_to_admin("Not a valid user id", $orderitem);
+            header('HTTP/1.1 400 BAD REQUEST');
             die;
         }
 
         if (! $course = $DB->get_record("course", array("id"=>$oids[1]))) {
             $this->message_error_to_admin("Not a valid course id", $orderitem);
+            header('HTTP/1.1 400 BAD REQUEST');
             die;
         }
 
         if (! $context = context_course::instance($course->id, IGNORE_MISSING)) {
             $this->message_error_to_admin("Not a valid context id", $orderitem);
+            header('HTTP/1.1 400 BAD REQUEST');
             die;
         }
 
         if (! $plugin_instance = $DB->get_record("enrol", array("id"=>$oids[2], "status"=>0))) {
             $this->message_error_to_admin("Not a valid instance id", $orderitem);
+            header('HTTP/1.1 400 BAD REQUEST');
             die;
         }
         

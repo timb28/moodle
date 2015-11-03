@@ -87,11 +87,7 @@ if ($USER === $user) {
         var url = path + '/snipcart/completed.php?order=' + order.token;
         window.location.href = url;
     });
-    
-    // todo: Remove after debugging
-    Snipcart.execute('registerLocale', 'en', {
-        "my_cart": "--Javascript run--"
-      });
+
 </script>
 <?php } ?>
 

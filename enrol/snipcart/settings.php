@@ -38,12 +38,6 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configselect('enrol_snipcart/status',
         get_string('status', 'enrol_snipcart'), get_string('status_desc', 'enrol_snipcart'), ENROL_INSTANCE_DISABLED, $options));
 
-// Todo: Update or remove
-//    $settings->add(new admin_setting_configtext('enrol_snipcart/cost', get_string('cost', 'enrol_paypal'), '', 0, PARAM_FLOAT, 4));
-//
-//    $paypalcurrencies = enrol_get_plugin('paypal')->get_currencies();
-//    $settings->add(new admin_setting_configselect('enrol_paypal/currency', get_string('currency', 'enrol_paypal'), '', 'USD', $paypalcurrencies));
-
     if (!during_initial_install()) {
         $options = get_default_enrol_roles(context_system::instance());
         $student = get_archetype_roles('student');

@@ -46,12 +46,7 @@ if (is_null($body) or !isset($body['eventName'])) {
 
 switch ($body['eventName']) {
     case 'order.completed':
-        // This is an order:completed event
-        // do what needs to be done here.
-//        error_log('Snipcart: order complete');
-        
         $plugin = enrol_get_plugin('snipcart');
-//        error_log('body content: ' . print_r($body['content'], true));
         
         $validatedorder = $plugin->snipcart_get_order($body['content']['token']);
         
@@ -59,13 +54,11 @@ switch ($body['eventName']) {
         
         if (empty($validatedorder)) {
             error_log('Invalid Snipcart order: ' . print_r($body, true));
+            header('HTTP/1.1 400 BAD REQUEST');
             die;
         }
         
         foreach ($validatedorder['items'] as $orderitem) {
-//            error_log("item: " . print_r($item, true));
-//            error_log('valid item id: ' . $orderitem['id']);
-            
             $plugin->snipcart_enrol_user($orderitem);
         }
 
@@ -82,6 +75,8 @@ switch ($body['eventName']) {
         
         if (empty($validatedorder)) {
             error_log('Invalid Snipcart order: ' . print_r($body, true));
+            // Return a valid status code such as 200 OK.
+            header('HTTP/1.1 400 BAD REQUEST');
             die;
         }
         
