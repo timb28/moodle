@@ -38,19 +38,13 @@ if (is_null($body) or !isset($body['eventName'])) {
     return;
 }
 
-// Todo: Remove logging of all requests
-//error_log('-----------------');
-//error_log('New Snipcart call');
-//error_log(print_r($body, true));
-//error_log('-----------------');
-
 switch ($body['eventName']) {
     case 'order.completed':
         $plugin = enrol_get_plugin('snipcart');
         
         $validatedorder = $plugin->snipcart_get_order($body['content']['token']);
         
-// todo: remove        $validatedorder = $body['content']; // todo: remove after local testing
+// todo: remove         $validatedorder = $body['content']; // todo: remove after local testing
         
         if (empty($validatedorder)) {
             error_log('Invalid Snipcart order: ' . print_r($body, true));
@@ -62,7 +56,8 @@ switch ($body['eventName']) {
             $plugin->snipcart_enrol_user($orderitem);
         }
 
-        // Todo: Update the user's address, city and postcode if not set in Moodle
+        // Update the user's address, city and postcode if not set in Moodle
+        $plugin->snipcart_update_user($validatedorder);
         
         break;
         
@@ -82,8 +77,6 @@ switch ($body['eventName']) {
         
         // Unenrol the student if the order was cancelled
         if ($validatedorder['status'] == 'Cancelled') {
-            error_log('Order cancelled');
-        
             foreach ($validatedorder['items'] as $orderitem) {
                 $plugin->snipcart_unenrol_user($orderitem);
             }

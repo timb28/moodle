@@ -59,14 +59,18 @@ $courseshortname = format_string($course->shortname, true, array('context' => $c
 <?php
 
 if ($USER === $user) { 
-    $userfullname    = fullname($user);
-    $userfirstname   = $user->firstname;
-    $userlastname    = $user->lastname;
-    $useremail       = trim(preg_replace('/\s*\([^)]*\)/', '', $user->email));
-    $userphone       = $user->phone1;
-    $useraddress     = $user->address;
-    $usercity        = $user->city;
-    $usercountry     = $user->country;
+    $userfullname   = fullname($user);
+    $userfirstname  = $user->firstname;
+    $userlastname   = $user->lastname;
+    $useremail      = trim(preg_replace('/\s*\([^)]*\)/', '', $user->email));
+    $userphone      = $user->phone1;
+    $useraddress    = $user->address;
+    $usercity       = $user->city;
+    $usercountry    = $user->country;
+
+    $postcodefieldid    = $DB->get_field('user_info_field', 'id', array( 'shortname' => 'postcode'));
+    $postcodefield      = $DB->get_record('user_info_data', array('userid' => $user->id, 'fieldid' => $postcodefieldid));
+    $userpostcode       = $postcodefield->data;
 
 ?>
 <script type="text/javascript">
@@ -79,7 +83,7 @@ if ($USER === $user) {
         province: '',
         city: '<?php p($usercity) ?>',
         phone: '<?php p($userphone) ?>',
-        postalCode: ''
+        postalCode: '<?php p($userpostcode) ?>'
     });
     
     Snipcart.execute('bind', 'order.completed', function (order) {

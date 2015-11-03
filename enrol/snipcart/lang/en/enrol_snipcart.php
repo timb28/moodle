@@ -17,6 +17,7 @@ $string['costerror'] = 'The enrolment cost is not a number';
 $string['crontask'] = 'Snipcart enrolment scheduled tasks';
 $string['currency'] = 'Currency';
 $string['currencyerror'] = 'The currency is already used in this course.';
+$string['customfieldpostcode'] = 'Postcode';
 $string['defaultrole'] = 'Default role assignment';
 $string['defaultrole_desc'] = 'Select role which should be assigned to users during Snipcart enrolments';
 $string['enrolenddate'] = 'End date';

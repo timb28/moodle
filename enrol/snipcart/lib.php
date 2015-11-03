@@ -410,6 +410,68 @@ class enrol_snipcart_plugin extends enrol_plugin {
     }
     
     /**
+     * Updates the Moodle user account with new information from Snipcart order
+     *
+     * @param string[] $validatedorder
+     *
+     * @return bool true if user updated, false otherwise
+     */
+    public function snipcart_update_user($validatedorder) {
+        global $DB;
+        
+        $ids = explode("-", $validatedorder['items'][0]['id']);
+        
+        $user = $DB->get_record('user', array('id'=>$ids[0]));
+        
+        if (empty($user)) {
+            return false;
+        }
+        
+        $userupdated = false;
+        
+        if (empty($user->city) and $validatedorder['user']['billingAddressCity'] != 'null') {
+            $user->city = $validatedorder['user']['billingAddressCity'];
+            $userupdated = true;
+        }
+        
+        if (empty($user->address) and $validatedorder['user']['billingAddressAddress1'] != 'null') {
+            $user->address = $validatedorder['user']['billingAddressAddress1'] . 
+                    ', ' . $validatedorder['user']['billingAddressAddress2'];
+            $userupdated = true;
+        }
+        
+        $postcodefieldid = $DB->get_field('user_info_field', 'id', array( 'shortname' => 'postcode'));
+        $postcodefield = $DB->get_record('user_info_data', array('userid' => $user->id, 'fieldid' => $postcodefieldid));
+        
+        if (empty($postcodefield->data) and $validatedorder['user']['billingAddressPostalCode'] != 'null' ) {
+            $customfield = new stdClass;
+            $customfield->userid = $user->id;
+            $customfield->fieldid = $postcodefieldid;
+            $customfield->data = $validatedorder['user']['billingAddressPostalCode'];
+
+            if ( !$DB->record_exists( 'user_info_data', array( 'userid' => $user->id, 'fieldid' => $postcodefieldid ) ) ) {
+                $DB->insert_record('user_info_data', $customfield);
+            } else {
+                $record = $DB->get_record( 'user_info_data', array( 'userid' => $user->id, 'fieldid' => $postcodefieldid ) );
+                $customfield->id = $record->id;
+                $DB->update_record('user_info_data', $customfield);
+            }
+        }
+        
+        if (empty($user->phone1) and $validatedorder['user']['billingAddressPhone'] != 'null') {
+            $user->phone1 = $validatedorder['user']['billingAddressPhone'];
+            $userupdated = true;
+        }
+        
+        if ($userupdated) {
+            $DB->update_record('user', $user);
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
      * Enrols student in the course they purchased
      *
      * @param string[] $orderitem
