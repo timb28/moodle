@@ -13,12 +13,15 @@ $string['addtocart'] = '<i class="icon-shopping-cart icon-white"></i> Add to car
 $string['assignrole'] = 'Assign role';
 $string['checkout'] = 'Proceed to Checkout';
 $string['cost'] = 'Enrol cost';
+$string['costerror'] = 'The enrolment cost is not a number';
 $string['crontask'] = 'Snipcart enrolment scheduled tasks';
 $string['currency'] = 'Currency';
+$string['currencyerror'] = 'The currency is already used in this course.';
 $string['defaultrole'] = 'Default role assignment';
 $string['defaultrole_desc'] = 'Select role which should be assigned to users during Snipcart enrolments';
 $string['enrolenddate'] = 'End date';
 $string['enrolenddate_help'] = 'If enabled, users can be enrolled until this date only.';
+$string['enrolenddaterror'] = 'Enrolment end date cannot be earlier than start date';
 $string['enrolperiod'] = 'Enrolment duration';
 $string['enrolperiod_desc'] = 'Default length of time that the enrolment is valid. If set to zero, the enrolment duration will be unlimited by default.';
 $string['enrolperiod_help'] = 'Length of time that the enrolment is valid, starting with the moment the user is enrolled. If disabled, the enrolment duration will be unlimited.';

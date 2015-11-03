@@ -27,8 +27,6 @@ $validatedorder = $plugin->snipcart_get_order($order);
 $userid = $USER->id;  // Owner of the page
 $context = context_system::instance();
 
-// todo: record event in the Moodle event log
-
 $PAGE->set_url('/enrol/snipcart/confirmed.php', array('order'=>$order));
 $PAGE->set_pagelayout('mydashboard');
 $PAGE->blocks->add_region('content');

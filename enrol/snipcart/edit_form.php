@@ -35,7 +35,7 @@ class enrol_snipcart_edit_form extends moodleform {
         $mform->addElement('select', 'status', get_string('status', 'enrol_snipcart'), $options);
         $mform->setDefault('status', $plugin->get_config('status'));
 
-        $mform->addElement('text', 'cost', get_string('cost', 'enrol_snipcart'), array('size'=>5));
+        $mform->addElement('text', 'cost', get_string('cost', 'enrol_snipcart'), array('size'=>6,'maxlength'=>6));
         $mform->setType('cost', PARAM_RAW); // Use unformat_float to get real value.
         $mform->setDefault('cost', format_float($plugin->get_config('cost'), 2, true));
 
@@ -83,7 +83,27 @@ class enrol_snipcart_edit_form extends moodleform {
         global $DB, $CFG;
         $errors = parent::validation($data, $files);
         
-        // Todo: Add custom validation code
+        list($instance, $plugin, $context) = $this->_customdata;
+
+        if (!empty($data['enrolenddate']) and $data['enrolenddate'] < $data['enrolstartdate']) {
+            $errors['enrolenddate'] = get_string('enrolenddaterror', 'enrol_snipcart');
+        }
+
+        $cost = str_replace(get_string('decsep', 'langconfig'), '.', $data['cost']);
+        if (!is_numeric($cost)) {
+            $errors['cost'] = get_string('costerror', 'enrol_snipcart');
+        }
+        
+        error_log('context:' . print_r($context, true));
+        error_log('instance id:' . $context->instanceid);
+        error_log('currency:' . $data['currency']);
+
+        // The currency must be unique for this course
+        if ($DB->record_exists_select('enrol', 
+                'id != ? and courseid = ? and currency = ?',
+                array ($instance->id, $context->instanceid, $data['currency']))) {
+            $errors['currency'] = get_string('currencyerror', 'enrol_snipcart');
+        }
         
         return $errors;
     }
