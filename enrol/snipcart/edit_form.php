@@ -94,10 +94,6 @@ class enrol_snipcart_edit_form extends moodleform {
             $errors['cost'] = get_string('costerror', 'enrol_snipcart');
         }
         
-        error_log('context:' . print_r($context, true));
-        error_log('instance id:' . $context->instanceid);
-        error_log('currency:' . $data['currency']);
-
         // The currency must be unique for this course
         if ($DB->record_exists_select('enrol', 
                 'id != ? and courseid = ? and currency = ?',
