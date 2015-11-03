@@ -301,9 +301,8 @@ class enrol_snipcart_plugin extends enrol_plugin {
                 'courseid'   => $data->courseid,
                 'enrol'      => $this->get_name(),
                 'roleid'     => $data->roleid,
-// Todo: Update or remove
-//                'cost'       => $data->cost,
-//                'currency'   => $data->currency,
+                'cost'       => $data->cost,
+                'currency'   => $data->currency,
             );
         }
         if ($merge and $instances = $DB->get_records('enrol', $merge, 'id')) {
