@@ -20,6 +20,7 @@ define('NO_DEBUG_DISPLAY', true);
 
 require("../../config.php");
 require_once("lib.php");
+require_once("classes/event/snipcartorder_completed.php");
 
 $json = file_get_contents('php://input');
 
@@ -55,15 +56,34 @@ switch ($body['eventName']) {
         
         $validatedorder = $plugin->snipcart_get_order($body['content']['token']);
         
+//        $validatedorder = $body['content']; // todo: remove after local testing
+        
         if (empty($validatedorder)) {
             error_log('Invalid Snipcart order: ' . print_r($body, true));
         }
         
         foreach ($validatedorder['items'] as $orderitem) {
-            // error_log("item: " . print_r($item, true));
-            error_log('valid item id: ' . $orderitem['id']);
+//            error_log("item: " . print_r($item, true));
+//            error_log('valid item id: ' . $orderitem['id']);
+            
+            // Log the purchase of the course enrolment
+            $user = $plugin->snipcart_get_user_from_itemid($orderitem['id']);
+            $course = $plugin->snipcart_get_course_from_itemid($orderitem['id']);
+            $instance = $plugin->snipcart_get_instance_from_itemid($orderitem['id']);
+            
+            $context = \context_course::instance($course->id);
+            $event = \enrol_snipcart\event\snipcartorder_completed::create(array(
+                'context' => $context,
+                'userid' => $user->id,
+                'courseid' => $course->id,
+                'objectid' => $instance->id,
+                'other' => $orderitem['token'],
+            ));
+            $event->trigger();
             
             $plugin->snipcart_enrol_user($orderitem);
+            
+            
         }
 
         // Todo: Update the user's address, city and postcode if not set in Moodle
