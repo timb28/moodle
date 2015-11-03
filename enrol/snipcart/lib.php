@@ -156,6 +156,24 @@ class enrol_snipcart_plugin extends enrol_plugin {
     }
     
     /**
+     * Returns localised name of enrol instance
+     *
+     * @param object $instance (null is accepted too)
+     * @return string
+     */
+    public function get_instance_name($instance) {
+        if (empty($instance->name)) {
+            $enrol = $this->get_name();
+            return get_string('pluginname', 'enrol_'.$enrol);
+        } else {
+            $context = context_course::instance($instance->courseid);
+            return format_string("{$instance->name} {$instance->currency} " . 
+                    $this->get_localised_currency($instance->currency, format_float($instance->cost, 2, false)),
+                    true, array('context'=>$context));
+        }
+    }
+    
+    /**
      * Returns link to page which may be used to add new instance of enrolment plugin in course.
      * @param int $courseid
      * @return moodle_url page url
