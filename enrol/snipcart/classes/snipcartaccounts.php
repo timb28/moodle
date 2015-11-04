@@ -32,12 +32,14 @@ class snipcartaccounts {
      */
     public function get_snipcartaccounts() {
         global $CFG;
-
-        if (empty($CFG->enrol_snipcart_snipcartaccounts)) {
+        
+        $snipcart = new \enrol_snipcart_plugin();
+        
+        if (empty($snipcart->get_config('snipcartaccounts'))) {
             return array();
         }
-
-        $snipcartaccounts = $this->decode_stored_config($CFG->enrol_snipcart_snipcartaccounts);
+        
+        $snipcartaccounts = $this->decode_stored_config($snipcart->get_config('snipcartaccounts'));
 
         if (!is_array($snipcartaccounts)) {
             // Something is wrong with the format of stored setting.

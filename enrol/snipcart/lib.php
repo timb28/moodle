@@ -14,6 +14,7 @@ define('SOCIAL_USERNAME_PREFIX', 'social_user_');
 
 require_once($CFG->libdir . '/filelib.php'); // curl
 require_once("classes/event/snipcartorder_completed.php");
+require_once("classes/snipcartaccounts.php");
 
 class enrol_snipcart_plugin extends enrol_plugin {
 
@@ -141,9 +142,17 @@ class enrol_snipcart_plugin extends enrol_plugin {
     
     public function get_localised_currency($currency, $cost) {
         
+        global $CFG;
+        
         if (empty($currency) or empty($cost)) {
             return;
         }
+        
+        $manager = get_snipcartaccounts_manager();
+        
+        $snipcartaccounts = $manager->get_snipcartaccounts();
+        
+        // todo: get the currency format from the snipcartaccount
         
         $symbols = array(
             'AUD'=>'$%c',
