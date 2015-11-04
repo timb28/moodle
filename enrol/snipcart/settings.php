@@ -11,8 +11,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-use enrol_snipcart\snipcartaccounts;
-use enrol_snipcart\snipcartaccountsadminsetting;
+require_once("classes/snipcartaccountsadminsetting.php");
 
 
 if ($ADMIN->fulltree) {
@@ -26,7 +25,7 @@ if ($ADMIN->fulltree) {
     
     $settings->add(new admin_setting_configpasswordunmask('enrol_snipcart/privateapikey', get_string('privateapikey', 'enrol_snipcart'), get_string('privateapikey_desc', 'enrol_snipcart'), '', PARAM_ALPHANUMEXT));
     
-    $settings->add(new admin_setting_emoticons());
+    $settings->add(new admin_setting_snipcartaccounts());
 
     // Note: let's reuse the ext sync constants and strings here, internally it is very similar,
     //       it describes what should happen when users are not supposed to be enrolled any more.

@@ -9,7 +9,10 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace enrol_snipcart;
+defined('MOODLE_INTERNAL') || die();
+
+require_once('snipcartaccounts.php');
+require_once($CFG->libdir.'/adminlib.php');
 
 /**
  * Administration interface for emoticon_manager settings.
@@ -25,8 +28,8 @@ class admin_setting_snipcartaccounts extends admin_setting {
         global $CFG;
 
         $manager = get_snipcartaccounts_manager();
-        $defaults = $this->prepare_form_data($manager->default_emoticons());
-        parent::__construct('emoticons', get_string('emoticons', 'admin'), get_string('emoticons_desc', 'admin'), $defaults);
+        $defaults = $this->prepare_form_data($manager->default_snipcartaccounts());
+        parent::__construct('enrol_snipcart/snipcartaccounts', get_string('snipcartaccounts', 'enrol_snipcart'), get_string('snipcartaccounts_desc', 'enrol_snipcart'), $defaults);
     }
 
     /**
