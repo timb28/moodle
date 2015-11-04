@@ -102,23 +102,14 @@ class admin_setting_snipcartaccounts extends admin_setting {
         $out .= html_writer::start_tag('tbody');
         $i = 0;
         foreach($data as $field => $value) {
-//            switch ($i) {
-//                case 0:
-//                    $out .= html_writer::start_tag('tr');
-//                    $current_text = $value;
-//                    $current_filename = '';
-//                    $current_imagecomponent = '';
-//                    $current_altidentifier = '';
-//                    $current_altcomponent = '';
-//                case 1:
-//                    $current_filename = $value;
-//                case 2:
-//                    $current_imagecomponent = $value;
-//                case 3:
-//                    $current_altidentifier = $value;
-//                case 4:
-//                    $current_altcomponent = $value;
-//            }
+            switch ($i) {
+                case 5:
+                    $inputtype = 'password';
+                    break;
+                default:
+                    $inputtype = 'text';
+                    break;
+            }
             
             if ($i == 0) {
                 $out .= html_writer::start_tag('tr');
@@ -127,7 +118,7 @@ class admin_setting_snipcartaccounts extends admin_setting {
             $out .= html_writer::tag('td',
                 html_writer::empty_tag('input',
                     array(
-                        'type'  => 'text',
+                        'type'  => $inputtype,
                         'class' => 'form-text',
                         'name'  => $this->get_full_name().'['.$field.']',
                         'value' => $value,
@@ -136,16 +127,6 @@ class admin_setting_snipcartaccounts extends admin_setting {
             );
 
             if ($i == 5) {
-//                if (get_string_manager()->string_exists($current_altidentifier, $current_altcomponent)) {
-//                    $alt = get_string($current_altidentifier, $current_altcomponent);
-//                } else {
-//                    $alt = $current_text;
-//                }
-//                if ($current_filename) {
-//                    $out .= html_writer::tag('td', $OUTPUT->render(new pix_emoticon($current_filename, $alt, $current_imagecomponent)));
-//                } else {
-//                    $out .= html_writer::tag('td', '');
-//                }
                 $out .= html_writer::end_tag('tr');
                 $i = 0;
             } else {
