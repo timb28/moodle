@@ -152,14 +152,10 @@ class enrol_snipcart_plugin extends enrol_plugin {
         
         $snipcartaccounts = $manager->get_snipcartaccounts();
         
-        // todo: get the currency format from the snipcartaccount
-        
-        $symbols = array(
-            'AUD'=>'$%c',
-            'NZD'=>'$%c',
-            'USD'=>'$%c',
-            'ZAR'=>'R%c',
-        );
+        $symbols = array();
+        foreach ($snipcartaccounts as $account) {
+            $symbols[$account->currencycode] = $account->currencyformat;
+        }
         
         return str_replace('%c', $cost, $symbols[$currency]);
     }
