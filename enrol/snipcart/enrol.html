@@ -28,6 +28,9 @@ $cost = format_float($cost, 2, false);
 $coursefullname  = format_string($course->fullname, true, array('context'=>$context));
 $courseshortname = format_string($course->shortname, true, array('context' => $context));
 
+$manager = get_snipcartaccounts_manager();
+$publicapikey = $manager->get_snipcartaccount_info($instance->currency, 'publicapikey');
+
 ?>
 <div align="center">
 
@@ -38,7 +41,7 @@ $courseshortname = format_string($course->shortname, true, array('context' => $c
 
 <script type="text/javascript" src="https://cdn.snipcart.com/scripts/snipcart.js" id="snipcart"
   data-autopop='false'
-  data-api-key="<?php echo( $plugin->get_config('publicapikey') ); ?>"></script>
+  data-api-key="<?= $publicapikey ?>"></script>
 
 <link type="text/css" href="https://cdn.snipcart.com/themes/base/snipcart.min.css" rel="stylesheet" />
 

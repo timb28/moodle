@@ -49,6 +49,28 @@ class snipcartaccounts {
 
         return $snipcartaccounts;
     }
+    
+    /**
+     * Returns specific information about a single snipcartaccount
+     * using it's currency as the reference
+     *
+     * @param string $currencycode of the snipcart account of interest
+     * @param string $field name of the field to return
+     * 
+     * @return string of content of snipcart account data
+     */
+    public function get_snipcartaccount_info($currencycode, $field) {
+        
+        $snipcartaccounts = $this->get_snipcartaccounts();
+        
+        foreach ($snipcartaccounts as $account) {
+            if ($account->currencycode == $currencycode) {
+                return $account->$field;
+            }
+        }
+
+        return null;
+    }
 
     /**
      * Encodes the array of snipcartaccounts objects into a string storable in config table
