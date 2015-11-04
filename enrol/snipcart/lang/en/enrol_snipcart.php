@@ -54,6 +54,7 @@ $string['publicapikey_desc'] = 'The public API key is the key you need to add on
 $string['socialenrolments'] = 'Allow public (social) student enrolments';
 $string['snipcartaccounts'] = 'Snipcart accounts';
 $string['snipcartaccounts_desc'] = 'Configure the Snipcart accounts used for each country (currency)';
+$string['snipcartinvalidorderror'] = 'Cannot get invalid Snipcart order. token: {$a->token} currency: {$a->currency}';
 $string['snipcart:config'] = 'Configure Snipcart enrol instances';
 $string['snipcart:manage'] = 'Manage enrolled users';
 $string['snipcart:unenrol'] = 'Unenrol users from course';

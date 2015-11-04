@@ -344,7 +344,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
     }
     
     /**
-     * Get a Snipcart order using the order token by calling their API
+     * Get a Snipcart order using the order
      *
      * @param array $order
      *
@@ -356,9 +356,18 @@ class enrol_snipcart_plugin extends enrol_plugin {
         $currency = $instance->currency;
         $token = $order['content']['token'];
         
-        //error_log('order: ' . print_r($order, true));
-        //error_log('currency: ' . $currency);
-        //error_log('token: ' . $token);
+        return $this->snipcart_get_order_from_token_and_currency($token, $currency);;
+    }
+    
+    /**
+     * Get a Snipcart order using the order token and currency by calling their API
+     *
+     * @param string $token of the order
+     * @param string $currency of the order
+     *
+     * @return string[] - array containing the validated order
+     */
+    public function snipcart_get_order_from_token_and_currency($token, $currency) {
         
         $manager = get_snipcartaccounts_manager();
         $privateapikey = $manager->get_snipcartaccount_info($currency, 'privateapikey');
@@ -368,14 +377,14 @@ class enrol_snipcart_plugin extends enrol_plugin {
         $headers[] = 'Accept: application/json';
         $headers[] = 'Authorization: Basic ' . base64_encode($privateapikey . ':');
         $c->setHeader($headers);
-        die('headers: ' . print_r($headers, true));
         $result = $c->get("https://app.snipcart.com/api/orders/{$token}");
         
         $snipcartorder =  json_decode($result, true);
         
         if (is_null($snipcartorder) or !isset($snipcartorder['status'])) {
-            error_log('Invalid Snipcart order: ' . $token);
+            // this order can't be found on Snipcart
             header('HTTP/1.1 400 BAD REQUEST');
+            throw new moodle_exception('snipcartinvalidorderror', 'enrol_snipcart', null, array('token'=>$token, 'currency'=>$currency));
             die;
         }
         

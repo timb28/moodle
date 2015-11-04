@@ -91,7 +91,7 @@ if ($USER === $user) {
     
     Snipcart.execute('bind', 'order.completed', function (order) {
         var path = location.pathname.substring(0, location.pathname.lastIndexOf("/"));
-        var url = path + '/snipcart/completed.php?order=' + order.token;
+        var url = path + '/snipcart/completed.php?order=' + order.token + '&amp;i=<?php p($instance->id) ?>';
         window.location.href = url;
     });
 

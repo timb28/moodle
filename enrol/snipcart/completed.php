@@ -12,24 +12,27 @@
 
 require('../../config.php');
 
+global $DB;
+
 require_login();
 
 if (isguestuser()) {
     redirect(new moodle_url('/', array('redirect' => 0)));
 }
 
-$order = required_param('order', PARAM_ALPHANUMEXT);
+$token = required_param('order', PARAM_ALPHANUMEXT);
+$instanceid = required_param('i', PARAM_INT);
 
 $plugin = enrol_get_plugin('snipcart');
 
-// todo: Must update this to allow the get order function to access the currency used.
+$instance = $DB->get_record('enrol', array('id'=>$instanceid));
 
-$validatedorder = $plugin->snipcart_get_order($order);
+$validatedorder = $plugin->snipcart_get_order_from_token_and_currency($token, $instance->currency);
 
 $userid = $USER->id;  // Owner of the page
 $context = context_system::instance();
 
-$PAGE->set_url('/enrol/snipcart/confirmed.php', array('order'=>$order));
+$PAGE->set_url('/enrol/snipcart/confirmed.php', array('order'=>$token, 'i'=>$instanceid));
 $PAGE->set_pagelayout('mydashboard');
 $PAGE->blocks->add_region('content');
 $PAGE->set_cacheable(false);
@@ -73,14 +76,13 @@ foreach($validatedorder['items'] as $item) {
     $coursename = $item['name'];
     $courseprice = $item['totalPrice'];
     
-    $instance = $plugin->snipcart_get_instance_from_itemid($item['id']);
-    error_log('instance: ' . print_r($instance, true));
+    $orderinstance = $plugin->snipcart_get_instance_from_itemid($item['id']);
     $course = $plugin->snipcart_get_course_from_itemid($item['id']);
     $courselink = new moodle_url('/course/view.php', array('id' => $course->id));
+    $ordercurrency = $orderinstance->currency; // All order items use the same currency
 
-    $localisedcost = $plugin->get_localised_currency($instance->currency, format_float($courseprice, 2, true));
+    $localisedcost = $plugin->get_localised_currency($ordercurrency, format_float($courseprice, 2, true));
     $totalpaid+= $courseprice;
-    $ordercurrency = $instance->currency;
 ?>
 
 <div class="row-fluid">
