@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Factory function for emoticon_manager
+ * Factory function for snipcartaccounts_manager
  *
- * @return emoticon_manager singleton
+ * @return snipcartaccounts_manager singleton
  */
 function get_snipcartaccounts_manager() {
     static $singleton = null;
@@ -16,15 +16,11 @@ function get_snipcartaccounts_manager() {
 }
 
 /**
- * Provides core support for plugins that have to deal with emoticons (like HTML editor or emoticon filter).
+ * Provides support for enrol_snipcart
  *
- * Whenever this manager mentiones 'emoticon object', the following data
- * structure is expected: stdClass with properties text, imagename, imagecomponent,
- * altidentifier and altcomponent
- *
- * @see admin_setting_emoticons
- *
- * @copyright 2010 David Mudrak
+ * @package   enrol_snipcart
+ * @author    Tim Butler
+ * @copyright (c) 2015 Harcourts International Limited {@link http://www.harcourtsacademy.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class snipcartaccounts {
@@ -37,7 +33,7 @@ class snipcartaccounts {
     public function get_snipcartaccounts() {
         global $CFG;
 
-        if (empty($CFG->emoticons)) {
+        if (empty($CFG->enrol_snipcart_snipcartaccounts)) {
             return array();
         }
 
@@ -85,28 +81,28 @@ class snipcartaccounts {
      */
     public function default_snipcartaccounts() {
         return array(
-            $this->prepare_snipcartaccount_object('Australia', 'AU', 'AUD', '$%c', 'Public API Key', 'Private API Key')
+            $this->prepare_snipcartaccount_object('Australia', 'AU', 'AUD', '$%c', 'PublicAPIKey', 'PrivateAPIKey')
         );
     }
 
     /**
      * Helper method preparing the stdClass with the snipcart account properties
      *
-     * @param string $countryname of the country
+     * @param string $name of the Snipcart account
      * @param string $countrycode international standard used in the user country field
      * @param string $currencycode international standard used in the enrol table
-     * @param string $currencysymbol for localising prices
+     * @param string $currencyformat for localising prices
      * @param string $publicapikey for the Snipcart account
      * @param string $privateapikey for the Snipcar account
      * @return stdClass
      */
-    protected function prepare_snipcartaccount_object($countryname, $countrycode, $currencycode,
-                                               $currencysymbol, $publicapikey, $privateapikey) {
+    protected function prepare_snipcartaccount_object($name, $countrycode, $currencycode,
+                                               $currencyformat, $publicapikey, $privateapikey) {
         return (object)array(
-            'countryname'       => $countryname,
+            'name'              => $name,
             'countrycode'       => $countrycode,
             'currencycode'      => $currencycode,
-            'currencysymbol'    => $currencysymbol,
+            'currencyformat'    => $currencyformat,
             'publicapikey'      => $publicapikey,
             'privateapikey'     => $privateapikey,
         );

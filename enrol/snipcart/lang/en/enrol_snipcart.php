@@ -9,6 +9,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['accountname'] = 'Name';
 $string['addtocart'] = '<i class="icon-shopping-cart icon-white"></i> Add to cart';
 $string['assignrole'] = 'Assign role';
 $string['checkout'] = 'Proceed to Checkout';
@@ -16,6 +17,7 @@ $string['cost'] = 'Enrol cost';
 $string['costerror'] = 'The enrolment cost is not a number';
 $string['crontask'] = 'Snipcart enrolment scheduled tasks';
 $string['currency'] = 'Currency';
+$string['currencyformat'] = 'Format';
 $string['currencyerror'] = 'The currency is already used in this course.';
 $string['customfieldpostcode'] = 'Postcode';
 $string['defaultrole'] = 'Default role assignment';
@@ -45,9 +47,9 @@ $string['orderthankyou'] = 'Thank you for your order. Your invoice has been sent
 $string['ordertotal'] = 'Total paid';
 $string['pluginname'] = 'Snipcart';
 $string['pluginname_desc'] = 'The Snipcart module allows you to set up paid courses.  If the cost for any course is zero, then students are not asked to pay for entry.';
-$string['privateapikey'] = 'Snipcart Private API Key';
+$string['privateapikey'] = 'Private API Key';
 $string['privateapikey_desc'] = 'The secret keys are used to access all the data of your Snipcart account. This key should never be visible to anyone that you did not allow to, do not use it as a public key on your website. Those keys give access to our RESTful API.';
-$string['publicapikey'] = 'Snipcart Public API Key';
+$string['publicapikey'] = 'Public API Key';
 $string['publicapikey_desc'] = 'The public API key is the key you need to add on your website. This key can be shared without security issues because it only allows a specific subset of API operations.';
 $string['socialenrolments'] = 'Allow public (social) student enrolments';
 $string['snipcartaccounts'] = 'Snipcart accounts';
