@@ -346,16 +346,29 @@ class enrol_snipcart_plugin extends enrol_plugin {
     /**
      * Get a Snipcart order using the order token by calling their API
      *
-     * @param string $token
+     * @param array $order
      *
      * @return string[] - array containing the validated order
      */
-    public function snipcart_get_order($token) {
+    public function snipcart_get_order($order) {
+        
+        $instance = $this->snipcart_get_instance_from_itemid($order['content']['items'][0]['id']);
+        $currency = $instance->currency;
+        $token = $order['content']['token'];
+        
+        //error_log('order: ' . print_r($order, true));
+        //error_log('currency: ' . $currency);
+        //error_log('token: ' . $token);
+        
+        $manager = get_snipcartaccounts_manager();
+        $privateapikey = $manager->get_snipcartaccount_info($currency, 'privateapikey');
+        
         // Open a connection back to Snipcart to validate the data
         $c = new curl();
         $headers[] = 'Accept: application/json';
-        $headers[] = 'Authorization: Basic ' . base64_encode($this->get_config('privateapikey') . ':');
+        $headers[] = 'Authorization: Basic ' . base64_encode($privateapikey . ':');
         $c->setHeader($headers);
+        die('headers: ' . print_r($headers, true));
         $result = $c->get("https://app.snipcart.com/api/orders/{$token}");
         
         $snipcartorder =  json_decode($result, true);

@@ -22,6 +22,8 @@ $order = required_param('order', PARAM_ALPHANUMEXT);
 
 $plugin = enrol_get_plugin('snipcart');
 
+// todo: Must update this to allow the get order function to access the currency used.
+
 $validatedorder = $plugin->snipcart_get_order($order);
 
 $userid = $USER->id;  // Owner of the page

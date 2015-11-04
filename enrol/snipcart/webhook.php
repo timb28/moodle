@@ -42,7 +42,7 @@ switch ($body['eventName']) {
     case 'order.completed':
         $plugin = enrol_get_plugin('snipcart');
         
-        $validatedorder = $plugin->snipcart_get_order($body['content']['token']);
+        $validatedorder = $plugin->snipcart_get_order($body);
         
 // todo: remove         $validatedorder = $body['content']; // todo: remove after local testing
         
@@ -64,7 +64,7 @@ switch ($body['eventName']) {
     case 'order.status.changed':
         $plugin = enrol_get_plugin('snipcart');
         
-        $validatedorder = $plugin->snipcart_get_order($body['content']['token']);
+        $validatedorder = $plugin->snipcart_get_order($body);
         
 // todo: remove        $validatedorder = $body['content']; // todo: remove after local testing
         
