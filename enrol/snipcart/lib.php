@@ -264,7 +264,6 @@ class enrol_snipcart_plugin extends enrol_plugin {
             $user = $USER;
             $plugin = enrol_get_plugin('snipcart');
             $userid = $USER->id;
-            $courseid = $course->id;
             $enrolid = $enrol->id;
         
             include($CFG->dirroot.'/enrol/snipcart/enrol.html');

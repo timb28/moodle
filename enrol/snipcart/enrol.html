@@ -11,7 +11,7 @@
  
 defined('MOODLE_INTERNAL') || die();
 
-$context = context_course::instance($courseid);
+$context = context_course::instance($course->id);
 
 $params = array('uid' => $userid,
                 'eid' => $enrolid);

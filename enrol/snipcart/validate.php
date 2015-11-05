@@ -25,7 +25,7 @@ $userid     = required_param('uid', PARAM_INT);
 $enrolid    = required_param('eid',  PARAM_INT);
 
 $user = $DB->get_record('user', array('id'=>$userid));
-$enrol = $DB->get_record('enrol', array('id'=>$instanceid));
+$enrol = $DB->get_record('enrol', array('id'=>$enrolid));
 $course = $DB->get_record('course', array('id'=>$enrol->courseid));
 $cost = $enrol->cost;
 
