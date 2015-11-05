@@ -22,26 +22,27 @@ if (isguestuser()) {
     redirect(new moodle_url('/', array('redirect' => 0)));
 }
 
-$token = required_param('order', PARAM_ALPHANUMEXT);
+$ordertoken = required_param('order', PARAM_ALPHANUMEXT);
 $enrolid = required_param('eid', PARAM_INT);
 
-$plugin = enrol_get_plugin('snipcart');
+if (! $enrol = $DB->get_record('enrol', array('id'=>$enrolid))) {
+    header('HTTP/1.1 400 BAD REQUEST');
+    throw new moodle_exception('snipcartinvalidorderror', 'enrol_snipcart', null, array('token'=>$token, 'currency'=>$currency));
+}
 
-$enrol = $DB->get_record('enrol', array('id'=>$enrolid));
-
-$validatedorder = $plugin->snipcart_get_order_from_token_and_currency($token, $enrol->currency);
+$snipcartorder = new snipcartorder($ordertoken, $enrol->currency);
 
 $userid = $USER->id;  // Owner of the page
 $context = context_system::instance();
 
-$PAGE->set_url('/enrol/snipcart/confirmed.php', array('order'=>$token, 'eid'=>$enrolid));
+$PAGE->set_url('/enrol/snipcart/confirmed.php', array('order'=>$ordertoken, 'eid'=>$enrolid));
 $PAGE->set_pagelayout('mydashboard');
 $PAGE->blocks->add_region('content');
 $PAGE->set_cacheable(false);
 $PAGE->set_context($context);
 
 $ordermessage = '';
-switch ($validatedorder['status']) {
+switch ($snipcartorder->status) {
     case 'Processed':
         $ordermessage = get_string('orderthankyou', 'enrol_snipcart');
         break;
@@ -74,16 +75,12 @@ echo $OUTPUT->header();
 $totalpaid = 0;
 $ordercurrency = '';
 
-foreach($validatedorder['items'] as $item) { 
+foreach($snipcartorder->items as $item) { 
     $coursename = $item['name'];
     $courseprice = $item['totalPrice'];
+    $courselink = $item['courselink'];
     
-    $orderinstance = $plugin->snipcart_get_instance_from_itemid($item['id']);
-    $course = $plugin->snipcart_get_course_from_itemid($item['id']);
-    $courselink = new moodle_url('/course/view.php', array('id' => $course->id));
-    $ordercurrency = $orderinstance->currency; // All order items use the same currency
-
-    $localisedcost = $plugin->get_localised_currency($ordercurrency, format_float($courseprice, 2, true));
+    $localisedcost = $snipcartorder->plugin->get_localised_currency($snipcartorder->currency, format_float($courseprice, 2, true));
     $totalpaid+= $courseprice;
 ?>
 
@@ -96,7 +93,7 @@ foreach($validatedorder['items'] as $item) {
 
 }
 
-$localisedtotalpaid = $plugin->get_localised_currency($ordercurrency, format_float($totalpaid, 2, true));
+$localisedtotalpaid = $snipcartorder->plugin->get_localised_currency($ordercurrency, format_float($totalpaid, 2, true));
 
 ?>
 

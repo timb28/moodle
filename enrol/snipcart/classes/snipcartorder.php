@@ -40,7 +40,7 @@ class snipcartorder {
         $this->order        = $this->retrieve_order($ordertoken, $currency);
         $this->currency     = $currency;
         
-        $this->items        = $this->order['items'];
+        $this->items        = $this->create_items();
         $this->ordertoken   = $this->order['token'];
         $this->plugin       = enrol_get_plugin('snipcart');
         $this->status       = $this->order['status'];
@@ -72,13 +72,41 @@ class snipcartorder {
     }
     
     /**
+     * Create extra item details
+     *
+     * @return string[] array of items with extra information
+     */
+    private function create_items() {
+        global $DB;
+        
+        $items = '';
+        
+        foreach ($this->order['items'] as $item) {
+            
+            $itemid = explode("-", $item['id']);
+        
+            if (! $enrol = $DB->get_record('enrol', array('id'=>$itemid[1])) ) {
+                $this->plugin->message_error_to_admin("Not a valid enrol id", print_r($this->order, true));
+                header('HTTP/1.1 400 BAD REQUEST');
+                die;
+            }
+        
+            $item['courselink'] = new \moodle_url('/course/view.php', array('id' => $enrol->courseid));
+            
+            $items[] = $item;
+        }
+        
+        return $items;
+    }
+    
+    /**
      * Get a Snipcart order using the order
      *
      * @param array $ordertoretrieve
      *
      * @return string[] - array containing the validated order
      */
-    public function retrieve_order($ordertoken, $currency) {
+    private function retrieve_order($ordertoken, $currency) {
         
         $manager = get_snipcartaccounts_manager();
         $privateapikey = $manager->get_snipcartaccount_info($currency, 'privateapikey');

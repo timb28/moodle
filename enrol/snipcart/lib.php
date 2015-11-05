@@ -370,7 +370,6 @@ class enrol_snipcart_plugin extends enrol_plugin {
         $itemid = explode('-', $order['content']['items'][0]['id']);
         
         if (! $enrol = $DB->get_record('enrol', array('id'=>$itemid[1]))) {
-            // this order can't be found on Snipcart
             header('HTTP/1.1 400 BAD REQUEST');
             throw new moodle_exception('snipcartinvalidorderror', 'enrol_snipcart', null, array('token'=>$token, 'currency'=>$currency));
             die;
