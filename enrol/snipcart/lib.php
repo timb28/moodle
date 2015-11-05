@@ -504,7 +504,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
      * Enrols student in the course they purchased
      *
      * @param stdClass $user to be enrolled
-     * @param stdClass $enrol
+     * @param stdClass $enrol instance
      * @param string $ordertoken of the order for the event log
      *
      * @return stdClass Moodle course
@@ -544,54 +544,31 @@ class enrol_snipcart_plugin extends enrol_plugin {
     /**
      * Unenrols student in the course they purchased when the order is cancelled
      *
-     * @param string[] $orderitem
+     * @param stdClass $user to be enrolled
+     * @param stdClass $enrol instance
+     * @param string $ordertoken of the order for the event log
      *
      * @return stdClass Moodle course
      */
-    public function snipcart_unenrol_user($orderitem) {
+    public function snipcart_unenrol_user($user, $enrol, $ordertoken) {
         global $DB;
         
-        $oids = explode("-", $orderitem['id']);
+        $course = $DB->get_record("course", array('id'=>$enrol->courseid));
         
-        /// get the user and course records
-
-        if (! $user = $DB->get_record("user", array("id"=>$oids[0]))) {
-            $this->message_error_to_admin("Not a valid user id", $orderitem);
-            header('HTTP/1.1 400 BAD REQUEST');
-            die;
-        }
-
-        if (! $course = $DB->get_record("course", array("id"=>$oids[1]))) {
-            $this->message_error_to_admin("Not a valid course id", $orderitem);
-            header('HTTP/1.1 400 BAD REQUEST');
-            die;
-        }
-
-        if (! $context = context_course::instance($course->id, IGNORE_MISSING)) {
-            $this->message_error_to_admin("Not a valid context id", $orderitem);
-            header('HTTP/1.1 400 BAD REQUEST');
-            die;
-        }
-
-        if (! $plugin_instance = $DB->get_record("enrol", array("id"=>$oids[2], "status"=>0))) {
-            $this->message_error_to_admin("Not a valid instance id", $orderitem);
-            header('HTTP/1.1 400 BAD REQUEST');
-            die;
-        }
+        $context = context_course::instance($course->id, IGNORE_MISSING);
         
         // Log the order cancellation
-        $context = \context_course::instance($course->id);
         $event = \enrol_snipcart\event\snipcartorder_cancelled::create(array(
             'context' => $context,
             'userid' => $user->id,
             'courseid' => $course->id,
-            'objectid' => $plugin_instance->id,
-            'other' => $orderitem['token'],
+            'objectid' => $enrol->id,
+            'other' => $ordertoken,
         ));
         $event->trigger();
 
         // Unenrol the student in each of the courses they purchased
-        return $this->unenrol_user($plugin_instance, $user->id);
+        return $this->unenrol_user($enrol, $user->id);
     }
 
 }

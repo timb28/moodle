@@ -69,21 +69,18 @@ switch ($body['eventName']) {
     case 'order.status.changed':
         $plugin = enrol_get_plugin('snipcart');
         
-        $validatedorder = $plugin->snipcart_get_order($body);
+        $snipcartorder = new snipcartorder($body);
         
-// todo: remove        $validatedorder = $body['content']; // todo: remove after local testing
-        
-        if (empty($validatedorder)) {
+        if (!$snipcartorder->isvalid) {
             error_log('Invalid Snipcart order: ' . print_r($body, true));
-            // Return a valid status code such as 200 OK.
             header('HTTP/1.1 400 BAD REQUEST');
             die;
         }
         
         // Unenrol the student if the order was cancelled
-        if ($validatedorder['status'] == 'Cancelled') {
-            foreach ($validatedorder['items'] as $orderitem) {
-                $plugin->snipcart_unenrol_user($orderitem);
+        if ($snipcartorder->status == 'Cancelled') {
+            foreach ($snipcartorder->enrolments as $enrol) {
+                $plugin->snipcart_unenrol_user($snipcartorder->user, $enrol, $snipcartorder->ordertoken);
             }
         }
         

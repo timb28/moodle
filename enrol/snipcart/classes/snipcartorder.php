@@ -23,6 +23,7 @@ class snipcartorder {
             $order,
             $ordertoken,
             $plugin,
+            $status,
             $user,
             $isvalid = false;
     
@@ -34,10 +35,14 @@ class snipcartorder {
     public function __construct($neworder) {
         global $DB;
         
+        
+        // Call the Snipcart API to get the order using the provided order token
         $this->order        = $this->retrieve_order($neworder);
-        $this->ordertoken   = $this->order['token'];
+        
         $this->items        = $this->order['items'];
+        $this->ordertoken   = $this->order['token'];
         $this->plugin       = enrol_get_plugin('snipcart');
+        $this->status       = $this->order['status'];
         
         $firstitemids = explode("-", $this->items[0]['id']);
         
