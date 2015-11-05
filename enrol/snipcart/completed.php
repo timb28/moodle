@@ -12,6 +12,8 @@
 
 require('../../config.php');
 
+use enrol_snipcart\snipcartorder;
+
 global $DB;
 
 require_login();

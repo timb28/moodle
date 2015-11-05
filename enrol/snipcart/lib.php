@@ -347,6 +347,39 @@ class enrol_snipcart_plugin extends enrol_plugin {
     }
     
     /**
+     * Get a order token from an order array
+     *
+     * @param array $order as array
+     *
+     * @return string containing the order token
+     */
+    public function snipcart_get_ordertoken($order) {
+        return $order['content']['token'];
+    }
+    
+    /**
+     * Get a order currency from an order array
+     *
+     * @param array $order as array
+     *
+     * @return string containing the order token
+     */
+    public function snipcart_get_ordercurrency($order) {
+        global $DB;
+        
+        $itemid = explode('-', $order['content']['items'][0]['id']);
+        
+        if (! $enrol = $DB->get_record('enrol', array('id'=>$itemid[1]))) {
+            // this order can't be found on Snipcart
+            header('HTTP/1.1 400 BAD REQUEST');
+            throw new moodle_exception('snipcartinvalidorderror', 'enrol_snipcart', null, array('token'=>$token, 'currency'=>$currency));
+            die;
+        }
+        
+        return $enrol->currency;
+    }
+    
+    /**
      * Get a Snipcart order using the order
      *
      * @param array $order

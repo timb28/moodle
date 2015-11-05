@@ -18,6 +18,7 @@ require_once("classes/snipcartaccounts.php");
 class snipcartorder {
     
     public  $courses,
+            $currency,
             $enrolments,
             $items,
             $order,
@@ -32,12 +33,12 @@ class snipcartorder {
      *
      * @param string[] $neworder with the student and their courses
      */
-    public function __construct($neworder) {
+    public function __construct($ordertoken, $currency) {
         global $DB;
         
-        
         // Call the Snipcart API to get the order using the provided order token
-        $this->order        = $this->retrieve_order($neworder);
+        $this->order        = $this->retrieve_order($ordertoken, $currency);
+        $this->currency     = $currency;
         
         $this->items        = $this->order['items'];
         $this->ordertoken   = $this->order['token'];
@@ -50,14 +51,16 @@ class snipcartorder {
             
             // The user is the same for every item
             if (empty($this->user)) {
-                if (!($this->user = $DB->get_record("user", array("id"=>$itemid[0])))) {
+// todo               if (!($this->user = $DB->get_record("user", array("id"=>$itemid[0])))) {
+                if (!($this->user = $DB->get_record("user", array("id"=>3862)))) {
                     $this->plugin->message_error_to_admin("Not a valid user id", print_r($this->order, true));
                     header('HTTP/1.1 400 BAD REQUEST');
                     die;
                 }
             }
             
-            if (! $enrol = $DB->get_record('enrol', array('id'=>$itemid[1], 'status'=>0)) ) {
+// todo           if (! $enrol = $DB->get_record('enrol', array('id'=>$itemid[1], 'status'=>0)) ) {
+            if (! $enrol = $DB->get_record('enrol', array('id'=>218, 'status'=>0)) ) {
                 $this->plugin->message_error_to_admin("Not a valid enrol id", print_r($this->order, true));
                 header('HTTP/1.1 400 BAD REQUEST');
                 die;
@@ -75,18 +78,7 @@ class snipcartorder {
      *
      * @return string[] - array containing the validated order
      */
-    public function retrieve_order($ordertoretrieve) {
-        global $DB;
-        
-// todo: remove after local debugging:
-        $this->isvalid = true; return $ordertoretrieve['content'];
-        
-        $itemid = explode("-", $ordertoretrieve['content']['items'][0]['id']);
-        
-        $enrol = $DB->get_record('enrol', array('id'=>$itemid[1]));
-        
-        $currency = $enrol->currency;
-        $token = $ordertoretrieve['content']['token'];
+    public function retrieve_order($ordertoken, $currency) {
         
         $manager = get_snipcartaccounts_manager();
         $privateapikey = $manager->get_snipcartaccount_info($currency, 'privateapikey');
@@ -96,14 +88,14 @@ class snipcartorder {
         $headers[] = 'Accept: application/json';
         $headers[] = 'Authorization: Basic ' . base64_encode($privateapikey . ':');
         $c->setHeader($headers);
-        $result = $c->get("https://app.snipcart.com/api/orders/{$token}");
+        $result = $c->get("https://app.snipcart.com/api/orders/{$ordertoken}");
         
         $snipcartorder =  json_decode($result, true);
         
         if (is_null($snipcartorder) or !isset($snipcartorder['status'])) {
             // this order can't be found on Snipcart
             header('HTTP/1.1 400 BAD REQUEST');
-            throw new moodle_exception('snipcartinvalidorderror', 'enrol_snipcart', null, array('token'=>$token, 'currency'=>$currency));
+            throw new \moodle_exception('snipcartinvalidorderror', 'enrol_snipcart', null, array('token'=>$ordertoken, 'currency'=>$currency));
         }
         
         $this->isvalid = true;

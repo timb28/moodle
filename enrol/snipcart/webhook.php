@@ -32,20 +32,23 @@ if (empty($json) or !empty($_GET)) {
     return;
 }
 
-$body = json_decode($json, true);
+$order = json_decode($json, true);
 
-if (is_null($body) or !isset($body['eventName'])) {
+if (is_null($order) or !isset($order['eventName'])) {
     // When something goes wrong, return an invalid status code
     // such as 400 BadRequest.
     header('HTTP/1.1 400 Bad Request');
     return;
 }
 
-switch ($body['eventName']) {
+switch ($order['eventName']) {
     case 'order.completed':
         $plugin = enrol_get_plugin('snipcart');
         
-        $snipcartorder = new snipcartorder($body);
+        $ordertoken = $plugin->snipcart_get_ordertoken($order);
+        $currency   = $plugin->snipcart_get_ordercurrency($order);
+        
+        $snipcartorder = new snipcartorder($ordertoken, $currency);
         
         if (!$snipcartorder->isvalid) {
             error_log('Invalid Snipcart order: ' . print_r($body, true));
@@ -69,13 +72,18 @@ switch ($body['eventName']) {
     case 'order.status.changed':
         $plugin = enrol_get_plugin('snipcart');
         
-        $snipcartorder = new snipcartorder($body);
+        $ordertoken = $plugin->snipcart_get_ordertoken($order);
+        $currency   = $plugin->snipcart_get_ordercurrency($order);
+        
+        $snipcartorder = new snipcartorder($ordertoken, $currency);
         
         if (!$snipcartorder->isvalid) {
             error_log('Invalid Snipcart order: ' . print_r($body, true));
             header('HTTP/1.1 400 BAD REQUEST');
             die;
         }
+        
+        error_log('changed: ' . print_r($snipcartorder, true));
         
         // Unenrol the student if the order was cancelled
         if ($snipcartorder->status == 'Cancelled') {
