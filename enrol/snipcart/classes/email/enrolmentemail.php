@@ -82,7 +82,7 @@ class enrolmentemail {
         $email->customheaders   = $this->get_email_headers();
         $email->subject         = get_string('ordercompleteemailsubject', 'enrol_snipcart');
         
-        $email->text            = get_string('ordercompleteemailheader', 'enrol_snipcart')
+        $email->text            = get_string('ordercompleteemailheader', 'enrol_snipcart', array('firstname'=>$this->order->user->firstname))
                                 . $this->get_course_links()
                                 . get_string('ordercompleteemailfooter', 'enrol_snipcart');
         

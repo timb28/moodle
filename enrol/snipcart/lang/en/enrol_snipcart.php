@@ -65,6 +65,8 @@ $string['status_desc'] = 'Allow users to use Snipcart to enrol into a course by 
 
 $string['ordercompleteemailsubject']   = 'Start you Academy Real Estate Training courses now';
 $string['ordercompleteemailheader']     = '
+Hi {$a->firstname}
+
 Your Academy Real Estate online course(s) are ready to start';
 
 $string['ordercompleteemailfooter'] = '

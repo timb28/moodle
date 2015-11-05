@@ -12,6 +12,7 @@
 namespace enrol_snipcart;
 
 require_once($CFG->libdir . '/filelib.php'); // curl
+require_once("lib.php");
 require_once("classes/snipcartaccounts.php");
 
 class snipcartorder {
@@ -20,6 +21,7 @@ class snipcartorder {
             $items,
             $order,
             $ordertoken,
+            $plugin,
             $user,
             $isvalid = false;
     
@@ -34,10 +36,15 @@ class snipcartorder {
         $this->order        = $this->retrieve_order($neworder);
         $this->ordertoken   = $this->order['token'];
         $this->items        = $this->order['items'];
+        $this->plugin       = enrol_get_plugin('snipcart');
         
         $firstitemids = explode("-", $this->items[0]['id']);
         
-        $this->user =  $DB->get_record('user', array('id'=>$firstitemids[0]));
+        if (! $this->user = $DB->get_record("user", array("id"=>$firstitemids[0]))) {
+            $this->plugin->message_error_to_admin("Not a valid user id", print_r($this->order, true));
+            header('HTTP/1.1 400 BAD REQUEST');
+            die;
+        }
         
         foreach ($this->items as $item) {
             $itemid = explode("-", $item['id']);
@@ -99,4 +106,63 @@ class snipcartorder {
         return $this->order['user'][$field];
     }
     
+    
+//    /**
+//     * Enrols the student in the course(s) they purchased
+//     *
+//     * @return bool true if successful
+//     */
+//    public function enrol_user() {
+//        global $DB;
+//        
+//        /// get the user and course records
+//        
+//        foreach ($this->items as $item) {
+//            $itemid = explode("-", $item['id']);
+//            
+//            if (! $course = $DB->get_record("course", array("id"=>$itemid[1]))) {
+//                $this->plugin->message_error_to_admin("Not a valid course id", print_r($this->order, true));
+//                header('HTTP/1.1 400 BAD REQUEST');
+//                die;
+//            }
+//
+//            if (! $context = context_course::instance($course->id, IGNORE_MISSING)) {
+//                $this->plugin->message_error_to_admin("Not a valid context id", print_r($this->order, true));
+//                header('HTTP/1.1 400 BAD REQUEST');
+//                die;
+//            }
+//
+//            if (! $plugin_instance = $DB->get_record("enrol", array("id"=>$itemid[2], "status"=>0))) {
+//                $this->plugin->message_error_to_admin("Not a valid instance id", print_r($this->order, true));
+//                header('HTTP/1.1 400 BAD REQUEST');
+//                die;
+//            }
+//            
+//            if ($plugin_instance->enrolperiod) {
+//                $timestart = time();
+//                $timeend   = $timestart + $plugin_instance->enrolperiod;
+//            } else {
+//                $timestart = 0;
+//                $timeend   = 0;
+//            }
+//
+//            // Log the purchase of the course enrolment
+//            $context = \context_course::instance($course->id);
+//            $event = \enrol_snipcart\event\snipcartorder_completed::create(array(
+//                'context' => $context,
+//                'userid' => $user->id,
+//                'courseid' => $course->id,
+//                'objectid' => $plugin_instance->id,
+//                'other' => $orderitem['token'],
+//            ));
+//            $event->trigger();
+//
+//            // Enrol the student in each of the course they have purchased
+//            $this->plugin->enrol_user($plugin_instance, $user->id, $plugin_instance->roleid, $timestart, $timeend);
+//            
+//        }
+//        
+//        return true;
+//
+//    }
 }
