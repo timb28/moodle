@@ -21,18 +21,18 @@ if (isguestuser()) {
 }
 
 $token = required_param('order', PARAM_ALPHANUMEXT);
-$instanceid = required_param('i', PARAM_INT);
+$enrolid = required_param('eid', PARAM_INT);
 
 $plugin = enrol_get_plugin('snipcart');
 
-$instance = $DB->get_record('enrol', array('id'=>$instanceid));
+$enrol = $DB->get_record('enrol', array('id'=>$enrolid));
 
-$validatedorder = $plugin->snipcart_get_order_from_token_and_currency($token, $instance->currency);
+$validatedorder = $plugin->snipcart_get_order_from_token_and_currency($token, $enrol->currency);
 
 $userid = $USER->id;  // Owner of the page
 $context = context_system::instance();
 
-$PAGE->set_url('/enrol/snipcart/confirmed.php', array('order'=>$token, 'i'=>$instanceid));
+$PAGE->set_url('/enrol/snipcart/confirmed.php', array('order'=>$token, 'eid'=>$enrolid));
 $PAGE->set_pagelayout('mydashboard');
 $PAGE->blocks->add_region('content');
 $PAGE->set_cacheable(false);

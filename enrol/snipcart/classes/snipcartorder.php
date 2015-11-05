@@ -44,28 +44,27 @@ class snipcartorder {
         $this->plugin       = enrol_get_plugin('snipcart');
         $this->status       = $this->order['status'];
         
-        $firstitemids = explode("-", $this->items[0]['id']);
-        
-        if (! $this->user = $DB->get_record("user", array("id"=>$firstitemids[0]))) {
-            $this->plugin->message_error_to_admin("Not a valid user id", print_r($this->order, true));
-            header('HTTP/1.1 400 BAD REQUEST');
-            die;
-        }
-        
+        // Get the user and enrolment from the order item: {userid}-{enrolid}
         foreach ($this->items as $item) {
             $itemid = explode("-", $item['id']);
             
-            if (! $this->courses[] = $DB->get_record('course', array('id'=>$itemid[1]))) {
-                $this->plugin->message_error_to_admin("Not a valid course id", print_r($this->order, true));
+            // The user is the same for every item
+            if (empty($this->user)) {
+                if (!($this->user = $DB->get_record("user", array("id"=>$itemid[0])))) {
+                    $this->plugin->message_error_to_admin("Not a valid user id", print_r($this->order, true));
+                    header('HTTP/1.1 400 BAD REQUEST');
+                    die;
+                }
+            }
+            
+            if (! $enrol = $DB->get_record('enrol', array('id'=>$itemid[1], 'status'=>0)) ) {
+                $this->plugin->message_error_to_admin("Not a valid enrol id", print_r($this->order, true));
                 header('HTTP/1.1 400 BAD REQUEST');
                 die;
             }
             
-            if (! $this->enrolments[] = $DB->get_record('enrol', array('id'=>$itemid[2], 'status'=>0))) {
-                $this->plugin->message_error_to_admin("Not a valid course id", print_r($this->order, true));
-                header('HTTP/1.1 400 BAD REQUEST');
-                die;
-            }
+            $this->enrolments[] = $enrol;
+            $this->courses[]    = $DB->get_record('course', array('id'=>$enrol->courseid));
         }
     }
     
@@ -82,11 +81,11 @@ class snipcartorder {
 // todo: remove after local debugging:
         $this->isvalid = true; return $ordertoretrieve['content'];
         
-        $firstitemids = explode("-", $ordertoretrieve['content']['items'][0]['id']);
+        $itemid = explode("-", $ordertoretrieve['content']['items'][0]['id']);
         
-        $enrolinstance = $DB->get_record('enrol', array('id'=>$firstitemids[2]));
+        $enrol = $DB->get_record('enrol', array('id'=>$itemid[1]));
         
-        $currency = $enrolinstance->currency;
+        $currency = $enrol->currency;
         $token = $ordertoretrieve['content']['token'];
         
         $manager = get_snipcartaccounts_manager();

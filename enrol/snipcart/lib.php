@@ -224,7 +224,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
      * @param stdClass $instance
      * @return string html text, usually a form in a text box
      */
-    public function enrol_page_hook(stdClass $instance) {
+    public function enrol_page_hook(stdClass $enrol) {
         global $CFG, $USER, $OUTPUT, $DB;
         
         // Notify the admin if a user's country is not set (ignore the guest user)
@@ -234,38 +234,38 @@ class enrol_snipcart_plugin extends enrol_plugin {
 
         ob_start();
         
-        if ($DB->record_exists('user_enrolments', array('userid'=>$USER->id, 'enrolid'=>$instance->id))) {
+        if ($DB->record_exists('user_enrolments', array('userid'=>$USER->id, 'enrolid'=>$enrol->id))) {
             return ob_get_clean();
         }
         
-        if ($instance->enrolstartdate != 0 && $instance->enrolstartdate > time()) {
+        if ($enrol->enrolstartdate != 0 && $enrol->enrolstartdate > time()) {
             return ob_get_clean();
         }
 
-        if ($instance->enrolenddate != 0 && $instance->enrolenddate < time()) {
+        if ($enrol->enrolenddate != 0 && $enrol->enrolenddate < time()) {
             return ob_get_clean();
         }
         
-        if (!$this->can_user_access_instance($instance)) {
+        if (!$this->can_user_access_instance($enrol)) {
             return ob_get_clean();
         }
         
-        if ( (float) $instance->cost <= 0 ) {
+        if ( (float) $enrol->cost <= 0 ) {
             $cost = (float) $this->get_config('cost');
         } else {
-            $cost = (float) $instance->cost;
+            $cost = (float) $enrol->cost;
         }
 
         if (abs($cost) < 0.01) { // no cost, other enrolment methods (instances) should be used
             echo '<p>'.get_string('nocost', 'enrol_snipcart').'</p>';
         } else {
 
-            $course = $DB->get_record('course', array('id'=>$instance->courseid));
+            $course = $DB->get_record('course', array('id'=>$enrol->courseid));
             $user = $USER;
             $plugin = enrol_get_plugin('snipcart');
             $userid = $USER->id;
             $courseid = $course->id;
-            $instanceid = $instance->id;
+            $enrolid = $enrol->id;
         
             include($CFG->dirroot.'/enrol/snipcart/enrol.html');
         }

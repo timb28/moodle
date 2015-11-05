@@ -22,19 +22,18 @@ require_once("lib.php");
 $plugin = enrol_get_plugin('snipcart');
 
 $userid     = required_param('uid', PARAM_INT);
-$courseid   = required_param('cid', PARAM_INT);
-$instanceid = required_param('id',  PARAM_INT);
+$enrolid    = required_param('eid',  PARAM_INT);
 
 $user = $DB->get_record('user', array('id'=>$userid));
-$course = $DB->get_record('course', array('id'=>$courseid));
-$instance = $DB->get_record('enrol', array('id'=>$instanceid));
-$cost = $instance->cost;
+$enrol = $DB->get_record('enrol', array('id'=>$instanceid));
+$course = $DB->get_record('course', array('id'=>$enrol->courseid));
+$cost = $enrol->cost;
 
         
-if ( (float) $instance->cost <= 0 ) {
-    $cost = (float) $instance->get_config('cost');
+if ( (float) $enrol->cost <= 0 ) {
+    $cost = (float) $enrol->get_config('cost');
 } else {
-    $cost = (float) $instance->cost;
+    $cost = (float) $enrol->cost;
 }
 
 ?>

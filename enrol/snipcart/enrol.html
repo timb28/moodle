@@ -14,14 +14,13 @@ defined('MOODLE_INTERNAL') || die();
 $context = context_course::instance($courseid);
 
 $params = array('uid' => $userid,
-                'cid' => $courseid,
-                'id'  => $instanceid);
+                'eid' => $enrolid);
 $itemurl = str_replace("http://", "https://", new moodle_url("/enrol/snipcart/validate.php", $params));
 
 // Calculate localised and "." cost, make sure we send Snipcart the same value,
 // please note Snipcart expects amount with 2 decimal places and "." separator.
-$snipcart = new \enrol_snipcart_plugin();
-$localisedcost = $snipcart->get_localised_currency($instance->currency, format_float($cost, 2, true));
+$plugin = new \enrol_snipcart_plugin();
+$localisedcost = $plugin->get_localised_currency($enrol->currency, format_float($cost, 2, true));
 $cost = format_float($cost, 2, false);
 
 //Sanitise some fields before building the Snipcart code
@@ -29,13 +28,13 @@ $coursefullname  = format_string($course->fullname, true, array('context'=>$cont
 $courseshortname = format_string($course->shortname, true, array('context' => $context));
 
 $manager = get_snipcartaccounts_manager();
-$publicapikey = $manager->get_snipcartaccount_info($instance->currency, 'publicapikey');
+$publicapikey = $manager->get_snipcartaccount_info($enrol->currency, 'publicapikey');
 
 ?>
 <div align="center">
 
 <p><?php print_string("paymentrequired") ?></p>
-<p><b><?php echo get_string("cost").": {$instance->currency} $localisedcost"; ?></b></p>
+<p><b><?php echo get_string("cost").": {$enrol->currency} $localisedcost"; ?></b></p>
 
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
@@ -54,7 +53,7 @@ $publicapikey = $manager->get_snipcartaccount_info($instance->currency, 'publica
 
 <a href='#'
     class='snipcart-add-item btn btn-primary'
-    data-item-id='<?php echo "{$user->id}-{$course->id}-{$instance->id}" ?>'
+    data-item-id='<?php echo "{$user->id}-{$enrol->id}" ?>'
     data-item-name='<?php p($coursefullname) ?>'
     data-item-price='<?php p($cost) ?>'
     data-item-max-quantity='1'
@@ -100,7 +99,7 @@ if ($USER === $user) {
     
     Snipcart.execute('bind', 'order.completed', function (order) {
         var path = location.pathname.substring(0, location.pathname.lastIndexOf("/"));
-        var url = path + '/snipcart/completed.php?order=' + order.token + '&i=<?php p($instance->id) ?>';
+        var url = path + '/snipcart/completed.php?order=' + order.token + '&eid=<?php p($enrol->id) ?>';
         window.location.href = url;
     });
 
