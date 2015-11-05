@@ -503,57 +503,34 @@ class enrol_snipcart_plugin extends enrol_plugin {
     /**
      * Enrols student in the course they purchased
      *
-     * @param string[] $orderitem
+     * @param stdClass $user to be enrolled
+     * @param stdClass $enrol
+     * @param string $ordertoken of the order for the event log
      *
      * @return stdClass Moodle course
      */
-    public function snipcart_enrol_user($orderitem) {
+    public function snipcart_enrol_user($user, $enrol, $ordertoken) {
         global $DB;
         
-        $oids = explode("-", $orderitem['id']);
+        $course = $DB->get_record("course", array('id'=>$enrol->courseid));
         
-        /// get the user and course records
+        $context = context_course::instance($course->id, IGNORE_MISSING);
 
-        if (! $user = $DB->get_record("user", array("id"=>$oids[0]))) {
-            $this->message_error_to_admin("Not a valid user id", $orderitem);
-            header('HTTP/1.1 400 BAD REQUEST');
-            die;
-        }
-
-        if (! $course = $DB->get_record("course", array("id"=>$oids[1]))) {
-            $this->message_error_to_admin("Not a valid course id", $orderitem);
-            header('HTTP/1.1 400 BAD REQUEST');
-            die;
-        }
-
-        if (! $context = context_course::instance($course->id, IGNORE_MISSING)) {
-            $this->message_error_to_admin("Not a valid context id", $orderitem);
-            header('HTTP/1.1 400 BAD REQUEST');
-            die;
-        }
-
-        if (! $plugin_instance = $DB->get_record("enrol", array("id"=>$oids[2], "status"=>0))) {
-            $this->message_error_to_admin("Not a valid instance id", $orderitem);
-            header('HTTP/1.1 400 BAD REQUEST');
-            die;
-        }
-        
-        if ($plugin_instance->enrolperiod) {
+        if ($enrol->enrolperiod) {
             $timestart = time();
-            $timeend   = $timestart + $plugin_instance->enrolperiod;
+            $timeend   = $timestart + $enrol->enrolperiod;
         } else {
             $timestart = 0;
             $timeend   = 0;
         }
         
         // Log the purchase of the course enrolment
-        $context = \context_course::instance($course->id);
         $event = \enrol_snipcart\event\snipcartorder_completed::create(array(
             'context' => $context,
             'userid' => $user->id,
             'courseid' => $course->id,
-            'objectid' => $plugin_instance->id,
-            'other' => $orderitem['token'],
+            'objectid' => $enrol->id,
+            'other' => $ordertoken,
         ));
         $event->trigger();
 
@@ -561,7 +538,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
         // Todo: Email the student a link to get started
                 
         // Enrol the student in each of the course they have purchased
-        return $this->enrol_user($plugin_instance, $user->id, $plugin_instance->roleid, $timestart, $timeend);
+        return $this->enrol_user($enrol, $user->id, $enrol->roleid, $timestart, $timeend);
     }
     
     /**

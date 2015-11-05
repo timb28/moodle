@@ -18,6 +18,7 @@ require_once("classes/snipcartaccounts.php");
 class snipcartorder {
     
     public  $courses,
+            $enrolments,
             $items,
             $order,
             $ordertoken,
@@ -48,7 +49,18 @@ class snipcartorder {
         
         foreach ($this->items as $item) {
             $itemid = explode("-", $item['id']);
-            $this->courses[] = $DB->get_record('course', array('id'=>$itemid[1]));
+            
+            if (! $this->courses[] = $DB->get_record('course', array('id'=>$itemid[1]))) {
+                $this->plugin->message_error_to_admin("Not a valid course id", print_r($this->order, true));
+                header('HTTP/1.1 400 BAD REQUEST');
+                die;
+            }
+            
+            if (! $this->enrolments[] = $DB->get_record('enrol', array('id'=>$itemid[2], 'status'=>0))) {
+                $this->plugin->message_error_to_admin("Not a valid course id", print_r($this->order, true));
+                header('HTTP/1.1 400 BAD REQUEST');
+                die;
+            }
         }
     }
     

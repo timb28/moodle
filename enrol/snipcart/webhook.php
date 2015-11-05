@@ -53,8 +53,8 @@ switch ($body['eventName']) {
             die;
         }
         
-        foreach ($snipcartorder->items as $orderitem) {
-            $plugin->snipcart_enrol_user($orderitem);
+        foreach ($snipcartorder->enrolments as $enrol) {
+            $plugin->snipcart_enrol_user($snipcartorder->user, $enrol, $snipcartorder->ordertoken);
         }
   
         // Notify the user that they are now enrolled in the courses they purchased
