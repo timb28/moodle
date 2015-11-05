@@ -227,8 +227,8 @@ class enrol_snipcart_plugin extends enrol_plugin {
     public function enrol_page_hook(stdClass $instance) {
         global $CFG, $USER, $OUTPUT, $DB;
         
-        // Notify the admin if a user's country is not set
-        if (!($USER->country)) {
+        // Notify the admin if a user's country is not set (ignore the guest user)
+        if (!($USER->country) and !($USER->id == 1)) {
             $this->message_error_to_admin('A Moodle user cannot purchase a course because their country is not set', $USER);
         }
 
