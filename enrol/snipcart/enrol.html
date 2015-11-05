@@ -45,6 +45,13 @@ $publicapikey = $manager->get_snipcartaccount_info($instance->currency, 'publica
 
 <link type="text/css" href="https://cdn.snipcart.com/themes/base/snipcart.min.css" rel="stylesheet" />
 
+<noscript>
+  <div class="alert alert-block alert-error">
+      <p><strong><?= get_string('warning', 'moodle') ?></strong> <?= get_string('javascriptrequired', 'group') ?></p>
+      <p><?= get_string('nojavascript', 'enrol_snipcart') ?></p>
+  </div>
+</noscript>
+
 <a href='#'
     class='snipcart-add-item btn btn-primary'
     data-item-id='<?php echo "{$user->id}-{$course->id}-{$instance->id}" ?>'

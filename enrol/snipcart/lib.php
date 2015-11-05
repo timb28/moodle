@@ -226,7 +226,6 @@ class enrol_snipcart_plugin extends enrol_plugin {
      */
     public function enrol_page_hook(stdClass $instance) {
         global $CFG, $USER, $OUTPUT, $DB;
-        // Todo: Build product page.
         
         ob_start();
 

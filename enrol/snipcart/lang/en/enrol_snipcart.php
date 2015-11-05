@@ -37,6 +37,7 @@ $string['eventsnipcartordercancelled'] = 'Snipcart order cancelled';
 $string['expiredaction'] = 'Enrolment expiration action';
 $string['expiredaction_help'] = 'Select action to carry out when user enrolment expires. Please note that some user data and settings are purged from course during course unenrolment.';
 $string['nocost'] = 'There is no cost associated with enrolling in this course.';
+$string['nojavascript'] = 'Please follow these <a href="http://www.enable-javascript.com/" target="_blank">instructions to enable JavaScript in your web browser</a>.';
 $string['ordercomplete'] = 'Order Complete';
 $string['ordercancelled'] = 'Thank you for your order, it has been cancelled. Your course enrolments purchased on this order have also been cancelled.';
 $string['orderdisputed'] = 'Thank you for your order, it\'s currently being disputed. We\'ll email you when the dispute is resolved';
