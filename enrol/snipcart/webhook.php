@@ -14,6 +14,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use enrol_snipcart\snipcartorder;
 use enrol_snipcart\email\enrolmentemail;
 
 // Disable moodle specific debug messages and any errors in output,
@@ -44,28 +45,24 @@ switch ($body['eventName']) {
     case 'order.completed':
         $plugin = enrol_get_plugin('snipcart');
         
-// todo: remove        $validatedorder = $plugin->snipcart_get_order($body);
+        $snipcartorder = new snipcartorder($body);
         
-        $validatedorder = $body['content']; // todo: remove after local testing
-        
-        if (empty($validatedorder)) {
+        if (!$snipcartorder->isvalid) {
             error_log('Invalid Snipcart order: ' . print_r($body, true));
             header('HTTP/1.1 400 BAD REQUEST');
             die;
         }
         
-        foreach ($validatedorder['items'] as $orderitem) {
+        foreach ($snipcartorder->items as $orderitem) {
 //            $plugin->snipcart_enrol_user($orderitem);
         }
-        
   
         // Notify the user that they are now enrolled in the courses they purchased
-        $email = new enrol_snipcart\email\enrolmentemail($validatedorder,
-                $plugin->snipcart_get_user_from_itemid($validatedorder['items'][0]['id']));
+        $email = new enrol_snipcart\email\enrolmentemail($snipcartorder);
         $email->send_enrolment_email();
 
         // Update the user's address, city and postcode if not set in Moodle
-        $plugin->snipcart_update_user($validatedorder);
+        $plugin->snipcart_update_user($snipcartorder);
         
         break;
         

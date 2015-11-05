@@ -60,3 +60,30 @@ $string['snipcart:unenrol'] = 'Unenrol users from course';
 $string['snipcart:unenrolself'] = 'Unenrol self from the course';
 $string['status'] = 'Allow Snipcart enrolments';
 $string['status_desc'] = 'Allow users to use Snipcart to enrol into a course by default.';
+
+// Email contents
+
+$string['ordercompleteemailsubject']   = 'Start you Academy Real Estate Training courses now';
+$string['ordercompleteemailheader']     = '
+Your Academy Real Estate online course(s) are ready to start';
+
+$string['ordercompleteemailfooter'] = '
+
+-------------------------------------------------------------------
+
+We provide real estate training in class and online for all roles 
+including office administrators, property managers,
+sales consultants, managers, business owners and more.
+
+                          Find us online
+               (http://www.harcourtsacademy.com/)
+-------------------------------------------------------------------
+
+Copyright Harcourts International, All rights reserved.
+
+This email was sent to you because you purchased from our online store.
+
+Our mailing address is:
+31 Amy Johnson Place
+Eagle Farm, QLD 4009
+Australia';

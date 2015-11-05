@@ -443,16 +443,14 @@ class enrol_snipcart_plugin extends enrol_plugin {
     /**
      * Updates the Moodle user account with new information from Snipcart order
      *
-     * @param string[] $validatedorder
+     * @param stdClass $snipcartorder
      *
      * @return bool true if user updated, false otherwise
      */
-    public function snipcart_update_user($validatedorder) {
+    public function snipcart_update_user($snipcartorder) {
         global $DB;
         
-        $ids = explode("-", $validatedorder['items'][0]['id']);
-        
-        $user = $DB->get_record('user', array('id'=>$ids[0]));
+        $user = $snipcartorder->user;
         
         if (empty($user)) {
             return false;
@@ -460,25 +458,25 @@ class enrol_snipcart_plugin extends enrol_plugin {
         
         $userupdated = false;
         
-        if (empty($user->city) and $validatedorder['user']['billingAddressCity'] != 'null') {
-            $user->city = $validatedorder['user']['billingAddressCity'];
+        if (empty($user->city) and $snipcartorder->get_user_field('billingAddressCity') != 'null') {
+            $user->city = $snipcartorder->get_user_field('billingAddressCity');
             $userupdated = true;
         }
         
-        if (empty($user->address) and $validatedorder['user']['billingAddressAddress1'] != 'null') {
-            $user->address = $validatedorder['user']['billingAddressAddress1'] . 
-                    ', ' . $validatedorder['user']['billingAddressAddress2'];
+        if (empty($user->address) and $snipcartorder->get_user_field('billingAddressAddress1') != 'null') {
+            $user->address = $snipcartorder->get_user_field('billingAddressAddress1') . 
+                    ', ' . $snipcartorder->get_user_field('billingAddressAddress2');
             $userupdated = true;
         }
         
         $postcodefieldid = $DB->get_field('user_info_field', 'id', array( 'shortname' => 'postcode'));
         $postcodefield = $DB->get_record('user_info_data', array('userid' => $user->id, 'fieldid' => $postcodefieldid));
         
-        if (empty($postcodefield->data) and $validatedorder['user']['billingAddressPostalCode'] != 'null' ) {
+        if (empty($postcodefield->data) and $snipcartorder->get_user_field('billingAddressPostalCode') != 'null' ) {
             $customfield = new stdClass;
             $customfield->userid = $user->id;
             $customfield->fieldid = $postcodefieldid;
-            $customfield->data = $validatedorder['user']['billingAddressPostalCode'];
+            $customfield->data = $snipcartorder->get_user_field('billingAddressPostalCode');
 
             if ( !$DB->record_exists( 'user_info_data', array( 'userid' => $user->id, 'fieldid' => $postcodefieldid ) ) ) {
                 $DB->insert_record('user_info_data', $customfield);
@@ -489,8 +487,8 @@ class enrol_snipcart_plugin extends enrol_plugin {
             }
         }
         
-        if (empty($user->phone1) and $validatedorder['user']['billingAddressPhone'] != 'null') {
-            $user->phone1 = $validatedorder['user']['billingAddressPhone'];
+        if (empty($user->phone1) and $snipcartorder->get_user_field('billingAddressPhone') != 'null') {
+            $user->phone1 = $snipcartorder->get_user_field('billingAddressPhone');
             $userupdated = true;
         }
         
