@@ -5,8 +5,7 @@ $html = '
     	<!-- NAME: 2 COLUMN -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>*|MC:SUBJECT|*</title>
-        
+        <title>' . $a['subject'] . '</title>
     <style type="text/css">
 		body,#bodyTable,#bodyCell{
 			height:100% !important;
@@ -476,9 +475,9 @@ $html = '
                         
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: center;">
                         
-                            <h2 style="margin: 0;padding: 0;display: block;font-family: Helvetica;font-size: 26px;font-style: normal;font-weight: bold;line-height: 125%;letter-spacing: -.75px;text-align: left;color: #404040 !important;">Thank you for buying an Academy online course</h2>
+                            <h2 style="margin: 0;padding: 0;display: block;font-family: Helvetica;font-size: 26px;font-style: normal;font-weight: bold;line-height: 125%;letter-spacing: -.75px;text-align: left;color: #404040 !important;">' . $a['heading'] . '</h2>
 
-<p style="text-align: left;margin: 1em 0;padding: 0;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;">Use the links below to get started.</p>
+<p style="text-align: left;margin: 1em 0;padding: 0;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;">' . $a['subheading'] . '</p>
 
                         </td>
                     </tr>
@@ -607,7 +606,7 @@ $html = '
                         
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #000000;font-family: Helvetica;font-size: 11px;line-height: 125%;text-align: left;">
                         
-                            <p style="margin: 1em 0;padding: 0;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #000000;font-family: Helvetica;font-size: 11px;line-height: 125%;text-align: left;">Your purchase invoice is attached to a separate order confirmation email. If it hasn\'t arrived, please check your junk or spam email folders.</p>
+                            <p style="margin: 1em 0;padding: 0;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #000000;font-family: Helvetica;font-size: 11px;line-height: 125%;text-align: left;">' . $a['invoice'] . '</p>
 
                         </td>
                     </tr>
@@ -626,14 +625,9 @@ $html = '
                         
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #000000;font-family: Helvetica;font-size: 11px;line-height: 125%;text-align: left;">
                         
-                            <div style="text-align: center;">*|ARCHIVE|*<br>
-<em>Copyright © *|CURRENT_YEAR|* *|LIST:COMPANY|*, All rights reserved.</em><br>
-*|IFNOT:ARCHIVE_PAGE|* *|LIST:DESCRIPTION|*<br>
-<br>
-<a class="utilityLink" href="*|UNSUB|*" style="line-height: 20.7999992370605px;word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #000000;font-weight: normal;text-decoration: underline;" target="_blank">unsubscribe</a><br>
-<br>
+                            <div style="text-align: center;"><em>' . $a['copyright'] . '</em><br>
 <strong>Our mailing address is:</strong><br>
-*|HTML:LIST_ADDRESS_HTML|* *|END:IF|*</div>
+' . $a['mailingaddress'] . '</div>
 
                         </td>
                     </tr>

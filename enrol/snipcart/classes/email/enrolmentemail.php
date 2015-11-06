@@ -72,9 +72,14 @@ class enrolmentemail {
      */
     public function create_email_variables() {
         $a = array(
+            'subject'=>get_string('email_ordercompletesubject', 'enrol_snipcart'),
             'firstname'=>$this->snipcartorder->user->firstname,
-            'subject'=>get_string('ordercompleteemailsubject', 'enrol_snipcart'),
+            'heading'=>get_string('email_ordercompleteheading', 'enrol_snipcart'),
+            'subheading'=>get_string('email_ordercompletesubheading', 'enrol_snipcart'),
+            'invoice'=>get_string('email_ordercompleteinvoice', 'enrol_snipcart'),
             'textcourselinks'=>$this->create_text_course_links(),
+            'copyright'=>get_string('copyright', 'enrol_snipcart'),
+            'mailingaddress'=>get_string('email_mailingaddress', 'enrol_snipcart'),
         );
         return $a;
     }
@@ -104,11 +109,10 @@ class enrolmentemail {
         $email = new \stdClass();
 
         $email->customheaders   = $this->get_email_headers();
-        $email->subject         = get_string('ordercompleteemailsubject', 'enrol_snipcart');
-                               . get_string('ordercompleteemailfooter', 'enrol_snipcart');
+        $email->subject         = get_string('email_ordercompletesubject', 'enrol_snipcart');
         
         $a                      = $this->create_email_variables();
-        $email->text            = get_string('ordercompleteemailtext', 'enrol_snipcart', $a);
+        $email->text            = get_string('email_ordercompletetext', 'enrol_snipcart', $a);
         $email->html            = $this->create_html_email($a);
 
         // Send it from the support email address

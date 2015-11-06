@@ -13,6 +13,7 @@ $string['accountname'] = 'Name';
 $string['addtocart'] = '<i class="icon-shopping-cart icon-white"></i> Add to cart';
 $string['assignrole'] = 'Assign role';
 $string['checkout'] = 'Proceed to Checkout';
+$string['copyright'] = '© Copyright Harcourts International';
 $string['cost'] = 'Enrol cost';
 $string['costerror'] = 'The enrolment cost is not a number';
 $string['crontask'] = 'Snipcart enrolment scheduled tasks';
@@ -63,16 +64,30 @@ $string['status_desc'] = 'Allow users to use Snipcart to enrol into a course by 
 
 // Email contents
 
-$string['ordercompleteemailsubject']   = 'Start you Academy Real Estate Training courses now';
-$string['ordercompleteemailtext']     = '
+$string['email_ordercompletesubject']      = 'Start you Academy Real Estate Training courses now';
+$string['email_ordercompleteheading']      = 'Thank you for buying an Academy online course';
+$string['email_ordercompletesubheading']   = 'Your online training is ready to start';
+$string['email_ordercompleteinvoice']      = 'Your purchase invoice is attached to a separate order confirmation email. If it hasn\'t arrived, please check your junk or spam email folders.';
+$string['email_aboutus']                   = 'We provide real estate training in class and online for all roles including office administrators, property managers, sales consultants, managers, business owners and more.';
+$string['email_findus']                    = '<a href="http://www.harcourtsacademy.com/">Find us online</a>';
+$string['email_footer']                    = 'This email was sent to you because you purchased from our online store.';
+$string['email_mailingaddressheader']      = 'Our mailing address is:';
+$string['email_mailingaddress']            = '31 Amy Johnson Place Eagle Farm, QLD 4009 Australia';
+
+$string['email_ordercompletetext']              = '
 Hi {$a->firstname}
 
-Your Academy Real Estate Training online course(s) are ready to start
+Thank you for buying an Academy online course.
+
+Your online training is ready to start
 {$a->textcourselinks}
+
+Your purchase invoice is attached to a separate order confirmation email.
+If it hasn\'t arrived, please check your junk or spam email folders.
 
 -------------------------------------------------------------------
 
-We provide real estate training in class and online for all roles 
+We provide real estate training in class and online for all roles
 including office administrators, property managers,
 sales consultants, managers, business owners and more.
 
@@ -80,7 +95,7 @@ sales consultants, managers, business owners and more.
                (http://www.harcourtsacademy.com/)
 -------------------------------------------------------------------
 
-Copyright Harcourts International, All rights reserved.
+(c) Copyright Harcourts International
 
 This email was sent to you because you purchased from our online store.
 
