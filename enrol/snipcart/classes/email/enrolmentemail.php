@@ -175,6 +175,7 @@ class enrolmentemail {
     public function create_email_variables() {
         $a = array(
             'subject'=>get_string('email_ordercompletesubject', 'enrol_snipcart'),
+            'logourl'=> new \moodle_url('/enrol/snipcart/pix/logo.png'),
             'firstname'=>$this->snipcartorder->user->firstname,
             'heading'=>get_string('email_ordercompleteheading', 'enrol_snipcart'),
             'subheading'=>get_string('email_ordercompletesubheading', 'enrol_snipcart'),

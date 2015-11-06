@@ -431,7 +431,7 @@ $html = '
                         
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-family: Helvetica;font-size: 11px;line-height: 125%;text-align: left;">
                         
-                            <div style="text-align: center;"><a href="http://www.harcourtsacademy.com/" style="line-height: 20.7999992370605px;word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-weight: normal;text-decoration: underline;" target="_blank"><img align="none" height="40" src="https://gallery.mailchimp.com/7eae2f154fe18e4b458689ab2/images/da43700b-31e0-4f0c-b252-3580f1e6079c.png" style="opacity: 0.9;max-width: 146px;height: 40px;width: 121px;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="121"></a></div>
+                            <div style="text-align: center;"><a href="http://www.harcourtsacademy.com/" style="line-height: 20.7999992370605px;word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-weight: normal;text-decoration: underline;" target="_blank"><img align="none" height="40" src="' . $a['logourl'] . '" style="opacity: 0.9;max-width: 146px;height: 40px;width: 121px;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="121"></a></div>
 
                         </td>
                     </tr>
