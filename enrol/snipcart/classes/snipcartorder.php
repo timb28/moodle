@@ -25,6 +25,8 @@ class snipcartorder {
             $ordertoken,
             $plugin,
             $status,
+            $totalprice,
+            $taxes,
             $user,
             $isvalid = false;
     
@@ -44,6 +46,8 @@ class snipcartorder {
         $this->items        = $this->create_items();
         $this->ordertoken   = $this->order['token'];
         $this->plugin       = enrol_get_plugin('snipcart');
+        $this->taxes        = $this->order['taxes'];
+        $this->totalprice   = $this->order['finalGrandTotal'];
         $this->status       = $this->order['status'];
         
         // Get the user and enrolment from the order item: {userid}-{enrolid}

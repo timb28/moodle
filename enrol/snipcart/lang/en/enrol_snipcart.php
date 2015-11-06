@@ -45,7 +45,7 @@ $string['orderdisputed'] = 'Thank you for your order, it\'s currently being disp
 $string['orderitem'] = 'Courses Purchased';
 $string['orderpending'] = 'Thank you for your order, it\'s currently being processed. We\'ll email you when it\'s done.';
 $string['orderprice'] = 'Price';
-$string['orderthankyou'] = 'Thank you for your order. Your invoice has been sent to you by email, you should receive it soon.';
+$string['orderthankyou'] = 'Thank you for your order. Your invoice has been sent to you by email.';
 $string['ordertotal'] = 'Total paid';
 $string['pluginname'] = 'Snipcart';
 $string['pluginname_desc'] = 'The Snipcart module allows you to set up paid courses.  If the cost for any course is zero, then students are not asked to pay for entry.';
@@ -64,9 +64,9 @@ $string['status_desc'] = 'Allow users to use Snipcart to enrol into a course by 
 
 // Email contents
 
-$string['email_ordercompletesubject']      = 'Start you Academy Real Estate Training courses now';
-$string['email_ordercompleteheading']      = 'Thank you for buying an Academy online course';
-$string['email_ordercompletesubheading']   = 'Your online training is ready to start';
+$string['email_ordercompletesubject']      = 'Start your Academy Real Estate Training courses now';
+$string['email_ordercompleteheading']      = 'Thanks for registering.';
+$string['email_ordercompletesubheading']   = 'Your online training is ready to start.';
 $string['email_ordercompleteinvoice']      = 'Your purchase invoice is attached to a separate order confirmation email. If it hasn\'t arrived, please check your junk or spam email folders.';
 $string['email_aboutus']                   = 'We provide real estate training in class and online for all roles including office administrators, property managers, sales consultants, managers, business owners and more.';
 $string['email_findus']                    = '<a href="http://www.harcourtsacademy.com/">Find us online</a>';
@@ -77,9 +77,9 @@ $string['email_mailingaddress']            = '31 Amy Johnson Place Eagle Farm, Q
 $string['email_ordercompletetext']              = '
 Hi {$a->firstname}
 
-Thank you for buying an Academy online course.
+Thanks for registering.
 
-Your online training is ready to start
+Your online training is ready to start.
 {$a->textcourselinks}
 
 Your purchase invoice is attached to a separate order confirmation email.

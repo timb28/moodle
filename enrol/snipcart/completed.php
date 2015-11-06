@@ -77,7 +77,6 @@ echo $OUTPUT->header();
 </div>
 <?php
 
-$totalpaid = 0;
 $ordercurrency = '';
 
 foreach($snipcartorder->items as $item) { 
@@ -86,7 +85,6 @@ foreach($snipcartorder->items as $item) {
     $courselink = $item['courselink'];
     
     $localisedcost = $snipcartorder->plugin->get_localised_currency($snipcartorder->currency, format_float($courseprice, 2, true));
-    $totalpaid+= $courseprice;
 ?>
 
 <div class="row-fluid">
@@ -98,9 +96,28 @@ foreach($snipcartorder->items as $item) {
 
 }
 
-$localisedtotalpaid = $snipcartorder->plugin->get_localised_currency($ordercurrency, format_float($totalpaid, 2, true));
+$localisedtotalpaid = $snipcartorder->plugin->get_localised_currency($snipcartorder->currency, format_float($snipcartorder->totalprice, 2, true));
 
 ?>
+
+<hr style="width: 90%;" />
+
+<?php
+
+foreach ($snipcartorder->taxes as $tax) {
+    
+    $localisedtaxcost = $snipcartorder->plugin->get_localised_currency($snipcartorder->currency, format_float($tax['amount'], 2, true));
+?>
+<div class="row-fluid">
+  <div class="span8"><?= $tax['taxName'] ?></div>
+  <div class="span4"><?= $localisedtaxcost ?></div>  
+</div>
+
+<?php
+
+}
+?>
+
 
 <div class="row-fluid">
     <div class="span8"><h5><?= get_string('ordertotal', 'enrol_snipcart') ?></h5></div>
