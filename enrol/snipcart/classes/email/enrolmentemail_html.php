@@ -494,26 +494,7 @@ $html = '
                             </tr>
                             <tr>
                                 <td align="center" valign="top" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                                    <!-- BEGIN COLUMNS // -->
-                                    <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateColumns" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background-color: #FFFFFF;border-top: 0;border-bottom: 0;">
-                                        <tbody><tr>
-                                            <td align="left" valign="top" class="columnsContainer" width="25%" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" class="templateColumn" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;width: 143px;">
-                                                    <tbody><tr>
-                                                        <td valign="top" class="leftColumnContainer" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">' . $a['htmlcourseimages'] . '</td>
-                                                    </tr>
-                                                </tbody></table>
-                                            </td>
-                                            <td align="left" valign="top" class="columnsContainer" width="75%" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" class="templateColumn" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;width: 443px;">
-                                                    <tbody><tr>
-                                                        <td valign="top" class="rightColumnContainer" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">' . $a['htmlcourselinks'] . '</td>
-                                                    </tr>
-                                                </tbody></table>
-                                            </td>
-                                        </tr>
-                                    </tbody></table>
-                                    <!-- // END COLUMNS -->
+                                    ' . $a['htmlcourselist'] . '
                                 </td>
                             </tr>
                             <tr>

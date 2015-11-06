@@ -66,17 +66,23 @@ class enrolmentemail {
     }
     
     /**
-     * Creates the course images for the html email.
+     * Creates the course list for the html email.
      *
      * @return string the course links
      */
-    public function create_html_course_images() {
-        $courseimages = '';
+    public function create_html_course_list() {
+        $courselist = '';
         
         foreach ($this->snipcartorder->courses as $course) {
             $courseurl = new \moodle_url('/course/view.php', array('id'=>$course->id));
             
-            $courseimages .= '<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+            $courselist .= '<!-- BEGIN COLUMNS // -->
+                                    <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateColumns" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background-color: #FFFFFF;border-top: 0;border-bottom: 0;">
+                                        <tbody><tr>
+                                            <td align="left" valign="top" class="columnsContainer" width="25%" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" class="templateColumn" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;width: 143px;">
+                                                    <tbody><tr>
+                                                        <td valign="top" class="leftColumnContainer" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
     <tbody class="mcnTextBlockOuter">
         <tr>
             <td valign="top" class="mcnTextBlockInner" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
@@ -95,24 +101,24 @@ class enrolmentemail {
             </td>
         </tr>
     </tbody>
-</table>';
-        }
-        
-        return $courseimages;
-    }
-    
-    /**
-     * Creates the course links for the html email.
-     *
-     * @return string the course links
-     */
-    public function create_html_course_links() {
-        $courselinks = '';
-        
-        foreach ($this->snipcartorder->courses as $course) {
-            $courseurl = new \moodle_url('/course/view.php', array('id'=>$course->id));
-            
-            $courselinks .= '<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+    <tbody class="mcnTextBlockOuter">
+        <tr>
+            <td valign="top" class="mcnTextBlockInner" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                
+                
+                
+            </td>
+        </tr>
+    </tbody>
+</table></td>
+                                                    </tr>
+                                                </tbody></table>
+                                            </td>
+                                            <td align="left" valign="top" class="columnsContainer" width="75%" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" class="templateColumn" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;width: 443px;">
+                                                    <tbody><tr>
+                                                        <td valign="top" class="rightColumnContainer" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
     <tbody class="mcnTextBlockOuter">
         <tr>
             <td valign="top" class="mcnTextBlockInner" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
@@ -130,10 +136,16 @@ class enrolmentemail {
             </td>
         </tr>
     </tbody>
-</table>';
+</table></td>
+                                                    </tr>
+                                                </tbody></table>
+                                            </td>
+                                        </tr>
+                                    </tbody></table>
+                                    <!-- // END COLUMNS -->';
         }
         
-        return $courselinks;
+        return $courselist;
     }
     
     /**
@@ -149,8 +161,7 @@ class enrolmentemail {
             'subheading'=>get_string('email_ordercompletesubheading', 'enrol_snipcart'),
             'invoice'=>get_string('email_ordercompleteinvoice', 'enrol_snipcart'),
             'textcourselinks'=>$this->create_text_course_links(),
-            'htmlcourseimages'=>$this->create_html_course_images(),
-            'htmlcourselinks'=>$this->create_html_course_links(),
+            'htmlcourselist'=>$this->create_html_course_list(),
             'copyright'=>get_string('copyright', 'enrol_snipcart'),
             'mailingaddress'=>get_string('email_mailingaddress', 'enrol_snipcart'),
         );
