@@ -32,7 +32,7 @@ if (! $enrol = $DB->get_record('enrol', array('id'=>$enrolid))) {
 
 $snipcartorder = new snipcartorder($ordertoken, $enrol->currency);
 
-if ($snipcartoder->user->id != $USER->id) {
+if ($snipcartorder->user->id != $USER->id) {
     header('HTTP/1.1 400 BAD REQUEST');
     throw new moodle_exception('snipcartinvalidorderror', 'enrol_snipcart', null, array('token'=>$ordertoken, 'currency'=>$enrol->currency));
 }

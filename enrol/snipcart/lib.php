@@ -142,8 +142,6 @@ class enrol_snipcart_plugin extends enrol_plugin {
     
     public function get_localised_currency($currency, $cost) {
         
-        global $CFG;
-        
         if (empty($currency) or empty($cost)) {
             return;
         }
@@ -372,103 +370,9 @@ class enrol_snipcart_plugin extends enrol_plugin {
         if (! $enrol = $DB->get_record('enrol', array('id'=>$itemid[1]))) {
             header('HTTP/1.1 400 BAD REQUEST');
             throw new moodle_exception('snipcartinvalidorderror', 'enrol_snipcart', null, array('token'=>$token, 'currency'=>$currency));
-            die;
         }
         
         return $enrol->currency;
-    }
-    
-    /**
-     * Get a Snipcart order using the order
-     *
-     * @param array $order
-     *
-     * @return string[] - array containing the validated order
-     */
-    public function snipcart_get_order($order) {
-        
-        $instance = $this->snipcart_get_instance_from_itemid($order['content']['items'][0]['id']);
-        $currency = $instance->currency;
-        $token = $order['content']['token'];
-        
-        return $this->snipcart_get_order_from_token_and_currency($token, $currency);;
-    }
-    
-    /**
-     * Get a Snipcart order using the order token and currency by calling their API
-     *
-     * @param string $token of the order
-     * @param string $currency of the order
-     *
-     * @return string[] - array containing the validated order
-     */
-    public function snipcart_get_order_from_token_and_currency($token, $currency) {
-        
-        $manager = get_snipcartaccounts_manager();
-        $privateapikey = $manager->get_snipcartaccount_info($currency, 'privateapikey');
-        
-        // Open a connection back to Snipcart to validate the data
-        $c = new curl();
-        $headers[] = 'Accept: application/json';
-        $headers[] = 'Authorization: Basic ' . base64_encode($privateapikey . ':');
-        $c->setHeader($headers);
-        $result = $c->get("https://app.snipcart.com/api/orders/{$token}");
-        
-        $snipcartorder =  json_decode($result, true);
-        
-        if (is_null($snipcartorder) or !isset($snipcartorder['status'])) {
-            // this order can't be found on Snipcart
-            header('HTTP/1.1 400 BAD REQUEST');
-            throw new moodle_exception('snipcartinvalidorderror', 'enrol_snipcart', null, array('token'=>$token, 'currency'=>$currency));
-            die;
-        }
-        
-        return $snipcartorder;
-    }
-    
-    /**
-     * Gets the Moodle course instance for a given Snipcart order
-     *
-     * @param string $itemid
-     *
-     * @return stdClass Moodle course
-     */
-    public function snipcart_get_course_from_itemid($itemid) {
-        global $DB;
-        
-        $ids = explode("-", $itemid);
-        
-        return $DB->get_record('course', array('id'=>$ids[1]));
-    }
-    
-    /**
-     * Gets the Snipcart enrolment instance for a given Snipcart order
-     *
-     * @param string $itemid
-     *
-     * @return stdClass Moodle user
-     */
-    public function snipcart_get_instance_from_itemid($itemid) {
-        global $DB;
-        
-        $ids = explode("-", $itemid);
-        
-        return $DB->get_record('enrol', array('id'=>$ids[2]));
-    }
-    
-    /**
-     * Gets the Moodle user for a given Snipcart order
-     *
-     * @param string $itemid
-     *
-     * @return stdClass Moodle user
-     */
-    public function snipcart_get_user_from_itemid($itemid) {
-        global $DB;
-        
-        $ids = explode("-", $itemid);
-        
-        return $DB->get_record('user', array('id'=>$ids[0]));
     }
     
     /**

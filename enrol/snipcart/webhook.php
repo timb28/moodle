@@ -53,7 +53,7 @@ switch ($order['eventName']) {
         if (!$snipcartorder->isvalid) {
             error_log('Invalid Snipcart order: ' . print_r($body, true));
             header('HTTP/1.1 400 BAD REQUEST');
-            die;
+            throw new moodle_exception('snipcartinvalidorderror', 'enrol_snipcart', null, array('token'=>$ordertoken, 'currency'=>$currency));
         }
         
         foreach ($snipcartorder->enrolments as $enrol) {
@@ -82,8 +82,6 @@ switch ($order['eventName']) {
             header('HTTP/1.1 400 BAD REQUEST');
             die;
         }
-        
-        error_log('changed: ' . print_r($snipcartorder, true));
         
         // Unenrol the student if the order was cancelled
         if ($snipcartorder->status == 'Cancelled') {

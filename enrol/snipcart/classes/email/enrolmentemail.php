@@ -17,15 +17,15 @@ defined('MOODLE_INTERNAL') || die();
 
 class enrolmentemail {
     
-    private $order;
+    private $snipcartorder;
     
     /**
      * Constructs the enrolment email.
      *
-     * @param stdClass $order snipcartorder object
+     * @param stdClass $snipcartorder snipcartorder object
      */
-    public function __construct($order) {
-        $this->order = $order;
+    public function __construct($snipcartorder) {
+        $this->snipcartorder= $snipcartorder;
     }
     
     /**
@@ -44,7 +44,7 @@ class enrolmentemail {
             'Return-Path: <>',
             'List-Id: "Snipcart Order Complete" <enrol_snipcart@'.$hostname.'>',
             'List-Help: '.$CFG->wwwroot,
-            'Message-ID: <'.hash('sha256','Order: '.$this->order->ordertoken).'@'.$hostname.'>',
+            'Message-ID: <'.hash('sha256','Order: '.$this->snipcartorder->ordertoken).'@'.$hostname.'>',
             );
     }
     
@@ -56,11 +56,11 @@ class enrolmentemail {
     public function get_course_links() {
         $courselinks = '';
         
-        foreach ($this->order->courses as $course) {
+        foreach ($this->snipcartorder->courses as $course) {
             $courseurl = new \moodle_url('/course/view.php', array('id'=>$course->id));
             
             $courselinks.= "\r\n\r\n";
-            $courselinks.= "{$course->fullname}:\r\n$courseurl";
+            $courselinks.= "{snipcartorder->fullname}:\r\n$courseurl";
         }
         
         return $courselinks;
@@ -69,8 +69,6 @@ class enrolmentemail {
     /**
      * Sends the course enrolment notification email to the student
      *
-     * @param string[] $order containing the student and courses bought
-     * 
      * @return bool true if successful, false otherwise
      */
     public function send_enrolment_email() {
@@ -82,7 +80,7 @@ class enrolmentemail {
         $email->customheaders   = $this->get_email_headers();
         $email->subject         = get_string('ordercompleteemailsubject', 'enrol_snipcart');
         
-        $email->text            = get_string('ordercompleteemailheader', 'enrol_snipcart', array('firstname'=>$this->order->user->firstname))
+        $email->text            = get_string('ordercompleteemailheader', 'enrol_snipcart', array('firstname'=>$this->snipcartorder->user->firstname))
                                 . $this->get_course_links()
                                 . get_string('ordercompleteemailfooter', 'enrol_snipcart');
         
@@ -96,13 +94,13 @@ class enrolmentemail {
         $fromuser->maildisplay = 1;
         $fromuser->customheaders = $email->customheaders;
 
-        $mailresult = email_to_user($this->order->user, $fromuser, $email->subject,
+        $mailresult = email_to_user($this->snipcartorder->user, $fromuser, $email->subject,
         $email->text, $email->html);
 
         if (!$mailresult){
             error_log("Error: "
-                    . "Could not send out email for order {$this->ordertoken} "
-                    . "to the student ({$this->order->user->email}). Error: $mailresult .. not trying again.");
+                    . "Could not send out email for order {$this->snipcartorder->ordertoken} "
+                    . "to the student ({$this->snipcartorder->user->email}). Error: $mailresult .. not trying again.");
             return false;
         }
 
