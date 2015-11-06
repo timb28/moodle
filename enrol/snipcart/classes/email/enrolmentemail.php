@@ -49,21 +49,47 @@ class enrolmentemail {
     }
     
     /**
-     * Creates the course links.
+     * Creates the course links for the text email.
      *
      * @return string the course links
      */
-    public function get_course_links() {
+    public function create_text_course_links() {
         $courselinks = '';
         
         foreach ($this->snipcartorder->courses as $course) {
             $courseurl = new \moodle_url('/course/view.php', array('id'=>$course->id));
             
-            $courselinks.= "\r\n\r\n";
-            $courselinks.= "{snipcartorder->fullname}:\r\n$courseurl";
+            $courselinks.= "\r\n{$course->fullname} ($courseurl)\r\n";
         }
         
         return $courselinks;
+    }
+    
+    /**
+     * Creates the content that appears in the text and html emails
+     *
+     * @return string[] array containing the email variables
+     */
+    public function create_email_variables() {
+        $a = array(
+            'firstname'=>$this->snipcartorder->user->firstname,
+            'subject'=>get_string('ordercompleteemailsubject', 'enrol_snipcart'),
+            'textcourselinks'=>$this->create_text_course_links(),
+        );
+        return $a;
+    }
+    
+    /**
+     * Creates the html email
+     * 
+     * @param string[] $a array containing email variables
+     *
+     * @return string containing the html email
+     */
+    public function create_html_email($a) {
+        $html = '';
+        include 'enrolmentemail_html.php';
+        return $html;
     }
     
     /**
@@ -73,18 +99,17 @@ class enrolmentemail {
      */
     public function send_enrolment_email() {
         global $CFG, $DB, $COURSE;
-
+        
         // Create the email to send
         $email = new \stdClass();
 
         $email->customheaders   = $this->get_email_headers();
         $email->subject         = get_string('ordercompleteemailsubject', 'enrol_snipcart');
+                               . get_string('ordercompleteemailfooter', 'enrol_snipcart');
         
-        $email->text            = get_string('ordercompleteemailheader', 'enrol_snipcart', array('firstname'=>$this->snipcartorder->user->firstname))
-                                . $this->get_course_links()
-                                . get_string('ordercompleteemailfooter', 'enrol_snipcart');
-        
-        $email->html            = "todo: <strong>HTML</strong> email";
+        $a                      = $this->create_email_variables();
+        $email->text            = get_string('ordercompleteemailtext', 'enrol_snipcart', $a);
+        $email->html            = $this->create_html_email($a);
 
         // Send it from the support email address
         $fromuser = new \stdClass();

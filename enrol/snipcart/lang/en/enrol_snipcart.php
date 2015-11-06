@@ -64,12 +64,11 @@ $string['status_desc'] = 'Allow users to use Snipcart to enrol into a course by 
 // Email contents
 
 $string['ordercompleteemailsubject']   = 'Start you Academy Real Estate Training courses now';
-$string['ordercompleteemailheader']     = '
+$string['ordercompleteemailtext']     = '
 Hi {$a->firstname}
 
-Your Academy Real Estate online course(s) are ready to start';
-
-$string['ordercompleteemailfooter'] = '
+Your Academy Real Estate Training online course(s) are ready to start
+{$a->textcourselinks}
 
 -------------------------------------------------------------------
 
