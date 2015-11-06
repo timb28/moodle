@@ -71,10 +71,23 @@ class enrolmentemail {
      * @return string the course links
      */
     public function create_html_course_list() {
+        global $CFG;
+        
         $courselist = '';
         
         foreach ($this->snipcartorder->courses as $course) {
+            require_once($CFG->libdir. '/coursecatlib.php');
+            $course = new \course_in_list($course);
+            
             $courseurl = new \moodle_url('/course/view.php', array('id'=>$course->id));
+            
+            // get the first course image
+            $courseoverviewfiles = $course->get_course_overviewfiles();
+            $firstfile = array_shift($courseoverviewfiles);
+            
+            $courseimageurl = file_encode_url("$CFG->wwwroot/pluginfile.php",
+                    '/'. $firstfile->get_contextid(). '/'. $firstfile->get_component(). '/'.
+                    $firstfile->get_filearea(). $firstfile->get_filepath(). $firstfile->get_filename(), true);
             
             $courselist .= '<!-- BEGIN COLUMNS // -->
                                     <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateColumns" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background-color: #FFFFFF;border-top: 0;border-bottom: 0;">
@@ -92,7 +105,7 @@ class enrolmentemail {
                         
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: left;">
                         
-                            <div style="text-align: right;"><a href="http://www" target="_blank" style="word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #6DC6DD;font-weight: normal;text-decoration: underline;"><img align="none" height="48" src="https://gallery.mailchimp.com/7eae2f154fe18e4b458689ab2/images/12800d7a-76d5-4d95-b256-46f5a391287e.png" style="width: 48px;height: 48px;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="48"></a></div>
+                            <div style="text-align: right;"><a href="' . $courseurl . '" target="_blank" style="word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #6DC6DD;font-weight: normal;text-decoration: underline;"><img align="none" height="48" src="' . $courseimageurl . '" style="width: 48px;height: 48px;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="48"></a></div>
 
                         </td>
                     </tr>
