@@ -66,6 +66,77 @@ class enrolmentemail {
     }
     
     /**
+     * Creates the course images for the html email.
+     *
+     * @return string the course links
+     */
+    public function create_html_course_images() {
+        $courseimages = '';
+        
+        foreach ($this->snipcartorder->courses as $course) {
+            $courseurl = new \moodle_url('/course/view.php', array('id'=>$course->id));
+            
+            $courseimages .= '<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+    <tbody class="mcnTextBlockOuter">
+        <tr>
+            <td valign="top" class="mcnTextBlockInner" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                
+                <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                    <tbody><tr>
+                        
+                        <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: left;">
+                        
+                            <div style="text-align: right;"><a href="http://www" target="_blank" style="word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #6DC6DD;font-weight: normal;text-decoration: underline;"><img align="none" height="48" src="https://gallery.mailchimp.com/7eae2f154fe18e4b458689ab2/images/12800d7a-76d5-4d95-b256-46f5a391287e.png" style="width: 48px;height: 48px;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="48"></a></div>
+
+                        </td>
+                    </tr>
+                </tbody></table>
+                
+            </td>
+        </tr>
+    </tbody>
+</table>';
+        }
+        
+        return $courseimages;
+    }
+    
+    /**
+     * Creates the course links for the html email.
+     *
+     * @return string the course links
+     */
+    public function create_html_course_links() {
+        $courselinks = '';
+        
+        foreach ($this->snipcartorder->courses as $course) {
+            $courseurl = new \moodle_url('/course/view.php', array('id'=>$course->id));
+            
+            $courselinks .= '<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+    <tbody class="mcnTextBlockOuter">
+        <tr>
+            <td valign="top" class="mcnTextBlockInner" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                
+                <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                    <tbody><tr>
+                        
+                        <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 15px;line-height: 150%;text-align: left;">
+                        
+                            <a href="' . $courseurl . '" target="_blank" style="word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #6DC6DD;font-weight: normal;text-decoration: underline;"><strong>' .$course->fullname . '</strong></a>
+                        </td>
+                    </tr>
+                </tbody></table>
+                
+            </td>
+        </tr>
+    </tbody>
+</table>';
+        }
+        
+        return $courselinks;
+    }
+    
+    /**
      * Creates the content that appears in the text and html emails
      *
      * @return string[] array containing the email variables
@@ -78,6 +149,8 @@ class enrolmentemail {
             'subheading'=>get_string('email_ordercompletesubheading', 'enrol_snipcart'),
             'invoice'=>get_string('email_ordercompleteinvoice', 'enrol_snipcart'),
             'textcourselinks'=>$this->create_text_course_links(),
+            'htmlcourseimages'=>$this->create_html_course_images(),
+            'htmlcourselinks'=>$this->create_html_course_links(),
             'copyright'=>get_string('copyright', 'enrol_snipcart'),
             'mailingaddress'=>get_string('email_mailingaddress', 'enrol_snipcart'),
         );
