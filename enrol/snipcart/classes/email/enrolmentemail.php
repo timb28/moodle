@@ -85,9 +85,15 @@ class enrolmentemail {
             $courseoverviewfiles = $course->get_course_overviewfiles();
             $firstfile = array_shift($courseoverviewfiles);
             
-            $courseimageurl = file_encode_url("$CFG->wwwroot/pluginfile.php",
-                    '/'. $firstfile->get_contextid(). '/'. $firstfile->get_component(). '/'.
-                    $firstfile->get_filearea(). $firstfile->get_filepath(). $firstfile->get_filename(), true);
+            $isimage = (!empty($firstfile) and $firstfile->is_valid_image());
+            
+            if ($isimage) {
+                $courseimageurl = file_encode_url("$CFG->wwwroot/pluginfile.php",
+                        '/'. $firstfile->get_contextid(). '/'. $firstfile->get_component(). '/'.
+                        $firstfile->get_filearea(). $firstfile->get_filepath(). $firstfile->get_filename(), true);
+            } else {
+                $courseimageurl = new \moodle_url('/enrol/snipcart/pix/empty-course-icon.png');
+            }
             
             $courselist .= '<!-- BEGIN COLUMNS // -->
                                     <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateColumns" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background-color: #FFFFFF;border-top: 0;border-bottom: 0;">

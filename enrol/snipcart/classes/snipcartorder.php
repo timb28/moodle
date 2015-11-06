@@ -31,7 +31,8 @@ class snipcartorder {
     /**
      * Constructs the snipcart order
      *
-     * @param string[] $neworder with the student and their courses
+     * @param string $ordertoken of the order
+     * @param string $currency of the order
      */
     public function __construct($ordertoken, $currency) {
         global $DB;
@@ -51,16 +52,14 @@ class snipcartorder {
             
             // The user is the same for every item
             if (empty($this->user)) {
-// todo               if (!($this->user = $DB->get_record("user", array("id"=>$itemid[0])))) {
-                if (!($this->user = $DB->get_record("user", array("id"=>3862)))) {
+                if (!($this->user = $DB->get_record("user", array("id"=>$itemid[0])))) {
                     $this->plugin->message_error_to_admin("Not a valid user id", print_r($this->order, true));
                     header('HTTP/1.1 400 BAD REQUEST');
                     die;
                 }
             }
             
-// todo           if (! $enrol = $DB->get_record('enrol', array('id'=>$itemid[1], 'status'=>0)) ) {
-            if (! $enrol = $DB->get_record('enrol', array('id'=>218, 'status'=>0)) ) {
+            if (! $enrol = $DB->get_record('enrol', array('id'=>$itemid[1], 'status'=>0)) ) {
                 $this->plugin->message_error_to_admin("Not a valid enrol id", print_r($this->order, true));
                 header('HTTP/1.1 400 BAD REQUEST');
                 die;
