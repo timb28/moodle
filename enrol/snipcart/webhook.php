@@ -57,7 +57,7 @@ switch ($order['eventName']) {
         }
         
         foreach ($snipcartorder->enrolments as $enrol) {
-//            $plugin->snipcart_enrol_user($snipcartorder->user, $enrol, $snipcartorder->ordertoken);
+            $plugin->snipcart_enrol_user($snipcartorder->user, $enrol, $snipcartorder->ordertoken);
         }
   
         // Notify the user that they are now enrolled in the courses they purchased
@@ -65,7 +65,7 @@ switch ($order['eventName']) {
         $email->send_enrolment_email();
 
         // Update the user's address, city and postcode if not set in Moodle
-//        $plugin->snipcart_update_user($snipcartorder);
+        $plugin->snipcart_update_user($snipcartorder);
         
         break;
         
