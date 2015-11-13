@@ -10,21 +10,21 @@
     text-align: center;
 }
 
-.loginbox.twocolumns {
+#page-login-index .loginbox.twocolumns {
     margin: 0;
 }
 
-.loginpanel {
+#page-login-index .loginpanel {
     color: white;
     background-color: #002b49;
     background-image: radial-gradient( circle, #07314e 40%, #002946 100%);
 }
 
-.loginpanel a:hover {
+#page-login-index .loginpanel a:hover {
     color: white;
 }
 
-.loginpanel h2 {
+#page-login-index .loginpanel h2 {
     height: 3rem;
     background: url([[pix:theme|h1-logo-white]]) 50% 50% no-repeat;
     background-size: 240px, contain;
@@ -34,48 +34,48 @@
     overflow: hidden;
 }
 
-.loginbox form {
+#page-login-index .loginbox form {
     width: 50%;
     margin: 0 auto;
 }
 
-.loginbox .loginform .form-input {
+#page-login-index .loginbox .loginform .form-input {
     float: none;
     width: 100%;
 }
 
-.loginbox .loginform .form-input input {
+#page-login-index .loginbox .loginform .form-input input {
     width: 100%;
     text-indent: -15px;
 }
 
-.loginpanel form label {
+#page-login-index .loginpanel form label {
     display: none;
 }
 
-.loginpanel form input#username {
+#page-login-index .loginpanel form input#username {
     background: url([[pix:theme|fontawesome/user]]) 3% 50% no-repeat rgba(178, 191, 200, 0.2);
     background-size: 20px, contain;
 }
 
-.loginpanel form input#username:focus {
+#page-login-index .loginpanel form input#username:focus {
     background: url([[pix:theme|fontawesome/user]]) 3% 50% no-repeat rgba(255, 255, 255, 0.9);
     background-size: 20px, contain;
     color: #000;
 }
 
-.loginpanel form input#password {
+#page-login-index .loginpanel form input#password {
     background: url([[pix:theme|fontawesome/lock]]) 3% 50% no-repeat rgba(178, 191, 200, 0.2);
     background-size: 20px, contain;
 }
 
-.loginpanel form input#password:focus {
+#page-login-index .loginpanel form input#password:focus {
     background: url([[pix:theme|fontawesome/lock]]) 3% 50% no-repeat rgba(255, 255, 255, 0.9);
     background-size: 20px, contain;
     color: #000;
 }
 
-.loginpanel form input {
+#page-login-index .loginpanel form input {
     width: 100%;
     height: 40px;
     line-height: 38px;
@@ -90,19 +90,13 @@
     transition: all 0.2s ease-in-out 0s;
 }
 
-/*.loginpanel form input:focus {
-    background: rgba(255, 255, 255, 0.9) none repeat scroll 0% 0%;
-    color: #000;
-    z-index: 10;
-}*/
-
-.loginpanel form input[type="submit"] {
+#page-login-index .loginpanel form input[type="submit"] {
     color: #333;
     background-color: #F5F5F5;
     background-image: linear-gradient(to bottom, #FFF, #E6E6E6);
 }
 
-.loginpanel input#loginbtn[type="submit"] {
+#page-login-index .loginpanel input#loginbtn[type="submit"] {
     transition: none 0s ease 0s;
     display: block;
     margin-left: auto;
@@ -127,17 +121,16 @@
     font-size: 1rem;
 }
 
-.loginpanel input[type="submit"]:hover {
+#page-login-index .loginpanel input[type="submit"]:hover {
     background-color: #e6e6e6;
     background-image: none;
     background-repeat: repeat;
     cursor: pointer;
 }
 
-.loginpanel input#loginbtn[type="submit"]:hover {
+#page-login-index .loginpanel input#loginbtn[type="submit"]:hover {
     background-color: #007DB5;
     background-image: none;
     background-repeat: repeat;
     cursor: pointer;
 }
-
