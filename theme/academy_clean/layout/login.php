@@ -81,11 +81,15 @@ echo $OUTPUT->doctype() ?>
     <div id="page-content" class="row-fluid">
         <section id="region-main" class="span12">
             <?php
+            $auth_instructions = '';
+            
             if ( file_exists( $CFG->dirroot . '/auth/lenauth/out.php' ) ) :
                 include_once $CFG->dirroot . '/auth/lenauth/out.php';
-                echo auth_lenauth_out::getInstance()->lenauth_output('style3-text');
-            endif; ?>
-            <?php
+                $auth_instructions = auth_lenauth_out::getInstance()->lenauth_output('style3-text');
+            endif;
+            
+            $CFG->auth_instructions = $CFG->auth_instructions . $auth_instructions;
+            
             echo $OUTPUT->course_content_header();
             echo $OUTPUT->main_content();
             echo $OUTPUT->course_content_footer();
@@ -108,5 +112,6 @@ echo $OUTPUT->doctype() ?>
 
 <?php echo $OUTPUT->standard_end_of_body_html() ?>
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 </body>
 </html>
