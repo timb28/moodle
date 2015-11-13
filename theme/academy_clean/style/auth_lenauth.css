@@ -44,10 +44,10 @@
     width: 100%;
 }
 
-#page-login-index .loginbox .loginform .form-input input {
+/*#page-login-index .loginbox .loginform .form-input input {
     width: 100%;
     text-indent: -15px;
-}
+}*/
 
 #page-login-index .loginpanel form label {
     display: none;
@@ -80,22 +80,15 @@
     height: 40px;
     line-height: 38px;
     border: medium none;
-    background: rgba(178, 191, 200, 0.2) none repeat scroll 0% 0%;
     padding: 0;
     color: #FFF;
     font-size: 1rem;
     border-radius: 3px;
     text-align: center;
-    text-indent: -15px;
     transition: all 0.2s ease-in-out 0s;
 }
 
-#page-login-index .loginpanel form input[type="submit"] {
-    color: #333;
-    background-color: #F5F5F5;
-    background-image: linear-gradient(to bottom, #FFF, #E6E6E6);
-}
-
+/* 'Log in' button */
 #page-login-index .loginpanel input#loginbtn[type="submit"] {
     transition: none 0s ease 0s;
     display: block;
@@ -121,15 +114,23 @@
     font-size: 1rem;
 }
 
-#page-login-index .loginpanel input[type="submit"]:hover {
-    background-color: #e6e6e6;
+
+#page-login-index .loginpanel input#loginbtn[type="submit"]:hover {
+    background-color: #007DB5;
     background-image: none;
     background-repeat: repeat;
     cursor: pointer;
 }
 
-#page-login-index .loginpanel input#loginbtn[type="submit"]:hover {
-    background-color: #007DB5;
+/* 'Log in as guest' button */
+#page-login-index .loginpanel form input[type="submit"] {
+    color: #333;
+    background-color: #F5F5F5;
+    background-image: linear-gradient(to bottom, #FFF, #E6E6E6);
+}
+
+#page-login-index .loginpanel input[type="submit"]:hover {
+    background-color: #e6e6e6;
     background-image: none;
     background-repeat: repeat;
     cursor: pointer;
