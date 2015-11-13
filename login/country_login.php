@@ -28,6 +28,7 @@
 
 require('../config.php');
 require_once('lib.php');
+require_once($CFG->libdir.'/authlib.php');
 
 // Try to prevent searching for sites that allow sign-up.
 if (!isset($CFG->additionalhtmlhead)) {
@@ -37,8 +38,8 @@ $CFG->additionalhtmlhead .= '<meta name="robots" content="noindex" />';
 
 redirect_if_major_upgrade_required();
 
-$testsession = optional_param('testsession', 0, PARAM_INT); // test session works properly
-$cancel      = optional_param('cancel', 0, PARAM_BOOL);      // redirect to frontpage, needed for loginhttps
+$cancel      = optional_param('cancel', 0, PARAM_BOOL);     // redirect to frontpage, needed for loginhttps
+$errorcode   = optional_param('errorcode', 0, PARAM_INT);   // show any errors
 
 if ($cancel) {
     redirect(new moodle_url('/'));
@@ -54,24 +55,6 @@ $PAGE->set_pagelayout('login');
 
 /// Initialize variables
 $errormsg = '';
-$errorcode = 0;
-
-// login page requested session test
-if ($testsession) {
-    if ($testsession == $USER->id) {
-        if (isset($SESSION->wantsurl)) {
-            $urltogo = $SESSION->wantsurl;
-        } else {
-            $urltogo = $CFG->wwwroot.'/';
-        }
-        unset($SESSION->wantsurl);
-        redirect($urltogo);
-    } else {
-        // TODO: try to find out what is the exact reason why sessions do not work
-        $errormsg = get_string("cookiesnotenabled");
-        $errorcode = 1;
-    }
-}
 
 /// Check for timed out sessions
 if (!empty($SESSION->has_timed_out)) {
@@ -323,6 +306,24 @@ if (!empty($SESSION->loginerrormsg)) {
         $SESSION->loginerrormsg = $errormsg;
     }
     redirect(new moodle_url('/login/country_login.php'));
+}
+
+switch ($errorcode) {
+    case AUTH_LOGIN_NOUSER:
+        $errormsg = get_string('username').': '.get_string("invalidusername");
+        break;
+    case AUTH_LOGIN_SUSPENDED:
+        $errormsg = get_string('username').': '.get_string("invalidusername");
+        break;
+    case AUTH_LOGIN_FAILED:
+        $errormsg = get_string("invalidlogin");
+        break;
+    case AUTH_LOGIN_LOCKOUT:
+        $errormsg = get_string('sessionerroruser', 'error');
+        break;
+    case AUTH_LOGIN_UNAUTHORISED:
+        $errormsg = get_string("unauthorisedlogin", "", $frm->username);
+        break;
 }
 
 $PAGE->set_title("$site->fullname: $loginsite");

@@ -21,6 +21,16 @@ if (!empty($wantsurl)) {
 ?>
 <div class="loginbox clearfix">
   <div class="loginpanel">
+        <?php
+            if (!empty($errormsg)) {
+                echo html_writer::start_tag('div', array('class'=>'subcontent loginsub alert alert-error'));
+                echo html_writer::start_tag('div', array('class' => 'loginerrors'));
+                echo html_writer::link('#', $errormsg, array('id' => 'loginerrormessage', 'class' => 'accesshide'));
+                echo $OUTPUT->error_text($errormsg);
+                echo html_writer::end_tag('div');
+                echo html_writer::end_tag('div');
+            }
+        ?>
     <h2>Select your country to login</h2>
     <div class="subcontent loginsub">
       <?php foreach($countries as $countrycode => $countryname) { ?>
