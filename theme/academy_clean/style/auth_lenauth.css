@@ -6,7 +6,15 @@
 ** Author URI: http://www.academyrealestatetraining.com
 **
 *********************************************************/
-.lenauth-buttons {
+#page-login-index .lenauth-buttons {
+    text-align: center;
+    width: 14rem;
+    margin: 2rem auto 0;
+}
+
+#page-login-index .loginbox .signuppanel .subcontent {
+    max-width: 30rem;
+    margin: auto;
     text-align: center;
 }
 
@@ -129,4 +137,8 @@
     background-image: none;
     background-repeat: repeat;
     cursor: pointer;
+}
+
+#page-login-index .loginpanel input[type="submit"]:focus {
+    background-position: 0;
 }
