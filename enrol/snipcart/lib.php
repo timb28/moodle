@@ -23,6 +23,13 @@ class enrol_snipcart_plugin extends enrol_plugin {
         return false;
     }
     
+    private $currencies = array(
+        'AU' => 'AUD',
+        'NZ' => 'NZD',
+        'US' => 'USD',
+        'ZA' => 'ZAR',
+    );
+    
     /**
      * Sets up navigation entries.
      *
@@ -138,6 +145,19 @@ class enrol_snipcart_plugin extends enrol_plugin {
         }
 
         return $currencies;
+    }
+    
+    /**
+     * Returns the currency for a given country
+     * @param string $country as the two-digit code
+     * @return string
+     */
+    public function get_currency_for_country($country) {
+//        foreach (CURRENCIES as $country => $code) {
+//            $currencies[$c] = new lang_string($c, 'core_currencies');
+//        }
+
+        return $this->currencies[$country];
     }
     
     public function get_localised_currency($currency, $cost) {

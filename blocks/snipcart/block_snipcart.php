@@ -41,12 +41,16 @@ class block_snipcart extends block_base {
     }
 
     public function get_content() {
+        global $USER;
+        
         if ($this->content !== null) {
             return $this->content;
         }
         
+        $plugin = enrol_get_plugin('snipcart');
+        
         $manager = \enrol_snipcart\get_snipcartaccounts_manager();
-        $currency = 'AUD'; // todo get the user's currency from their country
+        $currency = $plugin->get_currency_for_country($USER->country);
         $publicapikey = $manager->get_snipcartaccount_info($currency, 'publicapikey');
         
 
