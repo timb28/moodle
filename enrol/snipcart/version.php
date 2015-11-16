@@ -10,7 +10,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2015110601;
+$plugin->version   = 2015111600;
 $plugin->component = 'enrol_snipcart';
 $plugin->release = '0.6 (Build: 2015110601)';
 $plugin->requires = 2014051200;                     // Requires Moodle 2.7+
