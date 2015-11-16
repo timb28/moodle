@@ -783,7 +783,9 @@ $string['firstaccess'] = 'First access';
 $string['firstname'] = 'First name';
 $string['firstnamephonetic'] = 'First name - phonetic';
 $string['firstsiteaccess'] = 'First access to site';
-$string['firsttime'] = 'Is this your first time here?';
+/* START Academy Patch M#036 Display additional authentication methods on the right side of the login page */
+$string['firsttime'] = 'Don\'t have a Harcourts One Account?';
+/* END Academy Patch M#036 */
 $string['folder'] = 'Folder';
 $string['folderclosed'] = 'Closed folder';
 $string['folderopened'] = 'Opened folder';
