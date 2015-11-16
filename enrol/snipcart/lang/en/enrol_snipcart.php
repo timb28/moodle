@@ -12,7 +12,6 @@
 $string['accountname'] = 'Name';
 $string['addtocart'] = '<i class="icon-plus-sign icon-white" style="margin-top: 4px;"></i> {$a->cost} Add to cart';
 $string['assignrole'] = 'Assign role';
-$string['checkout'] = '<i class="icon-shopping-cart icon-white" style="margin-top: 4px;"></i> View cart';
 $string['copyright'] = '© Copyright Harcourts International';
 $string['cost'] = 'Enrol cost';
 $string['costerror'] = 'The enrolment cost is not a number';
