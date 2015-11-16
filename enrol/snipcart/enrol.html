@@ -31,10 +31,10 @@ $manager = get_snipcartaccounts_manager();
 $publicapikey = $manager->get_snipcartaccount_info($enrol->currency, 'publicapikey');
 
 ?>
+<p class="summary"><?= $course->summary ?></p>
 <div align="center">
 
-<p><?php print_string("paymentrequired") ?></p>
-<p><b><?php echo get_string("cost").": {$enrol->currency} $localisedcost"; ?></b></p>
+<p><?php print_string('paymentrequired', 'enrol_snipcart') ?></p>
 
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
@@ -62,7 +62,7 @@ $publicapikey = $manager->get_snipcartaccount_info($enrol->currency, 'publicapik
     data-item-url='<?php echo $itemurl ?>'
     data-item-description='<?php echo $course->summary ?>'>
 
-    <?php print_string('addtocart', 'enrol_snipcart') ?>
+    <?php print_string('addtocart', 'enrol_snipcart', array('currency'=>$enrol->currency, 'cost'=>$localisedcost)) ?>
 </a>
 
 <?php
