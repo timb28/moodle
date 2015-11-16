@@ -1,5 +1,7 @@
 <?php
 
+namespace enrol_snipcart;
+
 /**
  * Factory function for snipcartaccounts_manager
  *
@@ -33,7 +35,7 @@ class snipcartaccounts {
     public function get_snipcartaccounts() {
         global $CFG;
         
-        $snipcart = new \enrol_snipcart_plugin();
+        $snipcart = enrol_get_plugin('snipcart');
         
         if (empty($snipcart->get_config('snipcartaccounts'))) {
             return array();

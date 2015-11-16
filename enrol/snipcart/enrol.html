@@ -27,7 +27,7 @@ $cost = format_float($cost, 2, false);
 $coursefullname  = format_string($course->fullname, true, array('context'=>$context));
 $courseshortname = format_string($course->shortname, true, array('context' => $context));
 
-$manager = get_snipcartaccounts_manager();
+$manager = \enrol_snipcart\get_snipcartaccounts_manager();
 $publicapikey = $manager->get_snipcartaccount_info($enrol->currency, 'publicapikey');
 
 ?>

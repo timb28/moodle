@@ -146,7 +146,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
             return;
         }
         
-        $manager = get_snipcartaccounts_manager();
+        $manager = \enrol_snipcart\get_snipcartaccounts_manager();
         
         $snipcartaccounts = $manager->get_snipcartaccounts();
         
