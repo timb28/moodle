@@ -22,6 +22,13 @@
     margin: 0;
 }
 
+@media (min-width: 768px) and (max-width: 979px) {
+    .loginbox.twocolumns .loginpanel,
+    .loginbox.twocolumns .signuppanel {
+        margin-bottom: 8px;
+    }
+}
+
 #page-login-index .loginpanel {
     color: white;
     background-color: #002b49;
