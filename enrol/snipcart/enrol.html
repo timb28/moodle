@@ -76,7 +76,8 @@ if ($isimage) {
     data-item-quantity='1'
     data-item-shippable='false'
     data-item-url='<?php echo $itemurl ?>'
-    data-item-description='<?php echo $course->summary ?>'>
+    data-item-description='<?php echo $course->summary ?>'
+    data-item-image='<?php echo $courseimageurl ?>'>
 
     <?php print_string('addtocart', 'enrol_snipcart', array('currency'=>$enrol->currency, 'cost'=>$localisedcost)) ?>
 </a>
