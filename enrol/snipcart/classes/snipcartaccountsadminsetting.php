@@ -40,7 +40,7 @@ class admin_setting_snipcartaccounts extends admin_setting {
     public function get_setting() {
         global $CFG;
 
-        $manager = get_snipcartaccounts_manager();
+        $manager = \enrol_snipcart\get_snipcartaccounts_manager();
 
         $config = $this->config_read($this->name);
         if (is_null($config)) {
