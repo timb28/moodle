@@ -11,6 +11,10 @@
  
 defined('MOODLE_INTERNAL') || die();
 
+global $PAGE;
+$PAGE->requires->css('/enrol/snipcart/tooltipster/css/tooltipster.css');
+$PAGE->requires->js('/enrol/snipcart/tooltipster/js/jquery.tooltipster.min.js');
+
 $context = context_course::instance($course->id);
 
 $params = array('uid' => $userid,
@@ -67,8 +71,10 @@ if ($isimage) {
   </div>
 </noscript>
 
-<a href='#'
-    class='snipcart-add-item btn btn-primary'
+<a href="#" onmousedown="javascript:Snipcart.api.showCart();">Test open cart</a><br/>
+
+<a href='#' title='Added course to shopping cart. &lt;a href=&quot;#&quot; onmouseup=&quot;javascript:Snipcart.api.showCart();&quot; class=&quot;snipcart-checkout&quot; &gt;View cart&lt;/a&gt;' 
+    class='snipcart-add-item btn btn-primary tooltip'
     data-item-id='<?php echo "{$user->id}-{$enrol->id}" ?>'
     data-item-name='<?php p($coursefullname) ?>'
     data-item-price='<?php p($cost) ?>'
@@ -118,6 +124,17 @@ if ($USER === $user) {
             var url = path + '/snipcart/completed.php?order=' + order.token + '&eid=<?php p($enrol->id) ?>';
             window.location.href = url;
         });
+        
+        $('.tooltip').tooltipster({
+            animation: 'fade',
+            contentAsHTML: true,
+            delay: 200,
+            timer: 5000,
+            interactive: true,
+            theme: 'tooltipster-default',
+            touchDevices: false,
+            trigger: 'click'
+         });
     }
 
 </script>
