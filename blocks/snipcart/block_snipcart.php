@@ -22,30 +22,36 @@ class block_snipcart extends block_base {
 
     function applicable_formats() {
         return array('all' => false,
-                     'course-index-category' => true,
-                     'enrol' => true,
+                     'enrol-index' => true,
+                     'site-index' => true,
                      'my-index' => true,
+                     'course-index-category' => true,
             );
     }
     
     public function hide_header() {
-        return true;
+        global $PAGE;
+        
+        // display the block header if the block is empty and visible to admins
+        $pageformat = $PAGE->pagetype;
+        return blocks_name_allowed_in_format('snipcart', $pageformat);
     }
     
     public function instance_allow_multiple() {
         return false;
     }
     
-    /**
-     * Returns true if there is not snipcart product being displayed.
-     *
-     * @return boolean
-     */
-    function is_empty() {
-    }
-
     public function get_content() {
-        global $OUTPUT, $USER;
+        global $OUTPUT, $PAGE, $USER;
+        
+        // don't display the block if on a page within a course
+        $pageformat = $PAGE->pagetype;
+        if (!blocks_name_allowed_in_format('snipcart', $pageformat)) {
+            $this->instance->visible = false;
+            
+            $this->content = null;
+            return $this->content;
+        }
         
         if ($this->content !== null) {
             return $this->content;
