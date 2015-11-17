@@ -10,7 +10,7 @@
  */
 
 $string['accountname'] = 'Name';
-$string['addtocart'] = '<i class="icon-plus-sign icon-white" style="margin-top: 4px;"></i> {$a->cost} Add to cart';
+$string['addtocart'] = '<i class="icon-plus icon-white" style="margin-top: 3px;"></i> {$a->cost} Add to cart';
 $string['assignrole'] = 'Assign role';
 $string['copyright'] = '© Copyright Harcourts International';
 $string['cost'] = 'Enrol cost';
@@ -46,7 +46,7 @@ $string['orderpending'] = 'Thank you for your order, it\'s currently being proce
 $string['orderprice'] = 'Price';
 $string['orderthankyou'] = 'Thank you for your order. Your invoice has been sent to you by email.';
 $string['ordertotal'] = 'Total paid';
-$string['paymentrequired'] = 'Buy this course and access it immediately.';
+$string['paymentrequired'] = 'Buy now for instant access.';
 $string['pluginname'] = 'Snipcart';
 $string['pluginname_desc'] = 'The Snipcart module allows you to set up paid courses.  If the cost for any course is zero, then students are not asked to pay for entry.';
 $string['privateapikey'] = 'Private API Key';

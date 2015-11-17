@@ -30,11 +30,27 @@ $courseshortname = format_string($course->shortname, true, array('context' => $c
 $manager = \enrol_snipcart\get_snipcartaccounts_manager();
 $publicapikey = $manager->get_snipcartaccount_info($enrol->currency, 'publicapikey');
 
+// get the first course image
+require_once($CFG->libdir. '/coursecatlib.php');
+$course = new \course_in_list($course);
+$courseoverviewfiles = $course->get_course_overviewfiles();
+$firstfile = array_shift($courseoverviewfiles);
+
+$isimage = (!empty($firstfile) and $firstfile->is_valid_image());
+
+if ($isimage) {
+    $courseimageurl = file_encode_url("$CFG->wwwroot/pluginfile.php",
+            '/'. $firstfile->get_contextid(). '/'. $firstfile->get_component(). '/'.
+            $firstfile->get_filearea(). $firstfile->get_filepath(). $firstfile->get_filename(), true);
+} else {
+    $courseimageurl = new \moodle_url('/enrol/snipcart/pix/empty-course-icon.png');
+}
+
 ?>
-<p class="summary"><?= $course->summary ?></p>
+<p class="course-summary"><img src="<?= $courseimageurl ?>" /><?= $course->summary ?></p>
 <div align="center">
 
-<p><?php print_string('paymentrequired', 'enrol_snipcart') ?></p>
+<p class="payment-required"><?php print_string('paymentrequired', 'enrol_snipcart') ?></p>
 
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
