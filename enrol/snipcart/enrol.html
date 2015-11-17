@@ -112,13 +112,13 @@ if ($USER === $user) {
             phone: '<?php p($userphone) ?>',
             postalCode: '<?php p($userpostcode) ?>'
         });
-    }
     
-    Snipcart.execute('bind', 'order.completed', function (order) {
-        var path = location.pathname.substring(0, location.pathname.lastIndexOf("/"));
-        var url = path + '/snipcart/completed.php?order=' + order.token + '&eid=<?php p($enrol->id) ?>';
-        window.location.href = url;
-    });
+        Snipcart.execute('bind', 'order.completed', function (order) {
+            var path = location.pathname.substring(0, location.pathname.lastIndexOf("/"));
+            var url = path + '/snipcart/completed.php?order=' + order.token + '&eid=<?php p($enrol->id) ?>';
+            window.location.href = url;
+        });
+    }
 
 </script>
 <?php } ?>
