@@ -69,6 +69,11 @@ class block_snipcart extends block_base {
         $shoppingcart.= '<div class="checkout">';
         $shoppingcart.= '  <a href="#" class="snipcart-checkout btn btn-small btn-success">' . get_string('checkout', 'block_snipcart') . '</a>';
         $shoppingcart.= '</div>';
+        $shoppingcart.= '<div class="snipcart-payment-types">';
+        $shoppingcart.= '  <span class="snipcart-payment-type"><img src="'.$OUTPUT->pix_url('amex', 'block_snipcart').'" alt="American Express accepted" /></span>';
+        $shoppingcart.= '  <span class="snipcart-payment-type"><img src="'.$OUTPUT->pix_url('master_card', 'block_snipcart').'" alt="Master Card accepted" /></span>';
+        $shoppingcart.= '  <span class="snipcart-payment-type"><img src="'.$OUTPUT->pix_url('visa', 'block_snipcart').'" alt="Visa accepted" /></span>';
+        $shoppingcart.= '</div>';
         
         $this->content         =  new stdClass;
         $this->content->text   = $shoppingcart;

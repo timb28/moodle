@@ -22,3 +22,12 @@ and open the template in the editor.
     font-weight: bold;
 }
 
+.snipcart-payment-types {
+    clear: both;
+    margin: 1rem 1rem 0;
+}
+.snipcart-payment-type img {
+    max-width: 32px;
+    padding-right: 8px;
+}
+

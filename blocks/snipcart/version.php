@@ -2,6 +2,9 @@
 
 /**
  * Snipcart shopping cart block Version Details
+ * 
+ * Payment card icons copyright Minh Do https://www.iconfinder.com/minhm2m
+ * Licensed under Creative Commons (Attribution 3.0 Unported)
  *
  * @package   block_snipcart
  * @author    Tim Butler
