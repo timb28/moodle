@@ -28,6 +28,10 @@ class block_snipcart extends block_base {
             );
     }
     
+    public function hide_header() {
+        return true;
+    }
+    
     public function instance_allow_multiple() {
         return false;
     }
@@ -63,11 +67,17 @@ class block_snipcart extends block_base {
         $shoppingcart.= '<link type="text/css" href="https://cdn.snipcart.com/themes/base/snipcart.min.css" rel="stylesheet" />';
         $shoppingcart.= '<div class="snipcart-summary">';
         $shoppingcart.= '  <div class="snipcart-image"><a href="#" class="snipcart-checkout"><img src="'.$OUTPUT->pix_url('shopping_cart', 'block_snipcart').'" /></a></div>';
-        $shoppingcart.= '  <div class="snipcart-totals"><span class="snipcart-total-items-label">Items:</span> <span class="snipcart-total-items"></span>';
-        $shoppingcart.= '  <span class="snipcart-total-price-label">Total: </span><span class="snipcart-total-price"></span></div>';
+        $shoppingcart.= '  <div class="snipcart-items">'
+                . '<span class="snipcart-total-items-label">'.get_string('items', 'block_snipcart').'</span> '
+                . '<span class="snipcart-total-items"></span>'
+                . '</div>';
+        $shoppingcart.= '  <div class="snipcart-items">'
+                . '<span class="snipcart-total-price-label">'.get_string('total', 'block_snipcart').' </span>'
+                . '<span class="snipcart-total-price"></span></div>';
         $shoppingcart.= '</div>';
         $shoppingcart.= '<div class="checkout">';
-        $shoppingcart.= '  <a href="#" class="snipcart-checkout btn btn-small btn-success">' . get_string('checkout', 'block_snipcart') . '</a>';
+        $shoppingcart.= '  <a href="#" class="snipcart-checkout btn btn-mini btn-success">'
+                . get_string('checkout', 'block_snipcart') . '</a>';
         $shoppingcart.= '</div>';
         $shoppingcart.= '<div class="snipcart-payment-types">';
         $shoppingcart.= '  <span class="snipcart-payment-type"><img src="'.$OUTPUT->pix_url('amex', 'block_snipcart').'" alt="American Express accepted" /></span>';

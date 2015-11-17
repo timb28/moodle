@@ -10,5 +10,6 @@
  */
 
 $string['checkout'] = 'View cart';
+$string['items'] = 'Cart items:';
 $string['pluginname'] = 'Snipcart Shopping Cart';
-$string['shoppingcart'] = 'Shopping Cart';
+$string['total'] = 'Total:';

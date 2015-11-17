@@ -11,7 +11,7 @@ and open the template in the editor.
 .snipcart-image img {
     max-width: 64px;
     float: left;
-    margin-right: 1rem;
+    margin: 1rem 1rem 0 0;
 }
 
 .snipcart-total-items {
@@ -23,11 +23,14 @@ and open the template in the editor.
 }
 
 .snipcart-payment-types {
-    clear: both;
-    margin: 1rem 1rem 0;
+    margin: 1rem 0 0;
+    text-align: center;
+}
+.snipcart-payment-type span {
+    display: inline-block;
 }
 .snipcart-payment-type img {
-    max-width: 32px;
+    max-width: 30px;
     padding-right: 8px;
 }
 
