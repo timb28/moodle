@@ -27,7 +27,7 @@ class admin_setting_snipcartaccounts extends admin_setting {
     public function __construct() {
         global $CFG;
 
-        $manager = get_snipcartaccounts_manager();
+        $manager = \enrol_snipcart\get_snipcartaccounts_manager();
         $defaults = $this->prepare_form_data($manager->default_snipcartaccounts());
         parent::__construct('enrol_snipcart/snipcartaccounts', get_string('snipcartaccounts', 'enrol_snipcart'), get_string('snipcartaccounts_desc', 'enrol_snipcart'), $defaults);
     }

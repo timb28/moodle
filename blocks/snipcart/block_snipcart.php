@@ -13,7 +13,7 @@ require_once($CFG->dirroot."/enrol/snipcart/classes/snipcartaccounts.php");
 
 class block_snipcart extends block_base {
     public function init() {
-        $this->title = get_string('shoppingcart', 'block_snipcart');
+        $this->title = get_string('pluginname', 'block_snipcart');
     }
     
     function has_config() {
@@ -45,13 +45,11 @@ class block_snipcart extends block_base {
     }
 
     public function get_content() {
-        global $OUTPUT, $PAGE, $USER;
+        global $OUTPUT, $USER;
         
         if ($this->content !== null) {
             return $this->content;
         }
-        
-        $PAGE->requires->css('/blocks/snipcart/styles.css');
         
         $plugin = enrol_get_plugin('snipcart');
         
@@ -66,17 +64,17 @@ class block_snipcart extends block_base {
         $shoppingcart.= '   data-api-key="'. $publicapikey .'"></script>';
         $shoppingcart.= '<link type="text/css" href="https://cdn.snipcart.com/themes/base/snipcart.min.css" rel="stylesheet" />';
         $shoppingcart.= '<div class="snipcart-summary">';
-        $shoppingcart.= '  <div class="snipcart-image"><a href="#" class="snipcart-checkout"><img src="'.$OUTPUT->pix_url('shopping_cart', 'block_snipcart').'" /></a></div>';
-        $shoppingcart.= '  <div class="snipcart-items">'
-                . '<span class="snipcart-total-items-label">'.get_string('items', 'block_snipcart').'</span> '
-                . '<span class="snipcart-total-items"></span>'
-                . '</div>';
-        $shoppingcart.= '  <div class="snipcart-items">'
+        $shoppingcart.= '  <div class="snipcart-items">';
+        $shoppingcart.= '    <span class="snipcart-total-items-label">'.get_string('items', 'block_snipcart').'</span> '
+                     . '     <span class="snipcart-total-items"></span>'
+                     . '   </div>';
+        $shoppingcart.= '  <div class="snipcart-price">'
                 . '<span class="snipcart-total-price-label">'.get_string('total', 'block_snipcart').' </span>'
                 . '<span class="snipcart-total-price"></span></div>';
         $shoppingcart.= '</div>';
-        $shoppingcart.= '<div class="checkout">';
-        $shoppingcart.= '  <a href="#" class="snipcart-checkout btn btn-mini btn-success">'
+        $shoppingcart.= '<div class="snipcart-actions">';
+        $shoppingcart.= '  <a href="#" class="snipcart-checkout btn btn-small btn-success">'
+                . '<img src="'.$OUTPUT->pix_url('shopping_cart', 'block_snipcart').'" /> '
                 . get_string('checkout', 'block_snipcart') . '</a>';
         $shoppingcart.= '</div>';
         $shoppingcart.= '<div class="snipcart-payment-types">';
