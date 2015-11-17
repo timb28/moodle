@@ -29,7 +29,7 @@ if (empty($CFG->authloginviaemail)) {
       <div class="subcontent loginsub">
         <?php
           if (!empty($errormsg)) {
-              echo html_writer::start_tag('div', array('class' => 'loginerrors'));
+              echo html_writer::start_tag('div', array('class' => 'loginerrors alert alert-warning'));
               echo html_writer::link('#', $errormsg, array('id' => 'loginerrormessage', 'class' => 'accesshide'));
               echo $OUTPUT->error_text($errormsg);
               echo html_writer::end_tag('div');
