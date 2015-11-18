@@ -130,7 +130,7 @@ if ($USER === $user) {
         
         $('#<?= $tooltipid ?>').tooltipster({
                     animation: 'fade',
-                    content: $('<span>Added to shopping cart. <a href="#" class="snipcart-checkout" >View cart</a></span>'),
+                    content: $('<span><?php print_string("addedtocart", "enrol_snipcart") ?></span>'),
                     delay: 200,
                     timer: 10000,
                     interactive: true,
