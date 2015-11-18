@@ -129,7 +129,7 @@ if ($USER === $user) {
         
         $('#<?= $tooltipid ?>').tooltipster({
                     animation: 'fade',
-                    content: $('<span><?php print_string("addedtocart", "enrol_snipcart") ?></span>'),
+                    content: $('<span><?php print_string("addedtocarttooltip", "enrol_snipcart") ?></span>'),
                     delay: 200,
                     timer: 10000,
                     interactive: true,
@@ -140,6 +140,11 @@ if ($USER === $user) {
         $('#<?= $tooltipid ?>')
             .mousedown(function(){
                 $(this).tooltipster('show');
+                $(this).addClass('btn-disabled');
+                $(this).addClass('disabled');
+                $(this).removeClass('btn-primary');
+                $(this).removeAttr('data-toggle');
+                $(this).html('<?php print_string("addedtocart", "enrol_snipcart", array("currency"=>$enrol->currency, "cost"=>$localisedcost)) ?>');
              })
             .blur(function(){
                 $(this).tooltipster('hide');
