@@ -11,11 +11,6 @@
  
 defined('MOODLE_INTERNAL') || die();
 
-global $PAGE;
-$PAGE->requires->css('/enrol/snipcart/tooltipster/css/tooltipster.css');
-$PAGE->requires->css('/enrol/snipcart/tooltipster/css/themes/tooltipster-shadow.css');
-$PAGE->requires->js('/enrol/snipcart/tooltipster/js/jquery.tooltipster.min.js');
-
 $context = context_course::instance($course->id);
 
 $params = array('uid' => $userid,
@@ -51,8 +46,8 @@ if ($isimage) {
     $courseimageurl = new \moodle_url('/enrol/snipcart/pix/empty-course-icon.png');
 }
 
-// Generate random tooltip id
-$tooltipid = 'tooltip' . mt_rand(1000000, 9999999);
+// Generate id for 'Add to cart' button based on course id
+$addtocartid = 'addtocart' . $course->id;
 
 ?>
 <p class="course-summary"><img src="<?= $courseimageurl ?>" /><?= $course->summary ?></p>
@@ -75,7 +70,7 @@ $tooltipid = 'tooltip' . mt_rand(1000000, 9999999);
   </div>
 </noscript>
 
-<a href='#' id='<?= $tooltipid ?>'
+<a href='#' id='<?= $addtocartid ?>'
     class='snipcart-add-item invisible btn btn-primary'
     data-item-id='<?php echo "{$user->id}-{$enrol->id}" ?>'
     data-item-name='<?php p($coursefullname) ?>'
@@ -127,28 +122,14 @@ if ($USER === $user) {
             window.location.href = url;
         });
         
-        $('#<?= $tooltipid ?>').tooltipster({
-                    animation: 'fade',
-                    content: $('<span><?php print_string("addedtocarttooltip", "enrol_snipcart") ?></span>'),
-                    delay: 200,
-                    timer: 10000,
-                    interactive: true,
-                    theme: 'tooltipster-shadow',
-                    touchDevices: false,
-                    trigger: 'none'
-                 });
-        $('#<?= $tooltipid ?>')
+        $('#<?= $addtocartid ?>')
             .mousedown(function(){
                 $(this).addClass('btn-disabled');
                 $(this).addClass('disabled');
                 $(this).removeClass('btn-primary');
                 $(this).removeAttr('data-toggle');
                 $(this).html('<?php print_string("addedtocart", "enrol_snipcart", array("currency"=>$enrol->currency, "cost"=>$localisedcost)) ?>');
-                $(this).tooltipster('show');
              })
-            .blur(function(){
-                $(this).tooltipster('hide');
-            });
         $('.snipcart-add-item').addClass('fadein');
     });
 
