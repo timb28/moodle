@@ -770,3 +770,16 @@ body#page-enrol-index div.box.generalbox.info {
 .guest.pagelayout-coursecategory #region-main {
     width: 100%;
 }
+
+/* Animations */
+.invisible {
+    visibility: hidden;
+    opacity: 0;
+}
+.invisible.fadein {
+    visibility: visible;
+    opacity: 100;
+    transition-duration: 200ms, 0ms;
+    transition-property: opacity, visibility;
+    transition-delay: 0ms;
+}
