@@ -108,7 +108,7 @@ if ($USER === $user) {
 
 ?>
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(window).load(function() {
         Snipcart.execute('setBillingAddress', {
             email: '<?php p($useremail) ?>',
             name: '<?php p($userfullname) ?>',
@@ -139,12 +139,12 @@ if ($USER === $user) {
                  });
         $('#<?= $tooltipid ?>')
             .mousedown(function(){
-                $(this).tooltipster('show');
                 $(this).addClass('btn-disabled');
                 $(this).addClass('disabled');
                 $(this).removeClass('btn-primary');
                 $(this).removeAttr('data-toggle');
                 $(this).html('<?php print_string("addedtocart", "enrol_snipcart", array("currency"=>$enrol->currency, "cost"=>$localisedcost)) ?>');
+                $(this).tooltipster('show');
              })
             .blur(function(){
                 $(this).tooltipster('hide');
