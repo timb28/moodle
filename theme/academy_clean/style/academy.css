@@ -771,6 +771,16 @@ body#page-enrol-index div.box.generalbox.info {
     width: 100%;
 }
 
+/* Country login */
+#page-login-country_login .loginsub {
+    text-align: center;
+}
+
+#page-login-country_login .big-button-wrapper {
+    display: inline-block;
+    float: none;
+}
+
 /* Animations */
 .invisible {
     visibility: hidden;
