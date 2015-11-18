@@ -14,3 +14,7 @@
 #page-enrol-index .payment-required {
     clear: both;
 }
+
+#snipcart-main-container button.snipcart-btn:hover {
+    background-position: 0 -45px;
+}
