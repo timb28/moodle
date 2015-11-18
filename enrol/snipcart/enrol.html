@@ -13,6 +13,7 @@ defined('MOODLE_INTERNAL') || die();
 
 global $PAGE;
 $PAGE->requires->css('/enrol/snipcart/tooltipster/css/tooltipster.css');
+$PAGE->requires->css('/enrol/snipcart/tooltipster/css/themes/tooltipster-shadow.css');
 $PAGE->requires->js('/enrol/snipcart/tooltipster/js/jquery.tooltipster.min.js');
 
 $context = context_course::instance($course->id);
@@ -132,7 +133,7 @@ if ($USER === $user) {
                     delay: 200,
                     timer: 5000,
                     interactive: true,
-                    theme: 'tooltipster-default',
+                    theme: 'tooltipster-shadow',
                     touchDevices: false,
                     trigger: 'none'
                  });
