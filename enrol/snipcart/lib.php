@@ -143,7 +143,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
      * @return string of button html
      */
     function get_add_to_cart_button($course) {
-        global $DB, $USER;
+        global $CFG, $DB, $USER;
         
         // Notify the admin if a user's country is not set (ignore the guest user)
         if (!($USER->country) and !($USER->id == 1)) {
@@ -176,13 +176,85 @@ class enrol_snipcart_plugin extends enrol_plugin {
                 continue;
             } else {
 
+                $params = array('uid' => $USER->id,
+                                'eid' => $instance->id);
+                $itemurl = str_replace("http://", "https://", new moodle_url("/enrol/snipcart/validate.php", $params));
+                
                 $localisedcost = $this->get_localised_currency($instance->currency, format_float($cost, 2, true));
+                $cost = format_float($cost, 2, false);
+                
+                $context = context_course::instance($course->id);
+
+                //Sanitise some fields before building the Snipcart code
+                $coursefullname  = format_string($course->fullname, true, array('context'=>$context));
+                $courseshortname = format_string($course->shortname, true, array('context' => $context));
+                
+                // get the first course image
+                require_once($CFG->libdir. '/coursecatlib.php');
+                $courseoverviewfiles = $course->get_course_overviewfiles();
+                $firstfile = array_shift($courseoverviewfiles);
+
+                $isimage = (!empty($firstfile) and $firstfile->is_valid_image());
+
+                if ($isimage) {
+                    $courseimageurl = file_encode_url("$CFG->wwwroot/pluginfile.php",
+                            '/'. $firstfile->get_contextid(). '/'. $firstfile->get_component(). '/'.
+                            $firstfile->get_filearea(). $firstfile->get_filepath(). $firstfile->get_filename(), true);
+                } else {
+                    $courseimageurl = new \moodle_url('/enrol/snipcart/pix/empty-course-icon.png');
+                }
+
+                // Generate id for 'Add to cart' button based on course id
                 $addtocartid = 'addtocart' . $course->id;
+
                 
                 $buttons.= "
-                    <a href='#' id='$addtocartid' class='snipcart-actions invisible btn btn-primary btn-small pull-right'>
-                        ".get_string('addtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "</a>   
-                    ";
+                    <a href='#' id='$addtocartid' class='snipcart-actions invisible btn btn-primary btn-small pull-right'>".get_string('addtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "</a>
+                            
+                    <script type='text/javascript'>
+                        $(window).load(function() {
+                            Snipcart.execute('bind', 'order.completed', function (order) {
+                                var path = location.pathname.substring(0, location.pathname.lastIndexOf('/'));
+                                var url = path + '/snipcart/completed.php?order=' + order.token + '&eid={$instance->id}';
+                                window.location.href = url;
+                            });
+
+                            $('#$addtocartid')
+                                .click(function(e){
+                                    // Cancel the default action
+                                    e.preventDefault();
+
+                                    Snipcart.execute('item.add', {
+                                        id: '{$USER->id}-{$instance->id}',
+                                        name: '$coursefullname',
+                                        price: '{$instance->cost}',
+                                        maxQuantity: '1',
+                                        quantity: '1',
+                                        shippable: 'false',
+                                        url: '$itemurl',
+                                        description: '{$course->summary}',
+                                        image: '$courseimageurl'
+                                    });
+
+                                    var oldLabel = $(this).html();
+                                    $(this).addClass('btn-disabled');
+                                    $(this).addClass('disabled');
+                                    $(this).removeClass('btn-primary');
+                                    $(this).removeAttr('data-toggle');
+                                    var width = $(this).css('width');
+                                    var height = $(this).css('height');
+                                    $(this).html('". get_string('addedtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) ."');
+                                    var newWidth = $(this).css('width');
+                                    $(this).html('');
+                                    $(this).css({'width': width, 'height': height});
+                                    $(this).animate({'width': newWidth}, 300, function() {
+                                        $(this).html('". get_string('addedtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) ."');
+                                      });
+
+                                 });
+                        });
+
+                    </script>";
             }
             
         }

@@ -27,9 +27,6 @@ $cost = format_float($cost, 2, false);
 $coursefullname  = format_string($course->fullname, true, array('context'=>$context));
 $courseshortname = format_string($course->shortname, true, array('context' => $context));
 
-$manager = \enrol_snipcart\get_snipcartaccounts_manager();
-$publicapikey = $manager->get_snipcartaccount_info($enrol->currency, 'publicapikey');
-
 // get the first course image
 require_once($CFG->libdir. '/coursecatlib.php');
 $course = new \course_in_list($course);
