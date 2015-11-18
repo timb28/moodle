@@ -91,7 +91,7 @@ class block_snipcart extends block_base {
             </div>
 
             <script type="text/javascript">
-                $(document).ready(function() {
+                $(window).load(function() {
                     $(".snipcart-actions").addClass("fadein");
                 });
             </script>';
