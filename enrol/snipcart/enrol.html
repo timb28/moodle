@@ -70,18 +70,7 @@ $addtocartid = 'addtocart' . $course->id;
   </div>
 </noscript>
 
-<a href='#' id='<?= $addtocartid ?>'
-    class='snipcart-add-item invisible btn btn-primary'
-    data-item-id='<?php echo "{$user->id}-{$enrol->id}" ?>'
-    data-item-name='<?php p($coursefullname) ?>'
-    data-item-price='<?php p($cost) ?>'
-    data-item-max-quantity='1'
-    data-item-quantity='1'
-    data-item-shippable='false'
-    data-item-url='<?php echo $itemurl ?>'
-    data-item-description='<?php echo $course->summary ?>'
-    data-item-image='<?php echo $courseimageurl ?>'>
-
+<a href='#' id='<?= $addtocartid ?>' class='snipcart-actions invisible btn btn-primary'>
     <?php print_string('addtocart', 'enrol_snipcart', array('currency'=>$enrol->currency, 'cost'=>$localisedcost)) ?>
 </a>
 
@@ -123,7 +112,22 @@ if ($USER === $user) {
         });
         
         $('#<?= $addtocartid ?>')
-            .mousedown(function(){
+            .click(function(e){
+                // Cancel the default action
+                e.preventDefault();
+                
+                Snipcart.execute('item.add', {
+                    id: '<?php echo "{$user->id}-{$enrol->id}" ?>',
+                    name: '<?php p($coursefullname) ?>',
+                    price: '<?php p($cost) ?>',
+                    maxQuantity: '1',
+                    quantity: '1',
+                    shippable: 'false',
+                    url: '<?php echo $itemurl ?>',
+                    description: '<?php echo $course->summary ?>',
+                    image: '<?php echo $courseimageurl ?>'
+                });
+                
                 var oldLabel = $(this).html();
                 $(this).addClass('btn-disabled');
                 $(this).addClass('disabled');
@@ -139,8 +143,7 @@ if ($USER === $user) {
                     $(this).html('<?php print_string("addedtocart", "enrol_snipcart", array("currency"=>$enrol->currency, "cost"=>$localisedcost)) ?>');
                   });
                 
-             })
-        $('.snipcart-add-item').addClass('fadein');
+             });
     });
 
 </script>
