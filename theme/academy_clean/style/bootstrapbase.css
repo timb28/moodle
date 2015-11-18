@@ -25,5 +25,5 @@ a.disabled:hover,a.disabled {
 	font-style: normal;
 	color: rgb(51, 51, 51);
 	text-decoration:none;
-	cursor:default
+	cursor:default;
 }
