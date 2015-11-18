@@ -76,7 +76,7 @@ $THEME->layouts = array(
         'options' => array('langmenu'=>true),
     ),
     'coursecategory' => array(
-        'file' => 'columns2.php',
+        'file' => 'coursecategory.php',
         'regions' => array('side-pre'),
         'defaultregion' => 'side-pre',
     ),

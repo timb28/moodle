@@ -136,6 +136,59 @@ class enrol_snipcart_plugin extends enrol_plugin {
         return $icons;
     }
     
+    /**
+     * Returns course 'Add to cart' button.
+     *
+     * @param object $course
+     * @return string of button html
+     */
+    function get_add_to_cart_button($course) {
+        global $DB, $USER;
+        
+        // Notify the admin if a user's country is not set (ignore the guest user)
+        if (!($USER->country) and !($USER->id == 1)) {
+            $this->message_error_to_admin('A Moodle user cannot purchase a course because their country is not set', $USER);
+        }
+        
+        $buttons = '';
+        
+        $instances = $DB->get_records('enrol', array('enrol'=>'snipcart', 'courseid'=>$course->id, 'status'=>ENROL_INSTANCE_ENABLED), 'sortorder,id');
+        
+        foreach ($instances as $instance) {
+            if ($instance->status != ENROL_INSTANCE_ENABLED or $instance->courseid != $course->id) {
+                debugging('Invalid instances parameter submitted in enrol_get_info_icons()');
+                continue;
+            }
+            
+            // TODO: continue if the student is already enrolled.
+            
+            if (!$this->can_user_access_instance($instance)) {
+                continue;
+            }
+
+            if ( (float) $instance->cost <= 0 ) {
+                $cost = (float) $instance->get_config('cost');
+            } else {
+                $cost = (float) $instance->cost;
+            }
+
+            if (abs($cost) < 0.01) { // no cost, other enrolment methods (instances) should be used
+                continue;
+            } else {
+
+                $localisedcost = $this->get_localised_currency($instance->currency, format_float($cost, 2, true));
+                $addtocartid = 'addtocart' . $course->id;
+                
+                $buttons.= "
+                    <a href='#' id='$addtocartid' class='snipcart-actions invisible btn btn-primary btn-small pull-right'>
+                        ".get_string('addtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "</a>   
+                    ";
+            }
+            
+        }
+        return $buttons;
+    }
+    
     public function get_currencies() {
         $codes = array(
             'AUD', 'NZD', 'USD', 'ZAR');

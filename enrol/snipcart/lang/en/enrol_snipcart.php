@@ -10,7 +10,7 @@
  */
 
 $string['accountname'] = 'Name';
-$string['addtocart'] = '<i class="icon-plus icon-white" style="margin-top: 3px;"></i> {$a->cost} Add to cart';
+$string['addtocart'] = '{$a->cost} Add to cart';
 $string['addedtocart'] = '<i class="icon-ok-sign" style="margin-top: 3px;"></i> {$a->cost} Added. <a href="#" onmousedown="javascript:Snipcart.api.showCart();" class="snipcart-checkout" >View cart</a>';
 $string['assignrole'] = 'Assign role';
 $string['copyright'] = '© Copyright Harcourts International';
