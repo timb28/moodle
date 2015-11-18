@@ -108,7 +108,7 @@ if ($USER === $user) {
 
 ?>
 <script type="text/javascript">
-    window.onload = function() {
+    $(document).ready(function() {
         Snipcart.execute('setBillingAddress', {
             email: '<?php p($useremail) ?>',
             name: '<?php p($userfullname) ?>',
@@ -145,7 +145,7 @@ if ($USER === $user) {
                 $(this).tooltipster('hide');
             });
         $('.snipcart-add-item').addClass('fadein');
-    }
+    });
 
 </script>
 <?php } ?>
