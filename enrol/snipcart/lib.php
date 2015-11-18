@@ -160,7 +160,10 @@ class enrol_snipcart_plugin extends enrol_plugin {
                 continue;
             }
             
-            // TODO: continue if the student is already enrolled.
+            // TODO: check if use is enrolled via ANY enrolment method not just this one.
+            if ($DB->record_exists('user_enrolments', array('userid'=>$USER->id, 'enrolid'=>$instance->id))) {
+                continue;
+            }
             
             if (!$this->can_user_access_instance($instance)) {
                 continue;
