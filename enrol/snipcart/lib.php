@@ -157,7 +157,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
 //            $currencies[$c] = new lang_string($c, 'core_currencies');
 //        }
 
-        return $this->currencies[$country];
+        return (empty($country)) ? null : $this->currencies[$country];
     }
     
     public function get_localised_currency($currency, $cost) {

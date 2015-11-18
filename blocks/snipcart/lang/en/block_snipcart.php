@@ -12,4 +12,5 @@
 $string['checkout'] = 'View cart';
 $string['items'] = 'Cart items:';
 $string['pluginname'] = 'Snipcart Shopping Cart';
+$string['snipcart:addinstance'] = 'Add a new Snipcart Shopping Cart block';
 $string['total'] = 'Total:';
