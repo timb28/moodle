@@ -63,7 +63,7 @@ class admin_setting_snipcartaccounts extends admin_setting {
      */
     public function write_setting($data) {
 
-        $manager = get_snipcartaccounts_manager();
+        $manager = \enrol_snipcart\get_snipcartaccounts_manager();
         $snipcartaccounts = $this->process_form_data($data);
 
         if ($snipcartaccounts === false) {

@@ -111,7 +111,7 @@ class snipcartorder {
      */
     private function retrieve_order($ordertoken, $currency) {
         
-        $manager = get_snipcartaccounts_manager();
+        $manager = \enrol_snipcart\get_snipcartaccounts_manager();
         $privateapikey = $manager->get_snipcartaccount_info($currency, 'privateapikey');
         
         // Open a connection back to Snipcart to validate the data
