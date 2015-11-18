@@ -56,13 +56,7 @@ $addtocartid = 'addtocart' . $course->id;
 <p class="payment-required"><?php print_string('paymentrequired', 'enrol_snipcart') ?></p>
 
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-
-<script type="text/javascript" src="https://cdn.snipcart.com/scripts/snipcart.js" id="snipcart"
-  data-autopop='false'
-  data-api-key="<?= $publicapikey ?>"></script>
-
-<link type="text/css" href="https://cdn.snipcart.com/themes/base/snipcart.min.css" rel="stylesheet" />
-
+            
 <noscript>
   <div class="alert alert-block alert-error">
       <p><strong><?= get_string('warning', 'moodle') ?></strong> <?= get_string('javascriptrequired', 'group') ?></p>

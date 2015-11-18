@@ -65,7 +65,6 @@ class block_snipcart extends block_base {
         
 
         $shoppingcart = '
-            <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
             <script type="text/javascript" src="https://cdn.snipcart.com/scripts/snipcart.js" id="snipcart"
                data-autopop="false"
                data-api-key="'. $publicapikey .'"></script>
