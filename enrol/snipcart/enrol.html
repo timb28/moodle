@@ -77,6 +77,7 @@ $tooltipid = 'tooltip' . mt_rand(1000000, 9999999);
 
 <a href='#' id='<?= $tooltipid ?>' onmousedown='#$("<?= $tooltipid ?>").tooltipster("show")'
     class='snipcart-add-item btn btn-primary'
+    style='display: none'
     data-item-id='<?php echo "{$user->id}-{$enrol->id}" ?>'
     data-item-name='<?php p($coursefullname) ?>'
     data-item-price='<?php p($cost) ?>'
@@ -129,9 +130,9 @@ if ($USER === $user) {
         
         $('#<?= $tooltipid ?>').tooltipster({
                     animation: 'fade',
-                    content: $('<span>Added course to shopping cart. <a href="#" class="snipcart-checkout" >View cart</a></span>'),
+                    content: $('<span>Added to shopping cart. <a href="#" class="snipcart-checkout" >View cart</a></span>'),
                     delay: 200,
-                    timer: 5000,
+                    timer: 10000,
                     interactive: true,
                     theme: 'tooltipster-shadow',
                     touchDevices: false,
@@ -144,6 +145,7 @@ if ($USER === $user) {
             .blur(function(){
                 $(this).tooltipster('hide');
             });
+        $('.snipcart-add-item').show();
     }
 
 </script>
