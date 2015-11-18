@@ -64,30 +64,37 @@ class block_snipcart extends block_base {
         $publicapikey = $manager->get_snipcartaccount_info($currency, 'publicapikey');
         
 
-        $shoppingcart = '<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>';
-        $shoppingcart.= '<script type="text/javascript" src="https://cdn.snipcart.com/scripts/snipcart.js" id="snipcart"';
-        $shoppingcart.= '   data-autopop="false"';
-        $shoppingcart.= '   data-api-key="'. $publicapikey .'"></script>';
-        $shoppingcart.= '<link type="text/css" href="https://cdn.snipcart.com/themes/base/snipcart.min.css" rel="stylesheet" />';
-        $shoppingcart.= '<div class="snipcart-summary">';
-        $shoppingcart.= '  <div class="snipcart-items">';
-        $shoppingcart.= '    <span class="snipcart-total-items-label">'.get_string('items', 'block_snipcart').'</span> '
-                     . '     <span class="snipcart-total-items"></span>'
-                     . '   </div>';
-        $shoppingcart.= '  <div class="snipcart-price">'
-                . '<span class="snipcart-total-price-label">'.get_string('total', 'block_snipcart').' </span>'
-                . '<span class="snipcart-total-price"></span></div>';
-        $shoppingcart.= '</div>';
-        $shoppingcart.= '<div class="snipcart-actions">';
-        $shoppingcart.= '  <a href="#" class="snipcart-checkout btn btn-small btn-success">'
-                . '<img src="'.$OUTPUT->pix_url('shopping_cart', 'block_snipcart').'" /> '
-                . get_string('checkout', 'block_snipcart') . '</a>';
-        $shoppingcart.= '</div>';
-        $shoppingcart.= '<div class="snipcart-payment-types">';
-        $shoppingcart.= '  <span class="snipcart-payment-type"><img src="'.$OUTPUT->pix_url('amex', 'block_snipcart').'" alt="American Express accepted" /></span>';
-        $shoppingcart.= '  <span class="snipcart-payment-type"><img src="'.$OUTPUT->pix_url('master_card', 'block_snipcart').'" alt="Master Card accepted" /></span>';
-        $shoppingcart.= '  <span class="snipcart-payment-type"><img src="'.$OUTPUT->pix_url('visa', 'block_snipcart').'" alt="Visa accepted" /></span>';
-        $shoppingcart.= '</div>';
+        $shoppingcart = '
+            <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+            <script type="text/javascript" src="https://cdn.snipcart.com/scripts/snipcart.js" id="snipcart"
+               data-autopop="false"
+               data-api-key="'. $publicapikey .'"></script>
+            <link type="text/css" href="https://cdn.snipcart.com/themes/base/snipcart.min.css" rel="stylesheet" />
+            <div class="snipcart-summary">
+              <div class="snipcart-items">
+                <span class="snipcart-total-items-label">'.get_string('items', 'block_snipcart').'</span> '
+                         . '     <span class="snipcart-total-items"></span>'
+                         . '   </div>
+              <div class="snipcart-price">'
+                    . '<span class="snipcart-total-price-label">'.get_string('total', 'block_snipcart').' </span>'
+                    . '<span class="snipcart-total-price"></span></div>
+            </div>
+            <div class="snipcart-actions invisible">
+              <a href="#" class="snipcart-checkout btn btn-small btn-success">'
+                    . '<img src="'.$OUTPUT->pix_url('shopping_cart', 'block_snipcart').'" /> '
+                    . get_string('checkout', 'block_snipcart') . '</a>
+            </div>
+            <div class="snipcart-payment-types">
+              <span class="snipcart-payment-type"><img src="'.$OUTPUT->pix_url('amex', 'block_snipcart').'" alt="American Express accepted" /></span>
+              <span class="snipcart-payment-type"><img src="'.$OUTPUT->pix_url('master_card', 'block_snipcart').'" alt="Master Card accepted" /></span>
+              <span class="snipcart-payment-type"><img src="'.$OUTPUT->pix_url('visa', 'block_snipcart').'" alt="Visa accepted" /></span>
+            </div>
+
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $(".snipcart-actions").addClass("fadein");
+                });
+            </script>';
         
         $this->content         =  new stdClass;
         $this->content->text   = $shoppingcart;
