@@ -58,3 +58,8 @@
     padding: 4px;
 }
 
+/* Don't display the Snipcart discount field */
+#snipcart-step-content-cart-content #snipcart-discounts,
+#snipcart-step-content-confirm #snipcart-discounts {
+    display: none;
+}
