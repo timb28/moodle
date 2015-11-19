@@ -47,12 +47,12 @@ function theme_academy_create_course_button($course) {
             continue;
         }
 
-        // Check if use is enrolled via ANY enrolment method not just this one.
+        // Check if use is enrolled via ANY enrolment method.
         if (!$DB->record_exists('user_enrolments', array('userid'=>$USER->id, 'enrolid'=>$instance->id))) {
-            return null;
+            continue;
         }
         
-        $inprogressbutton = '<a href="'.new moodle_url('/course/view.php', array('id'=>$course->id)).'" class="btn btn-small pull-right"><i class="icon-chevron-right"></i> In progress</a>';
+        $inprogressbutton = '<a href="'.new moodle_url('/course/view.php', array('id'=>$course->id)).'" class="btn btn-small btn-info pull-right"><i class="icon-chevron-right icon-white"></i> In progress</a>';
         
         if ($CFG->enablecompletion != COMPLETION_ENABLED) {
             return $inprogressbutton;
@@ -66,6 +66,14 @@ function theme_academy_create_course_button($course) {
             return $completealert;
         } else {
             return $inprogressbutton;
+        }
+    }
+    
+    /* Display any Snipcart 'Add to cart' buttons if the course is for sale. */
+    foreach ($instances as $instance) {
+        if ($instance->enrol == 'snipcart' && $instance->status == ENROL_INSTANCE_ENABLED ) {
+            $snipcart = enrol_get_plugin('snipcart');
+            return $snipcart->get_add_to_cart_button($course, $instance);
         }
     }
 }
