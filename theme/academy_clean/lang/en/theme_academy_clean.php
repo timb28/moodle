@@ -22,6 +22,10 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// Course category buttons
+$string['inprogress'] = '<a href="{$a}" class="btn btn-small btn-info pull-right"><i class="icon-chevron-right icon-white"></i> In progress</a>';
+$string['complete'] = '<a class="disabled btn btn-success btn-small pull-right"><i class="icon-ok icon-white"></i> Complete</a>';
+
 $string['choosereadme'] = '
 <div class="clearfix">
 <div class="well">

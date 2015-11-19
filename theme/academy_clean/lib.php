@@ -52,13 +52,14 @@ function theme_academy_create_course_button($course) {
             continue;
         }
         
-        $inprogressbutton = '<a href="'.new moodle_url('/course/view.php', array('id'=>$course->id)).'" class="btn btn-small btn-info pull-right"><i class="icon-chevron-right icon-white"></i> In progress</a>';
+        $viewcourseurl = new moodle_url('/course/view.php', array('id'=>$course->id));
+        $inprogressbutton = get_string('inprogress', 'theme_academy_clean', $viewcourseurl->out());
         
         if ($CFG->enablecompletion != COMPLETION_ENABLED) {
             return $inprogressbutton;
         }
         
-        $completealert = '<a class="disabled btn btn-success btn-small pull-right"><i class="icon-ok icon-white"></i> Complete</a>';
+        $completealert = get_string('complete', 'theme_academy_clean');
         
         $coursecompletion = new completion_info($course);
         
