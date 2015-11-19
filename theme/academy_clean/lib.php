@@ -29,6 +29,48 @@
  */
 
 /**
+ * Creates a course buttons (completed|in progress|add to cart for course category listings
+ *
+ * @param stdClass $course to create buttons for
+ * @return string The button HTML
+ */
+function theme_academy_create_course_button($course) {
+    global $CFG, $DB, $USER;
+    
+    require_once($CFG->libdir.'/completionlib.php');
+    
+    $instances = $DB->get_records('enrol', array('courseid'=>$course->id, 'status'=>ENROL_INSTANCE_ENABLED), 'sortorder,id');
+        
+    foreach ($instances as $instance) {
+        if ($instance->status != ENROL_INSTANCE_ENABLED or $instance->courseid != $course->id) {
+            debugging('Invalid instances parameter submitted in theme_academy_create_course_button()');
+            continue;
+        }
+
+        // Check if use is enrolled via ANY enrolment method not just this one.
+        if (!$DB->record_exists('user_enrolments', array('userid'=>$USER->id, 'enrolid'=>$instance->id))) {
+            return null;
+        }
+        
+        $inprogressbutton = '<a href="'.new moodle_url('/course/view.php', array('id'=>$course->id)).'" class="btn btn-small pull-right"><i class="icon-chevron-right"></i> In progress</a>';
+        
+        if ($CFG->enablecompletion != COMPLETION_ENABLED) {
+            return $inprogressbutton;
+        }
+        
+        $completealert = '<a class="disabled btn btn-success btn-small pull-right"><i class="icon-ok icon-white"></i> Complete</a>';
+        
+        $coursecompletion = new completion_info($course);
+        
+        if ($coursecompletion->is_course_complete($USER->id)) {
+            return $completealert;
+        } else {
+            return $inprogressbutton;
+        }
+    }
+}
+
+/**
  * Parses CSS before it is cached.
  *
  * This function can make alterations and replace patterns within the CSS.

@@ -11,7 +11,7 @@
 
 class theme_academy_clean_core_renderer extends theme_bootstrapbase_core_renderer {
 
-   /*
+    /*
      * This renders the navbar.
      * Uses bootstrap compatible html.
      */
@@ -39,6 +39,7 @@ class theme_academy_clean_core_renderer extends theme_bootstrapbase_core_rendere
 
 include_once($CFG->dirroot . "/course/renderer.php");
 require_once("$CFG->libdir/resourcelib.php");
+require_once("lib.php");
 
 class theme_academy_clean_core_course_renderer extends core_course_renderer {
 
@@ -243,8 +244,9 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
         }
         
         // print 'add to cart' buttons
-        $snipcart = enrol_get_plugin('snipcart');
-        $content .= $snipcart->get_add_to_cart_button($course);
+        //$snipcart = enrol_get_plugin('snipcart');
+        //$content .= $snipcart->get_add_to_cart_button($course);
+        $content.= theme_academy_create_course_button($course);
 
         $content .= html_writer::end_tag('div'); // .info
 

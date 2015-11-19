@@ -23,7 +23,13 @@ Moodle Bootstrapbase theme overrides
 
 a.disabled:hover,a.disabled {
 	font-style: normal;
-	color: rgb(51, 51, 51);
 	text-decoration:none;
 	cursor:default;
+}
+
+a.btn-primary.disabled:hover,
+a.btn-primary.disabled,
+a.btn-success.disabled:hover,
+a.btn-success.disabled {
+    color: #FFF;
 }
