@@ -13,6 +13,7 @@ defined('MOODLE_INTERNAL') || die();
 define('SOCIAL_USERNAME_PREFIX', 'social_user_');
 
 require_once($CFG->libdir . '/filelib.php'); // curl
+require_once($CFG->libdir . '/weblib.php'); // curl
 require_once("classes/event/snipcartorder_completed.php");
 require_once("classes/snipcartaccounts.php");
 
@@ -150,9 +151,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
             $this->message_error_to_admin('A Moodle user cannot purchase a course because their country is not set', $USER);
         }
         
-        $buttons = '';
-        
-        $instances = $DB->get_records('enrol', array('enrol'=>'snipcart', 'courseid'=>$course->id, 'status'=>ENROL_INSTANCE_ENABLED), 'sortorder,id');
+        $instances = $DB->get_records('enrol', array('courseid'=>$course->id, 'status'=>ENROL_INSTANCE_ENABLED), 'sortorder,id');
         
         foreach ($instances as $instance) {
             if ($instance->status != ENROL_INSTANCE_ENABLED or $instance->courseid != $course->id) {
@@ -160,10 +159,12 @@ class enrol_snipcart_plugin extends enrol_plugin {
                 continue;
             }
             
-            // TODO: check if use is enrolled via ANY enrolment method not just this one.
+            // Check if use is enrolled via ANY enrolment method not just this one.
             if ($DB->record_exists('user_enrolments', array('userid'=>$USER->id, 'enrolid'=>$instance->id))) {
-                continue;
+                return '<a href="'.new moodle_url('/course/view.php', array('id'=>$course->id)).'" class="btn btn-small pull-right"><i class="icon-chevron-right"></i> In progress</button>';
             }
+            
+            // todo continue if not a enrol_snipcart instance
             
             if (!$this->can_user_access_instance($instance)) {
                 continue;
@@ -211,7 +212,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
                 $addtocartid = 'addtocart' . $course->id;
 
                 
-                $buttons.= "
+                return "
                     <a href='#' id='$addtocartid' class='snipcart-actions invisible btn btn-primary btn-small pull-right'>".get_string('addtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "</a>
                             
                     <script type='text/javascript'>
@@ -261,7 +262,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
             }
             
         }
-        return $buttons;
+        return null;
     }
     
     public function get_currencies() {
