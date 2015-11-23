@@ -48,25 +48,26 @@ function theme_academy_create_course_button($course) {
         }
 
         // Check if use is enrolled via this enrolment instance.
-        if (!$DB->record_exists('user_enrolments', array('userid'=>$USER->id, 'enrolid'=>$instance->id))) {
-            continue;
-        }
+        if ($DB->record_exists('user_enrolments', array('userid'=>$USER->id, 'enrolid'=>$instance->id, 'status'=>ENROL_USER_ACTIVE))) {
+            
+            error_log('course:' . $course->fullname . ' id: ' . $USER->id . ' enrolid: ' . $instance->id);
         
-        $viewcourseurl = new moodle_url('/course/view.php', array('id'=>$course->id));
-        $inprogressbutton = get_string('inprogress', 'theme_academy_clean', $viewcourseurl->out());
-        
-        if ($CFG->enablecompletion != COMPLETION_ENABLED) {
-            return $inprogressbutton;
-        }
-        
-        $completebutton = get_string('complete', 'theme_academy_clean', $viewcourseurl->out());
-        
-        $coursecompletion = new completion_info($course);
-        
-        if ($coursecompletion->is_course_complete($USER->id)) {
-            return $completebutton;
-        } else {
-            return $inprogressbutton;
+            $viewcourseurl = new moodle_url('/course/view.php', array('id'=>$course->id));
+            $inprogressbutton = get_string('inprogress', 'theme_academy_clean', $viewcourseurl->out());
+
+            if ($CFG->enablecompletion != COMPLETION_ENABLED) {
+                return $inprogressbutton;
+            }
+
+            $completebutton = get_string('complete', 'theme_academy_clean', $viewcourseurl->out());
+
+            $coursecompletion = new completion_info($course);
+
+            if ($coursecompletion->is_course_complete($USER->id)) {
+                return $completebutton;
+            } else {
+                return $inprogressbutton;
+            }
         }
     }
     
