@@ -144,7 +144,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
      * @param stdClass $instance for the enrolment instance
      * @return string of button html
      */
-    function get_add_to_cart_button($course, $instance) {
+    function get_add_to_cart_button($course, $instance, $buttonclasses = '') {
         global $CFG, $USER;
         
         // Notify the admin if a user's country is not set (ignore the guest user)
@@ -170,34 +170,23 @@ class enrol_snipcart_plugin extends enrol_plugin {
                         'eid' => $instance->id);
         $itemurl = str_replace("http://", "https://", new moodle_url("/enrol/snipcart/validate.php", $params));
 
+        // Calculate localised and "." cost, make sure we send Snipcart the same value,
+        // please note Snipcart expects amount with 2 decimal places and "." separator.
         $localisedcost = $this->get_localised_currency($instance->currency, format_float($cost, 2, true));
         $cost = format_float($cost, 2, false);
 
         $context = context_course::instance($course->id);
+        
+        $courseimageurl = $this->get_course_image_url($course);
 
         //Sanitise some fields before building the Snipcart code
         $coursefullname  = format_string($course->fullname, true, array('context'=>$context));
-
-        // get the first course image
-        require_once($CFG->libdir. '/coursecatlib.php');
-        $courseoverviewfiles = $course->get_course_overviewfiles();
-        $firstfile = array_shift($courseoverviewfiles);
-
-        $isimage = (!empty($firstfile) and $firstfile->is_valid_image());
-
-        if ($isimage) {
-            $courseimageurl = file_encode_url("$CFG->wwwroot/pluginfile.php",
-                    '/'. $firstfile->get_contextid(). '/'. $firstfile->get_component(). '/'.
-                    $firstfile->get_filearea(). $firstfile->get_filepath(). $firstfile->get_filename(), true);
-        } else {
-            $courseimageurl = new \moodle_url('/enrol/snipcart/pix/empty-course-icon.png');
-        }
 
         // Generate id for 'Add to cart' button based on instance id
         $addtocartid = 'addtocart' . $instance->id;
 
         return "
-            <a href='#' id='$addtocartid' class='snipcart-actions invisible btn btn-primary btn-small pull-right'>".get_string('addtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "</a>
+            <a href='#' id='$addtocartid' class='snipcart-actions invisible btn btn-primary btn-small $buttonclasses'>".get_string('addtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "</a>
 
             <script type='text/javascript'>
                 $(window).load(function() {
@@ -243,6 +232,36 @@ class enrol_snipcart_plugin extends enrol_plugin {
                 });
 
             </script>";
+    }
+    
+    /**
+     * Returns Moodle course image url.
+     *
+     * @param stdClass $course 
+     * @return string of course image url
+     */
+    function get_course_image_url($course) {
+        global $CFG;
+        
+        require_once($CFG->libdir. '/coursecatlib.php');
+        
+        // get the first course image
+        if (!$course instanceof course_in_list) {
+            $course = new \course_in_list($course);
+        }
+        
+        $courseoverviewfiles = $course->get_course_overviewfiles();
+        $firstfile = array_shift($courseoverviewfiles);
+
+        $isimage = (!empty($firstfile) and $firstfile->is_valid_image());
+
+        if ($isimage) {
+            return file_encode_url("$CFG->wwwroot/pluginfile.php",
+                    '/'. $firstfile->get_contextid(). '/'. $firstfile->get_component(). '/'.
+                    $firstfile->get_filearea(). $firstfile->get_filepath(). $firstfile->get_filename(), true);
+        } else {
+            return new \moodle_url('/enrol/snipcart/pix/empty-course-icon.png');
+        }
     }
     
     public function get_currencies() {

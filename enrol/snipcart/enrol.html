@@ -13,41 +13,8 @@ defined('MOODLE_INTERNAL') || die();
 
 $context = context_course::instance($course->id);
 
-$params = array('uid' => $userid,
-                'eid' => $enrolid);
-$itemurl = str_replace("http://", "https://", new moodle_url("/enrol/snipcart/validate.php", $params));
-
-// Calculate localised and "." cost, make sure we send Snipcart the same value,
-// please note Snipcart expects amount with 2 decimal places and "." separator.
-$plugin = new \enrol_snipcart_plugin();
-$localisedcost = $plugin->get_localised_currency($enrol->currency, format_float($cost, 2, true));
-$cost = format_float($cost, 2, false);
-
-//Sanitise some fields before building the Snipcart code
-$coursefullname  = format_string($course->fullname, true, array('context'=>$context));
-$courseshortname = format_string($course->shortname, true, array('context' => $context));
-
-// get the first course image
-require_once($CFG->libdir. '/coursecatlib.php');
-$course = new \course_in_list($course);
-$courseoverviewfiles = $course->get_course_overviewfiles();
-$firstfile = array_shift($courseoverviewfiles);
-
-$isimage = (!empty($firstfile) and $firstfile->is_valid_image());
-
-if ($isimage) {
-    $courseimageurl = file_encode_url("$CFG->wwwroot/pluginfile.php",
-            '/'. $firstfile->get_contextid(). '/'. $firstfile->get_component(). '/'.
-            $firstfile->get_filearea(). $firstfile->get_filepath(). $firstfile->get_filename(), true);
-} else {
-    $courseimageurl = new \moodle_url('/enrol/snipcart/pix/empty-course-icon.png');
-}
-
-// Generate id for 'Add to cart' button based on course id
-$addtocartid = 'addtocart' . $course->id;
-
 ?>
-<p class="course-summary"><img src="<?= $courseimageurl ?>" /><?= $course->summary ?></p>
+<p class="course-summary"><img src="<?= $plugin->get_course_image_url($course) ?>" alt="<?= $course->fullname ?>" /><?= $course->summary ?></p>
 <div align="center">
 
 <p class="payment-required"><?php print_string('paymentrequired', 'enrol_snipcart') ?></p>
@@ -61,55 +28,6 @@ $addtocartid = 'addtocart' . $course->id;
   </div>
 </noscript>
 
-<a href='#' id='<?= $addtocartid ?>' class='snipcart-actions invisible btn btn-primary'>
-    <?php print_string('addtocart', 'enrol_snipcart', array('currency'=>$enrol->currency, 'cost'=>$localisedcost)) ?>
-</a>
-
-<script type="text/javascript">
-    $(window).load(function() {
-    
-        Snipcart.execute('bind', 'order.completed', function (order) {
-            var path = location.pathname.substring(0, location.pathname.lastIndexOf("/"));
-            var url = path + '/snipcart/completed.php?order=' + order.token + '&eid=<?php p($enrol->id) ?>';
-            window.location.href = url;
-        });
-        
-        $('#<?= $addtocartid ?>')
-            .click(function(e){
-                // Cancel the default action
-                e.preventDefault();
-                
-                Snipcart.execute('item.add', {
-                    id: '<?php echo "{$user->id}-{$enrol->id}" ?>',
-                    name: '<?php p($coursefullname) ?>',
-                    price: '<?php p($cost) ?>',
-                    maxQuantity: '1',
-                    quantity: '1',
-                    shippable: 'false',
-                    url: '<?php echo $itemurl ?>',
-                    description: '<?php echo $course->summary ?>',
-                    image: '<?php echo $courseimageurl ?>'
-                });
-                
-                var oldLabel = $(this).html();
-                $(this).addClass('btn-disabled');
-                $(this).addClass('disabled');
-                $(this).removeClass('btn-primary');
-                $(this).removeAttr('data-toggle');
-                var width = $(this).css('width');
-                var height = $(this).css('height');
-                $(this).html('<?php print_string("addedtocart", "enrol_snipcart", array("currency"=>$enrol->currency, "cost"=>$localisedcost)) ?>');
-                var newWidth = $(this).css('width');
-                $(this).html('');
-                $(this).css({'width': width, 'height': height});
-                $(this).animate({'width': newWidth}, 300, function() {
-                    $(this).html('<?php print_string("addedtocart", "enrol_snipcart", array("currency"=>$enrol->currency, "cost"=>$localisedcost)) ?>');
-                  });
-                
-             });
-    });
-
-</script>
-<?php } ?>
+<?= $plugin->get_add_to_cart_button($course, $enrol); ?>
 
 </div>
