@@ -42,7 +42,7 @@ class block_snipcart extends block_base {
     }
     
     public function get_content() {
-        global $OUTPUT, $PAGE, $USER;
+        global $DB, $OUTPUT, $PAGE, $USER;
         
         // don't display the block if on a page within a course
         $pageformat = $PAGE->pagetype;
@@ -62,6 +62,17 @@ class block_snipcart extends block_base {
         $manager = \enrol_snipcart\get_snipcartaccounts_manager();
         $currency = $plugin->get_currency_for_country($USER->country);
         $publicapikey = $manager->get_snipcartaccount_info($currency, 'publicapikey');
+        
+        $userfullname   = fullname($USER);
+        $useremail      = trim(preg_replace('/\s*\([^)]*\)/', '', $USER->email));
+        $userphone      = $USER->phone1;
+        $useraddress    = $USER->address;
+        $usercity       = $USER->city;
+        $usercountry    = $USER->country;
+
+        $postcodefieldid    = $DB->get_field('user_info_field', 'id', array( 'shortname' => 'postcode'));
+        $postcodefield      = $DB->get_record('user_info_data', array('userid' => $USER->id, 'fieldid' => $postcodefieldid));
+        $userpostcode       = (!empty($postcodefield)) ? $postcodefield->data : '';
         
 
         $shoppingcart = '
@@ -92,6 +103,18 @@ class block_snipcart extends block_base {
             <script type="text/javascript">
                 $(window).load(function() {
                     $(".snipcart-actions").addClass("fadein");
+                    
+                    Snipcart.execute("setBillingAddress", {
+                        email: "'.$useremail.'",
+                        name: "'.$userfullname.'",
+                        address1: "'.$useraddress.'",
+                        address2: "",
+                        country: "'.$usercountry.'",
+                        province: "",
+                        city: "'.$usercity.'",
+                        phone: "'.$userphone.'",
+                        postalCode: "'.$userpostcode.'"
+                    });
                 });
             </script>';
         
