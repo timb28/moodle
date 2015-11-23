@@ -44,6 +44,8 @@ class block_snipcart extends block_base {
     public function get_content() {
         global $DB, $OUTPUT, $PAGE, $USER;
         
+        $PAGE->requires->jquery();
+        
         // don't display the block if on a page within a course
         $pageformat = $PAGE->pagetype;
         if (!blocks_name_allowed_in_format('snipcart', $pageformat)) {

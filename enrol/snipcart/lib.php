@@ -145,7 +145,9 @@ class enrol_snipcart_plugin extends enrol_plugin {
      * @return string of button html
      */
     function get_add_to_cart_button($course, $instance, $buttonclasses = '') {
-        global $CFG, $USER;
+        global $CFG, $PAGE, $USER;
+        
+        $PAGE->requires->jquery();
         
         // Notify the admin if a user's country is not set (ignore the guest user)
         if (!($USER->country) and !($USER->id == 1)) {
