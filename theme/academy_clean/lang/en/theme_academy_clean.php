@@ -24,7 +24,7 @@
 
 // Course category buttons
 $string['inprogress'] = '<a href="{$a}" class="btn btn-small btn-info pull-right"><i class="icon-chevron-right icon-white"></i></a>';
-$string['complete'] = '<a class="btn btn-success btn-small pull-right"><i class="icon-ok icon-white"></i></a>';
+$string['complete'] = '<a href="{$a}" class="btn btn-success btn-small pull-right"><i class="icon-ok icon-white"></i></a>';
 
 $string['choosereadme'] = '
 <div class="clearfix">

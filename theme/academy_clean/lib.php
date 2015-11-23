@@ -59,12 +59,12 @@ function theme_academy_create_course_button($course) {
             return $inprogressbutton;
         }
         
-        $completealert = get_string('complete', 'theme_academy_clean');
+        $completebutton = get_string('complete', 'theme_academy_clean', $viewcourseurl->out());
         
         $coursecompletion = new completion_info($course);
         
         if ($coursecompletion->is_course_complete($USER->id)) {
-            return $completealert;
+            return $completebutton;
         } else {
             return $inprogressbutton;
         }
