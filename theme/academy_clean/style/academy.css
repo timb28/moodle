@@ -751,6 +751,11 @@ body#page-enrol-index div.box.generalbox.info {
     display: none;
 }
 
+/* Add space between course icons and course buttons */
+#page-course-index-category .info .btn {
+    margin-left: 0.5rem;
+}
+
 /* For guests, hide items on the course category page
  * so that only the main content appears. */
 .guest.pagelayout-coursecategory .categorypicker {

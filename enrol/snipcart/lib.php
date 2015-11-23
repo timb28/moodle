@@ -145,13 +145,13 @@ class enrol_snipcart_plugin extends enrol_plugin {
      * @return string of button html
      */
     function get_add_to_cart_button($course, $instance) {
-        global $CFG, $DB, $USER;
+        global $CFG, $USER;
         
         // Notify the admin if a user's country is not set (ignore the guest user)
         if (!($USER->country) and !($USER->id == 1)) {
             $this->message_error_to_admin('A Moodle user cannot purchase a course because their country is not set', $USER);
         }
-
+        
         if (!$this->can_user_access_instance($instance)) {
             return;
         }
@@ -165,7 +165,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
         if (abs($cost) < 0.01) { // no cost, other enrolment methods (instances) should be used
             return;
         }
-
+        
         $params = array('uid' => $USER->id,
                         'eid' => $instance->id);
         $itemurl = str_replace("http://", "https://", new moodle_url("/enrol/snipcart/validate.php", $params));

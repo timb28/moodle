@@ -40,14 +40,14 @@ function theme_academy_create_course_button($course) {
     require_once($CFG->libdir.'/completionlib.php');
     
     $instances = $DB->get_records('enrol', array('courseid'=>$course->id, 'status'=>ENROL_INSTANCE_ENABLED), 'sortorder,id');
-        
+    
     foreach ($instances as $instance) {
         if ($instance->status != ENROL_INSTANCE_ENABLED or $instance->courseid != $course->id) {
             debugging('Invalid instances parameter submitted in theme_academy_create_course_button()');
             continue;
         }
 
-        // Check if use is enrolled via ANY enrolment method.
+        // Check if use is enrolled via this enrolment instance.
         if (!$DB->record_exists('user_enrolments', array('userid'=>$USER->id, 'enrolid'=>$instance->id))) {
             continue;
         }
@@ -70,7 +70,7 @@ function theme_academy_create_course_button($course) {
         }
     }
     
-    /* Display any Snipcart 'Add to cart' buttons if the course is for sale. */
+    /* Display any Snipcart 'Add to cart' buttons if the course is for sale and the user isn't already enrolled. */
     foreach ($instances as $instance) {
         if ($instance->enrol == 'snipcart' && $instance->status == ENROL_INSTANCE_ENABLED ) {
             $snipcart = enrol_get_plugin('snipcart');

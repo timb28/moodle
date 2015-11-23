@@ -220,6 +220,10 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
         $coursenamelink = html_writer::link(new moodle_url('/course/view.php', array('id' => $course->id)),
                                             $coursename, array('class' => $course->visible ? '' : 'dimmed'));
         $content .= html_writer::tag($nametag, $coursenamelink, array('class' => 'coursename'));
+
+        // print 'add to cart' buttons
+        $content.= theme_academy_create_course_button($course);
+
         // If we display course in collapsed form but the course has summary or course contacts, display the link to the info page.
         $content .= html_writer::start_tag('div', array('class' => 'moreinfo'));
         if ($chelper->get_show_courses() < self::COURSECAT_SHOW_COURSES_EXPANDED) {
@@ -243,11 +247,6 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
             $content .= html_writer::end_tag('div'); // .enrolmenticons
         }
         
-        // print 'add to cart' buttons
-        //$snipcart = enrol_get_plugin('snipcart');
-        //$content .= $snipcart->get_add_to_cart_button($course);
-        $content.= theme_academy_create_course_button($course);
-
         $content .= html_writer::end_tag('div'); // .info
 
         $content .= html_writer::start_tag('div', array('class' => 'content'));

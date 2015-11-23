@@ -18,3 +18,9 @@
 #snipcart-main-container button.snipcart-btn:hover {
     background-position: 0 -45px;
 }
+
+/* Don't hide snipcart actions when loaded via javascript */
+.category.with_children .snipcart-actions.invisible {
+    visibility: visible;
+    opacity: 1;
+}
