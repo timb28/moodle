@@ -53,6 +53,13 @@ $PAGE->set_url("$CFG->httpswwwroot/login/country_login.php");
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('login');
 
+/* START Academy Patch M#037 Clear Snipcart shopping cart on login */
+if (isset($_COOKIE['snipcart_order_token'])) {
+    unset($_COOKIE['snipcart_order_token']);
+    setcookie('snipcart_order_token', '', 1, '/'); // empty value and 1 second expiry 
+}
+/* END Academy Patch M#03 */
+
 /// Initialize variables
 $errormsg = '';
 
