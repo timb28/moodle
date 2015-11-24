@@ -22,6 +22,18 @@
     margin: 0;
 }
 
+@media (max-width: 767px) {
+    .loginbox .loginsub {
+        padding-top: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .loginbox.twocolumns .loginpanel {
+        padding-bottom: 3rem;
+    }
+}
+
 @media (min-width: 768px) and (max-width: 979px) {
     .loginbox.twocolumns .loginpanel,
     .loginbox.twocolumns .signuppanel {
@@ -40,9 +52,12 @@
 }
 
 #page-login-index .loginpanel h2 {
-    height: 3rem;
+    width: 300px;
+    height: 70px;
+    margin: 10px auto 0;
+    padding-bottom: 0;
     background: url([[pix:theme|h1-logo-white]]) 50% 50% no-repeat;
-    background-size: 240px, contain;
+    background-size: contain;
     /* Hide the text. */
     text-indent: 150%;
     white-space: nowrap;
@@ -51,13 +66,13 @@
 
 #page-login-index .loginbox.onecolumn .loginsub,
 #page-login-index .loginbox.onecolumn .guestsub {
-    width: 25%;
+    width: 300px;
     margin: 0 auto;
 }
 
 #page-login-index .loginbox.twocolumns .loginsub,
 #page-login-index .loginbox.twocolumns .guestsub {
-    width: 50%;
+    width: 300px;
     margin: 0 auto;
 }
 
@@ -155,4 +170,9 @@
 
 #page-login-index .loginpanel input[type="submit"]:focus {
     background-position: 0;
+}
+
+/* Hide the "Cookies must be enabled in your browser" hint */
+#page-login-index .loginpanel .desc {
+    display: none;
 }
