@@ -49,7 +49,14 @@
     overflow: hidden;
 }
 
-#page-login-index .loginbox form {
+#page-login-index .loginbox.onecolumn .loginsub,
+#page-login-index .loginbox.onecolumn .guestsub {
+    width: 25%;
+    margin: 0 auto;
+}
+
+#page-login-index .loginbox.twocolumns .loginsub,
+#page-login-index .loginbox.twocolumns .guestsub {
     width: 50%;
     margin: 0 auto;
 }
