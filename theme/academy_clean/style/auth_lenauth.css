@@ -154,11 +154,9 @@
     cursor: pointer;
 }
 
-/* 'Log in as guest' button */
-#page-login-index .loginpanel form input[type="submit"] {
-    color: #333;
-    background-color: #F5F5F5;
-    background-image: linear-gradient(to bottom, #FFF, #E6E6E6);
+/* Hide 'Log in as guest' button */
+#page-login-index form#guestlogin {
+    display: none;
 }
 
 #page-login-index .loginpanel input[type="submit"]:hover {
