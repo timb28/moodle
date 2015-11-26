@@ -44,6 +44,22 @@ if ( (float) $enrol->cost <= 0 ) {
         <title></title>
     </head>
     <body>
-        <?php include($CFG->dirroot.'/enrol/snipcart/enrol.html'); ?>
+    <p class="course-summary"><img src="<?= $plugin->get_course_image_url($course) ?>" alt="<?= $course->fullname ?>" /><?= $course->summary ?></p>
+    <div align="center">
+
+    <p class="payment-required"><?php print_string('paymentrequired', 'enrol_snipcart') ?></p>
+
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+    <noscript>
+      <div class="alert alert-block alert-error">
+          <p><strong><?= get_string('warning', 'moodle') ?></strong> <?= get_string('javascriptrequired', 'group') ?></p>
+          <p><?= get_string('nojavascript', 'enrol_snipcart') ?></p>
+      </div>
+    </noscript>
+
+    <?= $plugin->get_add_to_cart_button($course, $enrol, 'snipcart-add-item'); ?>
+
+    </div>
     </body>
 </html>
