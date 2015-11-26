@@ -87,11 +87,11 @@ class enrol_snipcart_plugin extends enrol_plugin {
      * @param stdClass $instance
      * @return bool
      */
-    public function can_user_access_instance($instance) {
-        global $DB, $USER;
+    public function can_user_access_instance($userid, $instanceid) {
+        global $DB;
         
-        $enrol = $DB->get_record('enrol', array('id'=>$instance->id));
-        $user = $DB->get_record('user', array('id'=>$USER->id)); // ensure current user info
+        $enrol = $DB->get_record('enrol', array('id'=>$instanceid));
+        $user = $DB->get_record('user', array('id'=>$userid)); // ensure current user info
         
         // Social (public) users are prevented from accessing
         // the course if so configured and this user is a social user.
@@ -154,7 +154,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
             $this->message_error_to_admin('A Moodle user cannot purchase a course because their country is not set', $user);
         }
         
-        if (!$this->can_user_access_instance($instance)) {
+        if (!$this->can_user_access_instance($user->id, $instance->id)) {
             return;
         }
 
@@ -404,7 +404,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
             return ob_get_clean();
         }
         
-        if (!$this->can_user_access_instance($enrol)) {
+        if (!$this->can_user_access_instance($USER->id, $enrol->id)) {
             return ob_get_clean();
         }
         
