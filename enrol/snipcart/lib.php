@@ -171,6 +171,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
         $params = array('uid' => $user->id,
                         'eid' => $instance->id);
         $itemurl = str_replace("http://", "https://", new moodle_url("/enrol/snipcart/validate.php", $params));
+        $itemurl = str_replace("&amp;", "&", $itemurl);
 
         // Calculate localised and "." cost, make sure we send Snipcart the same value,
         // please note Snipcart expects amount with 2 decimal places and "." separator.
