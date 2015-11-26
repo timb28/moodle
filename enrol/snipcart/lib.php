@@ -204,8 +204,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
             <script type='text/javascript'>
                 $(window).load(function() {
                     Snipcart.execute('bind', 'order.completed', function (order) {
-                        var path = location.pathname.substring(0, location.pathname.lastIndexOf('/'));
-                        var url = path + '/snipcart/completed.php?order=' + order.token + '&eid={$instance->id}';
+                        var url = '{$CFG->wwwroot}/enrol/snipcart/completed.php?order=' + order.token + '&eid={$instance->id}';
                         window.location.href = url;
                     });
 
