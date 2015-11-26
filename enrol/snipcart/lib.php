@@ -189,7 +189,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
 
         return "
             <a href='#' id='$addtocartid' class='snipcart-actions invisible btn btn-primary btn-small $buttonclasses'"
-                . " data-item-id='$USER->id}-{$instance->id}'"
+                . " data-item-id='{$USER->id}-{$instance->id}'"
                 . " data-item-name='$coursefullname'"
                 . " data-item-price='$cost'"
                 . " data-item-max-quantity='1'"
