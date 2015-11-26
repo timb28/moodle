@@ -188,7 +188,17 @@ class enrol_snipcart_plugin extends enrol_plugin {
         $addtocartid = 'addtocart' . $instance->id;
 
         return "
-            <a href='#' id='$addtocartid' class='snipcart-actions invisible btn btn-primary btn-small $buttonclasses'>".get_string('addtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "</a>
+            <a href='#' id='$addtocartid' class='snipcart-actions invisible btn btn-primary btn-small $buttonclasses'"
+                . " data-item-id='$USER->id}-{$instance->id}'"
+                . " data-item-name='$coursefullname'"
+                . " data-item-price='$cost'"
+                . " data-item-max-quantity='1'"
+                . " data-item-quantity='1'"
+                . " data-item-shippable='false'"
+                . " data-item-url='$itemurl'"
+                . " data-item-description='{$course->summary}'"
+                . " data-item-image='$courseimageurl'"
+                . ">".get_string('addtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "</a>
 
             <script type='text/javascript'>
                 $(window).load(function() {
