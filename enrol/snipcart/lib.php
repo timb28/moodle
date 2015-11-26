@@ -235,8 +235,8 @@ class enrol_snipcart_plugin extends enrol_plugin {
                             $(this).html('". get_string('addedtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) ."');
                             var newWidth = $(this).css('width');
                             $(this).html('');
-                            $(this).css({'width': width, 'height': height});
-                            $(this).animate({'width': newWidth}, 300, function() {
+                            $(this).css({'min-width': width, 'height': height});
+                            $(this).animate({'min-width': newWidth}, 300, function() {
                                 $(this).html('". get_string('addedtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) ."');
                               });
 
