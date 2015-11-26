@@ -58,7 +58,7 @@ if ( (float) $enrol->cost <= 0 ) {
       </div>
     </noscript>
 
-    <?= $plugin->get_add_to_cart_button($course, $enrol, 'snipcart-add-item'); ?>
+    <?= $plugin->get_add_to_cart_button($user, $course, $enrol, 'snipcart-add-item'); ?>
 
     </div>
     </body>

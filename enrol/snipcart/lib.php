@@ -144,14 +144,14 @@ class enrol_snipcart_plugin extends enrol_plugin {
      * @param stdClass $instance for the enrolment instance
      * @return string of button html
      */
-    function get_add_to_cart_button($course, $instance, $buttonclasses = '') {
-        global $CFG, $PAGE, $USER;
+    function get_add_to_cart_button($user, $course, $instance, $buttonclasses = '') {
+        global $CFG, $PAGE;
         
         $PAGE->requires->jquery();
         
         // Notify the admin if a user's country is not set (ignore the guest user)
-        if (!($USER->country) and !($USER->id == 1)) {
-            $this->message_error_to_admin('A Moodle user cannot purchase a course because their country is not set', $USER);
+        if (!($user->country) and !($user->id == 1)) {
+            $this->message_error_to_admin('A Moodle user cannot purchase a course because their country is not set', $user);
         }
         
         if (!$this->can_user_access_instance($instance)) {
@@ -168,7 +168,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
             return;
         }
         
-        $params = array('uid' => $USER->id,
+        $params = array('uid' => $user->id,
                         'eid' => $instance->id);
         $itemurl = str_replace("http://", "https://", new moodle_url("/enrol/snipcart/validate.php", $params));
 
@@ -189,7 +189,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
 
         return "
             <a href='#' id='$addtocartid' class='snipcart-actions invisible btn btn-primary btn-small $buttonclasses'"
-                . " data-item-id='{$USER->id}-{$instance->id}'"
+                . " data-item-id='{$user->id}-{$instance->id}'"
                 . " data-item-name='$coursefullname'"
                 . " data-item-price='$cost'"
                 . " data-item-max-quantity='1'"
@@ -214,7 +214,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
                             e.preventDefault();
 
                             Snipcart.execute('item.add', {
-                                id: '{$USER->id}-{$instance->id}',
+                                id: '{$user->id}-{$instance->id}',
                                 name: '$coursefullname',
                                 price: '{$instance->cost}',
                                 maxQuantity: '1',
