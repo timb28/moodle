@@ -73,7 +73,7 @@ function theme_academy_create_course_button($course) {
     foreach ($instances as $instance) {
         if ($instance->enrol == 'snipcart' && $instance->status == ENROL_INSTANCE_ENABLED ) {
             $snipcart = enrol_get_plugin('snipcart');
-            return $snipcart->get_add_to_cart_button($course, $instance, 'pull-right');
+            return $snipcart->get_add_to_cart_button($USER, $course, $instance, 'pull-right');
         }
     }
 }
