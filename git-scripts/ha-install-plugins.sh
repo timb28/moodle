@@ -28,6 +28,7 @@
 ./mod/mod_certificate-install.sh
 ./mod/mod_game-install.sh
 ./mod/mod_questionnaire-install.sh
+./mod/mod_subcourse-install.sh
 ./mod/mod_videofile-install.sh
 
 ## Quiz Question Types
