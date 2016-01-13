@@ -3,7 +3,7 @@ $string['enrol_message'] = 'Enrol message to show when the user has not yet boug
 $string['enrol_message_desc'] = 'Enrol message to show when the user has not yet bought the course';
 $string['enrolname'] = 'Joomdle';
 $string['pluginname'] = 'Joomdle';
-$string['pluginname_desc'] = 'Shows a message to the user to tell them they should buy the course through Joomla.\nVersion 1.0';
+$string['pluginname_desc'] = 'Shows a message to the user to tell them they should buy the course through Joomla.\nVersion 1.0.2';
 
 $string['assignrole'] = 'Assign role';
 $string['cost'] = 'Enrol Cost';

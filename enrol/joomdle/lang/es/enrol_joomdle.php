@@ -2,7 +2,7 @@
 $string['enrol_message'] = 'Mensaje a mostrar al usuario cuando aún no ha comprado el curso';
 $string['enrol_message_desc'] = 'Mensaje a mostrar al usuario cuando aún no ha comprado el curso';
 $string['pluginname'] = 'Joomdle';
-$string['pluginname_desc'] = 'Muestra un mensaje para informar al usuario de que deberían comprar el curso a través de Joomla.\nVersion 1.0';
+$string['pluginname_desc'] = 'Muestra un mensaje para informar al usuario de que deberían comprar el curso a través de Joomla.\nVersion 1.0.2';
 
 $string['enrolname'] = 'Joomdle';
 

@@ -17,8 +17,9 @@
 /**
  * Functions for file handling.
  *
- * @package   core_files
+ * @package   auth_joomdle
  * @copyright 1999 onwards Martin Dougiamas (http://dougiamas.com)
+ * @copyright  2009 Qontori Pte Ltd  (changes for Joomdle integration)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

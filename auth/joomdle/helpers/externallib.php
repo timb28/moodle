@@ -1,4 +1,27 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Joomdle web services helper file
+ *
+ * @package    auth_joomdle
+ * @copyright  2009 Qontori Pte Ltd
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 
 require_once("$CFG->libdir/externallib.php");
 require_once($CFG->dirroot.'/auth/joomdle/auth.php');
@@ -26,9 +49,6 @@ class joomdle_helpers_external extends external_api {
 		$auth = new  auth_plugin_joomdle ();
 		$id = $auth->user_id ($username);
 
-        /* START Academy Patch M#028 joomdle_user_id web service function should return null when a student doesn't exist */
-        $id = ($id === 0 ? null : $id);
-        /* END Academy Patch M#028 */
         return $id;
     }
 
@@ -129,9 +149,17 @@ class joomdle_helpers_external extends external_api {
                 array(
                     'id' => new external_value(PARAM_INT, 'group record id'),
                     'fullname' => new external_value(PARAM_TEXT, 'course name'),
+                    'summary' => new external_value(PARAM_RAW, 'summary'),
                     'category' => new external_value(PARAM_INT, 'course category id'),
                     'cat_name' => new external_value(PARAM_TEXT, 'course category name'),
                     'can_unenrol' => new external_value(PARAM_INT, 'user can self unenrol'),
+					'summary_files' => new external_multiple_structure(
+								new external_single_structure(
+									array(
+										'url' => new external_value(PARAM_TEXT, 'item url'),
+									)
+								)
+							)
                 )
             )
         );
@@ -1218,6 +1246,10 @@ class joomdle_helpers_external extends external_api {
 						'department' => new external_value(PARAM_TEXT, 'department', VALUE_OPTIONAL),
 						'picture' => new external_value(PARAM_TEXT, 'picture', VALUE_OPTIONAL),
 						'pic_url' => new external_value(PARAM_TEXT, 'pic url', VALUE_OPTIONAL),
+						'lastnamephonetic' => new external_value(PARAM_TEXT, 'lastnamephonetic', VALUE_OPTIONAL),
+						'firstnamephonetic' => new external_value(PARAM_TEXT, 'firstnamephonetic', VALUE_OPTIONAL),
+						'middlename' => new external_value(PARAM_TEXT, 'middlename', VALUE_OPTIONAL),
+						'alternatename' => new external_value(PARAM_TEXT, 'alternatename', VALUE_OPTIONAL),
 						'custom_fields' => new external_multiple_structure(
 								new external_single_structure(
 									array(
@@ -2174,12 +2206,8 @@ class joomdle_helpers_external extends external_api {
 
         $params = self::validate_parameters(self::suspend_enrolment_parameters(), array('username'=>$username, 'id' => $id));
 
-        /* START M#23 Prevent Harcourts One from suspending student enrolments until tracker HO-117895 is fixed */
-//        $auth = new  auth_plugin_joomdle ();
-//        $id = $auth->suspend_enrolment ($username, $id);
-        error_log('Ignored H1 suspending student: '.$username);
-        $id = null;
-        /* END M#23 Prevent Harcourts One from suspending student enrolments until tracker HO-117895 is fixed */
+        $auth = new  auth_plugin_joomdle ();
+        $id = $auth->suspend_enrolment ($username, $id);
 
         return $id;
     }
@@ -2253,6 +2281,7 @@ class joomdle_helpers_external extends external_api {
                                             'available' => new external_value(PARAM_INT, 'available'),
                                             'completion_info' => new external_value(PARAM_RAW, 'completion info'),
                                             'display' => new external_value(PARAM_INT, 'display'),
+                                            'content' => new external_value(PARAM_RAW, 'content'),
 											)
 										)
 							),
@@ -4018,6 +4047,8 @@ class joomdle_helpers_external extends external_api {
                 new external_single_structure(
                     array(
                         'email' => new external_value(PARAM_TEXT, 'email'),
+                        'firstname' => new external_value(PARAM_TEXT, 'fistname'),
+                        'lastname' => new external_value(PARAM_TEXT, 'lastname'),
                         'grades' => new external_multiple_structure(
                                         new external_single_structure(
                                 array(
@@ -4069,6 +4100,315 @@ class joomdle_helpers_external extends external_api {
 
         $auth = new  auth_plugin_joomdle ();
         $return = $auth->get_course_grades_items ($id);
+
+
+        return $return;
+    }
+
+    /* get_course_questionnaire_results */
+    public static function get_course_questionnaire_results_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'id' => new external_value(PARAM_INT, 'course id'),
+                        )
+        );
+    }
+
+    public static function get_course_questionnaire_results_returns() {
+         return new external_multiple_structure(
+            new external_single_structure(
+                array(
+                    'name' => new external_value(PARAM_TEXT, 'name'),
+                    'content' => new external_value(PARAM_RAW, 'content'),
+                    'type' => new external_value(PARAM_INT, 'type'),
+                    'options' => new external_multiple_structure(
+                                new external_single_structure(
+                                    array(
+                                        'n' => new external_value(PARAM_INT, 'number of responses'),
+										'content' => new external_value(PARAM_RAW, 'content'),
+                                    )
+                                )
+                            )
+                )
+            )
+        );
+    }
+
+    public static function get_course_questionnaire_results($id) { 
+        global $CFG, $DB;
+
+      $params = self::validate_parameters(self::get_course_questionnaire_results_parameters(), array('id'=>$id));
+
+        $auth = new  auth_plugin_joomdle ();
+        $id = $auth->get_course_questionnaire_results ($id);
+
+        return $id;
+    }
+
+	/* get_all_courses */
+    public static function get_all_courses_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'sortby' => new external_value(PARAM_TEXT, 'Order field'),
+                        )
+        );
+    }
+
+    public static function get_all_courses_returns() {
+		 return new external_multiple_structure(
+            new external_single_structure(
+                array(
+                    'remoteid' => new external_value(PARAM_INT, 'course id'),
+                    'cat_id' => new external_value(PARAM_INT, 'category id'),
+                    'cat_name' => new external_value(PARAM_TEXT, 'cartegory name'),
+                    'cat_description' => new external_value(PARAM_RAW, 'category description'),
+                    'sortorder' => new external_value(PARAM_TEXT, 'sortorder'),
+                    'fullname' => new external_value(PARAM_TEXT, 'course name'),
+                    'shortname' => new external_value(PARAM_TEXT, 'course shortname'),
+                    'idnumber' => new external_value(PARAM_RAW, 'idnumber'),
+                    'summary' => new external_value(PARAM_RAW, 'summary'),
+                    'startdate' => new external_value(PARAM_INT, 'start date'),
+                    'created' => new external_value(PARAM_INT, 'created'),
+                    'modified' => new external_value(PARAM_INT, 'modified'), 
+                    'cost' => new external_value(PARAM_FLOAT, 'cost', VALUE_OPTIONAL),
+                    'currency' => new external_value(PARAM_TEXT, 'currency', VALUE_OPTIONAL),
+                    'self_enrolment' => new external_value(PARAM_INT, 'self enrollable'), 
+                    'in_enrol_date' => new external_value(PARAM_BOOL, 'in enrol date'), 
+                    'guest' => new external_value(PARAM_INT, 'guest access'), 
+					'summary_files' => new external_multiple_structure(
+								new external_single_structure(
+									array(
+										'url' => new external_value(PARAM_TEXT, 'item url'),
+									)
+								)
+							)
+                )
+            )
+        );
+    }
+
+    public static function get_all_courses($sortby) { //Don't forget to set it as static
+        global $CFG, $DB;
+ 
+      $params = self::validate_parameters(self::get_all_courses_parameters(), array('sortby' => $sortby)); 
+ 
+		$auth = new  auth_plugin_joomdle ();
+		$id = $auth->get_all_courses ($sortby);
+
+        return $id;
+    }
+
+    /* get_events */
+    public static function get_events_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'username' => new external_value(PARAM_TEXT, 'Username'),
+                            'start_date' => new external_value(PARAM_INT, 'time start'),
+                            'end_date' => new external_value(PARAM_INT, 'time end'),
+                            'type' => new external_value(PARAM_TEXT, 'event type'),
+                            'course_id' => new external_value(PARAM_INT, 'course_id'),
+                        )
+        );
+    }
+
+    public static function get_events_returns() {
+         return new external_multiple_structure(
+                new external_single_structure(
+                    array(
+						'id' => new external_value(PARAM_INT, 'id'),
+                        'name' => new external_value(PARAM_TEXT, 'name'),
+                        'description' => new external_value(PARAM_RAW, 'description'),
+						'timestart' => new external_value(PARAM_INT, 'timestart'),
+						'timeduration' => new external_value(PARAM_INT, 'timeduration'),
+                    )
+                )
+            );
+    }
+
+    public static function get_events($username, $start_date, $end_date, $type, $course_id) {
+        global $CFG, $DB;
+
+        $params = self::validate_parameters(self::get_events_parameters(), array('username'=>$username, 'start_date'=>$start_date, 'end_date'=>$end_date, 'type'=>$type, 'course_id'=>$course_id));
+
+        $auth = new  auth_plugin_joomdle ();
+        $return = $auth->get_events ($username, $start_date, $end_date, $type, $course_id);
+
+
+        return $return;
+    }
+
+    /* get_event */
+    public static function get_event_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'id' => new external_value(PARAM_INT, 'id'),
+                        )
+        );
+    }
+
+    public static function get_event_returns() {
+         return new external_single_structure(
+                    array(
+						'id' => new external_value(PARAM_INT, 'id'),
+                        'name' => new external_value(PARAM_TEXT, 'name'),
+                        'description' => new external_value(PARAM_RAW, 'description'),
+						'timestart' => new external_value(PARAM_INT, 'timestart'),
+						'timeduration' => new external_value(PARAM_INT, 'timeduration'),
+                        'type' => new external_value(PARAM_TEXT, 'event type'),
+                    )
+            );
+    }
+
+    public static function get_event($id) {
+        global $CFG, $DB;
+
+        $params = self::validate_parameters(self::get_event_parameters(), array('id'=>$id));
+
+        $auth = new  auth_plugin_joomdle ();
+        $return = $auth->get_event ($id);
+
+
+        return $return;
+    }
+
+    /* get_certificates_credits */
+    public static function get_certificates_credits_parameters() {
+		        return new external_function_parameters(
+                        array(
+                            'courses' => new external_multiple_structure(
+                                        new external_single_structure(
+                                            array(
+                                                'id' => new external_value(PARAM_INT, 'course id'),
+                                            )
+                                        )
+                        )
+                )
+        );
+    }
+
+    public static function get_certificates_credits_returns() {
+         return new external_multiple_structure(
+                new external_single_structure(
+                    array(
+						'id' => new external_value(PARAM_INT, 'id'),
+                        'course_id' => new external_value(PARAM_TEXT, 'course id'),
+                        'credits' => new external_value(PARAM_TEXT, 'credits'),
+                    )
+                )
+            );
+    }
+
+    public static function get_certificates_credits($courses) {
+        global $CFG, $DB;
+
+        $params = self::validate_parameters(self::get_certificates_credits_parameters(), array('courses'=>$courses));
+
+        $auth = new  auth_plugin_joomdle ();
+        $return = $auth->get_certificates_credits ($courses);
+
+
+        return $return;
+    }
+
+    /* set_section_visible */
+    public static function set_section_visible_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'course_id' => new external_value(PARAM_INT, 'course_id'),
+                            'section' => new external_value(PARAM_INT, 'section'),
+                            'active' => new external_value(PARAM_INT, 'active'),
+                        )
+        );
+    }
+
+    public static function set_section_visible_returns() {
+		return new  external_value(PARAM_INT, 'course id');
+    }
+
+    public static function set_section_visible($course_id, $section, $active) {
+        global $CFG, $DB;
+
+        $params = self::validate_parameters(self::set_section_visible_parameters(), array('course_id'=>$course_id, 'section'=>$section, 'active'=>$active));
+
+        $auth = new  auth_plugin_joomdle ();
+        $return = $auth->set_section_visible ($course_id, $section, $active);
+
+
+        return $return;
+    }
+
+    /* create_events */
+    public static function create_events_parameters() {
+		        return new external_function_parameters(
+                        array(
+                            'events' => new external_multiple_structure(
+                                        new external_single_structure(
+                                            array(
+                                                'name' => new external_value(PARAM_TEXT, 'name'),
+                                                'description' => new external_value(PARAM_TEXT, 'description'),
+                                                'courseid' => new external_value(PARAM_INT, 'course id'),
+                                                'timestart' => new external_value(PARAM_INT, 'time start'),
+                                                'timeend' => new external_value(PARAM_INT, 'time end'),
+                                                'eventtype' => new external_value(PARAM_TEXT, 'event type'),
+                                                'username' => new external_value(PARAM_TEXT, 'username'),
+                                            )
+                                        )
+                        )
+                )
+        );
+    }
+
+    public static function create_events_returns() {
+		return new  external_value(PARAM_INT, 'event number');
+    }
+
+    public static function create_events($events) {
+        global $CFG, $DB;
+
+        $params = self::validate_parameters(self::create_events_parameters(), array('events'=>$events));
+
+        $auth = new  auth_plugin_joomdle ();
+        $return = $auth->create_events ($events);
+
+
+        return $return;
+    }
+
+    /* get_courses_not_editing_teachers */
+    public static function get_courses_not_editing_teachers_parameters() {
+                return new external_function_parameters(
+                        array(
+                            'courses' => new external_multiple_structure(
+                                        new external_single_structure(
+                                            array(
+                                                'id' => new external_value(PARAM_INT, 'course id'),
+                                            )
+                                        )
+                        )
+                )
+        );
+    }
+
+    public static function get_courses_not_editing_teachers_returns() {
+         return new external_multiple_structure(
+                new external_single_structure(
+                    array(
+                        'course_id' => new external_value(PARAM_TEXT, 'course id'),
+                        'firstname' => new external_value(PARAM_TEXT, 'firstname'),
+                        'lastname' => new external_value(PARAM_TEXT, 'lastname'),
+                        'username' => new external_value(PARAM_TEXT, 'username'),
+                    )
+                )
+            );
+    }
+
+    public static function get_courses_not_editing_teachers($courses) {
+        global $CFG, $DB;
+
+        $params = self::validate_parameters(self::get_courses_not_editing_teachers_parameters(), array('courses'=>$courses));
+
+        $auth = new  auth_plugin_joomdle ();
+        $return = $auth->get_courses_not_editing_teachers($courses);
 
 
         return $return;

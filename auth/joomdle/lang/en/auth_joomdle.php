@@ -2,8 +2,8 @@
 
 
 $string['pluginname'] = 'Joomdle';
-$string['pluginame_desc'] = 'This method uses Joomdle web services to know whether a user has a valid session in Joomla.Version 1.0.1';
-$string['auth_joomdledescription'] = 'This method uses Joomdle web services to know whether a user has a valid session in Joomla.Version 1.0.1';
+$string['pluginame_desc'] = 'This method uses Joomdle web services to know whether a user has a valid session in Joomla.Version 1.0.5';
+$string['auth_joomdledescription'] = 'This method uses Joomdle web services to know whether a user has a valid session in Joomla.Version 1.0.5';
 
 $string['joomla_sp_name'] = 'Joomdle';
 $string['joomla_sp_description'] = 'Services for Joomla Integration<br>';

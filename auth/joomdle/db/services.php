@@ -1,4 +1,27 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Joomdle web services definitions
+ *
+ * @package    auth_joomdle
+ * @copyright  2009 Qontori Pte Ltd
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 $functions = array(
     'joomdle_user_id' => array(         //web service function name
         'classname'   => 'joomdle_helpers_external',  //class containing the external function
@@ -7,12 +30,12 @@ $functions = array(
         'description' => 'Get user id.',    //human readable description of the web service function
         'type'        => 'read',                  //database rights of the web service function (read, write)
     ),
-    'joomdle_list_courses' => array(         //web service function name
-        'classname'   => 'joomdle_helpers_external',  //class containing the external function
-        'methodname'  => 'list_courses',          //external function name
-        'classpath'   => 'auth/joomdle/helpers/externallib.php',  //file containing the class/external function
-        'description' => 'List courses',    //human readable description of the web service function
-        'type'        => 'read',                  //database rights of the web service function (read, write)
+    'joomdle_list_courses' => array(    
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'list_courses',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'List courses',
+        'type'        => 'read',
     ),
     'joomdle_my_courses' => array(        
         'classname'   => 'joomdle_helpers_external',
@@ -803,6 +826,62 @@ $functions = array(
         'methodname'  => 'get_course_grades_items',
         'classpath'   => 'auth/joomdle/helpers/externallib.php',
         'description' => 'Get course grade items names',
+        'type'        => 'read',
+    ),
+    'joomdle_get_course_questionnaire_results' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'get_course_questionnaire_results',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Get results of course questionnaire',
+        'type'        => 'read',
+    ),
+    'joomdle_get_all_courses' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'get_all_courses',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Get all courses',
+        'type'        => 'read',
+    ),
+    'joomdle_get_events' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'get_events',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Get events',
+        'type'        => 'read',
+    ),
+    'joomdle_get_event' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'get_event',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Get event',
+        'type'        => 'read',
+    ),
+    'joomdle_get_certificates_credits' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'get_certificates_credits',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Get certificates credits',
+        'type'        => 'read',
+    ),
+    'joomdle_set_section_visible' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'set_section_visible',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Set section as visible',
+        'type'        => 'read',
+    ),
+    'joomdle_create_events' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'create_events',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Create events',
+        'type'        => 'read',
+    ),
+    'joomdle_get_courses_not_editing_teachers' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'get_courses_not_editing_teachers',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Get not editing teachers for several courses',
         'type'        => 'read',
     ),
 
