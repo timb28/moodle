@@ -27,3 +27,4 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version = 2011042000;
+$plugin->component = 'filter_flowplayer';  // Full name of the plugin (used for diagnostics)
