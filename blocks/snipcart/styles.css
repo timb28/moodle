@@ -1,0 +1,65 @@
+/**
+ * Snipcart shopping cart block styles
+ * 
+ * @package   block_snipcart
+ * @author    Tim Butler
+ * @copyright (c) 2015 Harcourts International Limited {@link http://www.harcourtsacademy.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+
+.block_snipcart .snipcart-items {
+    display: inline-block;
+    width: 50%;
+    float: left;
+}
+
+.block_snipcart .snipcart-total-items {
+    font-weight: bold;
+}
+
+.block_snipcart .snipcart-price {
+    display: inline-block;
+    width: 50%;
+    text-align: right;
+}
+
+.block_snipcart .snipcart-total-price {
+    font-weight: bold;
+}
+
+.block_snipcart .snipcart-actions {
+    margin: 0.5rem 0;
+    text-align: center;
+}
+
+.block_snipcart .snipcart-actions a.snipcart-checkout {
+    display: block;
+    margin: auto;
+    max-width: 20rem;
+}
+
+.block_snipcart .snipcart-actions a.snipcart-checkout img {
+    max-width: 1.03rem;
+    margin: 0 2px 5px 0;
+    
+}
+
+.block_snipcart .snipcart-payment-types {
+    text-align: center;
+}
+
+.block_snipcart .snipcart-payment-type span {
+    display: inline-block;
+}
+
+.block_snipcart .snipcart-payment-type img {
+    max-width: 30px;
+    padding: 4px;
+}
+
+/* Don't display the Snipcart discount field */
+#snipcart-step-content-cart-content #snipcart-discounts,
+#snipcart-step-content-confirm #snipcart-discounts {
+    display: none;
+}
