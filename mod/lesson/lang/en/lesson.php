@@ -97,7 +97,7 @@ $string['collapsed'] = 'Collapsed';
 $string['comments'] = 'Your comments';
 $string['completed'] = 'Completed';
 $string['completederror'] = 'Complete the lesson';
-$string['completethefollowingconditions'] = 'You must complete the following condition(s) in <b>{$a}</b> lesson before you can proceed.';
+$string['completethefollowingconditions'] = 'You must complete the following condition(s) in <b><a href=\'{$a->url}\'>{$a->name}</a></b> before you can proceed.'; /* Academy Patch M#17 Link to pre-requisites appears in pre-requisites not met page */
 $string['completionendreached'] = 'Require end reached';
 $string['completionendreached_desc'] = 'Student must reach the end of lesson page to complete this activity';
 $string['completiontimespent'] = 'Student must do this activity at least for';

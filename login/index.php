@@ -50,6 +50,13 @@ $PAGE->set_url("$CFG->httpswwwroot/login/index.php");
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('login');
 
+/* START Academy Patch M#037 Clear Snipcart shopping cart on login */
+if (isset($_COOKIE['snipcart_order_token'])) {
+    unset($_COOKIE['snipcart_order_token']);
+    setcookie('snipcart_order_token', '', 1, '/'); // empty value and 
+}
+/* END Academy Patch M#037 */
+
 /// Initialize variables
 $errormsg = '';
 $errorcode = 0;
@@ -271,7 +278,11 @@ if (empty($SESSION->wantsurl)) {
 }
 
 /// Redirect to alternative login URL if needed
-if (!empty($CFG->alternateloginurl)) {
+/* START Academy Patch M#030 Don't redirect Moodle login to alternative login url when directlogin=1 */
+$directlogin = optional_param('directlogin', 0, PARAM_BOOL); // don't redirect to alternative login
+if (!empty($CFG->alternateloginurl) && !$directlogin) {
+//if (!empty($CFG->alternateloginurl)) {
+/* END Academy Patch M#030 */
     $loginurl = $CFG->alternateloginurl;
 
     if (strpos($SESSION->wantsurl, $loginurl) === 0) {

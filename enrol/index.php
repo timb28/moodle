@@ -90,6 +90,10 @@ $PAGE->set_title($course->shortname);
 $PAGE->set_heading($course->fullname);
 $PAGE->navbar->add(get_string('enrolmentoptions','enrol'));
 
+/* Start: Academy Patch M#029 Skip the “Guests can not access this course, please try to log in.” notice and open the login page when not logged in when opening a course. */
+ob_start();
+/* END: Academy Patch M#029 */
+
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('enrolmentoptions','enrol'));
 
@@ -104,7 +108,12 @@ foreach ($forms as $form) {
 
 if (!$forms) {
     if (isguestuser()) {
-        notice(get_string('noguestaccess', 'enrol'), get_login_url());
+        /* Start: Academy Patch M#029
+         notice(get_string('noguestaccess', 'enrol'), get_login_url());
+         */
+         
+        redirect(get_login_url());
+        /* END: Academy Patch M#029 */
     } else if ($returnurl) {
         notice(get_string('notenrollable', 'enrol'), $returnurl);
     } else {
@@ -117,3 +126,7 @@ if (!$forms) {
 }
 
 echo $OUTPUT->footer();
+
+/* Start: Academy Patch M#029 */
+echo ob_get_clean();
+/* END: Academy Patch M#029 */

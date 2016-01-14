@@ -49,6 +49,9 @@ class joomdle_helpers_external extends external_api {
 		$auth = new  auth_plugin_joomdle ();
 		$id = $auth->user_id ($username);
 
+        /* START Academy Patch M#028 joomdle_user_id web service function should return null when a student doesn't exist */
+        $id = ($id === 0 ? null : $id);
+        /* END Academy Patch M#028 */
         return $id;
     }
 
@@ -2206,8 +2209,12 @@ class joomdle_helpers_external extends external_api {
 
         $params = self::validate_parameters(self::suspend_enrolment_parameters(), array('username'=>$username, 'id' => $id));
 
-        $auth = new  auth_plugin_joomdle ();
-        $id = $auth->suspend_enrolment ($username, $id);
+        /* START Academy Patch M#23 Prevent Harcourts One from suspending student enrolments until tracker HO-117895 is fixed */
+//        $auth = new  auth_plugin_joomdle ();
+//        $id = $auth->suspend_enrolment ($username, $id);
+        error_log('Ignored H1 suspending student: '.$username);
+        $id = null;
+        /* END Academy Patch M#23 Prevent Harcourts One from suspending student enrolments until tracker HO-117895 is fixed */
 
         return $id;
     }

@@ -580,6 +580,17 @@ if ($pageid != LESSON_EOL) {
         }
     }
     $lessoncontent .= $OUTPUT->box_end(); //End of Lesson button to Continue.
+    
+    // Academy Patch M#016 Enable lesson activity chaining
+    if (!$course->showgrades && $lesson->activitylink == 0) {
+         redirect(new moodle_url('/course/view.php', array('id'=>$course->id)));
+    }
+
+    // Academy Patch M#016 Enable lesson activity chaining
+    if (!$course->showgrades && $lesson->activitylink) {
+        redirect($lesson->url_for_activitylink());
+    }
+
 
     if ($lesson->modattempts && !$canmanage) {
         // make sure if the student is reviewing, that he/she sees the same pages/page path that he/she saw the first time
