@@ -158,6 +158,11 @@
   .nav-collapse.collapse {
     overflow: hidden;
     height: 0;
+    border-bottom: 0; // Academy: Remove the colour bar from the bottom of the menu;
+  }
+  .custom_narrow_menu {
+    display: block;
+    text-align: right;
   }
   // Navbar button
   .navbar .btn-navbar {
@@ -171,6 +176,10 @@
     padding-right: 10px;
   }
 
+  // Academy: Horizontal padding.
+  div#page {
+    margin: 0;
+  }
 
 }
 
@@ -180,10 +189,49 @@
 
 @media (min-width: @navbarCollapseDesktopWidth) {
 
+  // Academy: Horizontal padding.
+  body {
+    margin: 0 @gridGutterWidth1200;
+  }
+
+  .navbar-inner {
+    margin: 0;
+    padding: 5px 0;
+
+    .container-fluid {
+      padding-left: @gridGutterWidth1200;
+      padding-right: @gridGutterWidth1200;
+    }
+  }
+
   // Required to make the collapsing navbar work on regular desktops
   .nav-collapse.collapse {
     height: auto !important;
     overflow: visible !important;
+  }
+
+  .custom_narrow_menu {
+    display: none;
+  }
+
+  .custom_wide_menu {
+    margin: 0 0 (@gridGutterWidth1200 / 2);
+    background: #FFFFFF url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAZCAYAAAAIcL+IAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAxMC8xNC8xMQ5pWM4AAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzVxteM2AAAAP0lEQVQ4jWN88fj+fwYiAAsjIyMx6hhYGBmZiFVItInEKmQiUiHDALpxKIQj0VYTG+BDIXgYBjBmaBCOxLkRAAW7BFueY6hNAAAAAElFTkSuQmCC') repeat-x;
+
+    li {
+      height: 36px;
+      padding: 5px 5px 5px 0;
+      margin-right: 5px;
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAA9AQMAAABIqqGvAAAABlBMVEUPDw+vra3v6IsxAAAAAXRSTlMAQObYZgAAAAlwSFlzAAALEgAACxIB0t1+/AAAABlJREFUeF61wjENAAAAg7BJn3Q0cNB0zsMGg4IPgQBtpaEAAAAASUVORK5CYII=') no-repeat scroll 100% 50% transparent;
+    }
+    
+    .navbar .nav > li > a {
+      color: @linkColor;
+      &:hover,
+      &:focus {
+        color: @linkColorHover;
+      }
+    }
   }
 
 }
