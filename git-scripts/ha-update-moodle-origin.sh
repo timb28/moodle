@@ -4,5 +4,5 @@
 
 echo "Updating Moodle from Origin"
 (cd ../ && git fetch origin)
-(cd ../ && git checkout HA-Moodle286)
+(cd ../ && git checkout HA-Moodle30)
 (cd ../ && git pull)

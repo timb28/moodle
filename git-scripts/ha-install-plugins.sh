@@ -32,8 +32,5 @@
 ./mod/mod_videofile-install.sh
 
 ## Quiz Question Types
-./question/qtype_ddimageortext-install.sh
-./question/qtype_ddwtos-install.sh
-./question/qtype_gapselect-install.sh
 ./question/qtype_oumultiresponse-install.sh
 ./question/qtype_pmatch-install.sh

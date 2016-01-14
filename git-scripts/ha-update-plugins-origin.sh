@@ -3,6 +3,14 @@
 ## Shell script to update Moodle plugins via Git 
 ## 
 
+## Atto plugins ##
+./atto/atto_fullscreen-update-origin.sh
+./atto/atto_htmlplus-update-origin.sh
+./atto/atto_styles-update-origin.sh
+
+## Authentication ##
+./auth/auth_lenauth-update-origin.sh
+
 ## Blocks ##
 ./blocks/block_configurable_report-update-origin.sh
 ./blocks/block_forum_aggregator-update-origin.sh
@@ -20,11 +28,9 @@
 ./mod/mod_certificate-update-origin.sh
 ./mod/mod_game-update-origin.sh
 ./mod/mod_questionnaire-update-origin.sh
+./mod/mod_subcourse-update-origin.sh
 ./mod/mod_videofile-update-origin.sh
 
 ## Quiz Question Types ##
-./question/qtype_ddimageortext-update-origin.sh
-./question/qtype_ddwtos-update-origin.sh
-./question/qtype_gapselect-update-origin.sh
 ./question/qtype_oumultiresponse-update-origin.sh
 ./question/qtype_pmatch-update-origin.sh

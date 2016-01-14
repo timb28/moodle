@@ -3,5 +3,4 @@
 ## - AU Sales Registration
 ##
 echo "Cloning Pattern Patching Question Type from Origin"
-(cd ../question/type/pmatch && git fetch origin)
-(cd ../question/type/pmatch && git checkout HA-Moodle28)
+(cd ../question/type/pmatch && git fetch origin && git checkout HA-Moodle30)
