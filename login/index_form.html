@@ -1,9 +1,11 @@
 <?php
-if ($show_instructions) {
+/* START Academy Patch M#036 Display additional authentication methods on the right side of the login page */
+if ($show_instructions or !empty($CFG->auth_instructions)) {
     $columns = 'twocolumns';
 } else {
     $columns = 'onecolumn';
 }
+/* END Academy Patch M#036 */
 
 if (!empty($CFG->loginpasswordautocomplete)) {
     $autocomplete = 'autocomplete="off"';
@@ -27,7 +29,7 @@ if (empty($CFG->authloginviaemail)) {
       <div class="subcontent loginsub">
         <?php
           if (!empty($errormsg)) {
-              echo html_writer::start_tag('div', array('class' => 'loginerrors'));
+              echo html_writer::start_tag('div', array('class' => 'loginerrors alert alert-warning'));
               echo html_writer::link('#', $errormsg, array('id' => 'loginerrormessage', 'class' => 'accesshide'));
               echo $OUTPUT->error_text($errormsg);
               echo html_writer::end_tag('div');
@@ -37,12 +39,12 @@ if (empty($CFG->authloginviaemail)) {
           <div class="loginform">
             <div class="form-label"><label for="username"><?php echo($strusername) ?></label></div>
             <div class="form-input">
-              <input type="text" name="username" id="username" size="15" value="<?php p($frm->username) ?>" />
+              <input type="text" name="username" id="username" size="15" placeholder="<?php echo($strusername) ?>" value="<?php p($frm->username) ?>" />
             </div>
             <div class="clearer"><!-- --></div>
             <div class="form-label"><label for="password"><?php print_string("password") ?></label></div>
             <div class="form-input">
-              <input type="password" name="password" id="password" size="15" value="" <?php echo $autocomplete; ?> />
+              <input type="password" name="password" id="password" size="15" value="" placeholder="<?php print_string('password') ?>" <?php echo $autocomplete; ?> />
             </div>
           </div>
             <div class="clearer"><!-- --></div>
@@ -79,7 +81,11 @@ if (empty($CFG->authloginviaemail)) {
       </div>
 <?php } ?>
      </div>
-<?php if ($show_instructions) { ?>
+<?php 
+/* START Academy Patch M#036 Display additional authentication methods on the right side of the login page */
+if ($show_instructions or !empty($CFG->auth_instructions)) {
+/* END Academy Patch M#036 */
+?>
     <div class="signuppanel">
       <h2><?php print_string("firsttime") ?></h2>
       <div class="subcontent">

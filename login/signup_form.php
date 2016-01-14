@@ -81,6 +81,9 @@ class login_signup_form extends moodleform {
         $default_country[''] = get_string('selectacountry');
         $country = array_merge($default_country, $country);
         $mform->addElement('select', 'country', get_string('country'), $country);
+        /* START Academy Patch M#033 Country is a required field for Moodle user accounts */
+        $mform->addRule('country', get_string('missingcountry'), 'required', null, 'server');
+        /* END Academy Patch M#033 */
 
         if( !empty($CFG->country) ){
             $mform->setDefault('country', $CFG->country);

@@ -96,6 +96,11 @@ if (empty($searchcriteria)) {
 
 $PAGE->set_heading($site->fullname);
 
+/* START Academy Patch M#039 Pre-create course search page results to ensure JQuery library is loaded */
+$content = $courserenderer->search_courses($searchcriteria);
+
 echo $OUTPUT->header();
-echo $courserenderer->search_courses($searchcriteria);
+echo $content;
 echo $OUTPUT->footer();
+
+/* END Academy Patch M#039 */
