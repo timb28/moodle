@@ -44,8 +44,6 @@ class block_snipcart extends block_base {
     public function get_content() {
         global $DB, $OUTPUT, $PAGE, $USER;
         
-        $PAGE->requires->jquery();
-        
         // don't display the block if on a page within a course
         $pageformat = $PAGE->pagetype;
         if (!blocks_name_allowed_in_format('snipcart', $pageformat)) {
@@ -78,9 +76,12 @@ class block_snipcart extends block_base {
         
 
         $shoppingcart = '
-            <script type="text/javascript" src="https://cdn.snipcart.com/scripts/snipcart.js" id="snipcart"
+            <script type="text/javascript"
+               src="https://cdn.snipcart.com/scripts/snipcart.js"
+               id="snipcart"
                data-autopop="false"
-               data-api-key="'. $publicapikey .'"></script>
+               data-api-key="'. $publicapikey .'">
+            </script>
             <link type="text/css" href="https://cdn.snipcart.com/themes/base/snipcart.min.css" rel="stylesheet" />
             <div class="snipcart-summary">
               <div class="snipcart-items">
@@ -124,6 +125,20 @@ class block_snipcart extends block_base {
         $this->content->text   = $shoppingcart;
 
         return $this->content;
+    }
+    
+    /**
+ * ==================================================================
+ * ================= TEMPORARY HACK =================================
+ * ==================================================================
+ * Remove after Snipcart Javascript can be included using require.js.
+ * ==================================================================
+ */
+    public function get_required_javascript() {
+        parent::get_required_javascript();
+        $this->page->requires->jquery();
+        //$this->page->requires->jquery_plugin('ui');
+        //$this->page->requires->jquery_plugin('ui-css');
     }
 
 }

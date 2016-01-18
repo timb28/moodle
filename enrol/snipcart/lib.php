@@ -147,8 +147,6 @@ class enrol_snipcart_plugin extends enrol_plugin {
     function get_add_to_cart_button($user, $course, $instance, $buttonclasses = '') {
         global $CFG, $PAGE;
         
-        $PAGE->requires->jquery();
-        
         // Notify the admin if a user's country is not set (ignore the guest user)
         if (!($user->country) and !($user->id == 1)) {
             $this->message_error_to_admin('A Moodle user cannot purchase a course because their country is not set', $user);

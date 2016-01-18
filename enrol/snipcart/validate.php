@@ -49,8 +49,6 @@ if ( (float) $enrol->cost <= 0 ) {
 
     <p class="payment-required"><?php print_string('paymentrequired', 'enrol_snipcart') ?></p>
 
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-
     <noscript>
       <div class="alert alert-block alert-error">
           <p><strong><?= get_string('warning', 'moodle') ?></strong> <?= get_string('javascriptrequired', 'group') ?></p>
