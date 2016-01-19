@@ -2234,6 +2234,13 @@ class quiz_attempt_nav_panel extends quiz_nav_panel_base {
     }
 
     public function render_end_bits(mod_quiz_renderer $output) {
+        /* START Academy Patch M#040 ‘Finish Attempt…’ link on
+         * quiz summary page doesn’t work */
+        if($this->page == -1) {
+            return "";
+        }
+        /* END Academy Patch M#040 */
+        
         return html_writer::link($this->attemptobj->summary_url(),
                 get_string('endtest', 'quiz'), array('class' => 'endtestlink')) .
                 $output->countdown_timer($this->attemptobj, time()) .
