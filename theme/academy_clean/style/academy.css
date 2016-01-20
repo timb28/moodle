@@ -90,7 +90,7 @@ div#page {
 /* Nav Bar */
 .navbar {
   margin-bottom: 0;
-  background: url([[pix:theme|online_learning]]) 50% 150% / cover no-repeat fixed #203C62;
+  background: url([[pix:theme|online_learning]]) 50% 100% / cover no-repeat fixed #203C62;
 }
 .navbar-fixed-top {
     z-index: 100; // display behind the snipcart pop-up
