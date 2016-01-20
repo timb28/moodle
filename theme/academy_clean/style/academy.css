@@ -384,6 +384,7 @@ Grader Report
 .coursebox .content .summary, .coursebox .content .coursecat {
     float: none;
     width: 100%;
+    text-align: left;
 }
 
 .coursebox {
