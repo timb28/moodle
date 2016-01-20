@@ -156,6 +156,7 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
                                                              'height' => '315',
                                                              'src' => $url,
                                                              'frameborder' => '0',
+                                                             'scrolling' => 'no',
                                                              'allowfullscreen' => '1'));
 
             $output.= html_writer::end_div();
