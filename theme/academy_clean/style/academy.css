@@ -7,7 +7,10 @@
 **
 *********************************************************/
 
-a:link { transition: color .1s ease-out; }
+a:link {
+  transition: color .1s ease-out;
+  text-decoration: none;
+}
 
 a.logo {
     background: url([[pix:theme|logo]]) no-repeat 0 0 / 128px 42px;
@@ -21,6 +24,7 @@ a.logo {
 
 body {
     background: top left repeat fixed #002b49;
+    margin: 0;
 }
 
 body.pagelayout-embedded {
@@ -41,11 +45,6 @@ header.custom_wide_menu {
     margin: 0 auto;
     padding: 0 20px;
     background: #ffffff;
-}
-@media (min-width: 980px) {
-    header.custom_wide_menu {
-       margin-bottom: 6px;
-   }
 }
 
 th, td, a img { border-width: 0; }
@@ -109,10 +108,23 @@ div#page {
   width: auto;
   margin: 0;
   outline: 0;
-  padding: 5px 15px 5px 5px;
+  padding: 5px 5px 5px 5px;
   color: #ffffff;
-  line-height: 1.8em;
   text-shadow: none;
+}
+
+.custom_wide_menu li:first-child,
+.custom_wide_menu li:first-child a {
+  margin-left: 0;
+  padding-left: 0;
+}
+.custom_wide_menu li {
+  padding: 2px 5px;
+  margin: 3px 0;
+  background: none;
+}
+.custom_wide_menu li:hover {
+  /*background-color: #ebeef0;*/
 }
 
 /* Usermenu */
@@ -308,7 +320,7 @@ div#page {
 
 #page-bottom .block .header h2 {
     padding: 6px 0 0 12px;
-    font-family: 'Covered By Your Grace', arial, serif;
+    font-family: arial, serif;
     font-size: 1.8em;
     font-weight: bold;
 }

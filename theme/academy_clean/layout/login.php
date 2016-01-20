@@ -53,7 +53,7 @@ echo $OUTPUT->doctype() ?>
             <?php echo $OUTPUT->user_menu(); ?>
             <div class="nav-collapse collapse">
               <div class="custom_narrow_menu"><?php echo $OUTPUT->custom_menu(); ?></div>
-                <ul class="nav pull-right">
+                <ul class="nav">
                     <li><?php echo $OUTPUT->page_heading_menu(); ?></li>
                 </ul>
             </div>
@@ -62,7 +62,7 @@ echo $OUTPUT->doctype() ?>
 </header>
 
 <header class="clearfix custom_wide_menu nav-collapse collapse visible-desktop">
-    <div class="navbar pull-right"><?php echo $OUTPUT->custom_menu(); ?></div>
+    <div class="navbar"><?php echo $OUTPUT->custom_menu(); ?></div>
 </header>
   
 <div id="page" class="container-fluid">

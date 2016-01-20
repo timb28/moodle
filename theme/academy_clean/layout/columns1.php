@@ -62,7 +62,7 @@ echo $OUTPUT->doctype() ?>
 </header>
 
 <header class="clearfix custom_wide_menu nav-collapse collapse visible-desktop">
-    <div class="navbar pull-right"><?php echo $OUTPUT->custom_menu(); ?></div>
+    <div class="navbar"><?php echo $OUTPUT->custom_menu(); ?></div>
 </header>
   
 <div id="page" class="container-fluid">
