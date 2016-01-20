@@ -20,7 +20,7 @@ a.logo {
 }
 
 body {
-    background: url([[pix:theme|background]]) top left repeat fixed #203C62;
+    background: top left repeat fixed #002b49;
 }
 
 body.pagelayout-embedded {
@@ -40,6 +40,7 @@ header.custom_wide_menu {
     max-width: 1680px;
     margin: 0 auto;
     padding: 0 20px;
+    background: #ffffff;
 }
 @media (min-width: 980px) {
     header.custom_wide_menu {
@@ -54,12 +55,26 @@ p, fieldset, table, pre { margin-bottom: 1em; }
 div#page {
   padding-bottom: 20px;
   background-color: white;
-  box-shadow: 0 0 35px rgba(0,0,0,0.8);
 }
 @media (max-width: 980px) {
    div#page {
        padding: 0 .5em;
    }
+}
+
+.block {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #ebeef0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+    border: none;
+    padding: 8px 0;
 }
 
 /* Maintenance warning */
