@@ -11,6 +11,6 @@ then
     (cd ../ && git checkout upstream/MOODLE_30_STABLE)
 #    (cd ../ && git branch HA-Moodle30)
     (cd ../ && git checkout HA-Moodle30)
-    (cd ../ && git merge origin/HA-Moodle286 --strategy-option ours)
+    (cd ../ && git merge origin/HA-Moodle289 --strategy-option ours)
     ## Then manually resolve the merge conflicts.
 fi
