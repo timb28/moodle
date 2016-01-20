@@ -37,6 +37,8 @@ $THEME->doctype = 'html5';
 $THEME->parents = array('bootstrapbase');
 $THEME->sheets = array( 'academy',
                         'auth_lenauth',
+                        'blocks',
+                        'block_course_overview',
                         'block_configurable_reports',
                         'bootstrapbase',
                         'course',

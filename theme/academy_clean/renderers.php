@@ -35,7 +35,7 @@ class theme_academy_clean_core_renderer extends theme_bootstrapbase_core_rendere
             $item->hideicon = true;
             $breadcrumbs[] = $this->render($item);
         }
-        $divider = '<span class="divider">/</span>';
+        $divider = '<span class="divider">&gt;</span>';
         $list_items = '<li>'.join("$divider</li><li>", $breadcrumbs).'</li>';
         $title = '<span class="accesshide">'.get_string('pagepath').'</span>';
         return $title . "<ul class=\"breadcrumb\">$list_items</ul>";
