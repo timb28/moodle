@@ -18,8 +18,12 @@
     text-align: center;
 }
 
-#page-login-index .loginbox.twocolumns {
+#page-login-index .loginbox {
     margin: 0 0 20px 0;
+}
+
+#page-login-index .signuppanel {
+    padding-top: 3rem;
 }
 
 @media (max-width: 767px) {
@@ -28,10 +32,12 @@
     }
 }
 
-@media (min-width: 768px) and (max-width: 979px) {
-    .loginbox.twocolumns .loginpanel,
-    .loginbox.twocolumns .signuppanel {
-        margin-bottom: 8px;
+@media (max-width: 979px) {
+    #page-login-index .loginbox {
+        margin: 0;
+    }
+    #page-login-index .loginbox .signuppanel {
+        padding-top: 1rem;
     }
 }
 
