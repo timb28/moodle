@@ -19,18 +19,12 @@
 }
 
 #page-login-index .loginbox.twocolumns {
-    margin: 0;
+    margin: 0 0 20px 0;
 }
 
 @media (max-width: 767px) {
     .loginbox .loginsub {
         padding-top: 0;
-    }
-}
-
-@media (min-width: 768px) {
-    .loginbox.twocolumns .loginpanel {
-        padding-bottom: 3rem;
     }
 }
 
@@ -42,6 +36,7 @@
 }
 
 #page-login-index .loginpanel {
+    padding: 2rem 0;
     color: white;
     background-color: #002b49;
     background-image: radial-gradient( circle, #07314e 40%, #002946 100%);
