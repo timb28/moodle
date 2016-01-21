@@ -39,10 +39,6 @@ echo $OUTPUT->doctype() ?>
 
 <div id="page" class="container-fluid">
 
-    <header id="page-header" class="clearfix">
-        <?php echo $html->heading; ?>
-    </header>
-
     <div id="page-content" class="row-fluid">
         <div id="region-bs-main-and-pre" class="span9">
             <div class="row-fluid">
