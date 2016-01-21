@@ -64,22 +64,26 @@ echo $OUTPUT->doctype() ?>
 <header class="clearfix custom_wide_menu nav-collapse collapse visible-desktop">
     <div class="navbar"><?php echo $OUTPUT->custom_menu(); ?></div>
 </header>
+    
+<header class="clearfix page_heading">
+    <nav class="breadcrumb-button"><?php echo $OUTPUT->page_heading_button(); ?></nav>
+    <?php echo $html->heading; ?>
+</header>
   
 <div id="page" class="container-fluid">
 
-    <header id="page-header" class="clearfix">
-        <?php echo $html->heading; ?>
-        <div id="page-navbar">
-            <nav class="breadcrumb-button"><?php echo $OUTPUT->page_heading_button(); ?></nav>
-            <?php echo $OUTPUT->navbar(); ?>
-        </div>
-        <div id="course-header">
-            <?php echo $OUTPUT->course_header(); ?>
-        </div>
-    </header>
-
     <div id="page-content" class="row-fluid">
         <section id="region-main" class="span12">
+            
+            <div class="clearfix">
+                <div id="page-navbar">
+                    <?php echo $OUTPUT->navbar(); ?>
+                </div>
+                <div id="course-header">
+                    <?php echo $OUTPUT->course_header(); ?>
+                </div>
+            </div>
+            
             <?php
             $auth_instructions = '';
             
