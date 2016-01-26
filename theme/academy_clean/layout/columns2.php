@@ -77,8 +77,10 @@ echo $OUTPUT->doctype() ?>
 </header>
     
 <header class="clearfix page_heading">
-    <nav class="breadcrumb-button"><?php echo $OUTPUT->page_heading_button(); ?></nav>
-    <?php echo $html->heading; ?>
+    <div class="page-heading-inner">
+        <nav class="breadcrumb-button"><?php echo $OUTPUT->page_heading_button(); ?></nav>
+        <?php echo $html->heading; ?>
+    </div>
 </header>
   
 <div id="page" class="container-fluid">

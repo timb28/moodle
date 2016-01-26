@@ -100,7 +100,6 @@ header.page_heading {
     background-size: cover;
 }
 header.page_heading {
-    max-width: 1680px;
     margin: 0 auto;
     padding: 0 0.5em;
 }
@@ -125,6 +124,13 @@ header.page_heading h1 {
   margin-bottom: 0;
   
 }
+header.custom_wide_menu .navbar,
+header.page_heading .page-heading-inner {
+    max-width: 1680px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .navbar-fixed-top {
     z-index: 100; // display behind the snipcart pop-up
 }
@@ -163,7 +169,6 @@ header.page_heading h1 {
 }
 
 header.custom_wide_menu {
-    max-width: 1680px;
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -217,6 +222,13 @@ header.custom_wide_menu {
 }
 
 /* Main Content */
+#page.container-fluid {
+    max-width: 100%;
+}
+#page-content {
+    max-width: 1680px;
+    margin: 0 auto;
+}
 .pagelayout-report #page-content #region-main {
     overflow-x: auto;
 }
