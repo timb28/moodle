@@ -215,6 +215,12 @@ class external_api {
                 }
             }
             /* END Academy Patch M#22 Clean tags from H1 web service calls */
+            /* START Academy Patch M#41 Convert uppercase letters in username to lowercase when creating users via the webservice */
+            global $CFG;
+            if ($description->type == PARAM_USERNAME && $CFG->extendedusernamechars) {
+                $params = core_text::strtolower($params);
+            }
+            /* END Academy Patch M#41 Convert uppercase letters in username to lowercase when creating users via the webservice */
             return validate_param($params, $description->type, $description->allownull, $debuginfo);
 
         } else if ($description instanceof external_single_structure) {
