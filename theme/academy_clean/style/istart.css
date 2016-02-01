@@ -251,3 +251,9 @@ body.course-shortname-iStart24#page-mod-lesson-view h3.main {
 body.course-shortname-iStart24 .istart-week-prefix {
     display: none;
 }
+
+
+/** Global iStart: Hide the 'Your Progress' label that shrinks the istart banner image */
+body.course-shortname-iStart #completionprogressid {
+    display: none;
+}
