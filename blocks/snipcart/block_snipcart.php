@@ -107,6 +107,8 @@ class block_snipcart extends block_base {
                 $(window).load(function() {
                     $(".snipcart-actions").addClass("fadein");
                     
+                    Snipcart.api.setCurrency("aud");
+                    
                     Snipcart.execute("setBillingAddress", {
                         email: "'.$useremail.'",
                         name: "'.$userfullname.'",
