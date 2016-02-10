@@ -125,6 +125,7 @@ class snipcartorder {
         
         if (is_null($snipcartorder) or !isset($snipcartorder['status'])) {
             // this order can't be found on Snipcart
+            $this->plugin->message_error_to_admin("Snipcart couldn't validate order:", print_r($this->order, true));
             header('HTTP/1.1 400 BAD REQUEST');
             throw new \moodle_exception('snipcartinvalidorderror', 'enrol_snipcart', null, array('token'=>$ordertoken, 'currency'=>$currency));
         }
