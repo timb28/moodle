@@ -188,7 +188,7 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
     }
     
     protected function coursecat_coursebox(coursecat_helper $chelper, $course, $additionalclasses = '') {
-        global $CFG;
+        global $CFG, $PAGE;
         if (!isset($this->strings->summary)) {
             $this->strings->summary = get_string('summary');
         }
@@ -224,7 +224,9 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
         $content .= html_writer::tag($nametag, $coursenamelink, array('class' => 'coursename'));
 
         // print 'add to cart' buttons
-        $content.= theme_academy_create_course_button($course);
+        if ($PAGE->context instanceof context_coursecat) {
+            $content.= theme_academy_create_course_button($course);
+        }
 
         // If we display course in collapsed form but the course has summary or course contacts, display the link to the info page.
         $content .= html_writer::start_tag('div', array('class' => 'moreinfo'));
