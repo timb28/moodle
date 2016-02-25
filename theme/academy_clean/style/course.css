@@ -6,6 +6,9 @@
         Styles for displaying course content.
 */
 
+.coursebox .content .courseimage,
+.coursebox .content .coursefile {float:left;width:inherit;clear:left;}
+
 ul.topics li.section, ul.weeks li.section {
     /* All course topics. */
 }

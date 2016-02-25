@@ -185,6 +185,10 @@ class enrol_snipcart_plugin extends enrol_plugin {
 
         // Generate id for 'Add to cart' button based on instance id
         $addtocartid = 'addtocart' . $instance->id;
+        
+        // Remove markup and new lines from course summary that could break the shopping cart.
+        $coursesummary = preg_replace('/\s+/', ' ', trim(strip_tags($course->summary)));
+        $shortcoursesummary = mb_strimwidth($coursesummary, 0, 128, '…');
 
         return "
             <a href='#' id='$addtocartid' class='snipcart-actions invisible btn btn-primary btn-small $buttonclasses'"
@@ -195,7 +199,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
                 . " data-item-quantity='1'"
                 . " data-item-shippable='false'"
                 . " data-item-url='$itemurl'"
-                . " data-item-description='{$course->summary}'"
+                . " data-item-description='$shortcoursesummary'"
                 . " data-item-image='$courseimageurl'"
                 . ">".get_string('addtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "</a>
 
@@ -219,7 +223,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
                                 quantity: '1',
                                 shippable: 'false',
                                 url: '$itemurl',
-                                description: '{$course->summary}',
+                                description: '$shortcoursesummary',
                                 image: '$courseimageurl'
                             });
 

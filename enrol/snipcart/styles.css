@@ -9,6 +9,8 @@
 
 #page-enrol-index .course-summary img {
     float: left;
+    margin: 0 1rem 1rem 0;
+    border: 1px solid #ECEEF0;
 }
 
 #page-enrol-index .payment-required {
