@@ -4201,9 +4201,11 @@ function file_pluginfile($relativepath, $forcedownload, $preview = null) {
         }
 
         if ($filearea === 'summary' || $filearea === 'overviewfiles') {
-            if ($CFG->forcelogin) {
-                require_login();
-            }
+/* START Academy Patch M#042 Enable course summary images used in emails to be accessible without login. */
+//            if ($CFG->forcelogin) {
+//                require_login();
+//            }
+/* END Academy M#042 */
 
             $filename = array_pop($args);
             $filepath = $args ? '/'.implode('/', $args).'/' : '/';
