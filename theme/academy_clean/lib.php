@@ -190,6 +190,50 @@ function theme_academy_clean_get_html_for_settings(renderer_base $output, moodle
 }
 
 /**
+ * Returns the next page module in a course section. Used to create 'Next' buttons in iStart.
+ *
+ * @param int|stdClass $courseorid object from DB table 'course' (must have field 'id'
+ *     and recommended to have field 'cacherev') or just a course id. Just course id
+ *     is enough when calling get_fast_modinfo() for current course or site or when
+ *     calling for any other course for the second time.
+ * @param int $section Section number - from course_sections table
+ * @param int $module Course-module ID - from course_modules table
+ * @return modinfo|null Module information for next page module, or null if none found
+ */
+function theme_academy_clean_get_next_page_in_section($courseorid, $section, $module) {
+    // Get all the modules in the current section
+    $modinfo = get_fast_modinfo($courseorid);
+    $sectionmods = $modinfo->sections[$section];
+    if (is_array($sectionmods)) {
+
+        // limit the array of mods to those after the current mod
+        $key = array_search($module, $sectionmods);
+    } else {
+        return null;
+    }
+
+    if ($key+1 < count($sectionmods)) {
+        // Create an array with only those mods after the current mod
+        // in this course section
+        $nextmods = array_slice($sectionmods, $key+1);
+    }
+
+    if (!empty($nextmods)) {
+
+        foreach ($nextmods as $modnumber) {
+            $nextmod = get_fast_modinfo($courseorid)->cms[$modnumber];
+            if ($nextmod->modname == 'page' and $nextmod->visible and $nextmod->available) {
+                // We have found our next page
+                $nextpagemod = $nextmod;
+                break;
+            }
+        }
+    }
+    
+    return $nextpagemod;
+}
+
+/**
  * Deprecated: Please call theme_academy_clean_process_css instead.
  * @deprecated since 2.5.1
  */

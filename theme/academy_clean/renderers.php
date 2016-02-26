@@ -40,6 +40,117 @@ class theme_academy_clean_core_renderer extends theme_bootstrapbase_core_rendere
         $title = '<span class="accesshide">'.get_string('pagepath').'</span>';
         return $title . "<ul class=\"breadcrumb\">$list_items</ul>";
     }
+    
+    /**
+     * Returns course-specific information to be output immediately below content on any course page
+     * (for the current course)
+     *
+     * @param bool $onlyifnotcalledbefore output content only if it has not been output before
+     * @return string
+     */
+    public function course_content_footer($onlyifnotcalledbefore = false) {
+        global $CFG;
+        
+        // Skip if not viewing a page
+        if ($this->page->cm === null or $this->page->cm->modname != 'page') {
+            return parent::course_content_footer($onlyifnotcalledbefore);
+        }
+        
+        if ($this->page->course->id == SITEID) {
+            // return immediately and do not include /course/lib.php if not necessary
+            return '';
+        }
+        static $functioncalled = false;
+        if ($functioncalled && $onlyifnotcalledbefore) {
+            // we have already output the content footer
+            return '';
+        }
+        $functioncalled = true;
+        require_once($CFG->dirroot.'/course/lib.php');
+        $courseformat = course_get_format($this->page->course);
+        if (($obj = $courseformat->course_content_footer()) !== null) {
+            $output = html_writer::start_div('course-content-footer');
+            $output.= $courseformat->get_renderer($this->page)->render($obj);
+            
+            /* Output next button */
+            
+//            // Get all the modules in the current section
+//            $modinfo = get_fast_modinfo($this->page->course);
+//            $sectionmods = $modinfo->sections[$this->page->cm->sectionnum];
+//            if (is_array($sectionmods)) {
+//                
+//                // limit the array of mods to those after the current mod
+//                $key = array_search($this->page->cm->id, $sectionmods);
+//            } else {
+//                return parent::course_content_footer($onlyifnotcalledbefore);
+//            }
+//            
+//            if ($key+1 < count($sectionmods)) {
+//                // Create an array with only those mods after the current mod
+//                // in this course section
+//                $nextmods = array_slice($sectionmods, $key+1);
+//            }
+//            
+//            if (!empty($nextmods)) {
+//                
+//                foreach ($nextmods as $modnumber) {
+//                    $nextmod = get_fast_modinfo($this->page->course)->cms[$modnumber];
+//                    if ($nextmod->modname == 'page' and $nextmod->visible and $nextmod->available) {
+//                        // We have found our next page
+//                        $nextpage = $nextmod;
+//                        break;
+//                    }
+//                }
+//            }
+            
+            $nextpagemod = theme_academy_clean_get_next_page_in_section($this->page->course,
+                    $this->page->cm->sectionnum,
+                    $this->page->cm->id);
+            
+            if (!empty($nextpagemod)) {
+                $buttontitle = 'Next: ' . $nextpagemod->name;
+                $buttonurl = $nextpagemod->url;
+                
+                $icon = new pix_icon('t/right', '', 'moodle');
+                $text = $this->render($icon). html_writer::tag('span', $buttontitle, array('class' => 'next-text'));
+                $output.= html_writer::tag('div', html_writer::link($buttonurl, $text),
+                        array('class' => 'btn btn-primary footer next'));
+
+                $output.= html_writer::end_div();
+                return $output;
+            }
+            
+//            if (!empty($nextpagemod)) {
+//                $nextcm = get_fast_modinfo($this->page->course)->get_cm($nextpagemod);
+//                //error_log("ncm: " . print_r($nextcm, true));
+//            }
+//            
+//            $cms = get_fast_modinfo($this->page->course)->get_cms();
+//            $foundpage = false;
+//            $nextpage = null;
+//            foreach ($cms as $cm) {
+//                error_log("cm id: " . $cm->id . ' type: ' . $cm->modname);
+//                if ($cm->id == $this->page->cm->id) {
+//                    $foundpage = true;
+//                }
+//                
+//                if ($foundpage && $cm->modname == 'page') {
+//                    $nextpage = $cm;
+//                    continue;
+//                }
+//            }
+//            
+//            if (!empty($nextpage)) {
+//                //error_log("ncm: " . print_r($nextpage, true));
+//                error_log("ncm url: " . $nextpage->url);
+//            }
+            
+            
+
+        }
+        
+        return parent::course_content_footer($onlyifnotcalledbefore);
+    }
 }
 
 class theme_academy_clean_core_course_renderer extends core_course_renderer {
