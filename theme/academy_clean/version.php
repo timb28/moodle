@@ -30,7 +30,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2015111801;
+$plugin->version   = 2016022601;
 $plugin->requires  = 2013050100;
 $plugin->component = 'theme_academy_clean';
 $plugin->dependencies = array(

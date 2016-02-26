@@ -73,80 +73,22 @@ class theme_academy_clean_core_renderer extends theme_bootstrapbase_core_rendere
             $output.= $courseformat->get_renderer($this->page)->render($obj);
             
             /* Output next button */
-            
-//            // Get all the modules in the current section
-//            $modinfo = get_fast_modinfo($this->page->course);
-//            $sectionmods = $modinfo->sections[$this->page->cm->sectionnum];
-//            if (is_array($sectionmods)) {
-//                
-//                // limit the array of mods to those after the current mod
-//                $key = array_search($this->page->cm->id, $sectionmods);
-//            } else {
-//                return parent::course_content_footer($onlyifnotcalledbefore);
-//            }
-//            
-//            if ($key+1 < count($sectionmods)) {
-//                // Create an array with only those mods after the current mod
-//                // in this course section
-//                $nextmods = array_slice($sectionmods, $key+1);
-//            }
-//            
-//            if (!empty($nextmods)) {
-//                
-//                foreach ($nextmods as $modnumber) {
-//                    $nextmod = get_fast_modinfo($this->page->course)->cms[$modnumber];
-//                    if ($nextmod->modname == 'page' and $nextmod->visible and $nextmod->available) {
-//                        // We have found our next page
-//                        $nextpage = $nextmod;
-//                        break;
-//                    }
-//                }
-//            }
-            
             $nextpagemod = theme_academy_clean_get_next_page_in_section($this->page->course,
                     $this->page->cm->sectionnum,
                     $this->page->cm->id);
             
             if (!empty($nextpagemod)) {
-                $buttontitle = 'Next: ' . $nextpagemod->name;
+                $buttontitle = get_string('next', 'theme_academy_clean') . $nextpagemod->name;
                 $buttonurl = $nextpagemod->url;
                 
                 $icon = new pix_icon('t/right', '', 'moodle');
                 $text = $this->render($icon). html_writer::tag('span', $buttontitle, array('class' => 'next-text'));
-                $output.= html_writer::tag('div', html_writer::link($buttonurl, $text),
-                        array('class' => 'btn btn-primary footer next'));
+                $output.= html_writer::link($buttonurl, $text,
+                        array('class' => 'btn footer next'));
 
                 $output.= html_writer::end_div();
                 return $output;
             }
-            
-//            if (!empty($nextpagemod)) {
-//                $nextcm = get_fast_modinfo($this->page->course)->get_cm($nextpagemod);
-//                //error_log("ncm: " . print_r($nextcm, true));
-//            }
-//            
-//            $cms = get_fast_modinfo($this->page->course)->get_cms();
-//            $foundpage = false;
-//            $nextpage = null;
-//            foreach ($cms as $cm) {
-//                error_log("cm id: " . $cm->id . ' type: ' . $cm->modname);
-//                if ($cm->id == $this->page->cm->id) {
-//                    $foundpage = true;
-//                }
-//                
-//                if ($foundpage && $cm->modname == 'page') {
-//                    $nextpage = $cm;
-//                    continue;
-//                }
-//            }
-//            
-//            if (!empty($nextpage)) {
-//                //error_log("ncm: " . print_r($nextpage, true));
-//                error_log("ncm url: " . $nextpage->url);
-//            }
-            
-            
-
         }
         
         return parent::course_content_footer($onlyifnotcalledbefore);

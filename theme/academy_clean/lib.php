@@ -230,7 +230,7 @@ function theme_academy_clean_get_next_page_in_section($courseorid, $section, $mo
         }
     }
     
-    return $nextpagemod;
+    return !empty($nextpagemod) ? $nextpagemod : null;
 }
 
 /**

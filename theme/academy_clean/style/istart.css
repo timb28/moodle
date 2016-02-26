@@ -99,6 +99,10 @@
     text-decoration: none;
     transition: background-position 0.1s linear 0s;
 }
+
+.format-flexsections .footer.next.btn {margin: 0 0 5px 1rem;}
+.format-flexsections .footer.next .next-text {margin-left:10px;}
+
 .format-flexsections .course-content-footer {
     margin: 1em 0;
 }

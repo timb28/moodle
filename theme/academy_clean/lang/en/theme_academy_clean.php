@@ -60,6 +60,8 @@ $string['footnotedesc'] = 'Whatever you add to this textarea will be displayed i
 $string['invert'] = 'Invert navbar';
 $string['invertdesc'] = 'Swaps text and background for the navbar at the top of the page between black and white.';
 
+$string['next'] = 'Next: ';
+
 $string['pluginname'] = 'Academy Clean';
 
 $string['region-side-post'] = 'Right';
