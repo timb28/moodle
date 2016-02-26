@@ -29,7 +29,9 @@ $enrol = $DB->get_record('enrol', array('id'=>$enrolid));
 $course = $DB->get_record('course', array('id'=>$enrol->courseid));
 $cost = $enrol->cost;
 
-        
+$manager = \enrol_snipcart\get_snipcartaccounts_manager();
+$publicapikey = $manager->get_snipcartaccount_info($enrol->currency, 'publicapikey');
+       
 if ( (float) $enrol->cost <= 0 ) {
     $cost = (float) $enrol->get_config('cost');
 } else {
@@ -49,12 +51,20 @@ if ( (float) $enrol->cost <= 0 ) {
 
     <p class="payment-required"><?php print_string('paymentrequired', 'enrol_snipcart') ?></p>
 
-    <noscript>
-      <div class="alert alert-block alert-error">
-          <p><strong><?= get_string('warning', 'moodle') ?></strong> <?= get_string('javascriptrequired', 'group') ?></p>
-          <p><?= get_string('nojavascript', 'enrol_snipcart') ?></p>
-      </div>
-    </noscript>
+    <script
+        src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
+        type="text/javascript"></script>
+
+    <script type="text/javascript"
+        src="https://cdn.snipcart.com/scripts/snipcart.js"
+        id="snipcart"
+        data-autopop="false"
+        data-api-key="<?= $publicapikey ?>">
+    </script>
+
+    <link id="snipcart-theme" type="text/css"
+        href="https://cdn.snipcart.com/themes/base/snipcart.min.css"
+        rel="stylesheet">
 
     <?= $plugin->get_add_to_cart_button($user, $course, $enrol, 'snipcart-add-item'); ?>
 
