@@ -23,7 +23,7 @@ if (!empty($wantsurl)) {
   <div class="loginpanel">
         <?php
             if (!empty($errormsg)) {
-                echo html_writer::start_tag('div', array('class'=>'subcontent loginsub alert alert-error'));
+                echo html_writer::start_tag('div', array('class'=>'subcontent loginsub alert alert-info'));
                 echo html_writer::start_tag('div', array('class' => 'loginerrors'));
                 echo html_writer::link('#', $errormsg, array('id' => 'loginerrormessage', 'class' => 'accesshide'));
                 echo $OUTPUT->error_text($errormsg);

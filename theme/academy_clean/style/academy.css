@@ -894,6 +894,10 @@ body#page-enrol-index div.box.generalbox.info {
     float: none;
 }
 
+.loginpanel .error {
+    color: inherit;
+}
+
 /* Animations */
 .invisible {
     visibility: hidden;
