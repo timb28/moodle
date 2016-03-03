@@ -168,7 +168,9 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
 
     $limit = block_course_overview_get_max_user_courses($showallcourses);
 
-    $courses = enrol_get_my_courses();
+    /* START Academy Patch M#044 Don’t show child (meta) courses on the Dashboard */
+    $courses = enrol_get_my_nonmeta_courses();
+    /* END Academy Patch M#044 */
     $site = get_site();
 
     if (array_key_exists($site->id,$courses)) {
