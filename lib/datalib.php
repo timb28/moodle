@@ -1133,8 +1133,10 @@ function get_my_remotecourses($userid=0) {
                      WHERE userid = ?
                    ) e ON (e.hostid = c.hostid AND e.remotecourseid = c.remoteid)
               JOIN {mnet_host} h ON h.id = c.hostid";
+    
+    $mnetcourses = $DB->get_records_sql($sql, array($userid));
 
-    return $DB->get_records_sql($sql, array($userid));
+    return $mnetcourses;
 }
 
 /**
