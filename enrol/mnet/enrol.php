@@ -107,6 +107,8 @@ class enrol_mnet_mnetservice_enrol {
      * @return array empty array
      */
     public function user_enrolments($username) {
+        error_log('=== $username: ' . $username); // REMOVE
+        
         error_log('!!! Reached user_enrolments: 1'); // REMOVE
         
         if (!$client = get_mnet_remote_client()) {
