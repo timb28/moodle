@@ -1157,6 +1157,8 @@ function get_my_otherremotecourses($userid=0) {
         $mnethostid = $user->mnethostid;
     }
     
+    error_log('=== userid: ' . $userid . ' mnet host id' . $mnethostid); // REMOVE
+    
     $service = mnetservice_enrol::get_instance();
     
     if ($service->is_available()) {
