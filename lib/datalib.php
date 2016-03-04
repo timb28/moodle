@@ -1146,7 +1146,7 @@ function get_my_remotecourses($userid=0) {
 function get_my_otherremotecourses() {
     global $DB, $USER;
     
-    $otherremotecourses = array();
+    $courses = array();
     
     $username = $USER->username;
     $mnethostid = $USER->mnethostid;
@@ -1168,10 +1168,10 @@ function get_my_otherremotecourses() {
         $course = (object) $course; // is returned from MNet XML-RPC call as an array
         $course->hostid = $mnethostid;
         $course->hostname = $mnethostname;
-        $otherremotecourses[$id] = $course;
+        $courses[$id] = $course;
     }
     
-    return $otherremotecourses;
+    return $courses;
 }
 
 /**
