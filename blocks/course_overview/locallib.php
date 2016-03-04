@@ -190,12 +190,17 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
     if (is_enabled_auth('mnet')) {
         $remotecourses = array_merge(get_my_remotecourses(), get_my_otherremotecourses());
     }
+    
+    error_log('=== remote courses: ' . print_r($remotecourses, true)); // REMOVE
+    
     // Remote courses will have -ve remoteid as key, so it can be differentiated from normal courses
     foreach ($remotecourses as $id => $val) {
         $remoteid = $val->remoteid * -1;
         $val->id = $remoteid;
         $courses[$remoteid] = $val;
     }
+    
+    error_log('=== all courses: ' . print_r($courses, true)); // REMOVE
 
     $order = block_course_overview_get_myorder();
 
