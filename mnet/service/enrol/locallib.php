@@ -435,6 +435,35 @@ class mnetservice_enrol {
             return serialize($request->error);
         }
     }
+    
+    /**
+     * Send request to unenrol our user from the remote course
+     *
+     * Updates our remote enrolments cache if the unenrolment was successful.
+     *
+     * @uses mnet_xmlrpc_client Invokes XML-RPC request
+     * @param id $mnethostid MNet remote host id
+     * @param object $user our user
+     * @return array Array of {@link $COURSE} of course objects
+     */
+    public function req_user_enrolments($mnethostid, $userid) {
+        global $CFG;
+        require_once($CFG->dirroot.'/mnet/xmlrpc/client.php');
+
+        $peer = new mnet_peer();
+        $peer->set_id($mnethostid);
+
+        $request = new mnet_xmlrpc_client();
+        $request->set_method('enrol/mnet/enrol.php/user_enrolments');
+        $request->add_param($userid);
+
+        if ($request->send($peer) === true) {
+            return serialize(array('invalid response: '.print_r($request->response, true)));
+
+        } else {
+            return serialize($request->error);
+        }
+    }
 
     /**
      * Prepares error messages returned by our XML-RPC requests to be send as debug info to {@link print_error()}

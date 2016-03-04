@@ -1134,9 +1134,26 @@ function get_my_remotecourses($userid=0) {
                    ) e ON (e.hostid = c.hostid AND e.remotecourseid = c.remoteid)
               JOIN {mnet_host} h ON h.id = c.hostid";
     
-    $mnetcourses = $DB->get_records_sql($sql, array($userid));
+    return $DB->get_records_sql($sql, array($userid));
+}
 
-    return $mnetcourses;
+/**
+ * List of remote courses that a user is enrolled in by means other than MNet.
+ * @param int @userid The user id to get remote courses for
+ * @return array Array of {@link $COURSE} of course objects
+ */
+function get_my_otherremotecourses($userid=0) {
+    global $USER;
+
+    if (empty($userid)) {
+        $userid = $USER->id;
+        $mnethostid = $USER->mnethostid;
+    } else {
+        $user = get_user($userid);
+        $mnethostid = $user->mnethostid;
+    }
+    
+    return req_user_enrolments($mnethostid, $userid);
 }
 
 /**

@@ -188,7 +188,7 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
     // Get remote courses.
     $remotecourses = array();
     if (is_enabled_auth('mnet')) {
-        $remotecourses = get_my_remotecourses();
+        $remotecourses = array_merge(get_my_remotecourses(), get_my_otherremotecourses());
     }
     // Remote courses will have -ve remoteid as key, so it can be differentiated from normal courses
     foreach ($remotecourses as $id => $val) {
