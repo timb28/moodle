@@ -1142,11 +1142,13 @@ function get_my_remotecourses($userid=0) {
 /**
  * List of remote courses that a user is enrolled in by means other than MNet.
  * @param int @userid The user id to get remote courses for
- * @return array Array of {@link $COURSE} of course objects
+ * @return array|false Array of {@link $COURSE} of course objects
  */
 function get_my_otherremotecourses($userid=0) {
     global $USER;
-
+    
+    $otherremotecourses = array();
+    
     if (empty($userid)) {
         $userid = $USER->id;
         $mnethostid = $USER->mnethostid;
@@ -1157,7 +1159,11 @@ function get_my_otherremotecourses($userid=0) {
     
     $service = mnetservice_enrol::get_instance();
     
-    return $service->req_user_enrolments($mnethostid, $userid);
+    if ($service->is_available()) {
+        $otherremotecourses = $service->req_user_enrolments($mnethostid, $userid);
+    }
+    
+    return $otherremotecourses;
 }
 
 /**
