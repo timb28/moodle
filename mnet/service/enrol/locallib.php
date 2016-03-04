@@ -443,7 +443,7 @@ class mnetservice_enrol {
      *
      * @uses mnet_xmlrpc_client Invokes XML-RPC request
      * @param id $mnethostid MNet remote host id
-     * @param object $user our user
+     * @param id $userid our user
      * @return array Array of {@link $COURSE} of course objects
      */
     public function req_user_enrolments($mnethostid, $userid) {
@@ -457,9 +457,8 @@ class mnetservice_enrol {
         $request->set_method('enrol/mnet/enrol.php/user_enrolments');
         $request->add_param($userid);
 
-        if ($request->send($peer) === true) {
-            return serialize(array('invalid response: '.print_r($request->response, true)));
-
+        if ($request->send($peer)) {
+            return $request->response;
         } else {
             return serialize($request->error);
         }

@@ -1163,6 +1163,10 @@ function get_my_otherremotecourses($userid=0) {
         $otherremotecourses = $service->req_user_enrolments($mnethostid, $userid);
     }
     
+    if (!is_array($otherremotecourses)) {
+        return array();
+    }
+    
     return $otherremotecourses;
 }
 
