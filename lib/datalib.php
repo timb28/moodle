@@ -1153,7 +1153,9 @@ function get_my_otherremotecourses($userid=0) {
         $mnethostid = $user->mnethostid;
     }
     
-    return req_user_enrolments($mnethostid, $userid);
+    $service = mnetservice_enrol::get_instance();
+    
+    return $service->req_user_enrolments($mnethostid, $userid);
 }
 
 /**
