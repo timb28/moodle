@@ -128,7 +128,7 @@ class enrol_mnet_mnetservice_enrol {
         
         error_log('!!! Reached user_enrolments: 4'); // REMOVE
         
-        error_log('=== $user: ' . $user); // REMOVE
+        error_log('=== $user: ' . print_r($user, true)); // REMOVE
         
         error_log('!!! Reached user_enrolments: 5'); // REMOVE
         
