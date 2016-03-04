@@ -140,7 +140,13 @@ class enrol_mnet_mnetservice_enrol {
         
         error_log('### username: ' . print_r($username, true)); // REMOVE
         
-        return core_enrol_external::get_users_courses($user->id);
+        $enrolledcourses = core_enrol_external::get_users_courses($user->id);
+        
+        error_log('!!! Reached user_enrolments: 7'); // REMOVE
+        
+        error_log('=== enrolled courses : ' . print_r($enrolledcourses, true)); // REMOVE
+        
+        return $enrolledcourses;
     }
 
     /**
