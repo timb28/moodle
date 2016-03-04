@@ -162,6 +162,8 @@ class mnet_xmlrpc_client {
         curl_close($httprequest);
 
         $this->rawresponse = trim($this->rawresponse);
+        
+        error_log('<<< mnet raw response: ' . print_r($this->rawresponse, true)); // REMOVE
 
         $mnet_peer->touch();
 
