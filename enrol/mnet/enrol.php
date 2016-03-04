@@ -125,7 +125,7 @@ class enrol_mnet_mnetservice_enrol {
                    summary, summaryformat, format, showgrades, lang, enablecompletion');
         
         foreach ($courses as $id=>$course) {
-            $courses[$id]['remoteid'] = $id;
+            $courses[$id]->remoteid = $id;
         }
         
         return $courses;
