@@ -126,13 +126,17 @@ class enrol_mnet_mnetservice_enrol {
         //$user = core_user::get_user_by_username($username);
         $user = (object) array('id' => 8836);
         
+        error_log('!!! Reached user_enrolments: 4'); // REMOVE
+        
         error_log('=== $user: ' . $user); // REMOVE
+        
+        error_log('!!! Reached user_enrolments: 5'); // REMOVE
         
         if (empty($user)) {
             throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
         }
         
-        error_log('!!! Reached user_enrolments: 4'); // REMOVE
+        error_log('!!! Reached user_enrolments: 6'); // REMOVE
         
         error_log('### username: ' . print_r($username, true)); // REMOVE
         
