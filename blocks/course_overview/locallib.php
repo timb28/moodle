@@ -207,7 +207,6 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
     }
     // Other Remote courses will have -ve remoteid as key, so it can be differentiated from normal courses
     foreach ($otherremotecourses as $id => $course) {
-        $course = (object) $course;
         $remoteid = $course->remoteid * -1;
         $course->id = $remoteid;
         $courses[$remoteid] = $course;
