@@ -107,11 +107,13 @@ class enrol_mnet_mnetservice_enrol {
      * @return array empty array
      */
     public function user_enrolments($username) {
-        error_log('!!! Reached user_enrolments'); // REMOVE
+        error_log('!!! Reached user_enrolments: 1'); // REMOVE
         
         if (!$client = get_mnet_remote_client()) {
             die('Callable via XML-RPC only');
         }
+        
+        error_log('!!! Reached user_enrolments: 2'); // REMOVE
         
         if (empty($username)) {
             throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
@@ -119,9 +121,13 @@ class enrol_mnet_mnetservice_enrol {
         
         $user = get_user_by_username($username, 'id');
         
+        error_log('!!! Reached user_enrolments: 3'); // REMOVE
+        
         if (empty($user)) {
             throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
         }
+        
+        error_log('!!! Reached user_enrolments: 4'); // REMOVE
         
         error_log('### username: ' . print_r($username, true)); // REMOVE
         
