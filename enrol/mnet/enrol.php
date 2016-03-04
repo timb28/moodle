@@ -107,44 +107,22 @@ class enrol_mnet_mnetservice_enrol {
      * @return array empty array
      */
     public function user_enrolments($username) {
-        error_log('=== $username: ' . $username); // REMOVE
-        
-        error_log('!!! Reached user_enrolments: 1'); // REMOVE
-        
         if (!$client = get_mnet_remote_client()) {
             die('Callable via XML-RPC only');
         }
-        
-        error_log('!!! Reached user_enrolments: 2'); // REMOVE
         
         if (empty($username)) {
             throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
         }
         
-        error_log('!!! Reached user_enrolments: 3'); // REMOVE
-        
         $user = core_user::get_user_by_username($username, 'id');
-        
-        error_log('!!! Reached user_enrolments: 4'); // REMOVE
-        
-        error_log('=== $user: ' . print_r($user, true)); // REMOVE
-        
-        error_log('!!! Reached user_enrolments: 5'); // REMOVE
         
         if (empty($user)) {
             throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
         }
         
-        error_log('!!! Reached user_enrolments: 6'); // REMOVE
-        
-        error_log('### username: ' . print_r($username, true)); // REMOVE
-        
         $courses = enrol_get_users_courses($user->id, true, 'id, shortname, fullname, idnumber, visible,
                    summary, summaryformat, format, showgrades, lang, enablecompletion');
-        
-        error_log('!!! Reached user_enrolments: 7'); // REMOVE
-        
-        error_log('=== enrolled courses : ' . print_r($courses, true)); // REMOVE
         
         return $courses;
     }
