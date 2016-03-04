@@ -443,10 +443,10 @@ class mnetservice_enrol {
      *
      * @uses mnet_xmlrpc_client Invokes XML-RPC request
      * @param id $mnethostid MNet remote host id
-     * @param id $userid our user
+     * @param String $username our user
      * @return array Array of {@link $COURSE} of course objects
      */
-    public function req_user_enrolments($mnethostid, $userid) {
+    public function req_user_enrolments($mnethostid, $username) {
         global $CFG;
         require_once($CFG->dirroot.'/mnet/xmlrpc/client.php');
 
@@ -455,7 +455,7 @@ class mnetservice_enrol {
 
         $request = new mnet_xmlrpc_client();
         $request->set_method('enrol/mnet/enrol.php/user_enrolments');
-        $request->add_param($userid);
+        $request->add_param($username);
         
         error_log('=== mnet request: ' . print_r($request, true)); // REMOVE
 

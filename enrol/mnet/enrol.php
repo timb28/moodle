@@ -103,20 +103,27 @@ class enrol_mnet_mnetservice_enrol {
      * This method has never been implemented in Moodle MNet API
      *
      * @uses mnet_remote_client Callable via XML-RPC only
+     * @param String $username of our user
      * @return array empty array
      */
-    public function user_enrolments($userid) {
+    public function user_enrolments($username) {
         if (!$client = get_mnet_remote_client()) {
             die('Callable via XML-RPC only');
         }
         
-        if (empty($userid)) {
+        if (empty($username)) {
             throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
         }
         
-        error_log('### userid: ' . print_r($userid, true)); // REMOVE
+        $user = get_user_by_username($username, 'id');
         
-        return core_enrol_external::get_users_courses($userid);
+        if (empty($user)) {
+            throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
+        }
+        
+        error_log('### username: ' . print_r($username, true)); // REMOVE
+        
+        return core_enrol_external::get_users_courses($user->id);
     }
 
     /**
