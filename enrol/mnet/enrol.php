@@ -114,6 +114,8 @@ class enrol_mnet_mnetservice_enrol {
             throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
         }
         
+        error_log('### userid: ' . print_r($userid, true)); // REMOVE
+        
         return core_enrol_external::get_users_courses($userid);
     }
 
