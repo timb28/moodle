@@ -121,9 +121,11 @@ class enrol_mnet_mnetservice_enrol {
             throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
         }
         
+        error_log('!!! Reached user_enrolments: 3'); // REMOVE
+        
         $user = get_user_by_username($username, 'id');
         
-        error_log('!!! Reached user_enrolments: 3'); // REMOVE
+        error_log('=== $user: ' . $user); // REMOVE
         
         if (empty($user)) {
             throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
