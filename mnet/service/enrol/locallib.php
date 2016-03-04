@@ -457,12 +457,13 @@ class mnetservice_enrol {
         $request->set_method('enrol/mnet/enrol.php/user_enrolments');
         $request->add_param($username);
         
-        error_log('=== mnet request: ' . print_r($request, true)); // REMOVE
+        error_log('>>> mnet request: ' . print_r($request, true)); // REMOVE
 
         if ($request->send($peer)) {
-            error_log('=== mnet response: ' . print_r($request->response, true)); // REMOVE
+            error_log('<<< mnet response: ' . print_r($request->response, true)); // REMOVE
             return $request->response;
         } else {
+            error_log('<<< mnet error: ' . print_r($request->error, true)); // REMOVE
             return serialize($request->error);
         }
     }
