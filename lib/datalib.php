@@ -1142,7 +1142,7 @@ function get_my_remotecourses($userid=0) {
 /**
  * List of remote courses that a user is enrolled in by means other than MNet.
  * @param int @userid The user id to get remote courses for
- * @return array|false Array of {@link $COURSE} of course objects
+ * @return array Array of {@link $COURSE} of course objects
  */
 function get_my_otherremotecourses($userid=0) {
     global $USER;
