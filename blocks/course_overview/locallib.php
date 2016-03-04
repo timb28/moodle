@@ -198,10 +198,10 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
     $remotecourses = array_merge($remotecourses, $otherremotecourses);
     
     // Remote courses will have -ve remoteid as key, so it can be differentiated from normal courses
-    foreach ($remotecourses as $id => $val) {
-        $remoteid = $val->remoteid * -1;
-        $val->id = $remoteid;
-        $courses[$remoteid] = $val;
+    foreach ($remotecourses as $id => $course) {
+        $remoteid = $course->remoteid * -1;
+        $course->id = $remoteid;
+        $courses[$remoteid] = (object) $course;
     }
     
     error_log('=== all courses: ' . print_r($courses, true)); // REMOVE

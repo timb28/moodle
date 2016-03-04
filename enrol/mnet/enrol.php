@@ -125,7 +125,6 @@ class enrol_mnet_mnetservice_enrol {
                    summary, summaryformat, format, showgrades, lang, enablecompletion');
         
         foreach ($courses as $id=>$course) {
-            error_log('### local course: ' . print_r($course, true)); // REMOVE
             $courses[$id]->remoteid = $id;
         }
         
