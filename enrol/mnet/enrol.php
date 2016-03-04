@@ -107,6 +107,8 @@ class enrol_mnet_mnetservice_enrol {
      * @return array empty array
      */
     public function user_enrolments($username) {
+        error_log('!!! Reached user_enrolments'); // REMOVE
+        
         if (!$client = get_mnet_remote_client()) {
             die('Callable via XML-RPC only');
         }
