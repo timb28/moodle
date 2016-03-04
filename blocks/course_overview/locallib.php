@@ -189,16 +189,24 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
     $remotecourses = array();
     if (is_enabled_auth('mnet')) {
         $remotecourses = get_my_remotecourses();
-        $otherremotecourses = get_my_otherremotecourses();
+    }
+    // Remote courses will have -ve remoteid as key, so it can be differentiated from normal courses
+    foreach ($remotecourses as $id => $val) {
+        $remoteid = $val->remoteid * -1;
+        $val->id = $remoteid;
+        $courses[$remoteid] = $val;
     }
     
     error_log('=== remote courses: ' . print_r($remotecourses, true)); // REMOVE
     error_log('=== other remote courses: ' . print_r($otherremotecourses, true)); // REMOVE
     
-    $remotecourses = array_merge($remotecourses, $otherremotecourses);
-    
-    // Remote courses will have -ve remoteid as key, so it can be differentiated from normal courses
-    foreach ($remotecourses as $id => $course) {
+    // Get other remote courses the user is enrolled in locally.
+    $otherremotecourses = array();
+    if (is_enabled_auth('mnet')) {
+        $otherremotecourses = get_my_otherremotecourses();
+    }
+    // Other Remote courses will have -ve remoteid as key, so it can be differentiated from normal courses
+    foreach ($otherremotecourses as $id => $course) {
         $remoteid = $course->remoteid * -1;
         $course->id = $remoteid;
         $courses[$remoteid] = (object) $course;
