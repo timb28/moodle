@@ -456,8 +456,11 @@ class mnetservice_enrol {
         $request = new mnet_xmlrpc_client();
         $request->set_method('enrol/mnet/enrol.php/user_enrolments');
         $request->add_param($userid);
+        
+        error_log('=== mnet request: ' . print_r($request, true)); // REMOVE
 
         if ($request->send($peer)) {
+            error_log('=== mnet response: ' . print_r($request->response, true)); // REMOVE
             return $request->response;
         } else {
             return serialize($request->error);
