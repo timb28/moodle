@@ -30,6 +30,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+require_once($CFG->dirroot.'/enrol/externallib.php');
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -103,13 +105,16 @@ class enrol_mnet_mnetservice_enrol {
      * @uses mnet_remote_client Callable via XML-RPC only
      * @return array empty array
      */
-    public function user_enrolments() {
-        global $CFG, $DB;
-
+    public function user_enrolments($userid) {
         if (!$client = get_mnet_remote_client()) {
             die('Callable via XML-RPC only');
         }
-        return array();
+        
+        if (empty($userid)) {
+            throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
+        }
+        
+        return core_enrol_external::get_users_courses($userid);
     }
 
     /**
