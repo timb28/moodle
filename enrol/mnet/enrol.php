@@ -123,7 +123,8 @@ class enrol_mnet_mnetservice_enrol {
         
         error_log('!!! Reached user_enrolments: 3'); // REMOVE
         
-        $user = core_user::get_user_by_username($username);
+        //$user = core_user::get_user_by_username($username);
+        $user = (object) array('id' => 8836);
         
         error_log('=== $user: ' . $user); // REMOVE
         
