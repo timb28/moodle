@@ -3,6 +3,7 @@
 // Countries that are linked to the Global Moodle
 $countries = array(
     "au"=>"Australia",
+    "ca"=>"Canada",
     "nz"=>"New Zealand",
     "za"=>"South Africa",
     "us"=>"USA"
@@ -34,7 +35,7 @@ if (!empty($wantsurl)) {
     <h2>Select your country to login</h2>
     <div class="subcontent loginsub">
       <?php foreach($countries as $countrycode => $countryname) { ?>
-      <div class="big-button-wrapper"><a href="http://<?= $_SERVER['HTTP_HOST'] ?>/<?= $countrycode ?>/moodle/auth/mnet/jump.php?hostwwwroot=<?= urlencode($CFG->wwwroot); ?>&wantsurl=<?= $wantsurl; ?>&remoteurl=1"><img alt="<?= $countryname ?>" src="//d2cd5r4xf758pl.cloudfront.net/images/buttons/country-<?= $countrycode ?>.gif" height="132" width="200"><span class="big-button-text-overlay"><?= $countryname ?></span></a></div>
+      <div class="big-button-wrapper"><a href="http://<?= $_SERVER['HTTP_HOST'] ?>/<?= $countrycode ?>/moodle/auth/mnet/jump.php?hostwwwroot=<?= urlencode($CFG->wwwroot); ?>&wantsurl=<?= $wantsurl; ?>&remoteurl=1"><img alt="<?= $countryname ?>" src="pix/country-<?= $countrycode ?>.gif" height="132" width="200"><span class="big-button-text-overlay"><?= $countryname ?></span></a></div>
       <?php } ?>
     </div>
   </div>

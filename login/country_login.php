@@ -303,10 +303,6 @@ if (!empty($SESSION->loginerrormsg)) {
     $errormsg = $SESSION->loginerrormsg;
     unset($SESSION->loginerrormsg);
 
-} else if ($testsession) {
-    // No need to redirect here.
-    unset($SESSION->loginerrormsg);
-
 } else if ($errormsg or !empty($frm->password)) {
     // We must redirect after every password submission.
     if ($errormsg) {
