@@ -37,6 +37,13 @@
 function theme_academy_create_course_button($course) {
     global $CFG, $DB, $USER;
     
+    // Display button to open MNet remote course
+    if ($course->id < 0 && !empty($course->remoteid)) {
+        $viewcourseurl = $course->wwwroot . '/course/view.php?id=' . $course->remoteid;
+        $inprogressbutton = get_string('inprogress', 'theme_academy_clean', $viewcourseurl);
+        return $inprogressbutton;
+    }
+    
     require_once($CFG->libdir.'/completionlib.php');
     
     $instances = $DB->get_records('enrol', array('courseid'=>$course->id, 'status'=>ENROL_INSTANCE_ENABLED), 'sortorder,id');
