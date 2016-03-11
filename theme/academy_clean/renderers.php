@@ -492,6 +492,10 @@ class theme_academy_clean_block_course_overview_renderer extends block_course_ov
                 // print 'add to cart' buttons
                 $html .= theme_academy_create_course_button($course);
                 /* END Academy code */
+            } elseif (is_mnet_remote_user($this->user)) {
+                $html .= $this->output->heading(html_writer::link(
+                    $course->wwwroot . '/course/view.php?id=' . $course->remoteid,
+                    format_string($course->shortname, true), $attributes) . ' (' . format_string($course->hostname) . ')', 2, 'title');
             } else {
                 $html .= $this->output->heading(html_writer::link(
                     new moodle_url('/auth/mnet/jump.php', array('hostid' => $course->hostid, 'wantsurl' => '/course/view.php?id='.$course->remoteid)),

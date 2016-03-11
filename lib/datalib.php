@@ -1150,7 +1150,9 @@ function get_my_otherremotecourses() {
     
     $username = $USER->username;
     $mnethostid = $USER->mnethostid;
-    $mnethostname = $DB->get_field('mnet_host', 'name', array('id' => $mnethostid));
+    $mnethost = $DB->get_record('mnet_host', array('id' => $mnethostid));
+    $mnethostname = $mnethost->name;
+    $mnetwwwroot = $mnethost->wwwroot;
     
     error_log('=== username: ' . $username . ' mnet host id: ' . $mnethostid); // REMOVE
     
@@ -1168,6 +1170,7 @@ function get_my_otherremotecourses() {
         $course = (object) $course; // is returned from MNet XML-RPC call as an array
         $course->hostid = $mnethostid;
         $course->hostname = $mnethostname;
+        $course->wwwroot = $mnetwwwroot;
         $courses[$id] = $course;
     }
     

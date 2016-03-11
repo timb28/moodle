@@ -437,9 +437,7 @@ class mnetservice_enrol {
     }
     
     /**
-     * Send request to unenrol our user from the remote course
-     *
-     * Updates our remote enrolments cache if the unenrolment was successful.
+     * Send request to get all remote course enrolments for a user
      *
      * @uses mnet_xmlrpc_client Invokes XML-RPC request
      * @param id $mnethostid MNet remote host id
