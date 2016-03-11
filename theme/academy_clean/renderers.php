@@ -415,6 +415,8 @@ class theme_academy_clean_block_course_overview_renderer extends block_course_ov
      * @return string html to be displayed in course_overview block
      */
     public function course_overview($courses, $overviews) {
+        global $USER;
+        
         $html = '';
         $config = get_config('block_course_overview');
         if ($config->showcategories != BLOCKS_COURSE_OVERVIEW_SHOWCATEGORIES_NONE) {
@@ -492,7 +494,7 @@ class theme_academy_clean_block_course_overview_renderer extends block_course_ov
                 // print 'add to cart' buttons
                 $html .= theme_academy_create_course_button($course);
                 /* END Academy code */
-            } elseif (is_mnet_remote_user($this->user)) {
+            } elseif (is_mnet_remote_user($USER)) {
                 $html .= $this->output->heading(html_writer::link(
                     $course->wwwroot . '/course/view.php?id=' . $course->remoteid,
                     format_string($course->shortname, true), $attributes) . ' (' . format_string($course->hostname) . ')', 2, 'title');
