@@ -278,9 +278,21 @@ class enrol_snipcart_plugin extends enrol_plugin {
         }
     }
     
+    /**
+     * Returns all the currencies configured in the Snipcart plugin settings
+     * @return array of supported currency codes
+     */
     public function get_currencies() {
-        $codes = array(
-            'AUD', 'NZD', 'USD', 'ZAR');
+        $codes = array();
+        
+        $manager = \enrol_snipcart\get_snipcartaccounts_manager();
+        
+        $snipcartaccounts = $manager->get_snipcartaccounts();
+        
+        foreach ($snipcartaccounts as $account) {
+            $codes[] = $account->currencycode;
+        }
+        
         $currencies = array();
         foreach ($codes as $c) {
             $currencies[$c] = new lang_string($c, 'core_currencies');
