@@ -498,7 +498,6 @@ class theme_academy_clean_block_course_overview_renderer extends block_course_ov
                 $html .= $this->output->heading(html_writer::link(
                     $course->wwwroot . '/course/view.php?id=' . $course->remoteid,
                     format_string($course->shortname, true), $attributes), 2, 'title');
-                $html .= $this->output->container(format_string($course->hostname), 'mnethostname');
                 $html .= theme_academy_create_course_button($course);
             } else {
                 $html .= $this->output->heading(html_writer::link(
