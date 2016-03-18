@@ -125,11 +125,22 @@ class enrol_mnet_mnetservice_enrol {
         $courses = enrol_get_users_courses($user->id, true, 'id, shortname, fullname, idnumber, visible,
                    summary, summaryformat, format, showgrades, lang, enablecompletion');
         
+        // Get meta course enrolments so they won't be included in returned courses
+        $sql = "SELECT e.courseid
+                FROM {user_enrolments} ue
+                JOIN {enrol} e ON ue.enrolid = e.id
+               WHERE enrol = 'meta' AND ue.userid = :userid";
+        $params['userid']  = $user->id;
+        $metacourses = $DB->get_records_sql($sql, $params);
+        
+        $cleanedcourses = array();
         foreach ($courses as $id=>$course) {
-            $courses[$id]->remoteid = $id;
+            if (!in_array($metacourses, $id)) {
+                $cleanedcourses[$id]->remoteid = $id;
+            }
         }
         
-        return $courses;
+        return $cleanedcourses;
     }
     /* END Academy Patch M#045 */
 
