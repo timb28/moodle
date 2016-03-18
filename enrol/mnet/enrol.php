@@ -109,6 +109,8 @@ class enrol_mnet_mnetservice_enrol {
      * @return array of courses
      */
     public function user_enrolments($username) {
+        global $DB;
+        
         if (!$client = get_mnet_remote_client()) {
             die('Callable via XML-RPC only');
         }
@@ -134,17 +136,13 @@ class enrol_mnet_mnetservice_enrol {
         $params['userid']  = $user->id;
         $metacourses = $DB->get_records_sql($sql, $params);
         
-        error_log('1 === courses: ' . print_r($courses, true));
-        error_log('2 === metacourses: ' . print_r($metacourses, true));
-        
         $cleanedcourses = array();
         foreach ($courses as $id=>$course) {
-            if (!in_array($metacourses, $id)) {
+            if (!array_key_exists($id, $metacourses)) {
+                $cleanedcourses[$id] = $course;
                 $cleanedcourses[$id]->remoteid = $id;
             }
         }
-        
-        error_log('3 === cleaned courses: ' . print_r($cleanedcourses, true));
         
         return $cleanedcourses;
     }
