@@ -238,10 +238,10 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
         if (($limit != 0) && ($counter >= $limit)) {
             break;
         }
-        if (!in_array($c->id, $order)) {
+//        if (!in_array($c->id, $order)) {
             $sortedcourses[] = $c;
             $counter++;
-        }
+//        }
     }
 
     // From list extract site courses for overview
