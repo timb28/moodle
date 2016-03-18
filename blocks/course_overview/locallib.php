@@ -276,7 +276,7 @@ function block_course_overview_get_mnet_sorted_courses($showallcourses = false) 
     // Get other remote courses the user is enrolled in on their local Moodle host.
     $otherremotecourses = array();
     if (is_enabled_auth('mnet')) {
-        $otherremotecourses = get_my_mnetremotecourses();
+        $otherremotecourses = get_my_remotemnetcourses();
     }
     // Other Remote courses will have -ve remoteid as key, so it can be differentiated from normal courses
     foreach ($otherremotecourses as $id => $course) {

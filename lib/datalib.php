@@ -26,8 +26,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once($CFG->dirroot.'/mnet/service/enrol/locallib.php'); // Academy Patch M#045 Display remote MNet courses on a student’s Dashboard 
-
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -1144,8 +1142,10 @@ function get_my_remotecourses($userid=0) {
  * List of remote courses that the current user is enrolled in by means other than MNet.
  * @return array Array of {@link $COURSE} of course objects
  */
-function get_my_mnetremotecourses() {
+function get_my_remotemnetcourses() {
     global $DB, $USER;
+    
+    require_once($CFG->dirroot.'/mnet/service/enrol/locallib.php');
     
     $courses = array();
     
