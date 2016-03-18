@@ -221,17 +221,17 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
     $sortedcourses = array();
     $counter = 0;
     // Get courses in sort order into list.
-    foreach ($order as $key => $cid) {
-        if (($counter >= $limit) && ($limit != 0)) {
-            break;
-        }
-
-        // Make sure user is still enroled.
-        if (isset($courses[$cid])) {
-            $sortedcourses[$cid] = $courses[$cid];
-            $counter++;
-        }
-    }
+//    foreach ($order as $key => $cid) {
+//        if (($counter >= $limit) && ($limit != 0)) {
+//            break;
+//        }
+//
+//        // Make sure user is still enroled.
+//        if (isset($courses[$cid])) {
+//            $sortedcourses[$cid] = $courses[$cid];
+//            $counter++;
+//        }
+//    }
     $courses = uksort($courses, 'compare_course_names');
     // Append unsorted courses if limit allows
     foreach ($courses as $c) {
