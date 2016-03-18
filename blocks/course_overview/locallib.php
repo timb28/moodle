@@ -212,6 +212,8 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
         $courses[$remoteid] = $course;
     }
     
+    
+    
     error_log('=== all courses: ' . print_r($courses, true)); // REMOVE
 
     $order = block_course_overview_get_myorder();
@@ -230,13 +232,14 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
             $counter++;
         }
     }
+    $courses = uksort($courses, 'compare_course_names');
     // Append unsorted courses if limit allows
     foreach ($courses as $c) {
         if (($limit != 0) && ($counter >= $limit)) {
             break;
         }
         if (!in_array($c->id, $order)) {
-            $sortedcourses[$c->id] = $c;
+            $sortedcourses[] = $c;
             $counter++;
         }
     }
@@ -249,4 +252,11 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
         }
     }
     return array($sortedcourses, $sitecourses, count($courses));
+}
+
+function compare_course_names($a, $b)
+{
+    $aname = $a->fullname;
+    $bname = $b->fullname;
+    return strcmp($aname, $bname);
 }
