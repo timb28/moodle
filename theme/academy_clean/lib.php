@@ -40,7 +40,10 @@ function theme_academy_create_course_button($course) {
     // Display button to open MNet remote course
     if ($course->id < 0 && !empty($course->remoteid)) {
         $viewcourseurl = $course->wwwroot . '/course/view.php?id=' . $course->remoteid;
+        
         $inprogressbutton = get_string('inprogress', 'theme_academy_clean', $viewcourseurl);
+        $completebutton = get_string('complete', 'theme_academy_clean', $viewcourseurl->out());
+        
         if ($course->complete) {
                 return $completebutton;
             } else {

@@ -30,8 +30,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once($CFG->dirroot.'/enrol/externallib.php'); // Academy Patch M#045 Display remote MNet courses on a student’s Dashboard
-
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -109,6 +107,10 @@ class enrol_mnet_mnetservice_enrol {
      * @return array of courses
      */
     public function user_enrolments($username) {
+        global $CFG;
+        
+        require_once($CFG->dirroot.'/enrol/externallib.php');
+        
         if (!$client = get_mnet_remote_client()) {
             die('Callable via XML-RPC only');
         }
@@ -127,14 +129,14 @@ class enrol_mnet_mnetservice_enrol {
                    summary, summaryformat, format, showgrades, lang, enablecompletion');
         
         // Get meta course enrolments so they won't be included in returned courses
-        $metacourses = meta_courses($user->id);
+        $metacourses = $this->meta_courses($user->id);
         
         $cleanedcourses = array();
         foreach ($courses as $id=>$course) {
             if (!array_key_exists($id, $metacourses)) {
                 $cleanedcourses[$id] = $course;
                 $cleanedcourses[$id]->remoteid = $id;
-                $cleanedcourses[$id]->complete = is_course_complete($course, $user->id);
+                $cleanedcourses[$id]->complete = $this->is_course_complete($course, $user->id);
             }
         }
         
@@ -170,6 +172,8 @@ class enrol_mnet_mnetservice_enrol {
      */
     private function is_course_complete($course, $userid) {
         global $CFG;
+        
+        require_once($CFG->libdir.'/completionlib.php');
         
         if ($CFG->enablecompletion != COMPLETION_ENABLED) {
             return false;
