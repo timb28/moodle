@@ -102,6 +102,7 @@ class enrol_mnet_mnetservice_enrol {
     /* START Academy Patch M#045 Display remote MNet courses on a student’s Dashboard */
     /**
      * Returns list of courses that user is enrolled in.
+     * Doesn't include meta course enrolments
      *
      * @uses mnet_remote_client Callable via XML-RPC only
      * @param String $username of our user
