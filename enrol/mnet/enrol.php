@@ -30,7 +30,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once($CFG->dirroot.'/enrol/externallib.php');
+require_once($CFG->dirroot.'/enrol/externallib.php'); // Academy Patch M#045 Display remote MNet courses on a student’s Dashboard
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -99,12 +99,13 @@ class enrol_mnet_mnetservice_enrol {
         return array_values($courses); // can not use keys for backward compatibility
     }
 
+    /* START Academy Patch M#045 Display remote MNet courses on a student’s Dashboard */
     /**
-     * This method has never been implemented in Moodle MNet API
+     * Returns list of courses that user is enrolled in.
      *
      * @uses mnet_remote_client Callable via XML-RPC only
      * @param String $username of our user
-     * @return array empty array
+     * @return array of courses
      */
     public function user_enrolments($username) {
         if (!$client = get_mnet_remote_client()) {
@@ -130,6 +131,7 @@ class enrol_mnet_mnetservice_enrol {
         
         return $courses;
     }
+    /* END Academy Patch M#045 */
 
     /**
      * Enrol remote user to our course

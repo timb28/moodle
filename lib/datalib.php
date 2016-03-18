@@ -26,7 +26,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once($CFG->dirroot.'/mnet/service/enrol/locallib.php');
+require_once($CFG->dirroot.'/mnet/service/enrol/locallib.php'); // Academy Patch M#045 Display remote MNet courses on a student’s Dashboard 
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -1139,11 +1139,12 @@ function get_my_remotecourses($userid=0) {
     return $DB->get_records_sql($sql, array($userid));
 }
 
+/* START Academy Patch M#045 Display remote MNet courses on a student’s Dashboard */
 /**
  * List of remote courses that the current user is enrolled in by means other than MNet.
  * @return array Array of {@link $COURSE} of course objects
  */
-function get_my_otherremotecourses() {
+function get_my_mnetremotecourses() {
     global $DB, $USER;
     
     $courses = array();
@@ -1153,8 +1154,6 @@ function get_my_otherremotecourses() {
     $mnethost = $DB->get_record('mnet_host', array('id' => $mnethostid));
     $mnethostname = $mnethost->name;
     $mnetwwwroot = $mnethost->wwwroot;
-    
-    error_log('=== username: ' . $username . ' mnet host id: ' . $mnethostid); // REMOVE
     
     $service = mnetservice_enrol::get_instance();
     
@@ -1176,6 +1175,7 @@ function get_my_otherremotecourses() {
     
     return $courses;
 }
+/* END Academy Patch M#045 */
 
 /**
  * List of remote hosts that a user has access to via MNET.

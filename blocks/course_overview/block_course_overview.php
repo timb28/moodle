@@ -71,7 +71,10 @@ class block_course_overview extends block_base {
         profile_load_custom_fields($USER);
 
         $showallcourses = ($updatemynumber === self::SHOW_ALL_COURSES);
-        list($sortedcourses, $sitecourses, $totalcourses) = block_course_overview_get_sorted_courses($showallcourses);
+        /* START Academy Patch M#045 Display remote MNet courses on a student’s Dashboard */
+        // list($sortedcourses, $sitecourses, $totalcourses) = block_course_overview_get_sorted_courses($showallcourses);
+        list($sortedcourses, $sitecourses, $totalcourses) = block_course_overview_get_mnet_sorted_courses($showallcourses);
+        /* END Academy Patch M#045 */
         $overviews = block_course_overview_get_overviews($sitecourses);
 
         $renderer = $this->page->get_renderer('block_course_overview');

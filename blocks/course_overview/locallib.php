@@ -168,6 +168,82 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
 
     $limit = block_course_overview_get_max_user_courses($showallcourses);
 
+    $courses = enrol_get_my_courses();
+    $site = get_site();
+
+    if (array_key_exists($site->id,$courses)) {
+        unset($courses[$site->id]);
+    }
+
+    foreach ($courses as $c) {
+        if (isset($USER->lastcourseaccess[$c->id])) {
+            $courses[$c->id]->lastaccess = $USER->lastcourseaccess[$c->id];
+        } else {
+            $courses[$c->id]->lastaccess = 0;
+        }
+    }
+
+    // Get remote courses.
+    $remotecourses = array();
+    if (is_enabled_auth('mnet')) {
+        $remotecourses = get_my_remotecourses();
+    }
+    // Remote courses will have -ve remoteid as key, so it can be differentiated from normal courses
+    foreach ($remotecourses as $id => $val) {
+        $remoteid = $val->remoteid * -1;
+        $val->id = $remoteid;
+        $courses[$remoteid] = $val;
+    }
+
+    $order = block_course_overview_get_myorder();
+
+    $sortedcourses = array();
+    $counter = 0;
+    // Get courses in sort order into list.
+    foreach ($order as $key => $cid) {
+        if (($counter >= $limit) && ($limit != 0)) {
+            break;
+        }
+
+        // Make sure user is still enroled.
+        if (isset($courses[$cid])) {
+            $sortedcourses[$cid] = $courses[$cid];
+            $counter++;
+        }
+    }
+    // Append unsorted courses if limit allows
+    foreach ($courses as $c) {
+        if (($limit != 0) && ($counter >= $limit)) {
+            break;
+        }
+        if (!in_array($c->id, $order)) {
+            $sortedcourses[$c->id] = $c;
+            $counter++;
+        }
+    }
+
+    // From list extract site courses for overview
+    $sitecourses = array();
+    foreach ($sortedcourses as $key => $course) {
+        if ($course->id > 0) {
+            $sitecourses[$key] = $course;
+        }
+    }
+    return array($sortedcourses, $sitecourses, count($courses));
+}
+
+/* START Academy Patch M#045 Display remote MNet courses on a student’s Dashboard */
+/**
+ * Return sorted list of user courses including courses on MNet student's local Moodle
+ *
+ * @param bool $showallcourses if set true all courses will be visible.
+ * @return array list of sorted courses and count of courses.
+ */
+function block_course_overview_get_mnet_sorted_courses($showallcourses = false) {
+    global $USER;
+
+    $limit = block_course_overview_get_max_user_courses($showallcourses);
+
     /* START Academy Patch M#044 Don’t show child (meta) courses on the Dashboard */
     $courses = enrol_get_my_nonmeta_courses();
     /* END Academy Patch M#044 */
@@ -197,14 +273,11 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
         $courses[$remoteid] = $val;
     }
     
-    error_log('=== remote courses: ' . print_r($remotecourses, true)); // REMOVE
-    
-    // Get other remote courses the user is enrolled in locally.
+    // Get other remote courses the user is enrolled in on their local Moodle host.
     $otherremotecourses = array();
     if (is_enabled_auth('mnet')) {
-        $otherremotecourses = get_my_otherremotecourses();
+        $otherremotecourses = get_my_mnetremotecourses();
     }
-    error_log('=== other remote courses: ' . print_r($otherremotecourses, true)); // REMOVE
     // Other Remote courses will have -ve remoteid as key, so it can be differentiated from normal courses
     foreach ($otherremotecourses as $id => $course) {
         $remoteid = $course->remoteid * -1;
@@ -212,37 +285,9 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
         $courses[$remoteid] = $course;
     }
     
-    
-    
-    error_log('=== all courses: ' . print_r($courses, true)); // REMOVE
-
-    $order = block_course_overview_get_myorder();
-
-    $sortedcourses = array();
-    $counter = 0;
-    // Get courses in sort order into list.
-//    foreach ($order as $key => $cid) {
-//        if (($counter >= $limit) && ($limit != 0)) {
-//            break;
-//        }
-//
-//        // Make sure user is still enroled.
-//        if (isset($courses[$cid])) {
-//            $sortedcourses[$cid] = $courses[$cid];
-//            $counter++;
-//        }
-//    }
-    usort($courses, 'compare_course_names');
-    // Append unsorted courses if limit allows
-    foreach ($courses as $c) {
-        if (($limit != 0) && ($counter >= $limit)) {
-            break;
-        }
-//        if (!in_array($c->id, $order)) {
-            $sortedcourses[] = $c;
-            $counter++;
-//        }
-    }
+    $sortedcourses = $courses;
+    // Ignore course sort order list and sort alphabetically
+    usort($sortedcourses, 'compare_course_names');
 
     // From list extract site courses for overview
     $sitecourses = array();
@@ -260,3 +305,4 @@ function compare_course_names($a, $b)
     $bname = $b->fullname;
     return strcasecmp($aname, $bname);
 }
+/* END Academy Patch M#045 */
