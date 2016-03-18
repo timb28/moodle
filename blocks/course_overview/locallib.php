@@ -258,7 +258,7 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
 
 function compare_course_names($a, $b)
 {
-    $aname = $a->fullname;
-    $bname = $b->fullname;
+    $aname = $a->shortname;
+    $bname = $b->shortname;
     return strcmp($aname, $bname);
 }
