@@ -957,7 +957,7 @@ function enrol_get_all_users_courses($userid, $onlyactive = false, $fields = NUL
     //note: we can not use DISTINCT + text fields due to Oracle and MS limitations, that is why we have the subselect there
     $sql = "SELECT $coursefields $ccselect
               FROM {course} c
-              JOIN (SELECT DISTINCT e.courseid
+              JOIN (SELECT DISTINCT e.courseid, e.enrol
                       FROM {enrol} e
                       JOIN {user_enrolments} ue ON (ue.enrolid = e.id AND ue.userid = :userid)
                  $subwhere

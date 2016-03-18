@@ -122,7 +122,7 @@ class enrol_mnet_mnetservice_enrol {
         }
         
         $courses = enrol_get_users_courses($user->id, true, 'id, shortname, fullname, idnumber, visible,
-                   summary, summaryformat, format, showgrades, lang, enablecompletion');
+                   summary, summaryformat, format, showgrades, lang, enablecompletion, enrol');
         
         foreach ($courses as $id=>$course) {
             $courses[$id]->remoteid = $id;
