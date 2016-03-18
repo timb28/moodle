@@ -134,12 +134,17 @@ class enrol_mnet_mnetservice_enrol {
         $params['userid']  = $user->id;
         $metacourses = $DB->get_records_sql($sql, $params);
         
+        error_log('1 === courses: ' . print_r($courses, true));
+        error_log('2 === metacourses: ' . print_r($metacourses, true));
+        
         $cleanedcourses = array();
         foreach ($courses as $id=>$course) {
             if (!in_array($metacourses, $id)) {
                 $cleanedcourses[$id]->remoteid = $id;
             }
         }
+        
+        error_log('3 === cleaned courses: ' . print_r($cleanedcourses, true));
         
         return $cleanedcourses;
     }
