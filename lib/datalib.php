@@ -1143,7 +1143,7 @@ function get_my_remotecourses($userid=0) {
  * @return array Array of {@link $COURSE} of course objects
  */
 function get_my_remotemnetcourses() {
-    global $DB, $USER;
+    global $CFG, $DB, $USER;
     
     require_once($CFG->dirroot.'/mnet/service/enrol/locallib.php');
     
