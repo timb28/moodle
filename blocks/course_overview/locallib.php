@@ -232,9 +232,7 @@ function block_course_overview_get_sorted_courses($showallcourses = false) {
 //            $counter++;
 //        }
 //    }
-    error_log('1111 courses before sort: ' . print_r($courses, true));
     usort($courses, 'compare_course_names');
-    error_log('2222 courses after sort: ' . print_r($courses, true));
     // Append unsorted courses if limit allows
     foreach ($courses as $c) {
         if (($limit != 0) && ($counter >= $limit)) {
