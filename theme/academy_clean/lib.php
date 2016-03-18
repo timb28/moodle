@@ -45,10 +45,10 @@ function theme_academy_create_course_button($course) {
         $completebutton = get_string('complete', 'theme_academy_clean', $viewcourseurl->out());
         
         if ($course->complete) {
-                return $completebutton;
-            } else {
-                return $inprogressbutton;
-            }
+            return $completebutton;
+        }
+
+        return $inprogressbutton;
     }
     
     require_once($CFG->libdir.'/completionlib.php');
