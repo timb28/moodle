@@ -41,7 +41,11 @@ function theme_academy_create_course_button($course) {
     if ($course->id < 0 && !empty($course->remoteid)) {
         $viewcourseurl = $course->wwwroot . '/course/view.php?id=' . $course->remoteid;
         $inprogressbutton = get_string('inprogress', 'theme_academy_clean', $viewcourseurl);
-        return $inprogressbutton;
+        if ($course->complete) {
+                return $completebutton;
+            } else {
+                return $inprogressbutton;
+            }
     }
     
     require_once($CFG->libdir.'/completionlib.php');

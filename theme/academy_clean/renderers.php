@@ -445,11 +445,13 @@ class theme_academy_clean_block_course_overview_renderer extends block_course_ov
                 // print 'add to cart' buttons
                 $html .= theme_academy_create_course_button($course);
                 /* END Academy code */
+                /* START Academy Patch M#045 Display remote MNet courses on a student’s Dashboard */
             } elseif (is_mnet_remote_user($USER)) {
                 $html .= $this->output->heading(html_writer::link(
                     $course->wwwroot . '/course/view.php?id=' . $course->remoteid,
                     format_string($course->fullname, true), $attributes), 2, 'title');
                 $html .= theme_academy_create_course_button($course);
+                /* END Academy Patch M#045 */
             } else {
                 $html .= $this->output->heading(html_writer::link(
                     new moodle_url('/auth/mnet/jump.php', array('hostid' => $course->hostid, 'wantsurl' => '/course/view.php?id='.$course->remoteid)),

@@ -109,8 +109,6 @@ class enrol_mnet_mnetservice_enrol {
      * @return array of courses
      */
     public function user_enrolments($username) {
-        global $DB;
-        
         if (!$client = get_mnet_remote_client()) {
             die('Callable via XML-RPC only');
         }
@@ -129,22 +127,61 @@ class enrol_mnet_mnetservice_enrol {
                    summary, summaryformat, format, showgrades, lang, enablecompletion');
         
         // Get meta course enrolments so they won't be included in returned courses
-        $sql = "SELECT e.courseid
-                FROM {user_enrolments} ue
-                JOIN {enrol} e ON ue.enrolid = e.id
-               WHERE enrol = 'meta' AND ue.userid = :userid";
-        $params['userid']  = $user->id;
-        $metacourses = $DB->get_records_sql($sql, $params);
+        $metacourses = meta_courses($user->id);
         
         $cleanedcourses = array();
         foreach ($courses as $id=>$course) {
             if (!array_key_exists($id, $metacourses)) {
                 $cleanedcourses[$id] = $course;
                 $cleanedcourses[$id]->remoteid = $id;
+                $cleanedcourses[$id]->complete = is_course_complete($course, $user->id);
             }
         }
         
         return $cleanedcourses;
+    }
+    
+    /**
+     * Returns list of course ids for courses user is enrolled in via
+     * meta enrolment plugin
+     *
+     * @param int $userid of our user
+     * @return array of courses ids
+     */
+    private function meta_courses($userid) {
+        global $DB;
+        
+        // Get meta course enrolments so they won't be included in returned courses
+        $sql = "SELECT e.courseid
+                FROM {user_enrolments} ue
+                JOIN {enrol} e ON ue.enrolid = e.id
+               WHERE enrol = 'meta' AND ue.userid = :userid";
+        $params['userid']  = $userid;
+        return $DB->get_records_sql($sql, $params);
+    }
+    
+    /**
+     * Returns list of course ids for courses user is enrolled in via
+     * meta enrolment plugin
+     *
+     * @param stdClass $course Moodle course object.
+     * @param int $userid of the user
+     * @return bool true if the user has completed the course
+     */
+    private function is_course_complete($course, $userid) {
+        global $CFG;
+        
+        if ($CFG->enablecompletion != COMPLETION_ENABLED) {
+            return false;
+        }
+
+        $coursecompletion = new completion_info($course);
+
+        if ($coursecompletion->is_course_complete($userid)) {
+            return true;
+        } else {
+            return false;
+        }
     }
     /* END Academy Patch M#045 */
 
