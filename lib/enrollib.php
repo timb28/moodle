@@ -903,7 +903,7 @@ function enrol_get_all_users_courses($userid, $onlyactive = false, $fields = NUL
     $basefields = array('id', 'category', 'sortorder',
             'shortname', 'fullname', 'idnumber',
             'startdate', 'visible',
-            'groupmode', 'groupmodeforce', 'enrol');
+            'groupmode', 'groupmodeforce');
 
     if (empty($fields)) {
         $fields = $basefields;
@@ -957,7 +957,7 @@ function enrol_get_all_users_courses($userid, $onlyactive = false, $fields = NUL
     //note: we can not use DISTINCT + text fields due to Oracle and MS limitations, that is why we have the subselect there
     $sql = "SELECT $coursefields $ccselect
               FROM {course} c
-              JOIN (SELECT DISTINCT e.courseid, e.enrol
+              JOIN (SELECT DISTINCT e.courseid
                       FROM {enrol} e
                       JOIN {user_enrolments} ue ON (ue.enrolid = e.id AND ue.userid = :userid)
                  $subwhere
