@@ -260,5 +260,5 @@ function compare_course_names($a, $b)
 {
     $aname = $a->shortname;
     $bname = $b->shortname;
-    return strcmp($aname, $bname);
+    return strcasecmp($aname, $bname);
 }
