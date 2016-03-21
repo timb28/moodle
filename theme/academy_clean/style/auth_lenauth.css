@@ -22,6 +22,10 @@
     margin: 0 0 20px 0;
 }
 
+#page-login-index .loginbox .potentialidps {
+    display: none; /* Hide the unused 'Log in using your account on:' MNet feature */
+}
+
 #page-login-index .signuppanel {
     padding-top: 3rem;
 }
