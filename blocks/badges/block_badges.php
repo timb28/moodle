@@ -96,6 +96,10 @@ class block_badges extends block_base {
             $courseid = null;
         }
 
+        /* START Academy Patch M#046 Display all latest badges in the badges block. */
+        $courseid = 0;
+        /* END Academy Patch M#046 */
+            
         if ($badges = badges_get_user_badges($USER->id, $courseid, 0, $this->config->numberofbadges)) {
             $output = $this->page->get_renderer('core', 'badges');
             $this->content->text = $output->print_badges_list($badges, $USER->id, true);
