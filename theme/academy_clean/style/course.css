@@ -9,6 +9,20 @@
 .coursebox .content .courseimage,
 .coursebox .content .coursefile {float:left;width:inherit;clear:left;}
 
+/* Remove extra whitespace from left of course content. */
+.course-content ul.section { margin: 1em 0;}
+.section .activity .mod-indent-outer {
+    padding-left: 0;
+}
+
+.section .label .mod-indent-outer {
+    padding-left: 0;
+}
+
+.dir-rtl .section .activity .mod-indent-outer {
+    padding-right: 0;
+}
+
 ul.topics li.section, ul.weeks li.section {
     /* All course topics. */
 }
