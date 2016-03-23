@@ -11,6 +11,7 @@
 
 /* Remove extra whitespace from left of course content. */
 .course-content ul.section { margin: 1em 0;}
+body.editing .course-content ul.section { margin: 1em;}
 .section .activity .mod-indent-outer {
     padding-left: 0;
 }
@@ -21,6 +22,20 @@
 
 .dir-rtl .section .activity .mod-indent-outer {
     padding-right: 0;
+}
+body.editing  .section .activity .mod-indent-outer {
+    display: table;
+    padding-left: 24px;
+}
+
+body.editing  .section .label .mod-indent-outer {
+    padding-left: 24px;
+    display: block;
+}
+
+body.editing  .dir-rtl .section .activity .mod-indent-outer {
+    padding-left: auto;
+    padding-right: 24px;
 }
 
 ul.topics li.section, ul.weeks li.section {
