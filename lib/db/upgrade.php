@@ -4608,6 +4608,40 @@ function xmldb_main_upgrade($oldversion) {
 
     // Moodle v3.0.0 release upgrade line.
     // Put any upgrade step following this.
+    if ($oldversion < 2015111602.07) {
+        $root = $CFG->tempdir . '/download';
+        if (is_dir($root)) {
+            // Fetch each repository type - include all repos, not just enabled.
+            $repositories = $DB->get_records('repository', array(), '', 'type');
+
+            foreach ($repositories as $id => $repository) {
+                $directory = $root . '/repository_' . $repository->type;
+                if (is_dir($directory)) {
+                    fulldelete($directory);
+                }
+            }
+        }
+
+        // Main savepoint reached.
+        upgrade_main_savepoint(true, 2015111602.07);
+    }
+
+    if ($oldversion < 2015111603.01) {
+        // This could take a long time. Unfortunately, no way to know how long, and no way to do progress, so setting for 1 hour.
+        upgrade_set_timeout(3600);
+
+        // Define index userid-itemid (not unique) to be added to grade_grades_history.
+        $table = new xmldb_table('grade_grades_history');
+        $index = new xmldb_index('userid-itemid-timemodified', XMLDB_INDEX_NOTUNIQUE, array('userid', 'itemid', 'timemodified'));
+
+        // Conditionally launch add index userid-itemid.
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Main savepoint reached.
+        upgrade_main_savepoint(true, 2015111603.01);
+    }
 
     return true;
 }
