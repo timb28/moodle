@@ -644,8 +644,6 @@ class enrol_snipcart_plugin extends enrol_plugin {
         $event->trigger();
 
         
-        // Todo: Email the student a link to get started
-                
         // Enrol the student in each of the course they have purchased
         return $this->enrol_user($enrol, $user->id, $enrol->roleid, $timestart, $timeend);
     }
