@@ -92,7 +92,7 @@ class block_snipcart extends block_base {
                     . '<span class="snipcart-total-price-label">'.get_string('total', 'block_snipcart').' </span>'
                     . '<span class="snipcart-total-price"></span></div>
             </div>
-            <div class="snipcart-actions invisible">
+            <div class="snipcart-actions faded">
               <a href="#" class="snipcart-checkout btn btn-small btn-success">'
                     . '<img src="'.$OUTPUT->pix_url('shopping_cart', 'block_snipcart').'" /> '
                     . get_string('checkout', 'block_snipcart') . '</a>

@@ -897,12 +897,10 @@ body#page-enrol-index div.box.generalbox.info {
 }
 
 /* Animations */
-.invisible {
-    visibility: hidden;
-    opacity: 0;
+.faded {
+    opacity: 0.25;
 }
-.invisible.fadein {
-    visibility: visible;
+.faded.fadein {
     opacity: 100;
     transition-duration: 200ms, 0ms;
     transition-property: opacity, visibility;

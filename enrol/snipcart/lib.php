@@ -191,7 +191,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
         $shortcoursesummary = mb_strimwidth($coursesummary, 0, 128, '…');
 
         return "
-            <a href='#' id='$addtocartid' class='snipcart-actions invisible btn btn-primary btn-small $buttonclasses'"
+            <a href='#' id='$addtocartid' class='snipcart-actions faded btn btn-primary btn-small $buttonclasses'"
                 . " data-item-id='{$user->id}-{$instance->id}'"
                 . " data-item-name='$coursefullname'"
                 . " data-item-price='$cost'"

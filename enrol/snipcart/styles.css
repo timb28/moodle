@@ -22,7 +22,6 @@
 }
 
 /* Don't hide snipcart actions when loaded via javascript */
-.category.with_children .snipcart-actions.invisible {
-    visibility: visible;
+.category.with_children .snipcart-actions.faded {
     opacity: 1;
 }
