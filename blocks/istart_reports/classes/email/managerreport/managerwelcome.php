@@ -55,8 +55,6 @@ class managerwelcome {
         $user           = $this->user;
         $manager        = $this->manager;
 
-        error_log("   - Send manager welcome email to: " . $manager->email);
-
         // Create the email to send
         $email = new \stdClass();
 

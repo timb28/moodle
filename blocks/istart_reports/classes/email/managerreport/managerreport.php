@@ -67,8 +67,6 @@ class managerreport {
         $user           = $this->user;
         $manager        = $this->manager;
 
-        error_log("   - To the manager: " . $manager->email);
-
         // Create the email to send
         $email = new \stdClass();
 

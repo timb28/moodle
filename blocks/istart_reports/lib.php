@@ -70,11 +70,8 @@ function process_manager_reports() {
         // Get the report time as midnight this morning local time
         $reporttime = strtotime(date("Ymd"));
 
-        error_log("1. Started processing reports for course: $course->id at time: " . date("Y-m-d", $reporttime)); // TODO remove after testing
-
         // Only process courses with group mode activated.
         if (groups_get_course_groupmode($course) == NOGROUPS) {
-            error_log(" - Course skipped: No groups"); // TODO remove after testing
             continue;
         }
 

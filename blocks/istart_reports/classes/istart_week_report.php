@@ -122,22 +122,12 @@ class istart_week_report {
 
             // Skip groups who have finished all iStart weeks +1 week
             if ($istartgroup->reportweek > $this->totalweeks) {
-                error_log(" - 2. Skipping group who have completed iStart: ".$istartgroup->group->id.
-                        " (".$istartgroup->group->name.") iStart week: " . $istartgroup->reportweek);
                 continue;
             }
 
-            // TODO remove testing code below
-            error_log(" - 2. Started processing group: ".$istartgroup->group->id." (".$istartgroup->group->name.") iStart report week: " . $istartgroup->reportweek);
-            error_log("   - group start date: " . date("Y-m-d", $istartgroup->startdate));
-            error_log("   - group report week: " . $istartgroup->reportweek);
-
             $reportsendtime = $istartgroup->startdate + ($istartgroup->reportweek * WEEKSECS) + DAYSECS;
 
-            error_log("   - group report send date: " . date("Y-m-d", $reportsendtime));
-
             if (date("Ymd", $reportsendtime) == date("Ymd", $this->reporttime)) {
-                error_log(" - 3. Sending report today");
 
                 // Get all group users
                 $istartgroup->prepare_for_group_report();
@@ -146,8 +136,6 @@ class istart_week_report {
                 if (!$istartgroup->isvalidgroup) {
                     continue;
                 }
-
-                error_log(print_r($istartgroup->istartweek, 1));
 
                 // Check if reports for those users have been sent
                 $this->prepare_manager_report_for_group($istartgroup);
@@ -173,13 +161,10 @@ class istart_week_report {
 
         foreach ($istartusers as $istartuser) {
             $user    = $istartuser->user;
-            error_log(" - Preparing to send manager report for $user->id at $this->reporttime"); // TODO remove after testing
 
             // Check if already sent
             if (!$this->is_report_sent($istartgroup, $user, managerreport::REPORTTYPE)) {
                 $this->prepare_manager_report_for_user($istartgroup, $istartuser);
-            } else {
-                error_log(" - Manager report for $user->id at $this->reporttime already sent"); // TODO remove after testing
             }
         }
 
@@ -206,13 +191,11 @@ class istart_week_report {
             // Does the user have a manager's email address set?
             $manageremailaddress = $manager->email;
             if ($manageremailaddress == NULL) {
-                // error_log('Manager email is not set for user: $istartuser->id ($istartuser->firstname $istartuser->lastname).');
                 continue;
             }
 
             // Is the manager's email address valid?
             if (!validate_email($manageremailaddress)) {
-                // error_log('Manager email ($manageremailaddress) not valid for user:' . ' $istartuser->id ($istartuser->firstname $istartuser->lastname).');
                 continue;
             }
 

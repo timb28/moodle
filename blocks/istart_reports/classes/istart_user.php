@@ -79,8 +79,6 @@ class istart_user {
                 $this->usertasks[$section->sectionid]->numtaskscomplete = $section->numtaskscomplete;
             }
 
-            error_log("     - tasks complete objects user ". $this->user->firstname .": " . print_r($this->usertasks, 1));
-
         } catch(Exception $e) {
             error_log($e, DEBUG_NORMAL);
             return("Could not obtain istart tasks complete.");
