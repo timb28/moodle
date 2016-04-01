@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+require_once($CFG->libdir . '/completionlib.php');
+
 define("GRADEDTASK_MAX_NAME_LENGTH", 50);
 
 /**
