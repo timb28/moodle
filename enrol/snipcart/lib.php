@@ -629,7 +629,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
             $timestart = time();
             $timeend   = $timestart + $enrol->enrolperiod;
         } else {
-            $timestart = 0;
+            $timestart = time();
             $timeend   = 0;
         }
         
