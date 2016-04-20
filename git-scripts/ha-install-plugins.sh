@@ -23,7 +23,7 @@
 
 ## Enrolments ##
 ./enrol/enrol_apply-install.sh
-./enrol/enrol_mnet_remote-install.sh
+./enrol/enrol_metamnet-install.sh
 
 ## Activities
 ./mod/mod_certificate-install.sh
