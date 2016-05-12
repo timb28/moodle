@@ -23,6 +23,7 @@
 
 ## Enrolments ##
 ./enrol/enrol_apply-update-origin.sh
+./enrol/enrol_metamnet-update-origin.sh
 
 ## Activities ##
 ./mod/mod_certificate-update-origin.sh
