@@ -2065,11 +2065,7 @@ class assign {
     public function get_submission_group_members($groupid, $onlyids, $excludesuspended = false) {
         $members = array();
         if ($groupid != 0) {
-            if ($onlyids) {
-                $allusers = groups_get_members($groupid, 'u.id');
-            } else {
-                $allusers = groups_get_members($groupid);
-            }
+            $allusers = $this->list_participants($groupid, $onlyids);
             foreach ($allusers as $user) {
                 if ($this->get_submission_group($user->id)) {
                     $members[] = $user;
@@ -3016,7 +3012,7 @@ class assign {
         $o .= $this->get_renderer()->render($header);
 
         // If userid is passed - we are only grading a single student.
-        $rownum = required_param('rownum', PARAM_INT);
+        $rownum = optional_param('rownum', 0, PARAM_INT);
         $useridlistid = optional_param('useridlistid', $this->get_useridlist_key_id(), PARAM_ALPHANUM);
         $userid = optional_param('userid', 0, PARAM_INT);
         $attemptnumber = optional_param('attemptnumber', -1, PARAM_INT);
@@ -3029,6 +3025,7 @@ class assign {
             $useridlist = $SESSION->mod_assign_useridlist[$useridlistkey];
         } else {
             $rownum = 0;
+            $useridlistid = 0;
             $useridlist = array($userid);
         }
 
@@ -3148,11 +3145,11 @@ class assign {
 
         // Now show the grading form.
         if (!$mform) {
-            $pagination = array('rownum'=>$rownum,
-                                'useridlistid'=>$useridlistid,
-                                'last'=>$last,
-                                'userid'=>optional_param('userid', 0, PARAM_INT),
-                                'attemptnumber'=>$attemptnumber);
+            $pagination = array('rownum' => $rownum,
+                                'useridlistid' => $useridlistid,
+                                'last' => $last,
+                                'userid' => $userid,
+                                'attemptnumber' => $attemptnumber);
             $formparams = array($this, $data, $pagination);
             $mform = new mod_assign_grade_form(null,
                                                $formparams,
@@ -3533,6 +3530,12 @@ class assign {
         // Need submit permission to submit an assignment.
         $userid = optional_param('userid', $USER->id, PARAM_INT);
         $user = $DB->get_record('user', array('id'=>$userid), '*', MUST_EXIST);
+
+        // This variation on the url will link direct to this student.
+        // The benefit is the url will be the same every time for this student, so Atto autosave drafts can match up.
+        $returnparams = array('userid' => $userid, 'rownum' => 0, 'useridlistid' => 0);
+        $this->register_return_link('editsubmission', $returnparams);
+
         if ($userid == $USER->id) {
             if (!$this->can_edit_submission($userid, $USER->id)) {
                 print_error('nopermission');
@@ -6113,7 +6116,9 @@ class assign {
         $useridlistid = $params['useridlistid'];
         $userid = $params['userid'];
         $attemptnumber = $params['attemptnumber'];
-        if (!$userid) {
+        $bothids = ($userid && $useridlistid);
+
+        if (!$userid || $bothids) {
             $useridlistkey = $this->get_useridlist_key($useridlistid);
             if (empty($SESSION->mod_assign_useridlist[$useridlistkey])) {
                 $SESSION->mod_assign_useridlist[$useridlistkey] = $this->get_grading_userid_list();
@@ -6279,6 +6284,8 @@ class assign {
         $mform->setType('attemptnumber', PARAM_INT);
         $mform->addElement('hidden', 'ajax', optional_param('ajax', 0, PARAM_INT));
         $mform->setType('ajax', PARAM_INT);
+        $mform->addElement('hidden', 'userid', optional_param('userid', 0, PARAM_INT));
+        $mform->setType('userid', PARAM_INT);
 
         if ($this->get_instance()->teamsubmission) {
             $mform->addElement('header', 'groupsubmissionsettings', get_string('groupsubmissionsettings', 'assign'));
@@ -6992,11 +6999,11 @@ class assign {
 
         $data = new stdClass();
 
-        $gradeformparams = array('rownum'=>$rownum,
-                                 'useridlistid'=>$useridlistid,
-                                 'last'=>false,
-                                 'attemptnumber'=>$attemptnumber,
-                                 'userid'=>optional_param('userid', 0, PARAM_INT));
+        $gradeformparams = array('rownum' => $rownum,
+                                 'useridlistid' => $useridlistid,
+                                 'last' => $last,
+                                 'attemptnumber' => $attemptnumber,
+                                 'userid' => $userid);
         $mform = new mod_assign_grade_form(null,
                                            array($this, $data, $gradeformparams),
                                            'post',
