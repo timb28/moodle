@@ -99,7 +99,6 @@ class local_academywebservices_external extends external_api {
         
         // Retrieve the user ignoring any MNet users that may have identical usernames
         $user = $DB->get_record_select('user', 'username = :username AND auth != "mnet"', array('username' => $cleanedusername), '*', MUST_EXIST);
-        error_log('$user: ' . print_r($user, true));
         $userdetails = user_get_user_details($user, $course);
         $userid = $userdetails['id'];
         
