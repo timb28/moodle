@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/* START Academy Patch M#049 Remove all Joomdle event listeners
+
 $observers = array(
 
     array(
@@ -113,5 +115,7 @@ $observers = array(
     ),
 
 );
+
+END Academy Patch M#049 */
 
 ?>
