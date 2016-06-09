@@ -911,11 +911,10 @@ body#page-enrol-index div.box.generalbox.info {
 #page-theme-academy_clean-complete header.navbar,
 #page-theme-academy_clean-complete header.custom_wide_menu,
 #page-theme-academy_clean-complete header.page_heading {
-    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url([[pix:local_completionnotification|header]]);
+    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url([[pix:theme_academy_clean|header-completion]]);
     background-color: #002b49;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: contain;
     color: white;
 }
-
