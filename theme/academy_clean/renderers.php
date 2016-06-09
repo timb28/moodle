@@ -16,6 +16,13 @@ require_once("lib.php");
 
 class theme_academy_clean_core_renderer extends theme_bootstrapbase_core_renderer {
 
+    public function header() {
+        // TODO: Add course completion notification checks here.
+        \theme_academy_clean\completion_notification\local_completion_notification::check_completion();
+        
+        return(parent::header());
+    }
+
     /*
      * This renders the navbar.
      * Uses bootstrap compatible html.
