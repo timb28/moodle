@@ -31,6 +31,24 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
+    
+    $settings->add(
+                    new admin_setting_configcheckbox(
+                            'theme_academy_clean/completionnotificationsenabled',
+                            get_string('completionnotificationsenabled', 'theme_academy_clean'),
+                            get_string('completionnotificationsenabled_desc', 'theme_academy_clean'),
+                            0)
+            );
+    
+    $settings->add(
+                    new admin_setting_configtext(
+                            'theme_academy_clean/completionnotificationsstartdate',
+                            get_string('completionnotificationsstartdate', 'theme_academy_clean'),
+                            get_string('completionnotificationsstartdate_desc', 'theme_academy_clean'),
+                            null,
+                            PARAM_TEXT,
+                            30)
+            );
 
     // Piwik site ID
     $name = 'theme_academy_clean/piwiksiteid';
@@ -40,7 +58,7 @@ if ($ADMIN->fulltree) {
     $setting->set_updatedcallback('theme_reset_all_caches');
     $settings->add($setting);
   
-// Invert Navbar to dark background.
+    // Invert Navbar to dark background.
     $name = 'theme_academy_clean/invert';
     $title = get_string('invert', 'theme_academy_clean');
     $description = get_string('invertdesc', 'theme_academy_clean');

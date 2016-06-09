@@ -28,8 +28,8 @@ class local_completion_notification {
     public static function check_completion() {
         global $PAGE, $CFG;
         
-        $enabled = get_config('local_completionnotification', 'enabled');
-        $startdate = get_config('local_completionnotification', 'startdate');
+        $enabled = get_config('theme_academy_clean', 'completionnotificationsenabled');
+        $startdate = get_config('theme_academy_clean', 'completionnotificationsstartdate');
 
         error_log('headers_sent: ' . print_r($PAGE->state, true));
         if (!$CFG->enablecompletion || !$enabled || !isloggedin() || is_siteadmin() || $PAGE->state != $PAGE::STATE_BEFORE_HEADER) {

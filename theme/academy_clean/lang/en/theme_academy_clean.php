@@ -48,6 +48,13 @@ Website: <a href="http://www.harcourtsacademy.com">www.harcourtsacademy.com</a>
 
 $string['configtitle'] = 'Academy Clean';
 
+// Settings.
+$string['completionnotificationsenabled'] = 'Enabled';
+$string['completionnotificationsenabled_desc'] = 'Enable Completion Notifications';
+
+$string['completionnotificationsstartdate'] = 'Start date and time';
+$string['completionnotificationsstartdate_desc'] = 'Limit notifications to completions that occur on or after this date and time.<br/>E.g. <em>1 July 2018 14:00</em>';
+
 $string['piwiksiteid'] = 'Piwik Site ID';
 $string['piwiksiteiddesc'] = 'For tracking web site visitors. Enter zero to disable tracking.';
 
