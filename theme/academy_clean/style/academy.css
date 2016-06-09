@@ -906,3 +906,16 @@ body#page-enrol-index div.box.generalbox.info {
     transition-property: opacity, visibility;
     transition-delay: 0ms;
 }
+
+/* Completion notifications */
+#page-theme-academy_clean-complete header.navbar,
+#page-theme-academy_clean-complete header.custom_wide_menu,
+#page-theme-academy_clean-complete header.page_heading {
+    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url([[pix:local_completionnotification|header]]);
+    background-color: #002b49;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: contain;
+    color: white;
+}
+

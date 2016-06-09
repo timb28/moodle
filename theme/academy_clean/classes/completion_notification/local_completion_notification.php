@@ -43,7 +43,7 @@ class local_completion_notification {
         }
 
         // Skip if displaying the completion notification page or an admin page.
-        if ($PAGE->url->out_as_local_url() == '/local/completionnotification/complete.php' ||
+        if ($PAGE->url->out_as_local_url() == '/theme/academy_clean/complete.php' ||
             $PAGE->pagelayout == 'admin') {
             return;
         }
@@ -72,7 +72,7 @@ class local_completion_notification {
         // TODO: remove: error_log('$newcompletions: ' . print_r($newcompletions, true));
 
         if ($newcompletions->count > 0) {
-            $url = new \moodle_url('/local/completionnotification/complete.php',
+            $url = new \moodle_url('/theme/academy_clean/complete.php',
                     array('wanturl' => $PAGE->url->out_as_local_url()));
             redirect($url);
         }
