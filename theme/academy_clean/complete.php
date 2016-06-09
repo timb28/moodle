@@ -96,6 +96,6 @@ foreach ($newcompletions as $completion) {
     $record->coursecompletionid = $completion->coursecompletionid;
     $record->timenotified = time();
     
-// TODO: uncomment    $DB->insert_record('course_completion_notifs', $record);
+    $DB->insert_record('course_completion_notifs', $record);
 }
 
