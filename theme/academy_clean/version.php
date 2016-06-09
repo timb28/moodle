@@ -15,22 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Moodle's Clean theme, an example of how to make a Bootstrap theme
- *
- * DO NOT MODIFY THIS THEME!
- * COPY IT FIRST, THEN RENAME THE COPY AND MODIFY IT INSTEAD.
- *
- * For full information about creating Moodle themes, see:
- * http://docs.moodle.org/dev/Themes_2.0
+ * Harcourts Academy Clean theme based on Bootstrap base theme
  *
  * @package    theme_academy_clean
- * @copyright  2013 Moodle, moodle.org
+ * @copyright  2016 Harcourts International Limited {@link http://www.harcourtsacademy.com}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2016022601;
+$plugin->version   = 2016060900;
 $plugin->requires  = 2013050100;
 $plugin->component = 'theme_academy_clean';
 $plugin->dependencies = array(

@@ -54,9 +54,9 @@ $sql = 'SELECT
                 JOIN
             {course} c ON cc.course = c.id
                 LEFT JOIN
-	        {local_completionnotification} lcn ON cc.id = lcn.coursecompletionid
+	        {course_completion_notifs} ccn ON cc.id = ccn.coursecompletionid
         WHERE
-            userid = :userid AND timecompleted > :startdatets AND lcn.coursecompletionid is null
+            userid = :userid AND timecompleted > :startdatets AND ccn.coursecompletionid is null
         GROUP BY
             cc.course;';
 $params = array('userid' => $USER->id, 'startdatets' => $startdatets);
@@ -96,6 +96,6 @@ foreach ($newcompletions as $completion) {
     $record->coursecompletionid = $completion->coursecompletionid;
     $record->timenotified = time();
     
-// TODO: uncomment    $DB->insert_record('local_completionnotification', $record);
+// TODO: uncomment    $DB->insert_record('course_completion_notifs', $record);
 }
 

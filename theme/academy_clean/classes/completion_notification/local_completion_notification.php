@@ -62,9 +62,9 @@ class local_completion_notification {
                 FROM
                     {course_completions} cc
                         LEFT JOIN
-                    {local_completionnotification} lcn ON cc.id = lcn.coursecompletionid
+                    {course_completion_notifs} ccn ON cc.id = ccn.coursecompletionid
                 WHERE
-                    userid = :userid AND timecompleted > :startdatets AND lcn.coursecompletionid is null;';
+                    userid = :userid AND timecompleted > :startdatets AND ccn.coursecompletionid is null;';
         $params = array('userid' => $USER->id, 'startdatets' => $startdatets);
 
         $newcompletions = $DB->get_record_sql($sql, $params);
