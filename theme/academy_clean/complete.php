@@ -68,7 +68,7 @@ if (empty($newcompletions)) {
 }
 
 $PAGE->requires->jquery();
-$PAGE->requires->js_call_amd('local_completionnotification/fireworks', 'start');
+$PAGE->requires->js_call_amd('theme_academy_clean/fireworks', 'start');
 
 $output = html_writer::tag('h2', 'You have successfully completed:');
 $output.= html_writer::start_div('block_course_overview');
