@@ -32,6 +32,9 @@
 ./mod/mod_subcourse-install.sh
 ./mod/mod_videofile-install.sh
 
+## Local plugins
+./local/local_completionnotification-install.sh
+
 ## Quiz Question Types
 ./question/qtype_oumultiresponse-install.sh
 ./question/qtype_pmatch-install.sh
