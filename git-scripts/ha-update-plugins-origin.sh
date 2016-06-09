@@ -32,9 +32,6 @@
 ./mod/mod_subcourse-update-origin.sh
 ./mod/mod_videofile-update-origin.sh
 
-## Local plugins
-./local/local_completionnotification-update-origin.sh
-
 ## Quiz Question Types ##
 ./question/qtype_oumultiresponse-update-origin.sh
 ./question/qtype_pmatch-update-origin.sh
