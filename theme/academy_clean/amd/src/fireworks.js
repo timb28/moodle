@@ -107,8 +107,8 @@ define(['jquery'], function($) {
         if (now.getTime() < data.starttime.getTime() + MAX_TIME) {
             // Launch a new rocket
             launch(data);
-        } else {
-            clearInterval(loop.bind(this, data));
+        } else if (now.getTime() > data.starttime.getTime() + MAX_TIME + 10000) {
+            clearInterval(data.interval);
             $(data.canvas).fadeOut(1000);
         }
         
