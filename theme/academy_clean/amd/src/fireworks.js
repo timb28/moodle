@@ -9,7 +9,8 @@ TODO:
 
 define(['jquery'], function($) {
     var MAX_ROCKETS = 5,
-        MAX_PARTICLES = 500;
+        MAX_PARTICLES = 250,
+        MAX_TIME = 15000; // milliseconds.
 
     var FUNCTIONS = {
         'init': function(element) {
@@ -31,7 +32,8 @@ define(['jquery'], function($) {
                     'canvas_buffer': canvas_buffer,
                     'context_buffer': canvas_buffer.getContext('2d'),
                     'particles': [],
-                    'rockets': []
+                    'rockets': [],
+                    'starttime': new Date()
                 };
 
             // Add & position the canvas
@@ -101,8 +103,13 @@ define(['jquery'], function($) {
     }
 
     function loop(data) {
-        // Launch a new rocket
-        launch(data);
+        var now = new Date();
+        if (now.getTime() < data.starttime.getTime() + MAX_TIME) {
+            // Launch a new rocket
+            launch(data);
+        } else {
+            clearInterval(loop.bind(this, data));
+        }
         
         // Update screen size
         if (data.canvas.width != window.innerWidth) {
