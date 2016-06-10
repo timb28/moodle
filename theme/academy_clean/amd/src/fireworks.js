@@ -118,6 +118,13 @@ define(['jquery'], function($) {
         if (data.canvas.height != window.innerHeight) {
             data.canvas.height = window.innerHeight;
         }
+        
+        if (data.canvas_buffer.width != window.innerWidth) {
+            data.canvas_buffer.width = window.innerWidth;
+        }
+        if (data.canvas_buffer.height != window.innerHeight) {
+            data.canvas_buffer.height = window.innerHeight;
+        }
 
         // Fade the background out slowly
         data.context_buffer.clearRect(0, 0, data.canvas.width, data.canvas.height);
