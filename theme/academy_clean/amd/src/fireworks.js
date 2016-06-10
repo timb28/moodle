@@ -109,6 +109,7 @@ define(['jquery'], function($) {
             launch(data);
         } else {
             clearInterval(loop.bind(this, data));
+            $(data.canvas).fadeOut(1000);
         }
         
         // Update screen size
