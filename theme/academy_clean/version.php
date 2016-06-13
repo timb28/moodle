@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2016060900;
+$plugin->version   = 2016061301;
 $plugin->requires  = 2013050100;
 $plugin->component = 'theme_academy_clean';
 $plugin->dependencies = array(

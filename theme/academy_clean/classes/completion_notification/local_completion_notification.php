@@ -15,7 +15,7 @@
 /**
  * Completion notification functions.
  *
- * @package    local_completionnotification
+ * @package    theme_academy_clean
  * @copyright  2016 Harcourts International Limited {@link http://www.harcourtsacademy.com}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -31,7 +31,6 @@ class local_completion_notification {
         $enabled = get_config('theme_academy_clean', 'completionnotificationsenabled');
         $startdate = get_config('theme_academy_clean', 'completionnotificationsstartdate');
 
-        error_log('headers_sent: ' . print_r($PAGE->state, true));
         if (!$CFG->enablecompletion || !$enabled || !isloggedin() || is_siteadmin() || $PAGE->state != $PAGE::STATE_BEFORE_HEADER) {
             return;
         }
@@ -62,9 +61,9 @@ class local_completion_notification {
                 FROM
                     {course_completions} cc
                         LEFT JOIN
-                    {course_completion_notifs} ccn ON cc.id = ccn.coursecompletionid
+                    {course_completion_notifs} ccn ON cc.course = ccn.courseid
                 WHERE
-                    userid = :userid AND timecompleted > :startdatets AND ccn.coursecompletionid is null;';
+                    cc.userid = :userid AND cc.timecompleted > :startdatets AND ccn.courseid is null;';
         $params = array('userid' => $USER->id, 'startdatets' => $startdatets);
 
         $newcompletions = $DB->get_record_sql($sql, $params);

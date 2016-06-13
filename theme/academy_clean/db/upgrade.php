@@ -35,19 +35,21 @@ function xmldb_theme_academy_clean_upgrade($oldversion) {
     
     $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes.
 
-    if ($oldversion < 2016060900) {
+    if ($oldversion < 2016061301) {
 
         // Define table theme_completionnotification to be created.
         $table = new xmldb_table('course_completion_notifs');
 
         // Adding fields to table theme_completionnotification.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $table->add_field('coursecompletionid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('timenotified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
 
         // Adding keys to table theme_completionnotification.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
-        $table->add_key('fk_coursecompletionid', XMLDB_KEY_FOREIGN, array('coursecompletionid'), 'course_completions', array('id'));
+        $table->add_key('fk_courseid', XMLDB_KEY_FOREIGN, array('courseid'), 'course', array('id'));
+        $table->add_key('fk_userid', XMLDB_KEY_FOREIGN, array('userid'), 'user', array('id'));
 
         // Conditionally launch create table for theme_completionnotification.
         if (!$dbman->table_exists($table)) {
@@ -55,6 +57,6 @@ function xmldb_theme_academy_clean_upgrade($oldversion) {
         }
 
         // Academy_clean savepoint reached.
-        upgrade_plugin_savepoint(true, 2016060900, 'theme', 'academy_clean');
+        upgrade_plugin_savepoint(true, 2016061301, 'theme', 'academy_clean');
     }
 }

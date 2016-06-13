@@ -14,8 +14,11 @@
 
 /**
  * Notifies students of course completion
+ * 
+ * TODO: Had to reload twice on the Test Course Completion page after manually checking in checkbox
+ * TODO: Check if the contents of {course_completions} db table are cleared when unlocking the course completion criteria
  *
- * @package    local_completionnotification
+ * @package    theme_academy_clean
  * @copyright  2016 Harcourts International Limited {@link http://www.harcourtsacademy.com}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -47,16 +50,16 @@ $PAGE->set_heading('Congratulations!');
 
 global $DB;
 $sql = 'SELECT 
-            cc.id as coursecompletionid,
+            c.id AS courseid,
             c.*
         FROM
             {course_completions} cc
                 JOIN
             {course} c ON cc.course = c.id
                 LEFT JOIN
-	        {course_completion_notifs} ccn ON cc.id = ccn.coursecompletionid
+	        {course_completion_notifs} ccn ON c.id = ccn.courseid
         WHERE
-            userid = :userid AND timecompleted > :startdatets AND ccn.coursecompletionid is null
+            cc.userid = :userid AND cc.timecompleted > :startdatets AND ccn.userid is null
         GROUP BY
             cc.course;';
 $params = array('userid' => $USER->id, 'startdatets' => $startdatets);
@@ -93,9 +96,10 @@ echo $OUTPUT->footer();
 // Store the displayed notification so it is only displayed once.
 foreach ($newcompletions as $completion) {
     $record = new stdclass();
-    $record->coursecompletionid = $completion->coursecompletionid;
+    $record->courseid = $completion->courseid;
+    $record->userid = $USER->id;
     $record->timenotified = time();
-    
+
     $DB->insert_record('course_completion_notifs', $record);
 }
 
