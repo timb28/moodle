@@ -8,8 +8,9 @@ TODO:
 */
 
 define(['jquery'], function($) {
-    var MAX_ROCKETS = 5,
-        MAX_PARTICLES = 250,
+    var ELEMENT = 'header.wrapper',
+        MAX_ROCKETS = 2,
+        MAX_PARTICLES = 100,
         MAX_TIME = 15000; // milliseconds.
 
     var FUNCTIONS = {
@@ -41,7 +42,7 @@ define(['jquery'], function($) {
                 element.style.position = 'relative';
             }
             element.appendChild(canvas);
-            canvas.style.position = 'fixed';
+            canvas.style.position = 'absolute';
             canvas.style.top = '0px';
             canvas.style.bottom = '0px';
             canvas.style.left = '0px';
@@ -49,11 +50,12 @@ define(['jquery'], function($) {
             canvas.style.pointerEvents = 'none';
             canvas.style.zIndex = 101;
 
-            // Kickoff the loops
-            data.interval = setInterval(loop.bind(this, data), 1000 / 50);
-
             // Save the data for later
             jqe.data('fireworks_data', data);
+
+            // Kickoff the loops
+//            data.interval = setInterval(loop.bind(this, data), 1000 / 50);
+            loop();
         },
         'destroy': function(element) {
             var jqe = $(element);
@@ -76,7 +78,7 @@ define(['jquery'], function($) {
             data.element.style.position = '';
         },
         'start': function () {
-           $('body').fireworks();
+           $(ELEMENT).fireworks();
         }
     };
 
@@ -102,34 +104,41 @@ define(['jquery'], function($) {
         }
     }
 
-    function loop(data) {
+    function loop() {
+        var jqe = $(ELEMENT);
+        var data = jqe.data('fireworks_data');
+        
         var now = new Date();
         if (now.getTime() < data.starttime.getTime() + MAX_TIME) {
             // Launch a new rocket
             launch(data);
+        }
+        
+        if (now.getTime() < data.starttime.getTime() + MAX_TIME + 10000) {
+            requestAnimationFrame(loop);
         } else if (now.getTime() > data.starttime.getTime() + MAX_TIME + 10000) {
             clearInterval(data.interval);
             $(data.canvas).fadeOut(1000);
         }
         
         // Update screen size
-        if (data.canvas.width != window.innerWidth) {
-            data.canvas.width = window.innerWidth;
+        if (data.canvas_width != data.element.offsetWidth) {
+            data.canvas_width = data.canvas.width = data.canvas_buffer.width = data.element.offsetWidth;
         }
-        if (data.canvas.height != window.innerHeight) {
-            data.canvas.height = window.innerHeight;
+        if (data.canvas_height != data.element.offsetHeight) {
+            data.canvas_height = data.canvas.height = data.canvas_buffer.height = data.element.offsetHeight;
         }
         
-        if (data.canvas_buffer.width != window.innerWidth) {
-            data.canvas_buffer.width = window.innerWidth;
+        if (data.canvas_buffer.width != data.element.offsetWidth) {
+            data.canvas_buffer.width = data.canvas.width = data.canvas_buffer.width = data.element.offsetWidth;
         }
-        if (data.canvas_buffer.height != window.innerHeight) {
-            data.canvas_buffer.height = window.innerHeight;
+        if (data.canvas_buffer.height != data.element.offsetHeight) {
+            data.canvas_buffer.height = data.canvas.height = data.canvas_buffer.height = data.element.offsetHeight;
         }
 
         // Fade the background out slowly
         data.context_buffer.clearRect(0, 0, data.canvas.width, data.canvas.height);
-        data.context_buffer.globalAlpha = 0.9;
+        data.context_buffer.globalAlpha = 0.6;
         data.context_buffer.drawImage(data.canvas, 0, 0);
         data.context.clearRect(0, 0, data.canvas.width, data.canvas.height);
         data.context.drawImage(data.canvas_buffer, 0, 0);
@@ -224,7 +233,7 @@ define(['jquery'], function($) {
 
         c.save();
 
-        c.globalCompositeOperation = 'lighter';
+        c.globalCompositeOperation = 'lighten';
 
         var x = this.pos.x,
             y = this.pos.y,
@@ -302,7 +311,7 @@ define(['jquery'], function($) {
 
         c.save();
 
-        c.globalCompositeOperation = 'lighter';
+        c.globalCompositeOperation = 'lighten';
 
         var x = this.pos.x,
             y = this.pos.y,
