@@ -90,14 +90,31 @@ div#page {
 
 /* Page header */
 header.navbar,
+header.navbar-inner,
 header.custom_wide_menu,
 header.page_heading {
+    background: none;
+}
+header nav.navbar-inner {
+    padding: 0 0.5em;
+}
+.header-wrapper {
+    padding: 5px 0;
     background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url([[pix:theme|online_learning]]);
     background-color: #002b49;
     background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: 100% auto;
+    background-position: center 60%;
+    background-size: cover;
     color: white;
+}
+
+/* Completion notifications */
+#page-theme-academy_clean-complete .header-wrapper {
+    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url([[pix:theme_academy_clean|header-completion]]);
+    background-color: #002b49;
+    background-repeat: no-repeat;
+    background-position: center 60%;
+    background-size: cover;
 }
 header.page_heading {
     margin: 0 auto;
@@ -905,16 +922,4 @@ body#page-enrol-index div.box.generalbox.info {
     transition-duration: 200ms, 0ms;
     transition-property: opacity, visibility;
     transition-delay: 0ms;
-}
-
-/* Completion notifications */
-#page-theme-academy_clean-complete header.navbar,
-#page-theme-academy_clean-complete header.custom_wide_menu,
-#page-theme-academy_clean-complete header.page_heading {
-    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url([[pix:theme_academy_clean|header-completion]]);
-    background-color: #002b49;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: contain;
-    color: white;
 }

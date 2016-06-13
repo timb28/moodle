@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Harcourts Academy Clean theme upgrade functions.
+ *
+ * @package    theme_academy_clean
+ * @copyright  2016 Harcourts International Limited {@link http://www.harcourtsacademy.com}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
 /**

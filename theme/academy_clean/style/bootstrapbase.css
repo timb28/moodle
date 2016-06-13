@@ -9,8 +9,13 @@ Moodle Bootstrapbase theme overrides
 @media (min-width: 980px) {
 
   body {
-    padding-top: 52px; // Override Bootstrapbase 'padding-top: 60px;'
-    }
+    padding-top: 0; // Override Bootstrapbase 'padding-top: 60px;'
+  }
+  
+  header nav.navbar-inner .container-fluid {
+      padding: 0 0.5em;
+  }
+    
 }
 
 .coursebox.collapsed {

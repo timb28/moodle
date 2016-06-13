@@ -8,7 +8,7 @@ TODO:
 */
 
 define(['jquery'], function($) {
-    var ELEMENT = 'header.wrapper',
+    var ELEMENT = '.header-wrapper',
         MAX_ROCKETS = 2,
         MAX_PARTICLES = 100,
         MAX_TIME = 15000; // milliseconds.

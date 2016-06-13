@@ -41,7 +41,8 @@ echo $OUTPUT->doctype() ?>
 
 <?php echo $OUTPUT->standard_top_of_body_html() ?>
 
-<header role="banner" class="navbar navbar-fixed-top<?php echo $html->navbarclass ?> moodle-has-zindex">
+<div class="header-wrapper">
+<header role="banner" class="navbar <?php echo $html->navbarclass ?> moodle-has-zindex">
     <nav role="navigation" class="navbar-inner">
         <div class="container-fluid">
             <a class="logo" href="<?php echo $CFG->wwwroot;?>"></a>
@@ -60,7 +61,7 @@ echo $OUTPUT->doctype() ?>
         </div>
     </nav>
 </header>
-
+    
 <header class="clearfix custom_wide_menu nav-collapse collapse visible-desktop">
     <div class="navbar"><?php echo $OUTPUT->custom_menu(); ?></div>
 </header>
@@ -71,7 +72,8 @@ echo $OUTPUT->doctype() ?>
         <?php echo $html->heading; ?>
     </div>
 </header>
-  
+</div>
+    
 <div id="page" class="container-fluid">
 
     <div id="page-content" class="row-fluid">
