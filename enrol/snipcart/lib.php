@@ -29,6 +29,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
         'NZ' => 'NZD',
         'US' => 'USD',
         'ZA' => 'ZAR',
+        'CA' => 'CAD',
     );
     
     /**
