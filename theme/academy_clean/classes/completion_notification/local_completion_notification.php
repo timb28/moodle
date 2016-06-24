@@ -22,11 +22,19 @@
 
 namespace theme_academy_clean\completion_notification;
 
+require_once($CFG->libdir.'/completionlib.php');
+
 defined('MOODLE_INTERNAL') || die();
 
 class local_completion_notification {
     public static function check_completion() {
         global $PAGE, $CFG;
+        
+//        $course = $DB->get_record('course', array('id' => '29'));
+//        $completion = new \completion_info($course);
+//        error_log('get_completions(): ' . print_r($completion->get_completions('3753'), true));
+        
+
         
         $enabled = get_config('theme_academy_clean', 'completionnotificationsenabled');
         $startdate = get_config('theme_academy_clean', 'completionnotificationsstartdate');
@@ -48,13 +56,24 @@ class local_completion_notification {
         }
 
         // Regular Completion cron, capturing the output in an output buffer for deletion.
-        require_once($CFG->dirroot.'/completion/cron.php');
-        ob_start();
-        completion_cron_criteria();
-        completion_cron_completions();
-        ob_end_clean();
+//        require_once($CFG->dirroot.'/completion/cron.php');
+//        ob_start();
+// TODO        completion_cron_criteria();
+// TODO       completion_cron_completions();
+//        ob_end_clean();
 
         global $DB, $USER;
+        require_once($CFG->dirroot.'/completion/completion_criteria_completion.php');
+        
+        $completionstoupdate = local_completion_notification::get_incomplete_completions($USER->id);
+        foreach ($completionstoupdate as $record) {
+            error_log('$record: ' . print_r($record, true));
+            $completion = new \completion_criteria_completion((array) $record, DATA_OBJECT_FETCH_BY_KEY);
+            $completion->mark_complete($record->timecompleted);
+        }
+        $completionstoupdate->close();
+        
+        
 
         $sql = 'SELECT 
                     count(cc.id) as count
@@ -68,12 +87,55 @@ class local_completion_notification {
 
         $newcompletions = $DB->get_record_sql($sql, $params);
 
-        // TODO: remove: error_log('$newcompletions: ' . print_r($newcompletions, true));
+        error_log('$newcompletions: ' . print_r($newcompletions, true));
 
         if ($newcompletions->count > 0) {
             $url = new \moodle_url('/theme/academy_clean/complete.php',
                     array('wanturl' => $PAGE->url->out_as_local_url()));
-            redirect($url);
+// TODO: uncomment:            redirect($url);
         }
+    }
+    
+    public static function get_incomplete_completions($userid, $courseid = null) {
+        global $DB;
+
+        // Get all users who meet this criteria
+        $sql = '
+            SELECT DISTINCT
+                c.id AS course,
+                cr.id AS criteriaid,
+                mc.userid AS userid,
+                mc.timemodified AS timecompleted
+            FROM
+                {course_completion_criteria} cr
+            INNER JOIN
+                {course} c
+             ON cr.course = c.id
+            INNER JOIN
+                {context} con
+             ON con.instanceid = c.id
+            INNER JOIN
+                {course_modules_completion} mc
+             ON mc.coursemoduleid = cr.moduleinstance
+            LEFT JOIN
+                {course_completion_crit_compl} cc
+             ON cc.criteriaid = cr.id
+            AND cc.userid = mc.userid
+            WHERE
+                cr.criteriatype = '.COMPLETION_CRITERIA_TYPE_ACTIVITY.'
+            AND con.contextlevel = '.CONTEXT_COURSE.'
+            AND mc.userid = :userid
+            AND c.enablecompletion = 1
+            AND cc.id IS NULL
+            AND (
+                mc.completionstate = '.COMPLETION_COMPLETE.'
+             OR mc.completionstate = '.COMPLETION_COMPLETE_PASS.'
+             OR mc.completionstate = '.COMPLETION_COMPLETE_FAIL.'
+                )
+        ';
+
+        // Get records for updating
+        $params = array('userid' => $userid);
+        return $DB->get_recordset_sql($sql, $params);
     }
 }

@@ -161,9 +161,18 @@ if($cm->completion != COMPLETION_TRACKING_MANUAL) {
 }
 
 $completion->update_state($cm, $targetstate);
+require_once($CFG->dirroot.'/completion/cron.php');
+ob_start();
+completion_cron_mark_started();
+completion_cron_criteria();
+completion_cron_completions();
+ob_end_clean();
 
 // And redirect back to course
 if ($fromajax) {
+    if ($completion->is_course_complete($USER->id)) {
+        print 'COURSE COMPLETE';
+    }
     print 'OK';
 } else {
     // In case of use in other areas of code we allow a 'backto' parameter,
