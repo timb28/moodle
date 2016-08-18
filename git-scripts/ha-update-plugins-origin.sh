@@ -1,7 +1,7 @@
 #!/bin/bash
 ##
-## Shell script to update Moodle plugins via Git 
-## 
+## Shell script to update Moodle plugins via Git
+##
 
 ## Atto plugins ##
 ./atto/atto_fullscreen-update-origin.sh
@@ -27,6 +27,7 @@
 
 ## Activities ##
 ./mod/mod_certificate-update-origin.sh
+./mod/mod_h5p-update-origin.sh
 ./mod/mod_game-update-origin.sh
 ./mod/mod_questionnaire-update-origin.sh
 ./mod/mod_subcourse-update-origin.sh

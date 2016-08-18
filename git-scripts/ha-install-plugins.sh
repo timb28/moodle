@@ -27,6 +27,7 @@
 
 ## Activities
 ./mod/mod_certificate-install.sh
+./mod/mod_h5p-install.sh
 ./mod/mod_game-install.sh
 ./mod/mod_questionnaire-install.sh
 ./mod/mod_subcourse-install.sh
