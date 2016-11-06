@@ -369,7 +369,7 @@ $string['notanswered'] = 'Not answered';
 $string['notflagged'] = 'Not flagged';
 $string['notgraded'] = 'Not graded';
 $string['notshown'] = 'Not shown';
-$string['notyetanswered'] = 'Not yet answered';
+$string['notyetanswered'] = 'Not answered or answered on a previous attempt';
 $string['notchanged'] = 'Not changed since last attempt';
 $string['notyourpreview'] = 'This preview does not belong to you';
 $string['options'] = 'Options';
@@ -443,4 +443,3 @@ $string['whichtries'] = 'Which tries';
 $string['withselected'] = 'With selected';
 $string['xoutofmax'] = '{$a->mark} out of {$a->max}';
 $string['yougotnright'] = 'You have correctly selected {$a->num}.';
-
