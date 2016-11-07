@@ -22,6 +22,9 @@ $html = theme_academy_clean_get_html_for_settings($OUTPUT, $PAGE);
 // Add course shortname name to body class
 $courseclass = ' course-shortname-'.trim($COURSE->shortname);
 
+// Add user's country to body class
+$countryclass = ' user-profile-country-'.strtolower(trim($USER->country));
+
 // Enable CSS to target pages presented to guest users.
 $roleclass = '';
 if (is_guest(context_course::instance($COURSE->id), $USER)) {
@@ -37,7 +40,7 @@ echo $OUTPUT->doctype() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body <?php echo $OUTPUT->body_attributes($roleclass . $courseclass); ?>>
+<body <?php echo $OUTPUT->body_attributes($roleclass.$courseclass.$countryclass); ?>>
 
 <?php echo $OUTPUT->standard_top_of_body_html() ?>
 
@@ -64,19 +67,19 @@ echo $OUTPUT->doctype() ?>
 <header class="clearfix custom_wide_menu nav-collapse collapse visible-desktop">
     <div class="navbar"><?php echo $OUTPUT->custom_menu(); ?></div>
 </header>
-    
+
 <header class="clearfix page_heading">
     <div class="page-heading-inner">
         <nav class="breadcrumb-button"><?php echo $OUTPUT->page_heading_button(); ?></nav>
         <?php echo $html->heading; ?>
     </div>
 </header>
-  
+
 <div id="page" class="container-fluid">
 
     <div id="page-content" class="row-fluid">
         <section id="region-main" class="span12">
-            
+
             <div class="clearfix">
                 <div id="page-navbar">
                     <?php echo $OUTPUT->navbar(); ?>
@@ -85,17 +88,17 @@ echo $OUTPUT->doctype() ?>
                     <?php echo $OUTPUT->course_header(); ?>
                 </div>
             </div>
-            
+
             <?php
             $auth_instructions = '';
-            
+
             if ( file_exists( $CFG->dirroot . '/auth/lenauth/out.php' ) ) :
                 include_once $CFG->dirroot . '/auth/lenauth/out.php';
                 $auth_instructions = auth_lenauth_out::getInstance()->lenauth_output('style3-text');
             endif;
-            
+
             $CFG->auth_instructions = $CFG->auth_instructions . $auth_instructions;
-            
+
             echo $OUTPUT->course_content_header();
             echo $OUTPUT->main_content();
             echo $OUTPUT->course_content_footer();
@@ -104,7 +107,7 @@ echo $OUTPUT->doctype() ?>
     </div>
 
 </div>
-  
+
 <footer id="page-footer">
     <div id="course-footer"><?php echo $OUTPUT->course_footer(); ?></div>
     <p class="helplink"><?php echo $OUTPUT->page_doc_link(); ?></p>

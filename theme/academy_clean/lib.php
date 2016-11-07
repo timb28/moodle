@@ -36,25 +36,25 @@
  */
 function theme_academy_create_course_button($course) {
     global $CFG, $DB, $USER;
-    
+
     // Display button to open MNet remote course
     if ($course->id < 0 && !empty($course->remoteid)) {
         $viewcourseurl = $course->wwwroot . '/course/view.php?id=' . $course->remoteid;
-        
+
         $inprogressbutton = get_string('inprogress', 'theme_academy_clean', $viewcourseurl);
         $completebutton = get_string('complete', 'theme_academy_clean', $viewcourseurl);
-        
+
         if ($course->complete) {
             return $completebutton;
         }
 
         return $inprogressbutton;
     }
-    
+
     require_once($CFG->libdir.'/completionlib.php');
-    
+
     $instances = $DB->get_records('enrol', array('courseid'=>$course->id, 'status'=>ENROL_INSTANCE_ENABLED), 'sortorder,id');
-    
+
     foreach ($instances as $instance) {
         if ($instance->status != ENROL_INSTANCE_ENABLED or $instance->courseid != $course->id) {
             debugging('Invalid instances parameter submitted in theme_academy_create_course_button()');
@@ -63,7 +63,7 @@ function theme_academy_create_course_button($course) {
 
         // Check if use is enrolled via this enrolment instance.
         if ($DB->record_exists('user_enrolments', array('userid'=>$USER->id, 'enrolid'=>$instance->id, 'status'=>ENROL_USER_ACTIVE))) {
-            
+
             $viewcourseurl = new moodle_url('/course/view.php', array('id'=>$course->id));
             $inprogressbutton = get_string('inprogress', 'theme_academy_clean', $viewcourseurl->out());
 
@@ -82,7 +82,7 @@ function theme_academy_create_course_button($course) {
             }
         }
     }
-    
+
     /* Display any Snipcart 'Add to cart' buttons if the course is for sale and the user isn't already enrolled. */
     foreach ($instances as $instance) {
         if ($instance->enrol == 'snipcart' && $instance->status == ENROL_INSTANCE_ENABLED ) {
@@ -151,6 +151,7 @@ function theme_academy_clean_set_customcss($css, $customcss) {
 
     $css = str_replace($tag, $replacement, $css);
 
+
     return $css;
 }
 
@@ -179,7 +180,7 @@ function theme_academy_clean_get_html_for_settings(renderer_base $output, moodle
     if (!empty($page->theme->settings->footnote)) {
         $return->footnote = '<div class="footnote text-center">'.$page->theme->settings->footnote.'</div>';
     }
-    
+
     $return->piwik = '';
     if (!empty($page->theme->settings->piwiksiteid)) {
         $return->piwik = '
@@ -243,7 +244,7 @@ function theme_academy_clean_get_next_page_in_section($courseorid, $section, $mo
             }
         }
     }
-    
+
     return !empty($nextpagemod) ? $nextpagemod : null;
 }
 

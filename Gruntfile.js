@@ -78,6 +78,17 @@ module.exports = function(grunt) {
             }
         },
         less: {
+            academy_clean: {
+                files: {
+                    "theme/academy_clean/style/fontawesome-no-woff2.css": "theme/academy_clean/less/fontawesome-no-woff2.less",
+                    "theme/academy_clean/style/fontawesome-woff2.css": "theme/academy_clean/less/fontawesome-woff2.less",
+                    "theme/academy_clean/style/fontawesome.css": "theme/academy_clean/less/fontawesome.less",
+                    "theme/academy_clean/style/user-profile-country.css": "theme/academy_clean/less/user-profile-country.less",
+                },
+                options: {
+                    compress: true
+                }
+            },
             bootstrapbase: {
                 files: {
                     "theme/bootstrapbase/style/moodle.css": "theme/bootstrapbase/less/moodle.less",
@@ -95,6 +106,10 @@ module.exports = function(grunt) {
             amd: {
                 files: ['**/amd/src/**/*.js'],
                 tasks: ['amd']
+            },
+            academy_clean: {
+                files: ["theme/academy_clean/less/*.less"],
+                tasks: ["less:academy_clean"]
             },
             bootstrapbase: {
                 files: ["theme/bootstrapbase/less/**/*.less"],
@@ -245,7 +260,7 @@ module.exports = function(grunt) {
     grunt.registerTask('js', ['amd', 'shifter']);
 
     // Register CSS taks.
-    grunt.registerTask('css', ['less:bootstrapbase']);
+    grunt.registerTask('css', ['less:academy_clean','less:bootstrapbase']);
 
     // Register the startup task.
     grunt.registerTask('startup', 'Run the correct tasks for the current directory', tasks.startup);

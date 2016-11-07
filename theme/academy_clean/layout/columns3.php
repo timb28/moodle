@@ -42,6 +42,9 @@ if (right_to_left()) {
 // Add course shortname name to body class
 $courseclass = ' course-shortname-'.trim($COURSE->shortname);
 
+// Add user's country to body class
+$countryclass = ' user-profile-country-'.strtolower(trim($USER->country));
+
 // Enable CSS to target pages presented to guest users.
 $roleclass = '';
 if (is_guest(context_course::instance($COURSE->id), $USER)) {
@@ -57,7 +60,7 @@ echo $OUTPUT->doctype() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body <?php echo $OUTPUT->body_attributes($roleclass . $courseclass); ?>>
+<body <?php echo $OUTPUT->body_attributes($roleclass.$courseclass.$countryclass); ?>>
 
 <?php echo $OUTPUT->standard_top_of_body_html() ?>
 
@@ -84,21 +87,21 @@ echo $OUTPUT->doctype() ?>
 <header class="clearfix custom_wide_menu nav-collapse collapse visible-desktop">
     <div class="navbar"><?php echo $OUTPUT->custom_menu(); ?></div>
 </header>
-    
+
 <header class="clearfix page_heading">
     <div class="page-heading-inner">
         <nav class="breadcrumb-button"><?php echo $OUTPUT->page_heading_button(); ?></nav>
         <?php echo $html->heading; ?>
     </div>
 </header>
-  
+
 <div id="page" class="container-fluid">
 
     <div id="page-content" class="row-fluid">
         <div id="<?php echo $regionbsid ?>" class="span9">
             <div class="row-fluid">
                 <section id="region-main" class="span8 pull-right">
-                    
+
                     <div class="clearfix">
                         <div id="page-navbar">
                             <?php echo $OUTPUT->navbar(); ?>
@@ -107,7 +110,7 @@ echo $OUTPUT->doctype() ?>
                             <?php echo $OUTPUT->course_header(); ?>
                         </div>
                     </div>
-                    
+
                     <?php
                     echo $OUTPUT->course_content_header();
                     echo $OUTPUT->main_content();
@@ -121,7 +124,7 @@ echo $OUTPUT->doctype() ?>
     </div>
 
 </div>
-  
+
 <footer id="page-footer">
     <div id="course-footer"><?php echo $OUTPUT->course_footer(); ?></div>
     <p class="helplink"><?php echo $OUTPUT->page_doc_link(); ?></p>
