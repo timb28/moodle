@@ -160,59 +160,62 @@ body {
   }
 }
 
+
 body.editing {
+  .user-profile-country {
+    display: inline;
+    border-radius: 3px;
+  }
+  .hidden-user-profile-country {
+    text-decoration: line-through;
+    opacity: 0.75;
+  }
   .visible-country-au {
     background-color: rgb(151, 233, 108);
-    display: inline;
+    .user-profile-country;
   }
   .hidden-country-au {
     .visible-country-au;
-    text-decoration: line-through;
-    opacity: 0.75;
+    .hidden-user-profile-country;
   }
   .visible-country-ca {
     background-color: rgb(226, 42, 42);
-    display: inline;
+    .user-profile-country;
   }
   .hidden-country-ca {
     .visible-country-ca;
-    text-decoration: line-through;
-    opacity: 0.75;
+    .hidden-user-profile-country;
   }
   .visible-country-id {
     background-color: rgb(224, 250, 14);
-    display: inline;
+    .user-profile-country;
   }
   .hidden-country-id {
     .visible-country-id;
-    text-decoration: line-through;
-    opacity: 0.75;
+    .hidden-user-profile-country;
   }
   .visible-country-nz {
     background-color: rgb(115, 115, 115);
-    display: inline;
+    .user-profile-country;
   }
   .hidden-country-nz {
     .visible-country-nz;
-    text-decoration: line-through;
-    opacity: 0.75;
+    .hidden-user-profile-country;
   }
   .visible-country-us {
     background-color: rgb(50, 115, 227);
-    display: inline;
+    .user-profile-country;
   }
   .hidden-country-us {
     .visible-country-us;
-    text-decoration: line-through;
-    opacity: 0.75;
+    .hidden-user-profile-country;;
   }
   .visible-country-za {
     background-color: rgb(195, 151, 64);
-    display: inline;
+    .user-profile-country;
   }
   .hidden-country-za {
     .visible-country-za;
-    text-decoration: line-through;
-    opacity: 0.75;
+    .hidden-user-profile-country;
   }
 }
