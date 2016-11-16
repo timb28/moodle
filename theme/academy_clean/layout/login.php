@@ -22,9 +22,6 @@ $html = theme_academy_clean_get_html_for_settings($OUTPUT, $PAGE);
 // Add course shortname name to body class
 $courseclass = ' course-shortname-'.trim($COURSE->shortname);
 
-// Add user's country to body class
-$countryclass = ' user-profile-country-'.strtolower(trim($USER->country));
-
 // Enable CSS to target pages presented to guest users.
 $roleclass = '';
 if (is_guest(context_course::instance($COURSE->id), $USER)) {
@@ -40,7 +37,7 @@ echo $OUTPUT->doctype() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body <?php echo $OUTPUT->body_attributes($roleclass.$courseclass.$countryclass); ?>>
+<body <?php echo $OUTPUT->body_attributes($roleclass.$courseclass); ?>>
 
 <?php echo $OUTPUT->standard_top_of_body_html() ?>
 
