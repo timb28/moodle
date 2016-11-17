@@ -38,7 +38,7 @@ class filter_academylang extends moodle_text_filter {
             'body corporate' => 'homeowners association',
             'Campaign Track' => 'Create One',
             'car boot' => 'trunk',
-            'categorise' => 'categorize',
+            'categoris' => 'categoriz',
             'centre' => 'center',
             'chattels' => 'included items',
             'cheque' => 'check',
