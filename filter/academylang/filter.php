@@ -25,7 +25,9 @@ defined('MOODLE_INTERNAL') || die();
 
 class filter_academylang extends moodle_text_filter {
 
-    /* Use zero-width space (&#8203;) to prevent double replacements. */
+    /** @var string[] Country specific dictionaries for localisation.
+     * Use zero-width space (&#8203;) to prevent recursive replacements.
+     */
     private $dictionaries = array(
         'US' => array(
             'analyse' => 'analyze',
@@ -38,12 +40,14 @@ class filter_academylang extends moodle_text_filter {
             'body corporate' => 'homeowners association',
             'Campaign Track' => 'Create One',
             'car boot' => 'trunk',
-            'categoris' => 'categoriz',
+            'categorise' => 'categorize',
+            'categorising' => 'categorizing',
             'centre' => 'center',
             'chattels' => 'included items',
             'cheque' => 'check',
             'colour' => 'color',
             'computerise' => 'computerize',
+            'computerised' => 'computerized',
             'consultant' => 'agent',
             'conveyancing' => 'escrow',
             'defence' => 'defense',
@@ -81,6 +85,7 @@ class filter_academylang extends moodle_text_filter {
             'neighbour' => 'neighbor',
             'neighbourhood' => 'neighborhood',
             'open home' => 'open house',
+            'open homes' => 'open houses',
             'organisation' => 'organization',
             'organisational' => 'organizational',
             'organise' => 'organize',
@@ -92,7 +97,7 @@ class filter_academylang extends moodle_text_filter {
             'petrol' => 'gas',
             'practise' => 'practice',
             'prioritise' => 'prioritize',
-            'private seller' => 'for sale by owner (fsbo)',
+            'private seller' => 'for sale by owner (FSBO)',
             'property inspections' => 'showing',
             'programme' => 'program',
             'rates' => 'property taxes',
@@ -128,6 +133,36 @@ class filter_academylang extends moodle_text_filter {
         )
     );
 
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+        /* Capitalise the first letter of the words in the dictionary. */
+        foreach ($this->dictionaries as $country => $words) {
+            foreach ($words as $local => $translation) {
+                if (ctype_lower($local[0])) {
+                    $this->dictionaries[$country][ucfirst($local)] = ucfirst($translation);
+                }
+            }
+        }
+
+        /* Capitalise the starting letter of all words in the dictionary. */
+        foreach ($this->dictionaries as $country => $words) {
+            foreach ($words as $local => $translation) {
+                if (ctype_lower($local[0])) {
+                    $this->dictionaries[$country][ucwords($local)] = ucwords($translation);
+                }
+            }
+        }
+    }
+
+    /**
+     * Filters the text to localise the content using the dictionary.
+     *
+     * @param string $text some HTML content.
+     * @param array $options options passed to the filters
+     * @return string the HTML content after the filtering has been applied.
+     */
     public function filter($text, array $options = array()) {
         global $USER;
 
@@ -141,12 +176,45 @@ class filter_academylang extends moodle_text_filter {
                 return $text;
             }
 
-            foreach ($dictionary as $find => $replace) {
-                // Replace thrice to capture capitalisation variations.
-                $text = str_replace($find, $replace, $text);
-                $text = str_replace(ucfirst($find), ucfirst($replace), $text);
-                $text = str_replace(ucwords($find), ucwords($replace), $text);
-            }
+            // Match single words.
+            $text = preg_replace_callback("/\b(\w*)\b/",
+                function($match) use ($dictionary) {
+                    if (isset($dictionary[$match[0]])) {
+                        return ($dictionary[$match[0]]);
+                    } else {
+                        return($match[0]);
+                    }
+                },  $text);
+
+            // Match two word sets.
+            $text = preg_replace_callback("/\b(\w* \w*)\b/",
+                function($match) use ($dictionary) {
+                    if (isset($dictionary[$match[0]])) {
+                        return ($dictionary[$match[0]]);
+                    } else {
+                        return($match[0]);
+                    }
+                },  $text);
+
+            // Match three word sets.
+            $text = preg_replace_callback("/\b(\w* \w* \w*)\b/",
+                function($match) use ($dictionary) {
+                    if (isset($dictionary[$match[0]])) {
+                        return ($dictionary[$match[0]]);
+                    } else {
+                        return($match[0]);
+                    }
+                },  $text);
+
+            // Match four word sets.
+            $text = preg_replace_callback("/\b(\w* \w* \w* \w*)\b/",
+                function($match) use ($dictionary) {
+                    if (isset($dictionary[$match[0]])) {
+                        return ($dictionary[$match[0]]);
+                    } else {
+                        return($match[0]);
+                    }
+                },  $text);
         }
 
         return $text;
