@@ -83,6 +83,7 @@ class filter_academylang extends moodle_text_filter {
             'maximise' => 'maximize',
             'mobile phone' => 'cell phone',
             'neighbour' => 'neighbor',
+            'neighbours' => 'neighbors',
             'neighbourhood' => 'neighborhood',
             'open home' => 'open house',
             'open homes' => 'open houses',
