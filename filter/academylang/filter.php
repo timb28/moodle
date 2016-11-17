@@ -148,6 +148,7 @@ class filter_academylang extends moodle_text_filter {
                 }
             }
         }
+        // error_log('dict: ' . print_r($this->dictionaries, true));
     }
 
     /**
@@ -170,47 +171,13 @@ class filter_academylang extends moodle_text_filter {
                 return $text;
             }
 
-            // Match single words.
-            $text = preg_replace_callback("/\b(\w*)\b/",
-                function($match) use ($dictionary) {
-                    if (isset($dictionary[$match[0]])) {
-                        return ($dictionary[$match[0]]);
-                    } else {
-                        return($match[0]);
-                    }
-                },  $text);
-
-            // Match two word sets.
-            $text = preg_replace_callback("/\b(\w* \w*)\b/",
-                function($match) use ($dictionary) {
-                    if (isset($dictionary[$match[0]])) {
-                        return ($dictionary[$match[0]]);
-                    } else {
-                        return($match[0]);
-                    }
-                },  $text);
-
-            // Match three word sets.
-            $text = preg_replace_callback("/\b(\w* \w* \w*)\b/",
-                function($match) use ($dictionary) {
-                    if (isset($dictionary[$match[0]])) {
-                        return ($dictionary[$match[0]]);
-                    } else {
-                        return($match[0]);
-                    }
-                },  $text);
-
-            // Match four word sets.
-            $text = preg_replace_callback("/\b(\w* \w* \w* \w*)\b/",
-                function($match) use ($dictionary) {
-                    if (isset($dictionary[$match[0]])) {
-                        return ($dictionary[$match[0]]);
-                    } else {
-                        return($match[0]);
-                    }
-                },  $text);
+            foreach ($dictionary as $search => $replace) {
+                $text = preg_replace_callback("/\b(" . $search . ")\b/",
+                    function($match) use ($replace) {
+                        return($replace);
+                    },  $text);
+            }
         }
-
         return $text;
     }
 }
