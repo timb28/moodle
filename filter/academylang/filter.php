@@ -74,7 +74,7 @@ class filter_academylang extends moodle_text_filter {
             'jeopardise' => 'jeopardize', 'jeopardises' => 'jeopardizes', 'jeopardised' => 'jeopardized',
             'primary school' => 'elementary school', 'primary schools' => 'elementary schools',
             'land size' => 'lot size',
-            'letter box dropping' => 'going door to door',
+            'letter box dropping' => 'going door to door', 'letterbox drop' => 'door drop',
             'lucky dip prize' => 'grab bag', 'lucky dip prizes' => 'grab bags',
             'listing authority' => 'listing agreement',
             'memorise' => 'memorize', 'memorises' => 'memorizes', 'memorised' => 'memorized',
