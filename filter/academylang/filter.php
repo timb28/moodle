@@ -112,7 +112,7 @@ class filter_academylang extends moodle_text_filter {
             '(\w+[dlmntv])ises' => '${1}izes',
             '(\w+[dlmntv])iser' => '${1}izer',
             '(\w+[dlmntv])ising' => '${1}izing',
-            '(\w+)our(\w*)' => '${1}or${2}',
+            '(\w{3,10})our(\w*)' => '${1}or${2}',
         )
     );
 
