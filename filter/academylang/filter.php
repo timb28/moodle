@@ -100,7 +100,7 @@ class filter_academylang extends moodle_text_filter {
             'recognise' => 'recognize', 'recognises' => 'recognizes', 'recognised' => 'recognized',
             'revitalise' => 'revitalize', 'revitalises' => 'revitalizes', 'revitalised' => 'revitalized',
             'RPData' => 'Core Logic',
-            'rubbish' => 'trash',
+            'rubbish' => 'garbage',
             'Sale &amp; Purchase Agreement' => 'Contract of Sale',
             'Sale and Purchase Agreement' => 'Contract of Sale',
             'sales consultant' => 'sales agent', 'sales consultants' => 'sales agents',
