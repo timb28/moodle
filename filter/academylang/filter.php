@@ -51,7 +51,7 @@ class filter_academylang extends moodle_text_filter {
             'defence' => 'defense',
             'demeanour' => 'demeanor',
             'diarise' => 'calendar',
-            'doorknocking' => 'going door to door',
+            'doorknock' => 'going door to door', 'doorknocking' => 'going door to door',
             'emphasise' => 'emphasize', 'emphasises' => 'emphasizes', 'emphasised' => 'emphasized',
             'endeavour' => 'endeavor', 'endeavours' => 'endeavors', 'endeavouring' => 'endeavoring',
             'enquiry' => 'inquiry',
