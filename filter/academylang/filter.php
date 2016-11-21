@@ -53,6 +53,7 @@ class filter_academylang extends moodle_text_filter {
             'diarise' => 'calendar',
             'doorknocking' => 'going door to door',
             'emphasise' => 'emphasize', 'emphasises' => 'emphasizes', 'emphasised' => 'emphasized',
+            'endeavour' => 'endeavor', 'endeavours' => 'endeavors', 'endeavouring' => 'endeavoring',
             'enquiry' => 'inquiry',
             'familiarise' => 'familiarize', 'familiarises' => 'familiarizes', 'familiarised' => 'familiarized',
             'favour' => 'favor', 'favours' => 'favors',
