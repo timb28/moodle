@@ -38,6 +38,7 @@ class filter_academylang extends moodle_text_filter {
             'bluebook' => 'blue&#8203;book (not used in USA)',
             'body corporate' => 'homeowners association',
             'Campaign Track' => 'Create One',
+            'capitalise' => 'capitalize', 'capitalises' => 'capitalize', 'capitalised' => 'capitalized', 
             'car boot' => 'trunk',
             'categorise' => 'categorize', 'categorised' => 'categorized', 'categorising' => 'categorizing',
             'centre' => 'center', 'centred' => 'centered',
