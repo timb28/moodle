@@ -108,7 +108,7 @@ class filter_academylang extends moodle_text_filter {
             '(\w{2,30}[dlmnrtv])iser' => '${1}izer',
             '(\w{2,30}[dlmnrtv])ising' => '${1}izing',
             '(\w{2,30})lisation' => '${1}lization',
-            '(\w{2,10}[binl])our(\w*)' => '${1}or${2}',
+            '(\w{2,20}[bimnl]|\w+av)our(\w*)' => '${1}or${2}',
         )
     );
 
