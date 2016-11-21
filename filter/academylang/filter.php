@@ -80,7 +80,7 @@ class filter_academylang extends moodle_text_filter {
             'maximise' => 'maximize', 'maximises' => 'maximizes', 'maximised' => 'maximized',
             'mobile phone' => 'cell phone', 'mobile phones' => 'cell phones',
             'neighbour' => 'neighbor', 'neighbours' => 'neighbors',
-            'neighbourhood' => 'neighborhood', 'neighbourhoods' => 'neighborhoods'
+            'neighbourhood' => 'neighborhood', 'neighbourhoods' => 'neighborhoods',
             'open home' => 'open house', 'open homes' => 'open houses',
             'organisation' => 'organization', 'organisations' => 'organizations',
             'organisational' => 'organizational',
