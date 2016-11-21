@@ -109,6 +109,7 @@ class filter_academylang extends moodle_text_filter {
             '(\w{2,30}[dlmnrtv])ising' => '${1}izing',
             '(\w{2,30})lisation' => '${1}lization',
             '(\w{3,10})our(\w*)' => '${1}or${2}',
+            'Harcorts' => 'Harcourts',
         )
     );
 
@@ -150,12 +151,16 @@ class filter_academylang extends moodle_text_filter {
             return $text;
         }
 
-        if (!isset($USER->country)) {
+        if (!isset($USER->country) or !isset($this->dictionaries[$USER->country])) {
             return $text;
         }
 
         foreach ($this->dictionaries[$USER->country] as $search => $replace) {
             $text = preg_replace("/\b(" . $search . ")\b/", $replace,  $text);
+        }
+
+        if (!isset($this->segments[$USER->country])) {
+            return $text;
         }
 
         foreach ($this->segments[$USER->country] as $search => $replace) {
