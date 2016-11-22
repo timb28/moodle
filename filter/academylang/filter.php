@@ -90,7 +90,6 @@ class filter_academylang extends moodle_text_filter {
             'for rent' => 'to let',
             'unit' => 'condo', 'units' => 'condos',
             'valuer' => 'appraiser', 'valuers' => 'appraisers',
-            'valuation' => 'appraisal', 'valuations' => 'appraisals',
             'vendor' => 'seller', 'vendors' => 'sellers',
             'VPA' => 'SPA',
             'vendor paid advertising' => 'seller paid advertising',
