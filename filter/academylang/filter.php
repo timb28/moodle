@@ -31,6 +31,7 @@ class filter_academylang extends moodle_text_filter {
     private $dictionaries = array(
         'US' => array(
             'appraisal' => 'comparative market analysis', 'appraisals' => 'comparative market analyses',
+            'market appraisal' => 'comparative market analysis', 'market appraisals' => 'comparative market analyses',
             'auction clearance rate' => 'auction success rate',
             'benchtop' => 'counter top', 'benchtops' => 'counter tops',
             'bluebook' => 'blue&#8203;book (Not Used in the USA)',
