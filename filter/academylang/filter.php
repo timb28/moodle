@@ -115,6 +115,14 @@ class filter_academylang extends moodle_text_filter {
         )
     );
 
+    /** @var string[] Country specific phrases to skip
+     */
+    private $skip = array(
+        'US' => array(
+            'advertise', 'advertises', 'advertised', 'advertising', 'advertiser',
+        )
+    );
+
     /**
      * Constructor.
      */
@@ -133,6 +141,15 @@ class filter_academylang extends moodle_text_filter {
             foreach ($words as $local => $translation) {
                 if (ctype_lower($local[0])) {
                     $this->dictionaries[$country][ucwords($local)] = ucwords($translation);
+                }
+            }
+        }
+
+        /* Capitalise the starting letter of all skipped phrases. */
+        foreach ($this->skip as $country => $words) {
+            foreach ($words as $word) {
+                if (ctype_lower($word[0])) {
+                    $this->skip[$country][] = ucwords($word);
                 }
             }
         }
@@ -166,7 +183,14 @@ class filter_academylang extends moodle_text_filter {
         }
 
         foreach ($this->segments[$USER->country] as $search => $replace) {
-            $text = preg_replace("/\b" . $search . "\b/", $replace,  $text);
+            $text = preg_replace_callback("/\b" . $search . "\b/",
+                function($match) use ($search, $replace, $USER) {
+                    if (array_search($match[0], $this->skip[$USER->country]) === false) {
+                        return preg_replace("/\b" . $search . "\b/", $replace,  $match[0]);
+                    } else {
+                        return($match[0]);
+                    }
+                },  $text);
         }
 
         return $text;
