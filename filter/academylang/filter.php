@@ -104,7 +104,7 @@ class filter_academylang extends moodle_text_filter {
      */
     private $segments = array(
         'US' => array(
-            '(\w+)yse' => '${1}yze', '(\w+)yses' => '${1}yzes', '(\w+)ysed' => '${1}yzed',
+            '(\w+)yse' => '${1}yze', '(\w+)ysed' => '${1}yzed',
             '(\w{2,30}[dlmnrtv])ise' => '${1}ize',
             '(\w{2,30}[dlmnrtv])ised' => '${1}ized',
             '(\w{2,30}[dlmnrtv])ises' => '${1}izes',
