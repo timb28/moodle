@@ -87,7 +87,7 @@ class filter_academylang extends moodle_text_filter {
             'tick off the list' => 'check off the list',
             'for rent' => 'to let',
             'unit' => 'condo', 'units' => 'condos',
-            'valuer' => 'appraiser',
+            'valuer' => 'appraiser', 'valuers' => 'appraisers',
             'valuation' => 'appraisal', 'valuations' => 'appraisals',
             'vendor' => 'seller', 'vendors' => 'sellers',
             'VPA' => 'SPA',
