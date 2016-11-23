@@ -88,7 +88,6 @@ class filter_academylang extends moodle_text_filter {
             'thermal control' => 'temperature control',
             'tick off the list' => 'check off the list',
             'for rent' => 'to let',
-            'unit' => 'condo', 'units' => 'condos',
             'valuer' => 'appraiser', 'valuers' => 'appraisers',
             'vendor' => 'seller', 'vendors' => 'sellers',
             'VPA' => 'SPA',
