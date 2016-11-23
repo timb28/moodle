@@ -55,7 +55,6 @@ class filter_academylang extends moodle_text_filter {
             'fulfil' => 'fulfill', 'fulfils' => 'fulfills',
             'garage sale' => 'yard sale', 'garage sales' => 'yard sales',
             'high school' => 'secondary school', 'high schools' => 'secondary schools',
-            'house' => 'single family residence',
             'inspection' => 'viewing', 'inspections' => 'viewings',
             'inspect' => 'view',
             'kindergarten' => 'preschool',
