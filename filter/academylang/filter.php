@@ -105,6 +105,7 @@ class filter_academylang extends moodle_text_filter {
             '(\w{2,30}[dlmnrtv])ised' => '${1}ized',
             '(\w{2,30}[dlmnrtv])ises' => '${1}izes',
             '(\w{2,30}[dlmnrtv])iser' => '${1}izer',
+            '(\w{2,30}[dlmnrtv])isers' => '${1}izers',
             '(\w{2,30}[dlmnrtv])ising' => '${1}izing',
             '(\w{2,30})lisation' => '${1}lization',
             '(\w{2,20}[bimnl]|\w+av)our(\w*)' => '${1}or${2}',
