@@ -117,6 +117,7 @@ class filter_academylang extends moodle_text_filter {
     private $skip = array(
         'US' => array(
             'advertise', 'advertises', 'advertised', 'advertising', 'advertiser',
+            'premises', 'premise',
         )
     );
 
