@@ -63,7 +63,7 @@ class filter_academylang extends moodle_text_filter {
             'land size' => 'lot size',
             'letter box dropping' => 'going door to door', 'letterbox drop' => 'door drop',
             'lucky dip prize' => 'grab bag', 'lucky dip prizes' => 'grab bags',
-            'listing authority' => 'listing agreement',
+            'listing authority' => 'listing agreement', 'written authority' => 'written agreement',
             'mobile phone' => 'cell phone', 'mobile phones' => 'cell phones',
             'open home' => 'open house', 'open homes' => 'open houses',
             'organisation' => 'organization', 'organisations' => 'organizations',
