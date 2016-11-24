@@ -46,7 +46,6 @@ class filter_academylang extends moodle_text_filter {
             'consultant' => 'agent', 'consultants' => 'agents',
             'conveyancing' => 'escrow',
             'defence' => 'defense',
-            'diarise' => 'calendar',
             'doorknock' => 'going door to door', 'doorknocking' => 'going door to door',
             'emphasise' => 'emphasize', 'emphasises' => 'emphasizes', 'emphasised' => 'emphasized',
             'enquiry' => 'inquiry',
