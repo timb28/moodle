@@ -117,8 +117,8 @@ class filter_academylang extends moodle_text_filter {
         'US' => array(
             'advertise', 'advertises', 'advertised', 'advertising', 'advertiser',
             'expertise',
-            'premises', 'premise',
-            'promise',
+            'premise', 'premises',
+            'promise', 'promised', 'promises', 'promising',
         )
     );
 
