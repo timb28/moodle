@@ -58,7 +58,7 @@ class filter_academylang extends moodle_text_filter {
             'land size' => 'lot size',
             'letter box dropping' => 'going door to door', 'letterbox drop' => 'door drop',
             'lucky dip prize' => 'grab bag', 'lucky dip prizes' => 'grab bags',
-            'listing authority' => 'listing agreement', 'written authority' => 'written agreement',
+            'listing authority' => 'listing agreement', 'listing authorities' => 'listing agreements',
             'mobile phone' => 'cell phone', 'mobile phones' => 'cell phones',
             'open home' => 'open house', 'open homes' => 'open houses',
             'organisation' => 'organization', 'organisations' => 'organizations',
@@ -88,6 +88,7 @@ class filter_academylang extends moodle_text_filter {
             'VPA' => 'SPA',
             'vendor paid advertising' => 'seller paid advertising',
             'whilst' => 'while',
+            'written authority' => 'written agreement', 'written authorities' => 'written agreements',
         )
     );
 
