@@ -43,7 +43,7 @@ class filter_academylang extends moodle_text_filter {
             'centre' => 'center', 'centred' => 'centered',
             'chattels' => 'included items',
             'cheque' => 'check', 'cheques' => 'checks',
-            'consultant' => 'agent', 'consultants' => 'agents', 'a consultant' => 'an agent',
+            'consultant' => 'agent', 'consultants' => 'agents',
             'conveyancing' => 'escrow',
             'defence' => 'defense',
             'doorknock' => 'going door to door', 'doorknocking' => 'going door to door',
