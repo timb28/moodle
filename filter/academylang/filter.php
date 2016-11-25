@@ -41,7 +41,6 @@ class filter_academylang extends moodle_text_filter {
             'Campaign Track' => 'Create One',
             'car boot' => 'trunk',
             'centre' => 'center', 'centred' => 'centered',
-            'chattels' => 'included items',
             'cheque' => 'check', 'cheques' => 'checks',
             'consultant' => 'agent', 'consultants' => 'agents',
             'conveyancing' => 'escrow',
