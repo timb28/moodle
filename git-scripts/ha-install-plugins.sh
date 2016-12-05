@@ -13,6 +13,7 @@
 
 ## Blocks ##
 ./blocks/block_configurable_report-install.sh
+./blocks/block_fn_marking-install.sh
 ./blocks/block_forum_aggregator-install.sh
 ./blocks/block_forum_post-install.sh
 ./blocks/block_quickmail-install.sh
