@@ -1,0 +1,4 @@
+[submodule "course/format/flexsections"]
+	path = course/format/flexsections
+	url = https://github.com/HarcourtsAcademy/moodle-format_flexsections.git
+	branch = HA-Moodle30
