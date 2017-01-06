@@ -69,3 +69,11 @@
 	path = mod/videofile
 	url = https://github.com/HarcourtsAcademy/moodle-mod_videofile.git
 	branch = HA-Moodle30
+[submodule "question/type/pmatch"]
+	path = question/type/pmatch
+	url = https://github.com/HarcourtsAcademy/moodle-qtype_pmatch.git
+	branch = HA-Moodle30
+[submodule "question/type/oumultiresponse"]
+	path = question/type/oumultiresponse
+	url = https://github.com/HarcourtsAcademy/moodle-qtype_oumultiresponse.git
+	branch = HA-Moodle30
