@@ -38,3 +38,10 @@
 	path = blocks/unanswered_discussions
 	url = https://github.com/HarcourtsAcademy/moodle-block_unanswered_discussions.git
 	branch = HA-Moodle30
+[submodule "enrol/apply"]
+	path = enrol/apply
+	url = https://github.com/HarcourtsAcademy/apply.git
+	branch = HA-Moodle30
+[submodule "enrol/metamnet"]
+	path = enrol/metamnet
+	url = https://github.com/HarcourtsAcademy/moodle-enrol_metamnet.git
