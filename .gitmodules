@@ -11,3 +11,7 @@
 [submodule "lib/editor/atto/plugins/styles"]
 	path = lib/editor/atto/plugins/styles
 	url = https://github.com/moodleuulm/moodle-atto_styles.git
+[submodule "auth/lenauth"]
+	path = auth/lenauth
+	url = https://github.com/HarcourtsAcademy/moodle-auth_lenauth.git
+	branch = HA-Moodle30
