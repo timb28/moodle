@@ -45,3 +45,27 @@
 [submodule "enrol/metamnet"]
 	path = enrol/metamnet
 	url = https://github.com/HarcourtsAcademy/moodle-enrol_metamnet.git
+[submodule "mod/certificate"]
+	path = mod/certificate
+	url = https://github.com/HarcourtsAcademy/moodle-mod_certificate.git
+	branch = HA-Moodle30
+[submodule "mod/game"]
+	path = mod/game
+	url = https://github.com/HarcourtsAcademy/moodle-mod_game.git
+	branch = HA-Moodle30
+[submodule "mod/hvp"]
+	path = mod/hvp
+	url = https://github.com/h5p/h5p-moodle-plugin.git
+	branch = rc3
+[submodule "mod/questionnaire"]
+	path = mod/questionnaire
+	url = https://github.com/HarcourtsAcademy/moodle-mod_questionnaire.git
+	branch = HA-Moodle30
+[submodule "mod/subcourse"]
+	path = mod/subcourse
+	url = https://github.com/HarcourtsAcademy/moodle-mod_subcourse.git
+	branch = HA-Moodle30
+[submodule "mod/videofile"]
+	path = mod/videofile
+	url = https://github.com/HarcourtsAcademy/moodle-mod_videofile.git
+	branch = HA-Moodle30
