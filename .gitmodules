@@ -2,3 +2,12 @@
 	path = course/format/flexsections
 	url = https://github.com/HarcourtsAcademy/moodle-format_flexsections.git
 	branch = HA-Moodle30
+[submodule "lib/editor/atto/plugins/fullscreen"]
+	path = lib/editor/atto/plugins/fullscreen
+	url = https://github.com/dthies/moodle-atto_fullscreen.git
+[submodule "lib/editor/atto/plugins/htmlplus"]
+	path = lib/editor/atto/plugins/htmlplus
+	url = https://github.com/andrewnicols/moodle-atto_htmlplus.git
+[submodule "lib/editor/atto/plugins/styles"]
+	path = lib/editor/atto/plugins/styles
+	url = https://github.com/moodleuulm/moodle-atto_styles.git
