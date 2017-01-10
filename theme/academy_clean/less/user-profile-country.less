@@ -1,0 +1,221 @@
+/**
+<p>User profile country tests:</p>
+<p>Australia</p>
+<ul>
+  <li class="visible-country-au">Shown in AU</li>
+  <li class="hidden-country-au">Hidden in AU</li>
+</ul>
+<p>Canada</p>
+<ul>
+  <li class="visible-country-ca">Shown in CA</li>
+  <li class="hidden-country-ca">Hidden in CA</li>
+</ul>
+<p>Indonesia</p>
+<ul>
+  <li class="visible-country-id">Shown in ID</li>
+  <li class="hidden-country-id">Hidden in ID</li>
+</ul>
+<p>New Zealand</p>
+<ul>
+  <li class="visible-country-nz">Shown in NZ</li>
+  <li class="hidden-country-nz">Hidden in NZ</li>
+</ul>
+<p>USA</p>
+<ul>
+  <li class="visible-country-us">Shown in US</li>
+  <li class="hidden-country-us">Hidden in US</li>
+</ul>
+<p>South Africa</p>
+<ul>
+  <li class="visible-country-za">Shown in ZA</li>
+  <li class="hidden-country-za">Hidden in ZA</li>
+</ul>
+*/
+
+body {
+  &.user-profile-country-au {
+    .hidden-country-au {
+      display: none;
+    }
+    .visible-country-ca {
+      display: none;
+    }
+    .visible-country-id {
+      display: none;
+    }
+    .visible-country-nz {
+      display: none;
+    }
+    .visible-country-us {
+      display: none;
+    }
+    .visible-country-za {
+      display: none;
+    }
+  }
+
+  &.user-profile-country-ca {
+    .visible-country-au {
+      display: none;
+    }
+    .hidden-country-ca {
+      display: none;
+    }
+    .visible-country-id {
+      display: none;
+    }
+    .visible-country-nz {
+      display: none;
+    }
+    .visible-country-us {
+      display: none;
+    }
+    .visible-country-za {
+      display: none;
+    }
+  }
+
+  &.user-profile-country-id {
+    .visible-country-au {
+      display: none;
+    }
+    .visible-country-ca {
+      display: none;
+    }
+    .hidden-country-id {
+      display: none;
+    }
+    .visible-country-nz {
+      display: none;
+    }
+    .visible-country-us {
+      display: none;
+    }
+    .visible-country-za {
+      display: none;
+    }
+  }
+
+  &.user-profile-country-nz {
+    .visible-country-au {
+      display: none;
+    }
+    .visible-country-ca {
+      display: none;
+    }
+    .visible-country-id {
+      display: none;
+    }
+    .hidden-country-nz {
+      display: none;
+    }
+    .visible-country-us {
+      display: none;
+    }
+    .visible-country-za {
+      display: none;
+    }
+  }
+
+  &.user-profile-country-us {
+    .visible-country-au {
+      display: none;
+    }
+    .visible-country-ca {
+      display: none;
+    }
+    .visible-country-id {
+      display: none;
+    }
+    .visible-country-nz {
+      display: none;
+    }
+    .hidden-country-us {
+      display: none;
+    }
+    .visible-country-za {
+      display: none;
+    }
+  }
+
+  &.user-profile-country-za {
+    .visible-country-au {
+      display: none;
+    }
+    .visible-country-ca {
+      display: none;
+    }
+    .visible-country-id {
+      display: none;
+    }
+    .visible-country-nz {
+      display: none;
+    }
+    .visible-country-us {
+      display: none;
+    }
+    .hidden-country-za {
+      display: none;
+    }
+  }
+}
+
+
+body.editing {
+  .user-profile-country {
+    display: inline;
+    border-radius: 3px;
+  }
+  .hidden-user-profile-country {
+    text-decoration: line-through;
+    opacity: 0.75;
+  }
+  .visible-country-au {
+    background-color: rgb(151, 233, 108);
+    .user-profile-country;
+  }
+  .hidden-country-au {
+    .visible-country-au;
+    .hidden-user-profile-country;
+  }
+  .visible-country-ca {
+    background-color: rgb(226, 42, 42);
+    .user-profile-country;
+  }
+  .hidden-country-ca {
+    .visible-country-ca;
+    .hidden-user-profile-country;
+  }
+  .visible-country-id {
+    background-color: rgb(224, 250, 14);
+    .user-profile-country;
+  }
+  .hidden-country-id {
+    .visible-country-id;
+    .hidden-user-profile-country;
+  }
+  .visible-country-nz {
+    background-color: rgb(115, 115, 115);
+    .user-profile-country;
+  }
+  .hidden-country-nz {
+    .visible-country-nz;
+    .hidden-user-profile-country;
+  }
+  .visible-country-us {
+    background-color: rgb(50, 115, 227);
+    .user-profile-country;
+  }
+  .hidden-country-us {
+    .visible-country-us;
+    .hidden-user-profile-country;;
+  }
+  .visible-country-za {
+    background-color: rgb(195, 151, 64);
+    .user-profile-country;
+  }
+  .hidden-country-za {
+    .visible-country-za;
+    .hidden-user-profile-country;
+  }
+}

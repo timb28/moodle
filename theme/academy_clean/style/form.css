@@ -1,0 +1,13 @@
+/* 
+    Document   : forms
+    Created on : 16/08/2013, 10:40:21 AM
+    Author     : timbutler
+    Description:
+        Styles and style overrides for Moodle form elements.
+*/
+
+input, textarea, .uneditable-input { 
+    width: auto;
+    max-width: 600px;
+}
+

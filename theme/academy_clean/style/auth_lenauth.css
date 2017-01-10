@@ -1,0 +1,181 @@
+/********************************************************
+**
+** Theme name: Academy
+** Creation Date: 26/10/15
+** Author: Harcourts International Pty Ltd
+** Author URI: http://www.academyrealestatetraining.com
+**
+*********************************************************/
+#page-login-index .lenauth-buttons {
+    text-align: center;
+    width: 14rem;
+    margin: 2rem auto 0;
+}
+
+#page-login-index .loginbox .signuppanel .subcontent {
+    max-width: 30rem;
+    margin: auto;
+    text-align: center;
+}
+
+#page-login-index .loginbox {
+    margin: 0 0 20px 0;
+}
+
+#page-login-index .loginbox .potentialidps {
+    display: none; /* Hide the unused 'Log in using your account on:' MNet feature */
+}
+
+#page-login-index .signuppanel {
+    padding-top: 3rem;
+}
+
+@media (max-width: 767px) {
+    .loginbox .loginsub {
+        padding-top: 0;
+    }
+}
+
+@media (max-width: 979px) {
+    #page-login-index .loginbox {
+        margin: 0;
+    }
+    #page-login-index .loginbox .signuppanel {
+        padding-top: 1rem;
+    }
+}
+
+#page-login-index .loginpanel {
+    padding: 2rem 0;
+    color: white;
+    background-color: #002b49;
+    background-image: radial-gradient( circle, #07314e 40%, #002946 100%);
+}
+
+#page-login-index .loginpanel a:hover {
+    color: white;
+}
+
+#page-login-index .loginpanel h2 {
+    width: 300px;
+    height: 70px;
+    margin: 10px auto 0;
+    padding-bottom: 0;
+    background: url([[pix:theme|h1-logo-white]]) 50% 50% no-repeat;
+    background-size: contain;
+    /* Hide the text. */
+    text-indent: 150%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#page-login-index .loginbox.onecolumn .loginsub,
+#page-login-index .loginbox.onecolumn .guestsub {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+#page-login-index .loginbox.twocolumns .loginsub,
+#page-login-index .loginbox.twocolumns .guestsub {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+#page-login-index .loginbox .loginform .form-input {
+    float: none;
+    width: 100%;
+}
+
+#page-login-index .loginpanel form label {
+    display: none;
+}
+
+#page-login-index .loginpanel form input#username {
+    background: url([[pix:theme|fontawesome/user]]) 3% 50% no-repeat rgba(178, 191, 200, 0.2);
+    background-size: 20px, contain;
+}
+
+#page-login-index .loginpanel form input#username:focus {
+    background: url([[pix:theme|fontawesome/user]]) 3% 50% no-repeat rgba(255, 255, 255, 0.9);
+    background-size: 20px, contain;
+    color: #000;
+}
+
+#page-login-index .loginpanel form input#password {
+    background: url([[pix:theme|fontawesome/lock]]) 3% 50% no-repeat rgba(178, 191, 200, 0.2);
+    background-size: 20px, contain;
+}
+
+#page-login-index .loginpanel form input#password:focus {
+    background: url([[pix:theme|fontawesome/lock]]) 3% 50% no-repeat rgba(255, 255, 255, 0.9);
+    background-size: 20px, contain;
+    color: #000;
+}
+
+#page-login-index .loginpanel form input {
+    width: 100%;
+    height: 40px;
+    line-height: 38px;
+    border: medium none;
+    padding: 0;
+    color: #FFF;
+    font-size: 1rem;
+    border-radius: 3px;
+    text-align: center;
+    transition: all 0.2s ease-in-out 0s;
+}
+
+/* 'Log in' button */
+#page-login-index .loginpanel input#loginbtn[type="submit"] {
+    transition: none 0s ease 0s;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 4px;
+    color: #FFF;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-shadow: 0px 1px 0px #006B9C;
+    border-width: 1px 1px 2px;
+    border-style: solid;
+    border-color: #008FCF #007DB5 #006B9C;
+    -moz-border-top-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    border-image: none;
+    background-color: #00ADEF;
+    background-image: linear-gradient(#00ADEF, #007DB5);
+    outline: medium none;
+    text-indent: 0px;
+    font-size: 1rem;
+}
+
+
+#page-login-index .loginpanel input#loginbtn[type="submit"]:hover {
+    background-color: #007DB5;
+    background-image: none;
+    background-repeat: repeat;
+    cursor: pointer;
+}
+
+/* Hide 'Log in as guest' button */
+#page-login-index form#guestlogin {
+    display: none;
+}
+
+#page-login-index .loginpanel input[type="submit"]:hover {
+    background-color: #e6e6e6;
+    background-image: none;
+    background-repeat: repeat;
+    cursor: pointer;
+}
+
+#page-login-index .loginpanel input[type="submit"]:focus {
+    background-position: 0;
+}
+
+/* Hide the "Cookies must be enabled in your browser" hint */
+#page-login-index .loginpanel .desc {
+    display: none;
+}

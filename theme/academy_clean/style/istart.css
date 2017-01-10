@@ -1,0 +1,263 @@
+/**
+ * Contains all the style customisations for iStart24 courses.
+ *   Created on : 23/06/2014, 3:09:48 PM
+ *   Author     : timbutler
+ */
+
+.format-flexsections .section li.activity.resource {
+    margin: 0;
+}
+.istartaction {
+    padding: 4px 0 4px 58px;
+    margin: 0 0 1rem 0;
+    min-height: 46px;
+    background-repeat: no-repeat;
+    background-position: 0 4px;
+}
+.istartaction.istartaction-affirmations {
+    background-image: url([[pix:theme|istart/affirmations]]);
+}
+.istartaction.istartaction-connect {
+    background-image: url([[pix:theme|istart/connect]]);
+}
+.istartaction.istartaction-form {
+    background-image: url([[pix:theme|istart/form]]);
+}
+.istartaction.istartaction-h1 {
+    background-image: url([[pix:theme|istart/h1]]);
+}
+.istartaction.istartaction-letter {
+    background-image: url([[pix:theme|istart/letter]]);
+}
+.istartaction.istartaction-material {
+    background-image: url([[pix:theme|istart/material]]);
+}
+.istartaction.istartaction-online {
+    background-image: url([[pix:theme|istart/online]]);
+}
+.istartaction.istartaction-purchase {
+    background-image: url([[pix:theme|istart/purchase]]);
+}
+.istartaction.istartaction-read {
+    background-image: url([[pix:theme|istart/read]]);
+}
+.istartaction.istartaction-schedule {
+    background-image: url([[pix:theme|istart/schedule]]);
+}
+.istartaction.istartaction-script {
+    background-image: url([[pix:theme|istart/script]]);
+}
+.istartaction.istartaction-tutorial {
+    background-image: url([[pix:theme|istart/tutorial]]);
+}
+.istartaction.istartaction-video {
+    background-image: url([[pix:theme|istart/video]]);
+}
+.istartaction.istartaction-write {
+    background-image: url([[pix:theme|istart/write]]);
+}
+/** iStart24 Flex Sections
+ *  Requirements:
+ *  1 The twenty four week Flex Sections have the custom class "istart-week-NN"
+ *  2 The four Flex Sections in each week have the following custom classes
+ *    - istart-week-task istart-week-task-watch
+ *    - istart-week-task istart-week-task-read
+ *    - istart-week-task istart-week-task-connect
+ *    - istart-week-task istart-week-task-do
+ *
+ */
+.format-flexsections .course-content-header {
+    display: none;
+}
+.format-flexsections .course-content-footer {
+    clear: both;
+}
+.format-flexsections .header.backto {
+    background-color: #f5f5f5;
+    background-image: linear-gradient(to bottom, #fff, #e6e6e6);
+    background-repeat: repeat-x;
+    border-color: #ccc #ccc #b3b3b3;
+    border-image: none;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #333;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    line-height: 24px;
+    padding: 4px 12px;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    vertical-align: middle;
+}
+.format-flexsections .header.backto:hover {
+    background-position: 0 -15px;
+    background-color: #e6e6e6;
+    color: #333;
+    text-decoration: none;
+    transition: background-position 0.1s linear 0s;
+}
+
+.format-flexsections .footer.next.btn {margin: 0 0 5px 1rem;}
+.format-flexsections .footer.next .next-text {margin-left:10px;}
+
+.format-flexsections .course-content-footer {
+    margin: 1em 0;
+}
+.course-content > .flexsections > .section > .content > h3 {
+    margin-top: 0;
+    font-weight: bold;
+}
+.format-flexsections .course-content ul.flexsections.flexsections-level-1
+li.section.main.istart-week-task {
+    float: left;
+    width: 25%;
+    padding: 2em 0 0 0;
+    margin: 0 0 5px 0;
+}
+@media (min-width: 980px) {
+    .format-flexsections .course-content ul.flexsections.flexsections-level-1
+    li.section.main.istart-week-task  {
+        padding-top: 52px; /* = height of the header */
+    }
+}
+.format-flexsections.editing .course-content ul.flexsections.flexsections-level-1
+li.section.main.istart-week-task {
+    float: none;
+    width: inherit;
+    padding-top: 0;
+    padding-left: 5px;
+}
+.istart-week-task > .content > h3 a {
+    background-position: left 32px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: block;
+    font-size: 1.1em;
+    height: 160px;
+    max-width: 100%;
+    text-align: center;
+    width: 100px;
+}
+.format-flexsections.editing .istart-week-task > .content > h3 {
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding-left: 1.2em;
+    max-height: 24px;
+}
+.format-flexsections.editing .istart-week-task > .content > h3 a {
+    background: none;
+    display: inline;
+    width: auto;
+    height: inherit;
+    text-align: left;
+    font-size: inherit;
+}
+.istart-week-task.istart-week-task-watch > .content > h3 a {
+    background-image: url([[pix:theme|istart/menu-watch]]);
+}
+.istart-week-task.istart-week-task-read > .content > h3 a {
+    background-image: url([[pix:theme|istart/menu-read]]);
+}
+.istart-week-task.istart-week-task-do > .content > h3 a {
+    background-image: url([[pix:theme|istart/menu-do]]);
+}
+.istart-week-task.istart-week-task-commit > .content > h3 a {
+    background-image: url([[pix:theme|istart/menu-commit]]);
+}
+/** TODO: START Remove once we no longer need a 'connect' section */
+.istart-week-task.istart-week-task-connect > h3 a {
+    background-image: url([[pix:theme|istart/menu-connect]]);
+}
+/** TODO: END Remove once we no longer need a 'connect' section */
+
+/*** Icons when editing flexsections **/
+.format-flexsections.editing .istart-week-task.istart-week-task-watch > .content > h3 {
+    background-image: url([[pix:theme|istart/title-watch]]);
+}
+.format-flexsections.editing .istart-week-task.istart-week-task-read > .content > h3 {
+    background-image: url([[pix:theme|istart/title-read]]);
+}
+.format-flexsections.editing .istart-week-task.istart-week-task-do > .content > h3 {
+    background-image: url([[pix:theme|istart/title-do]]);
+}
+.format-flexsections.editing .istart-week-task.istart-week-task-commit > .content > h3 {
+    background-image: url([[pix:theme|istart/title-commit]]);
+}
+
+/** TODO: START Remove once we no longer need a 'connect' section */
+.format-flexsections.editing .istart-week-task.istart-week-task-connect > .content > h3 {
+    background-image: url([[pix:theme|istart/title-connect]]);
+}
+/** TODO: END Remove once we no longer need a 'connect' section */
+
+.course-content ul li.section.main.istart-week-task {
+    border-bottom: 0;
+}
+
+/* Full iStart24 hide course resources */
+body.course-shortname-iStart24 .istart-welcome li.activity.lesson,
+body.course-shortname-iStart24 .istart-welcome li.activity.forum,
+body.course-shortname-iStart24 .istart-welcome li.activity.certificate,
+body.course-shortname-iStart24 .istart-welcome li.activity.questionnaire,
+body.course-shortname-iStart24 .istart-welcome li.activity.feedback,
+body.course-shortname-iStart24 .istart-welcome li.activity.page {
+    display: none;
+}
+body.course-shortname-iStart24.editing .istart-welcome li.activity.lesson,
+body.course-shortname-iStart24.editing .istart-welcome li.activity.forum,
+body.course-shortname-iStart24.editing .istart-welcome li.activity.certificate,
+body.course-shortname-iStart24.editing .istart-welcome li.activity.questionnaire,
+body.course-shortname-iStart24.editing .istart-welcome li.activity.feedback,
+body.course-shortname-iStart24.editing .istart-welcome li.activity.page {
+    display: list-item;
+}
+/* iStart24 hide iStart24 page title */
+body.course-shortname-iStart24 #page-header
+h1 {
+    display: none;
+}
+
+body.course-shortname-iStart24 .course-content
+ul.section {
+    margin: 0;
+}
+/* Only used for the list of weeks in the full iStart24 Online */
+.course-shortname-iStart24 .section h3 {
+    font-weight: normal;
+}
+/** iStart24 Read pictures. Note: Also use the 'img-responsive' class. */
+img.istart-read-hero {
+    float: right;
+    margin: 8px;
+}
+@media (max-width: 669px) {
+    img.istart-read-hero {
+        float: none;
+        clear: both;
+    }
+}
+@media (min-width: 670px) and (max-width: 979px) {
+    img.istart-read-hero {
+        max-width: 50%;
+    }
+}
+
+/** iStart 24 Remove "Attempt: 1" heading from Welcome lesson */
+body.course-shortname-iStart24#page-mod-lesson-view h3.main {
+    display: none;
+}
+
+/** iStart24 Hide the week prefix used to distinguish task labels. */
+body.course-shortname-iStart24 .istart-week-prefix {
+    display: none;
+}
+
+
+/** Global iStart: Hide the 'Your Progress' label that shrinks the istart banner image */
+body.course-shortname-iStart #completionprogressid {
+    display: none;
+}

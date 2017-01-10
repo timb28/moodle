@@ -1,0 +1,91 @@
+/* 
+    Document   : course
+    Created on : 13/08/2013, 3:55:40 PM
+    Author     : timbutler
+    Description:
+        Styles for displaying course content.
+*/
+
+.coursebox .content .courseimage,
+.coursebox .content .coursefile {float:left;width:inherit;clear:left;}
+
+/* Remove extra whitespace from left of course content. */
+.course-content ul.section { margin: 1em 0;}
+body.editing .course-content ul.section { margin: 1em;}
+.section .activity .mod-indent-outer {
+    padding-left: 0;
+}
+
+.section .label .mod-indent-outer {
+    padding-left: 0;
+}
+
+.dir-rtl .section .activity .mod-indent-outer {
+    padding-right: 0;
+}
+body.editing  .section .activity .mod-indent-outer {
+    display: table;
+    padding-left: 24px;
+}
+
+body.editing  .section .label .mod-indent-outer {
+    padding-left: 24px;
+    display: block;
+}
+
+body.editing  .dir-rtl .section .activity .mod-indent-outer {
+    padding-left: auto;
+    padding-right: 24px;
+}
+
+ul.topics li.section, ul.weeks li.section {
+    /* All course topics. */
+}
+
+ul.topics li#section-0, ul.weeks li#section-0 {
+    /* First course section. */
+}
+
+/* Fix for ordered and unordered list in course topic summary & course weekly summary */
+ul, li ul, 
+.course-content ul.weeks .content .summary ul,
+.course-content ul.topics .content .summary ul {list-style: disc outside none;}
+ol, li ol, 
+.course-content ul.weeks .content .summary ol,
+.course-content ul.topics .content .summary ol {list-style-position: outside;}
+
+/* Remove bullet points next to download report links. */
+ul.export-actions { margin-top: 1em; }
+ul.export-actions li { list-style: none; }
+
+/* START M#20 Vertically align the activity completion checkbox to the top of the activity */
+.section .activity .activityinstance,
+.section .activity .activityinstance div {
+    display: block;
+}
+
+div.activityinstance form.togglecompletion,
+div.activityinstance span.autocompletion {
+    margin: 0 6px;
+}
+/* END M#20 Vertically align the activity completion checkbox to the top of the activity */
+
+.course-content ul.topics li.section .summary,
+.course-content ul.topics li.section .content {
+    margin-left: 0;
+}
+
+li.activity.label,
+.file-picker td.label {
+    padding: 0.2em;
+}
+
+/* Course editing */
+/*  Hide duplicate activity icon as duplication content in a course with
+    completion tracking turned on breaks the course. */
+.editing_duplicate {
+    display: none;
+}
+
+.left.side{display:none}
+.editing .left.side{display:inline}

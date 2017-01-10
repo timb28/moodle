@@ -1,0 +1,35 @@
+/*
+Moodle Bootstrapbase theme overrides
+*/
+/* 
+    Created on : 01/10/2014, 3:50:34 PM
+    Author     : timbutler
+*/
+
+@media (min-width: 980px) {
+
+  body {
+    padding-top: 52px; // Override Bootstrapbase 'padding-top: 60px;'
+    }
+}
+
+.coursebox.collapsed {
+    margin-bottom: 6px; // Override Bootstrapbase 'margin-bottom:0;'
+}
+
+#page-course-index-category .generalbox.info {
+    border: none;
+}
+
+a.disabled:hover,a.disabled {
+	font-style: normal;
+	text-decoration:none;
+	cursor:default;
+}
+
+a.btn-primary.disabled:hover,
+a.btn-primary.disabled,
+a.btn-success.disabled:hover,
+a.btn-success.disabled {
+    color: #FFF;
+}

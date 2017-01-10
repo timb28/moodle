@@ -1,0 +1,193 @@
+/* 
+    Document   : joomla
+    Created on : 17/05/2013, 3:06:15 PM
+    Author     : timbutler
+    Description:
+        Styles for the Joomla HTML used to display the Sales Workshop menus displayed in course descriptions.
+*/
+
+/* Hide the side menus inside the sales workshop categories
+ * - Top level menu:        category-1
+ * - Lead Generation:       category-1 & category-7
+ * - Listing:               category-1 & category-3
+ * - Service for Sellers:   category-1 & category-8
+ * - Working with Buyers:   category-1 & category-9
+ */
+
+body#page-course-category.category-3 #page-content #region-post-box .ignoredrule { 
+  font-size: 100%
+}
+
+body#page-course-category.category-1 #page-content .headermain {
+  display: none;
+}
+
+body#page-course-category.category-1 #page-content #region-post-box {
+    left: 0;
+    padding-top: 0;
+    width: 100%;
+}
+
+body#page-course-category.category-1 #page-content #region-main-box .region-content {
+  padding-top: 0;
+}
+
+body#page-course-category.category-1 .region-content .generalbox {
+  padding-top: 0;
+}
+
+body#page-course-category.category-1 #page-content #region-post {
+    display: none;
+}
+
+body#page-course-category.category-1 #page-content #region-main-wrap {
+  float: none;  
+  right: 0;
+  width: 61%;
+}
+
+#rt-content-top, #rt-content-bottom {
+    overflow: hidden;
+}
+
+#rt-content-bottom {
+  margin-top: 1em;
+}
+
+.rt-grid-1:before, .rt-grid-2:before, .rt-grid-3:before, .rt-grid-4:before, .rt-grid-5:before, .rt-grid-6:before, .rt-grid-7:before, .rt-grid-8:before, .rt-grid-9:before, .rt-grid-10:before, .rt-grid-11:before, .rt-grid-12:before {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+.rt-grid-1:after, .rt-grid-2:after, .rt-grid-3:after, .rt-grid-4:after, .rt-grid-5:after, .rt-grid-6:after, .rt-grid-7:after, .rt-grid-8:after, .rt-grid-9:after, .rt-grid-10:after, .rt-grid-11:after, .rt-grid-12:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+#rt-mainbody-surround .rt-alpha {
+    background-image: none !important;
+}
+#rt-mainbody-surround [class*="rt-grid"] {
+    background-position: 0 0;
+    background-repeat: no-repeat;
+}
+body [class*="rt-grid"] {
+    display: inline;
+    margin: 0;
+    position: relative;
+}
+.rt-grid-4 {
+    width: 400px;
+}
+
+.academy-menu {
+    clear: none;
+    float: left;
+    width: 270px;
+    font-size: 1em;
+}
+.rt-block {
+    margin: 0;
+    padding: 15px;
+    position: relative;
+}
+
+.academy-menu .module-title, .academy-menu .module-content {
+    text-transform: uppercase;
+}
+.academy-menu .module-title {
+    margin-bottom: 0;
+}
+
+.academy-menu .module-title .title {
+    font-size: 1.5em;
+    margin-bottom: 0;
+}
+
+#page-course-category .region-content .generalbox .academy-menu li {margin-left:0;}
+
+.title, .component-content h2 {
+    font-weight: normal;
+    letter-spacing: normal;
+    margin-top: 0;
+    padding-bottom: 10px;
+}
+body h1, body h2, body h3 {
+    color: #383334;
+}
+h1, h2, h3, h4, h5 {
+    line-height: 1.1em;
+}
+
+.academy-menu .module-title, .academy-menu .module-content {
+    text-transform: uppercase;
+}
+
+.academy-menu ul {
+    list-style-type: none;
+    margin-left: 0;
+}
+ul, ol {
+    padding: 0;
+}
+
+.academy-menu ul li {
+    margin-bottom: 1em;
+}
+ul li {
+    padding: 0;
+}
+/*li {
+    line-height: 20px;
+}*/
+
+body #k2Container.itemView .itemImageBlock {
+    float: none;
+    margin: 0 0 16px;
+    padding: 0;
+}
+
+body #k2Container.itemView h2 {
+    font-size: 3.5em;
+    font-weight: normal;
+    line-height: 1em;
+    margin: 0;
+    padding: 0;
+}
+.component-content h1, .component-content h2, .component-content h3 {
+    color: #383334;
+}
+.title, .component-content h2 {
+    letter-spacing: normal;
+}
+
+body #k2Container.itemView .itemImage {
+    margin: 0;
+}
+span.itemImage {
+    display: block;
+    text-align: center;
+}
+
+
+.clr {
+    border: 0 none;
+    clear: both;
+    display: block;
+    float: none;
+    height: 0;
+    line-height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+body #k2Container.itemView .itemImage img {
+    border: 0 none;
+    margin: 0;
+    max-width: 100%;
+    padding: 0;
+    width: 100% !important;
+}
+

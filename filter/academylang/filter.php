@@ -1,0 +1,194 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * @package    filter
+ * @subpackage academylang
+ * @copyright  Harcourts Academy {@link http://www.harcourtsacademy.com}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+defined('MOODLE_INTERNAL') || die();
+
+class filter_academylang extends moodle_text_filter {
+
+    /** @var string[] Country specific dictionaries for localisation.
+     * Use zero-width space (&#8203;) to prevent recursive replacements.
+     */
+    private $dictionaries = array(
+        'US' => array(
+            'market appraisal' => 'comparative market analysis', 'market appraisals' => 'comparative market analyses',
+            'Market Appraisal' => 'Comparative Market Analysis', 'Market Appraisals' => 'Comparative Market Analyses',
+            'an appraisal' => 'a comparative market analysis', 'appraisals' => 'comparative market analyses',
+            'appraisal' => 'comparative market analysis', 'appraisals' => 'comparative market analyses',
+            'auction clearance rate' => 'auction success rate',
+            'benchtop' => 'counter top', 'benchtops' => 'counter tops',
+            'bluebook' => 'blue&#8203;book (Not Used in the USA)',
+            'body corporate' => 'homeowners association',
+            'Campaign Track' => 'Create One',
+            'car boot' => 'trunk',
+            'centre' => 'center', 'centred' => 'centered',
+            'cheque' => 'check', 'cheques' => 'checks',
+            'consultant' => 'agent', 'consultants' => 'agents',
+            'conveyancing' => 'escrow',
+            'defence' => 'defense',
+            'doorknock' => 'going door to door', 'doorknocking' => 'going door to door',
+            'emphasise' => 'emphasize', 'emphasises' => 'emphasizes', 'emphasised' => 'emphasized',
+            'enquiry' => 'inquiry',
+            'fortnightly' => 'bi-weekly',
+            'fulfil' => 'fulfill', 'fulfils' => 'fulfills',
+            'garage sale' => 'yard sale', 'garage sales' => 'yard sales',
+            'high school' => 'secondary school', 'high schools' => 'secondary schools',
+            'kindergarten' => 'preschool',
+            'primary school' => 'elementary school', 'primary schools' => 'elementary schools',
+            'land size' => 'lot size',
+            'letter box dropping' => 'going door to door', 'letterbox drop' => 'door drop',
+            'lucky dip prize' => 'grab bag', 'lucky dip prizes' => 'grab bags',
+            'listing authority' => 'listing agreement', 'listing authorities' => 'listing agreements',
+            'mobile phone' => 'cell phone', 'mobile phones' => 'cell phones',
+            'open home' => 'open house', 'open homes' => 'open houses',
+            'organisation' => 'organization', 'organisations' => 'organizations',
+            'organisational' => 'organizational',
+            'pay rise' => 'pay raise',
+            'petrol' => 'gas',
+            'practise' => 'practice', 'practises' => 'practices', 'practised' => 'practiced',
+            'private seller' => 'for sale by owner (FSBO)', 'private sellers' => 'for sale by owners (FSBOs)',
+            'programme' => 'program', 'programmes' => 'programs',
+            'RPData' => 'Core Logic',
+            'rubbish' => 'garbage',
+            'Sale &amp; Purchase Agreement' => 'Contract of Sale',
+            'Sale and Purchase Agreement' => 'Contract of Sale',
+            'sales consultant' => 'sales agent', 'sales consultants' => 'sales agents',
+            'sausage sizzle' => 'bbq',
+            'sceptical' => 'skeptical',
+            'settlement' => 'closing',
+            'settled' => 'closed',
+            'sqm' => 'sq ft',
+            'solicitor' => 'attorney', 'solicitors' => 'attorneys',
+            'superannuation' => 'social security pension',
+            'thermal control' => 'temperature control',
+            'tick off the list' => 'check off the list',
+            'for rent' => 'to let',
+            'valuer' => 'appraiser', 'valuers' => 'appraisers',
+            'vendor' => 'seller', 'vendors' => 'sellers',
+            'VPA' => 'SPA',
+            'vendor paid advertising' => 'seller paid advertising',
+            'whilst' => 'while',
+            'written authority' => 'written agreement', 'written authorities' => 'written agreements',
+        )
+    );
+
+    /** @var string[] Country specific word segments for localisation.
+     * Use zero-width space (&#8203;) to prevent recursive replacements.
+     */
+    private $segments = array(
+        'US' => array(
+            '(\w+)yse' => '${1}yze', '(\w+)ysed' => '${1}yzed',
+            '(\w{2,30}[dlmnrtv])ise' => '${1}ize',
+            '(\w{2,30}[dlmnrtv])ised' => '${1}ized',
+            '(\w{2,30}[dlmnrtv])ises' => '${1}izes',
+            '(\w{2,30}[dlmnrtv])iser' => '${1}izer',
+            '(\w{2,30}[dlmnrtv])isers' => '${1}izers',
+            '(\w{2,30}[dlmnrtv])ising' => '${1}izing',
+            '(\w{2,30}[dlmnrtv])isation' => '${1}ization',
+            '(\w{2,20}[bimnl]|\w+av)our(\w*)' => '${1}or${2}',
+        )
+    );
+
+    /** @var string[] Country specific phrases to skip
+     */
+    private $skip = array(
+        'US' => array(
+            'advertise', 'advertises', 'advertised', 'advertising', 'advertiser',
+            'expertise',
+            'premise', 'premises',
+            'promise', 'promised', 'promises', 'promising',
+        )
+    );
+
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+        /* Capitalise the first letter of the words in the dictionary. */
+        foreach ($this->dictionaries as $country => $words) {
+            foreach ($words as $local => $translation) {
+                if (ctype_lower($local[0])) {
+                    $this->dictionaries[$country][ucfirst($local)] = ucfirst($translation);
+                }
+            }
+        }
+
+        /* Capitalise the starting letter of all words in the dictionary. */
+        foreach ($this->dictionaries as $country => $words) {
+            foreach ($words as $local => $translation) {
+                if (ctype_lower($local[0])) {
+                    $this->dictionaries[$country][ucwords($local)] = ucwords($translation);
+                }
+            }
+        }
+
+        /* Capitalise the starting letter of all skipped phrases. */
+        foreach ($this->skip as $country => $words) {
+            foreach ($words as $word) {
+                if (ctype_lower($word[0])) {
+                    $this->skip[$country][] = ucwords($word);
+                }
+            }
+        }
+    }
+
+    /**
+     * Filters the text to localise the content using the dictionary.
+     *
+     * @param string $text some HTML content.
+     * @param array $options options passed to the filters
+     * @return string the HTML content after the filtering has been applied.
+     */
+    public function filter($text, array $options = array()) {
+        global $USER;
+
+        if (!isloggedin() or isguestuser() or !is_string($text) or empty($text)) {
+            // Non-string data can not be filtered anyway.
+            return $text;
+        }
+
+        if (!isset($USER->country) or !isset($this->dictionaries[$USER->country])) {
+            return $text;
+        }
+
+        foreach ($this->dictionaries[$USER->country] as $search => $replace) {
+            $text = preg_replace("/\b(" . $search . ")\b/", $replace,  $text);
+        }
+
+        if (!isset($this->segments[$USER->country])) {
+            return $text;
+        }
+
+        foreach ($this->segments[$USER->country] as $search => $replace) {
+            $text = preg_replace_callback("/\b" . $search . "\b/",
+                function($match) use ($search, $replace, $USER) {
+                    if (array_search($match[0], $this->skip[$USER->country]) === false) {
+                        return preg_replace("/\b" . $search . "\b/", $replace,  $match[0]);
+                    } else {
+                        return($match[0]);
+                    }
+                },  $text);
+        }
+
+        return $text;
+    }
+}

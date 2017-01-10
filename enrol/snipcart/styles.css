@@ -1,0 +1,27 @@
+/**
+ * Snipcart enrolment plugin styles
+ *
+ * @package   enrol_snipcart
+ * @author    Tim Butler
+ * @copyright (c) 2015 Harcourts International Limited {@link http://www.harcourtsacademy.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+#page-enrol-index .course-summary img {
+    float: left;
+    margin: 0 1rem 1rem 0;
+    border: 1px solid #ECEEF0;
+}
+
+#page-enrol-index .payment-required {
+    clear: both;
+}
+
+#snipcart-main-container button.snipcart-btn:hover {
+    background-position: 0 -45px;
+}
+
+/* Don't hide snipcart actions when loaded via javascript */
+.category.with_children .snipcart-actions.faded {
+    opacity: 1;
+}

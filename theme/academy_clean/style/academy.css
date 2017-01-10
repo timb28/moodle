@@ -1,0 +1,908 @@
+/********************************************************
+**
+** Theme name: Academy
+** Creation Date: 22/03/11
+** Author: Harcourts International Pty Ltd
+** Author URI: http://www.academyrealestatetraining.com
+**
+*********************************************************/
+
+a:link {
+  transition: color .1s ease-out;
+  text-decoration: none;
+}
+
+a.logo {
+    background: url([[pix:theme|logo]]) no-repeat 0 0 / 128px 42px;
+    display: block;
+    float: left;
+    height: 42px;
+    margin: 0;
+    padding: 0;
+    width: 158px;
+}
+
+body {
+    background: top left repeat fixed #002b49;
+    margin: 0;
+}
+
+body.pagelayout-embedded {
+    background: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+body.pagelayout-embedded div#page {
+    background: #fff;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+}
+
+th, td, a img { border-width: 0; }
+th, td { padding: 0.5em; }
+p, fieldset, table, pre { margin-bottom: 1em; }
+
+div#page {
+  padding: 20px 20px 0 20px ;
+  background-color: white;
+}
+@media (max-width: 980px) {
+    div#page {
+        padding: .5em .5em 0 .5em;
+    }
+    div[role="main"] {
+        margin-bottom: 0.5em;
+    }
+}
+
+.block {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #ebeef0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border: none;
+    padding: 8px 0;
+}
+@media (max-width: 980px) {
+    .block {
+        margin-bottom: 0.5em;
+    }
+}
+
+/* Maintenance warning */
+.errorbox.maintenancewarning {
+    background-color: red;
+    color: white;
+    width: 60%;
+    margin: 0 auto;
+    padding: .5em;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Page header */
+header.navbar,
+header.custom_wide_menu,
+header.page_heading {
+    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url([[pix:theme|online_learning]]);
+    background-color: #002b49;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% auto;
+    color: white;
+}
+header.page_heading {
+    margin: 0 auto;
+    padding: 0 0.5em;
+}
+header.page_heading h1 {
+    color: white;
+}
+@media (min-width: 980px) {
+    header.page_heading {
+        padding: 0 20px;
+    }
+    header.page_heading h1 {
+        margin-top: 0;
+    }
+    section#region-main h2:first-of-type {
+        margin-top: 0;
+        line-height: 1em;
+    }
+}
+
+/* Nav Bar */
+.navbar {
+  margin-bottom: 0;
+  
+}
+header.custom_wide_menu .navbar,
+header.page_heading .page-heading-inner {
+    max-width: 1680px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.navbar-fixed-top {
+    z-index: 100; // display behind the snipcart pop-up
+}
+.navbar-inverse .navbar-inner,
+.navbar-inner {
+  border: none;
+  background: inherit;
+}
+.navbar-fixed-top .navbar-inner,
+.navbar-static-top .navbar-inner {
+  box-shadow: none;
+}
+.navbar.navbar-inverse .nav-collapse.in {
+    border: 0;
+}
+.navbar.navbar-inverse .nav-collapse.in .nav > li > a:hover {
+    background: none;
+    color: #00adef;
+}
+.navbar .nav>li>a, .custom_wide_menu li a {
+  display: block;
+  width: auto;
+  margin: 0;
+  outline: 0;
+  padding: 5px 5px 5px 5px;
+  text-shadow: none;
+  font-weight: 100;
+}
+.custom_wide_menu .navbar .nav>li>a:link,
+.custom_wide_menu .navbar .nav>li>a:visited,
+.custom_wide_menu .navbar .nav>li>a:focus {
+  color: #ffffff;
+}
+.custom_wide_menu .navbar .nav>li>a:hover {
+    color: #00adef;
+}
+
+header.custom_wide_menu {
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.custom_wide_menu li:first-child,
+.custom_wide_menu li:first-child a {
+  margin-left: 0;
+  padding-left: 0;
+}
+.custom_wide_menu li {
+  padding: 2px 5px;
+  margin: 3px 0;
+  background: none;
+}
+.custom_wide_menu li:hover {
+  /*background-color: #ebeef0;*/
+}
+
+/* Usermenu */
+.jsenabled .navbar-inverse .usermenu .moodle-actionmenu.show {
+  background-color: transparent;
+}
+.navbar-inverse .usermenu .moodle-actionmenu:hover .usertext {
+    color: #fff;
+}
+.usermenu .moodle-actionmenu .toggle-display:hover .usertext {
+    text-decoration: underline;
+}
+
+/* Breadcrumbs */
+.breadcrumb {
+  background: none;
+  border-radius: 0;
+  margin: 0;
+  padding: 0 0 1em 0;
+}
+@media (max-width: 980px) {
+   .breadcrumb {
+       padding: 0 0 0.5em 0;
+   }
+}
+.breadcrumb > li {
+    text-shadow: none;
+    font-weight: 100;
+}
+.breadcrumb > li > .divider {
+    font-weight: bold;
+}
+.breadcrumb-button,
+.breadcrumb-button .singlebutton div {
+  margin: 0;
+}
+
+/* Main Content */
+#page.container-fluid {
+    max-width: 100%;
+}
+#page-content {
+    max-width: 1680px;
+    margin: 0 auto;
+}
+.pagelayout-report #page-content #region-main {
+    overflow-x: auto;
+}
+
+/* AV Gallery (Moodle Database)
+---------------------------*/
+.path-mod-data-view .media-library-single-template {
+    text-align: left;
+}
+
+/* AV Gallery (HTML Block)
+---------------------------*/
+#page-center .block {
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+#page-center .block.block_html .content .no-overflow {
+    min-width: 100%; /* Firefox fix for overflow: auto issue. */
+}
+.av-gallery ul {
+    float: left;
+    width: 30%;
+    min-width: 170px;
+    margin: 0;
+    padding: 0;
+}
+.av-gallery ul li {
+    margin: 0 .5em .5em 0;
+    list-style: none;
+}
+.av-gallery ul li h2 {
+    font-size: 1.2em;
+    padding: 0;
+    margin: 0;
+}
+.av-gallery ul li img {
+    display: block;
+    border: 1px solid #000;
+}
+.av-gallery ul li a:hover img {
+    display: block;
+    border: 1px solid #002e63;
+}
+
+/* dock left
+---------------------------*/
+#dock.dock.dock_left_vertical {  /* background style for dockpanel */
+    background: #000;
+    border: none;
+}
+
+.dockedtitle, .dockedtitle .activeitem { /* styles for docked item background */
+    background: #fff;
+    color: #333;
+    border-right:  1px dashed #656565;
+    border-left:  1px dashed #656565;
+}
+
+/*-- Lesson --
+ * Must account for class differences between viewing content and editing content
+ */
+.path-mod-lesson .menu .menuwrapper {
+    max-height: 900px; /*-- Overwrite default max-height of 500px --*/
+}
+
+.path-mod-lesson .box.contents img.left, .path-mod-lesson .box.edit_pages_box tbody img.left {
+    float: left;
+    margin: 0 15px 15px 0;
+}
+
+.path-mod-lesson .box.contents img.right, .path-mod-lesson .box.edit_pages_box tbody img.right {
+    float: right;
+    margin: 0 0 15px 15px;
+}
+
+/* Fix appearance of long multiple choice options. */
+#page-mod-lesson-view .mform .fitem_fselect .fitemtitle {
+    width:55%;
+    padding: 5px 12px 5px 0;
+    text-align:right;
+    float:left;
+}
+
+.path-mod-lesson .correctanswer {
+    margin: 1em auto;
+    width: 100%;
+    padding: 10px;
+}
+
+.path-mod-lesson .correctanswer .box.response { margin-top: 1em; font-weight: bold; }
+.path-mod-lesson .correctanswer .box.response.correct{ color: #99CC66; }
+.path-mod-lesson .correctanswer .box.response.incorrect{ color: #CC6666; }
+
+.path-mod-lesson .answeroption { padding: 3px 0; }
+.path-mod-lesson .answeroption .felement { padding: 5px; }
+.path-mod-lesson .answeroption:hover {
+    background-color: white;
+    background-color: rgba(0%,18%,38%,0.1);
+}
+.path-mod-lesson .answeroption input { cursor: pointer; }
+.path-mod-lesson .answeroption label { cursor: pointer; }
+
+#page-mod-lesson-view .branchbuttoncontainer.horizontal { padding: 2em 0; }
+
+#page-mod-lesson-view .fheader { display: none; }
+
+/* Footer
+---------------------------*/
+#page-footer {     /* settings for footer container */
+    position:relative;
+    width: 100%;
+    padding: 5px 0;
+    color: #999;
+    border-top: none;
+}
+
+#page-footer a:link {color: #eee; }
+#page-footer a:visited {color: #ccc;}
+#page-footer a:hover {color: #fff; }
+#page-footer a:active {color:#fff; }
+
+.helplink {
+    padding-top: 5px;
+}
+
+#footer-wrapper {
+    margin: auto;
+    width: 960px;
+    padding-left: 0 20px; /* Aligns content on iPad. */
+}
+
+#footnote {
+    margin: 20px 0px;
+    padding: 0px 5px;
+    text-align: right;
+}
+
+.pagelayout-redirect {background-position:0 0;border-top:1px solid #853650;}
+.pagelayout-redirect #content {margin-top:150px;}
+
+/* Bottom content area
+-----------------------*/
+#page-bottom {
+    margin: 20px auto 0;
+    padding: 0 20px; /* Aligns content on iPad. */
+    width: 950px;
+    overflow: hidden;
+}
+
+#page-bottom .block-region {
+    width: 200%;
+    background: url([[pix:theme|bottom-background]]) repeat-y;
+}
+
+#page-bottom .block {
+    width: 303px;
+    margin: 0;
+    margin-right: 19px;
+    float: left;
+}
+
+#page-bottom .block .header h2 {
+    padding: 6px 0 0 12px;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+#page-bottom .block .content {
+    padding: 6px;
+}
+
+/*
+Grader Report
+-----------------------*/
+#graded_users_selector {
+    float: none;
+}
+.user-grade {
+    font-size: 100%;
+}
+.user-grade thead, .user-grade thead th.header {
+    border-bottom: 1px solid #ddd;
+}
+.user-grade td.oddd1 {
+    background-color: #def
+}
+.user-grade, .user-grade td.item {
+    border: 1px solid #ddd;
+}
+.user-grade td.b1l, .user-grade td.b2l {
+    border-left: 1px solid #ddd;
+}
+.user-grade td.b1b, .user-grade td.b2b {
+    border-bottom: 1px solid #ddd;
+}
+.user-grade td.b1t, .user-grade td.b2t {
+    border-top: none;
+}
+.user-grade td.baggt {
+    border-top: 1px solid #ddd;
+}
+
+/* Admin Settings */
+#page-admin-index .generalbox { margin-bottom: 1em; }
+.path-admin .form-label .form-overridden {
+    font-size: 75%;
+    color: orange;
+}
+
+/* Front page */
+.coursebox>.info>.name {
+    width: 95%;
+}
+
+.coursebox .content .summary, .coursebox .content .coursecat {
+    float: none;
+    width: 100%;
+    text-align: left;
+}
+
+.coursebox {
+    border: 1px solid #ddd;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+.big-button-wrapper {
+    display: block;
+    float: left;
+    padding: 10px;
+}
+
+.big-button-wrapper a {
+    display: block;
+    width: 200px;
+    height: 132px;
+    overflow: hidden;
+    border: 1px solid #7e7e7e;
+}
+
+.big-button-wrapper a:link,
+.big-button-wrapper a:visited,
+.big-button-wrapper a:hover,
+.big-button-wrapper a:active {
+    color: #fff;
+    text-decoration: none;
+}
+
+.big-button-wrapper a:hover {
+    border-color: #00adef;
+}
+
+.big-button-wrapper a#australia {
+    background: url([[pix:theme|big-button-australia]]) no-repeat;
+}
+
+.big-button-wrapper a#new-zealand {
+    background: url([[pix:theme|big-button-new-zealand]]) no-repeat;
+}
+
+.big-button-wrapper a#residential-sales {
+    background: url([[pix:theme|big-button-residential-sales]]) no-repeat;
+}
+
+.big-button-wrapper a#residential-sales-registration-qld {
+    background: url([[pix:theme|big-button-residential-sales-registration-qld]]) no-repeat;
+}
+
+.big-button-wrapper a img {
+    vertical-align: text-bottom;
+}
+
+.big-button-text-overlay {
+    display: block;
+    /* Fallback for web browsers that doesn't support RGBa */
+    background: #7F7F7F;
+    /* RGBa with 0.5 opacity */
+    background: rgba(0, 0, 0, 0.5);
+    /* For IE 5.5 - 7*/
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#77000000, endColorstr=#77000000);
+    /* For IE 8*/
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#77000000, endColorstr=#77000000)";
+    padding-left: 3px;
+    position: relative;
+    height: 17%;
+    top: -18%;
+    width: 198px;
+}
+
+.big-button-wrapper a:hover .big-button-text-overlay {
+    /* Fallback for web browsers that doesn't support RGBa */
+    background: rgb(0, 173, 239);
+    /* RGBa with 0.5 opacity */
+    background: rgba(0, 173, 239, 0.5);
+    /* For IE 5.5 - 7*/
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7700adef, endColorstr=#7700adef);
+    /* For IE 8*/
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#7700adef, endColorstr=#7700adef)";
+}
+
+/* Course Activities.
+-------------------------------------*/
+.section li.activity.resource {
+     margin-bottom: 10px;
+}
+.availabilityinfo {
+    display: none; /* Hide activity restriction information unless editing */
+}
+.editing .availabilityinfo {
+    display: block;
+}
+
+/* Display SCORM content full width */
+body#page-mod-scorm-player #block-region-side-pre {
+    display: none;
+}
+body#page-mod-scorm-player #region-main {
+    width: 100%;
+}
+
+.que .info {
+    background: none;
+    float: left;
+    margin-bottom: 1.8em;
+    padding: 0.5em;
+    width: 6em;
+}
+
+.que .formulation {
+    background: none;
+    border-left: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Hide the button that open the SCORM navigation panel */
+body#page-mod-scorm-player div#scormpage div.yui-layout-clip-left {
+    display: none !important;
+}
+
+/* Widen the area where the SCORM content appears */
+body#page-mod-scorm-player div#scormpage div.yui-layout-unit.yui-layout-unit-center.yui-layout-scroll {
+    left: 0 !important;
+    width: 930px !important;
+}
+body#page-mod-scorm-player div#scorm_content object {
+    width: 930px !important;
+}
+
+/* Hide the border and background around the SCORM content */
+body#page-mod-scorm-player div#scorm_content iframe {
+    border-width: 0;
+}
+body#page-mod-scorm-player div#scormpage div.generalbox {
+    border: 0;
+}
+body#page-mod-scorm-player div#scormpage div.yui-layout {
+    background: 0;
+}
+body#page-mod-scorm-player div#scormpage div.yui-layout-bd.yui-layout-bd-nohd.yui-layout-bd-noft {
+    border: 0 !important;
+    background: 0 !important;
+    width: 930px !important;
+}
+
+/* Display exit activity botton in the bottom right */
+div.standardbutton#scormexitbutton {
+    float: right;
+    position: relative;
+    top: -60px;
+}
+
+/* Add extra margin around end of Lesson buttons */
+.standardbutton.lessonbutton {
+    margin: 1rem 2rem 1rem 0;
+}
+
+/**
+ * Academy Resource Library CSS
+ */
+.block_academy_library .content .no-overflow {
+     min-width: 100%; /* Firefox fix for overflow: auto issue. */
+}
+ul.resourcelibrary-links {
+    margin: 0;
+    width: 100%;
+}
+li.resourcelibrary-links {
+    float: left;
+    list-style: none;
+    width: 20%;
+    min-width: 80px;
+    text-align: center;
+    text-transform: uppercase;
+}
+li.resourcelibrary-links a {
+    display: block;
+    width: 80px;
+    padding-top: 60px;
+    background-position: 15px 0;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+li.resourcelibrary-manuals a { background-image: url([[pix:theme|icon-manuals]]); }
+li.resourcelibrary-forms   a { background-image: url([[pix:theme|icon-forms]]); }
+li.resourcelibrary-letters a { background-image: url([[pix:theme|icon-letters]]); }
+li.resourcelibrary-scripts a { background-image: url([[pix:theme|icon-scripts]]); }
+li.resourcelibrary-other   a { background-image: url([[pix:theme|icon-other]]); }
+
+/**
+ * Academy overridden CSS
+ */
+
+#chooseqtype .qtypename { width: auto; }
+
+#page-mod-quiz-edit .questionbankwindow.block div.header {
+    background-color: transparent;
+}
+#page-mod-quiz-edit .questionbankwindow.block div.header div.title h2 {
+    color: #000;
+    text-align: center;
+}
+#page-mod-quiz-edit .questionbankwindow a#showbankcmd,
+#page-mod-quiz-edit .questionbankwindow a#hidebankcmd {
+    color: inherit;
+    text-decoration: inherit;
+}
+#page-mod-quiz-edit .questionbankwindow a#showbankcmd:hover,
+#page-mod-quiz-edit .questionbankwindow a#hidebankcmd:hover {
+    color: inherit;
+    text-decoration: underline;
+    background: transparent;
+}
+
+.branchbuttoncontainer.horizontal {
+     clear: both;
+}
+
+#page-mod-lesson-continue .region-content input[type=submit], #page-mod-lesson-view .region-content input[type=submit] {
+    padding: 5px 10px;
+}
+
+.menuwrapper li.selected {
+    font-weight: bold;
+}
+
+.no-overflow {
+    overflow: auto;
+    padding-bottom: 1px;
+}
+
+/**
+ * Search
+ */
+
+.search-results li {
+    margin: 0.8em 0;
+    list-style: none;
+}
+
+.search-results li img {
+    display: none;
+}
+
+/**
+ * Course Completion
+ */
+table#completion-progress td.completion-progresscell { text-align: center; }
+#page-blocks-completionstatus-details #page-content table.generalbox b { padding-right: 1em; }
+
+/**
+ * Academy added CSS
+ */
+
+div.ha-information {
+    background: url([[pix:theme|ha-icon-information]]) top left no-repeat;
+    min-height: 64px;
+    clear: both;
+}
+
+div.ha-legislation {
+    background: url([[pix:theme|ha-icon-legislation]]) top left no-repeat;
+    min-height: 64px;
+    clear: both;
+}
+
+div.ha-link {
+    background: url([[pix:theme|ha-icon-link]]) top left no-repeat;
+    min-height: 64px;
+    clear: both;
+}
+
+div.ha-related {
+    background: url([[pix:theme|ha-icon-related]]) top left no-repeat;
+    min-height: 64px;
+    clear: both;
+}
+
+div.ha-box {
+    padding: 6px;
+    margin-left: 80px;
+    margin-bottom: 20px;
+    list-style: none;
+    border: 1px solid #002e63;
+    color: #002e63;
+}
+
+div.ha-box p {
+    margin: 0; /*-- Remove the extra space around paragraphs inside boxes --*/
+}
+
+table.ha-table {
+    border-collapse: collapse;
+}
+
+/*-- Center content in tables with class="ha-table ha-table-text-centered" --*/
+table.ha-table.ha-text-centered td {
+    text-align: center;
+}
+
+/*-- Highlight hover row in tables with class="ha-table ha-table-highlight-row" --*/
+table.ha-table.ha-table-highlight-row tr:hover td {
+    background-color: #eee;
+}
+
+table.ha-table.ha-table-all-borders td {
+    border: 1px solid #999;
+}
+
+table.ha-table .col-highlight {
+    background-color: #ccc;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+}
+
+table.ha-table thead {
+    width: 100%;
+    background-color: #002e63;
+    color: white;
+}
+
+table.ha-table td {
+    border-top: 1px solid #eee;
+}
+
+
+table.ha-table tr:first-child td {
+    border-top: 0;
+}
+
+table.ha-table tr td:first-child {
+    text-align: left;
+}
+
+/* All modules */
+#intro.generalbox {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Game Module */
+td.crosswordarea {
+    background-color: black;
+    color: white;
+    border: none;
+}
+
+/* Book module */
+.mod_book .book_toc_numbered ul ul {
+    margin-left: 10px;
+    font-size: 90%;
+}
+
+.mod_book .book_toc_numbered ul {
+    margin: 0;
+}
+
+.mod_book .book_toc_numbered {
+    font-size: 1em;
+}
+
+.mod_book .book_toc_bullets {
+    font-size: 1em;
+}
+
+.mod_book .book_toc_bullets ul ul {
+    font-size: 90%;
+}
+
+.mod_book .book_toc_bullets li li {
+    list-style: disc;
+}
+
+/** Tiny MCE **/
+.fitem .feditor textarea {
+  width: 522px;
+}
+
+/** Enrolment page **/
+body#page-enrol-index div.box.generalbox.info {
+    display: none;
+}
+
+
+/* AV Gallery (Moodle Database)
+---------------------------*/
+.guest.course-15.path-mod-data .groupselector,
+.guest.course-45.path-mod-data .groupselector {
+    display: none;
+}
+
+.guest.course-15.path-mod-data h2.main,
+.guest.course-45.path-mod-data h2.main {
+    display: none;
+}
+
+.guest.course-15.path-mod-data .nav-tabs,
+.guest.course-45.path-mod-data .nav-tabs {
+    display: none;
+}
+
+.guest.course-15.path-mod-data .paging,
+.guest.course-45.path-mod-data .paging {
+    display: none;
+}
+
+/* Add space between course icons and course buttons */
+#page-course-index-category .info .btn {
+    margin-left: 0.5rem;
+}
+
+/* For guests, hide items on the course category page
+ * so that only the main content appears. */
+.guest.pagelayout-coursecategory .categorypicker {
+    display: none;
+}
+
+.guest.pagelayout-coursecategory .course_category_tree {
+    display:none;
+}
+
+.guest.pagelayout-coursecategory form#coursesearchnavbar {
+    display:none;
+}
+.guest.pagelayout-coursecategory #block-region-side-pre {
+    display:none;
+}
+.guest.pagelayout-coursecategory #region-main {
+    width: 100%;
+}
+
+/* Country login */
+#page-login-country_login .loginsub {
+    text-align: center;
+}
+
+#page-login-country_login .big-button-wrapper {
+    display: inline-block;
+    float: none;
+}
+
+.loginpanel .error {
+    color: inherit;
+}
+
+/* Animations */
+.faded {
+    opacity: 0.25;
+}
+.faded.fadein {
+    opacity: 100;
+    transition-duration: 200ms, 0ms;
+    transition-property: opacity, visibility;
+    transition-delay: 0ms;
+}

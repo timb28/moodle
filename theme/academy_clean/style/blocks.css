@@ -1,0 +1,18 @@
+/*
+ * @package    theme_academy_clean
+ * @copyright  2015 Harcourts International Limited
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+#region-main .block_course_overview {
+    background: none;
+}
+
+#region-main .block_course_overview .content {
+    padding: 0;
+    margin: 0;
+}
+
+#region-main .block_course_overview .header h2 {
+    padding: 0;
+}
