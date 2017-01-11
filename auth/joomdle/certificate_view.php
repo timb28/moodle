@@ -25,7 +25,7 @@
 
 
 require_once('../../config.php');
-require_once('../../mod/certificate/lib.php');
+require_once('../../mod/certificate/locallib.php');
 include '../../lib/pdflib.php';
 include '../../auth/joomdle/auth.php';
 
@@ -61,7 +61,7 @@ require_capability('mod/certificate:view', $context);
 
 
 // log update
-add_to_log($course->id, 'certificate', 'view', "view.php?id=$cm->id", $certificate->id, $cm->id);
+//add_to_log($course->id, 'certificate', 'view', "view.php?id=$cm->id", $certificate->id, $cm->id);
 $completion=new completion_info($course);
 $completion->set_module_viewed($cm);
 

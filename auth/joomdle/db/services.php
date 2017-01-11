@@ -884,6 +884,62 @@ $functions = array(
         'description' => 'Get not editing teachers for several courses',
         'type'        => 'read',
     ),
+    'joomdle_get_course_progress' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'get_course_progress',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Get course progress',
+        'type'        => 'read',
+    ),
+    'joomdle_my_courses_progress' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'my_courses_progress',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Get courses progress',
+        'type'        => 'read',
+    ),
+    'joomdle_set_course_visible' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'set_course_visible',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Change course visibility',
+        'type'        => 'read',
+    ),
+    'joomdle_my_completed_courses' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'my_completed_courses',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Get user completed courses',
+        'type'        => 'read',
+    ),
+    'joomdle_users_completed_courses' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'users_completed_courses',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Get users completed courses',
+        'type'        => 'read',
+    ),
+    'joomdle_remove_parent_role' => array(        
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'remove_parent_role', 
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Remove parent role', 
+        'type'        => 'read',                 
+    ),
+    'joomdle_get_completed_course_users' => array(        
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'get_completed_course_users', 
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Get list of users that completed a course', 
+        'type'        => 'read',                 
+    ),
+    'joomdle_change_username' => array(        
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'change_username', 
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Change username', 
+        'type'        => 'read',                 
+    ),
 
 );
 

@@ -1,10 +1,10 @@
 <?php 
 
 $string['pluginname'] = 'Joomdle';
-$string['pluginame_desc'] = 'Este método usa los servicios web Joomdle para saber si un usuario tiene cuenta en Joomla.Version 1.0.5';
+$string['pluginame_desc'] = 'Este método usa los servicios web Joomdle para saber si un usuario tiene cuenta en Joomla.Version 1.0.8';
 
 $string['auth_joomdletitle'] = 'Joomdle';
-$string['auth_joomdledescription'] = 'Este método utiliza servicios web para saber si un usuario tiene una sesión válida en Joomla.\nVersion 1.0.5';
+$string['auth_joomdledescription'] = 'Este método utiliza servicios web para saber si un usuario tiene una sesión válida en Joomla.\nVersion 1.0.7';
 $string['joomla_sp_name'] = 'Joomdle';
 $string['joomla_sp_description'] = 'Servicios para la integración con Joomla<br>';
 $string['auth_joomla_url'] = 'URL de Joomla<br>';

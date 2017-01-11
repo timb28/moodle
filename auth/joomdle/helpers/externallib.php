@@ -49,9 +49,6 @@ class joomdle_helpers_external extends external_api {
 		$auth = new  auth_plugin_joomdle ();
 		$id = $auth->user_id ($username);
 
-        /* START Academy Patch M#028 joomdle_user_id web service function should return null when a student doesn't exist */
-        $id = ($id === 0 ? null : $id);
-        /* END Academy Patch M#028 */
         return $id;
     }
 
@@ -1333,7 +1330,7 @@ class joomdle_helpers_external extends external_api {
         return new external_function_parameters(
                         array(
                             'username' => new external_value(PARAM_TEXT, 'username'),
-							'courses' =>  new external_multiple_structure(
+						'courses' =>  new external_multiple_structure(
 											new external_single_structure(
 												array(
 													'id' => new external_value(PARAM_INT, 'course id'),
@@ -1591,9 +1588,9 @@ class joomdle_helpers_external extends external_api {
                 array(
                     'joomdle_auth' => new external_value(PARAM_INT, 'joomdle plugin enabled'),
                     'mnet_auth' => new external_value(PARAM_INT, 'mnet plugin enabled'),
- //                   'enablewebservices' => new external_value(PARAM_INT, 'webservices enabled'),
                     'joomdle_configured' => new external_value(PARAM_INT, 'joomdle configured'),
                     'test_data' => new external_value(PARAM_RAW, 'test data', VALUE_OPTIONAL),
+                    'release' => new external_value(PARAM_TEXT, 'Joomdle release'),
                 )
 		);
     }
@@ -2057,6 +2054,7 @@ class joomdle_helpers_external extends external_api {
         return new external_function_parameters(
                         array(
                             'id' => new external_value(PARAM_INT, 'course id'),
+                            'active' => new external_value(PARAM_INT, 'active'),
                         )
         );
     }
@@ -2068,19 +2066,20 @@ class joomdle_helpers_external extends external_api {
                         'firstname' => new external_value(PARAM_TEXT, 'firstname'),
                         'lastname' => new external_value(PARAM_TEXT, 'lastname'),
                         'username' => new external_value(PARAM_TEXT, 'username'),
+                        'email' => new external_value(PARAM_TEXT, 'email'),
 						'id' => new external_value(PARAM_INT, 'user id'),
                     )
                 )
             );
     }
 
-    public static function get_course_students($id) {
+    public static function get_course_students($id, $active) {
         global $CFG, $DB;
 
-        $params = self::validate_parameters(self::get_course_students_parameters(), array('id'=>$id));
+        $params = self::validate_parameters(self::get_course_students_parameters(), array('id'=>$id, 'active' => $active));
 
         $auth = new  auth_plugin_joomdle ();
-        $return = $auth->get_course_students ($id);
+        $return = $auth->get_course_students ($id, "", $active);
 
 
         return $return;
@@ -2209,12 +2208,8 @@ class joomdle_helpers_external extends external_api {
 
         $params = self::validate_parameters(self::suspend_enrolment_parameters(), array('username'=>$username, 'id' => $id));
 
-        /* START Academy Patch M#23 Prevent Harcourts One from suspending student enrolments until tracker HO-117895 is fixed */
-//        $auth = new  auth_plugin_joomdle ();
-//        $id = $auth->suspend_enrolment ($username, $id);
-        error_log('Ignored H1 suspending student: '.$username);
-        $id = null;
-        /* END Academy Patch M#23 Prevent Harcourts One from suspending student enrolments until tracker HO-117895 is fixed */
+        $auth = new  auth_plugin_joomdle ();
+        $id = $auth->suspend_enrolment ($username, $id);
 
         return $id;
     }
@@ -4420,6 +4415,285 @@ class joomdle_helpers_external extends external_api {
 
         return $return;
     }
+
+    /* get_course_progress */
+    public static function get_course_progress_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'id' => new external_value(PARAM_INT, 'id'),
+                            'username' => new external_value(PARAM_TEXT, 'username'),
+                        )
+        );
+    }
+
+    public static function get_course_progress_returns() {
+         return new external_multiple_structure(
+                new external_single_structure(
+                    array(
+						'id' => new external_value(PARAM_INT, 'id'),
+                        'name' => new external_value(PARAM_TEXT, 'name'),
+                        'type' => new external_value(PARAM_TEXT, 'type'),
+                        'link' => new external_value(PARAM_RAW, 'link'),
+                        'attempted' => new external_value(PARAM_TEXT, 'attempted'),
+                        'available' => new external_value(PARAM_INT, 'available'),
+                    )
+                )
+            );
+    }
+
+    public static function get_course_progress($id, $username) {
+        global $CFG, $DB;
+
+        $params = self::validate_parameters(self::get_course_progress_parameters(), array('id'=>$id, 'username'=>$username));
+
+        $auth = new  auth_plugin_joomdle ();
+        $return = $auth->get_course_progress ($id, $username);
+
+
+        return $return;
+    }
+
+    /* my_courses_progress */
+    public static function my_courses_progress_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'username' => new external_value(PARAM_TEXT, 'username'),
+                        )
+        );
+    }
+
+    public static function my_courses_progress_returns() {
+		 return new external_multiple_structure(
+            new external_single_structure(
+                array(
+                    'id' => new external_value(PARAM_INT, 'group record id'),
+                    'fullname' => new external_value(PARAM_TEXT, 'course name'),
+                    'summary' => new external_value(PARAM_RAW, 'summary'),
+                    'category' => new external_value(PARAM_INT, 'course category id'),
+                    'cat_name' => new external_value(PARAM_TEXT, 'course category name'),
+                    'can_unenrol' => new external_value(PARAM_INT, 'user can self unenrol'),
+					'summary_files' => new external_multiple_structure(
+								new external_single_structure(
+									array(
+										'url' => new external_value(PARAM_TEXT, 'item url'),
+									)
+								)
+							),
+					'progress' => new external_multiple_structure(
+						new external_single_structure(
+							array(
+								'id' => new external_value(PARAM_INT, 'id'),
+								'name' => new external_value(PARAM_TEXT, 'name'),
+								'type' => new external_value(PARAM_TEXT, 'type'),
+								'link' => new external_value(PARAM_RAW, 'link'),
+								'attempted' => new external_value(PARAM_TEXT, 'attempted'),
+								'available' => new external_value(PARAM_INT, 'available'),
+							)
+						)
+					)
+                )
+            )
+        );
+    }
+
+    public static function my_courses_progress($username) {
+        global $CFG, $DB;
+
+        $params = self::validate_parameters(self::my_courses_progress_parameters(), array('username'=>$username));
+
+        $auth = new  auth_plugin_joomdle ();
+        $return = $auth->my_courses_progress ($username);
+
+
+        return $return;
+    }
+
+    /* set_course_visible */
+    public static function set_course_visible_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'course_id' => new external_value(PARAM_INT, 'course_id'),
+                            'active' => new external_value(PARAM_INT, 'active'),
+                        )
+        );
+    }
+
+    public static function set_course_visible_returns() {
+        return new  external_value(PARAM_INT, 'course id');
+    }
+
+    public static function set_course_visible($course_id, $active) {
+        global $CFG, $DB;
+
+        $params = self::validate_parameters(self::set_course_visible_parameters(), array('course_id'=>$course_id, 'active'=>$active));
+
+        $auth = new  auth_plugin_joomdle ();
+        $return = $auth->set_course_visible ($course_id, $active);
+
+
+        return $return;
+    }
+
+   /* my_completed_courses */
+    public static function my_completed_courses_parameters() {
+        return new external_function_parameters(
+                        array(
+							'username' => new external_value(PARAM_TEXT, 'username'),
+                        )
+        );
+    }
+
+    public static function my_completed_courses_returns() {
+		 return new external_multiple_structure(
+            new external_single_structure(
+				array(
+					'remoteid' => new external_value(PARAM_INT, 'course id'),
+					'timecompleted' => new external_value(PARAM_INT, 'time completed'),
+					'fullname' => new external_value(PARAM_TEXT, 'course name'),
+				)
+            )
+        );
+    }
+	
+    public static function my_completed_courses ($username) { 
+        global $CFG, $DB;
+ 
+        $params = self::validate_parameters(self::my_completed_courses_parameters(), array('username'=>$username));
+ 
+        $auth = new  auth_plugin_joomdle ();
+        $courses = $auth->my_completed_courses ($username);
+
+        return $courses;
+    }
+
+   /* users_completed_courses */
+    public static function users_completed_courses_parameters() {
+        return new external_function_parameters(
+                        array(
+							'users' =>  new external_multiple_structure(
+											new external_single_structure(
+												array(
+													'username' => new external_value(PARAM_TEXT, 'username'),
+												)
+											)
+										)
+                        )
+        );
+    }
+
+    public static function users_completed_courses_returns() {
+		 return new external_multiple_structure(
+            new external_single_structure(
+                array(
+                    'username' => new external_value(PARAM_TEXT, 'username'),
+					'courses' =>  new external_multiple_structure(
+									new external_single_structure(
+										array(
+											'remoteid' => new external_value(PARAM_INT, 'course id'),
+											'timecompleted' => new external_value(PARAM_INT, 'time completed'),
+											'fullname' => new external_value(PARAM_TEXT, 'course name'),
+										)
+									)
+								)
+                )
+            )
+        );
+    }
+    public static function users_completed_courses ($users) { 
+        global $CFG, $DB;
+ 
+        $params = self::validate_parameters(self::users_completed_courses_parameters(), array('users'=>$users));
+ 
+        $auth = new  auth_plugin_joomdle ();
+        $id = $auth->users_completed_courses ($users);
+
+        return $id;
+    }
+
+	/* remove_parent_role */
+    public static function remove_parent_role_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'child' => new external_value(PARAM_TEXT, 'child username'),
+                            'parent' => new external_value(PARAM_TEXT, ' parent username'),
+                        )
+        );
+    }
+
+    public static function remove_parent_role_returns() {
+        return new  external_value(PARAM_TEXT, 'role added');
+    }
+
+    public static function remove_parent_role($child, $parent) { 
+        global $CFG, $DB;
+ 
+        $params = self::validate_parameters(self::remove_parent_role_parameters(), array('child'=>$child, 'parent' => $parent));
+ 
+		$auth = new  auth_plugin_joomdle ();
+		$id = $auth->remove_parent_role ($child, $parent);
+
+        return $id;
+    }
+
+    /* get_completed_course_users */
+    public static function get_completed_course_users_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'id' => new external_value(PARAM_INT, 'course id'),
+                        )
+        );
+    }
+
+    public static function get_completed_course_users_returns() {
+         return new external_multiple_structure(
+                new external_single_structure(
+                    array(
+                        'firstname' => new external_value(PARAM_TEXT, 'firstname'),
+                        'lastname' => new external_value(PARAM_TEXT, 'lastname'),
+                        'username' => new external_value(PARAM_TEXT, 'username'),
+                        'email' => new external_value(PARAM_TEXT, 'email'),
+                        'timecompleted' => new external_value(PARAM_INT, 'time completed'),
+                    )
+                )
+            );
+    }
+
+    public static function get_completed_course_users($id) {
+        global $CFG, $DB;
+
+        $params = self::validate_parameters(self::get_completed_course_users_parameters(), array('id'=>$id));
+
+        $auth = new  auth_plugin_joomdle ();
+        $return = $auth->get_completed_course_users ($id);
+
+        return $return;
+    }
+
+   /* change_username */
+    public static function change_username_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'old_username' => new external_value(PARAM_TEXT, 'old username'),
+                            'new_username' => new external_value(PARAM_TEXT, 'new username')
+                        )
+        );
+    }
+
+    public static function change_username_returns() {
+        return new  external_value(PARAM_BOOL, 'username changed');
+    }
+    public static function change_username ($old_username, $new_username) { 
+        global $CFG, $DB;
+ 
+        $params = self::validate_parameters(self::change_username_parameters(), array('old_username'=>$old_username,
+					'new_username' => $new_username));
+ 
+        $auth = new  auth_plugin_joomdle ();
+        $id = $auth->change_username ($old_username, $new_username);
+
+        return $id;
+    }
+
 
 }
 ?>

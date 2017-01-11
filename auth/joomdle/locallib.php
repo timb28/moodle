@@ -43,6 +43,10 @@ class auth_joomdle_handler {
 
 		$user = $event->get_record_snapshot('user', $event->objectid);
 
+		// Added so that we don't try to sync incomplete users
+		if (!$user->email)
+			return true;
+
         if ($user->auth != 'joomdle')
             return true;
 
@@ -58,12 +62,12 @@ class auth_joomdle_handler {
 
         /* Create user in Joomla */
         $userinfo['username'] = $user->username;
+//        $userinfo['password'] = $password_clear;
+//        $userinfo['password2'] = $password_clear;
 		/*
-        $userinfo['password'] = $password_clear;
-        $userinfo['password2'] = $password_clear;
-		*/
         $userinfo['password'] = $user->password;
         $userinfo['password2'] = $user->password;
+		*/
 
         $userinfo['name'] = $user->firstname. " " . $user->lastname;
         $userinfo['email'] = $user->email;
@@ -487,6 +491,7 @@ class auth_joomdle_handler {
                 $auth_joomdle->call_method ('removeSocialGroupMember', $user->username, $courseid);
 
 			$roleid = $event->objectid;
+			$type = '';
             if ($auto_mailing_lists)
             {
                 if ($roleid == 3)

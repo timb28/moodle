@@ -57,7 +57,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
     /**
      * Constructor.
      */
-    function auth_plugin_joomdle() {
+	public function __construct() {
         $this->authtype = 'joomdle';
 		$this->config = get_config('auth/joomdle');
     }
@@ -195,9 +195,6 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 
 		$user = get_complete_user_data('id', $user->id);
 		return update_internal_user_password($user, $password);
-
-//		return true;
-	//	return $return;
 	}
 
     /**
@@ -367,6 +364,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 		)));
 		$response = file_get_contents($joomla_xmlrpc_url, false, $context);
 
+		$response = trim ($response);
 		$data = xmlrpc_decode($response);
 
 		if (is_array ($data))
@@ -426,6 +424,128 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 		$response = curl_exec( $ch ); # run!
 		curl_close($ch);
 
+		$response = trim ($response);
+		$data = xmlrpc_decode($response);
+
+		if (is_array ($response))
+			if (xmlrpc_is_fault ($response))
+			{
+				return  "XML-RPC Error (".$response['faultCode']."): ".$response['faultString'];
+			}
+
+		return $data;
+
+	}
+
+    function call_method_debug ($method, $params = '', $params2 = '', $params3 = '' , $params4 = '', $params5 = '')
+    {
+		$connection_method = get_config('auth/joomdle', 'connection_method');
+
+		if ($connection_method == 'fgc')
+			$response = $this->call_method_fgc_debug ($method, $params, $params2, $params3, $params4, $params5);
+		else
+			$response = $this->call_method_curl_debug ($method, $params, $params2, $params3, $params4, $params5);
+
+		return $response;
+    }
+
+    function call_method_fgc_debug ($method, $params = '', $params2 = '', $params3 = '' , $params4 = '', $params5 = '')
+    {
+		global $CFG;
+
+		$joomla_xmlrpc_url = $this->_get_xmlrpc_url ();
+
+		$options = array ();
+
+		if ($params == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array (), $options);
+		else if ($params2 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params), $options);
+		else if ($params3 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2), $options);
+		else if ($params4 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3), $options);
+		else if ($params5 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3, $params4), $options);
+		else
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3, $params4, $params5), $options);
+
+		$context = stream_context_create(array('http' => array(
+			'method' => "POST",
+			'header' => "Content-Type: text/xml ",
+			'content' => $request
+		)));
+		$response = file_get_contents($joomla_xmlrpc_url, false, $context);
+
+		// Save raw reply to file
+		$tmp_file = $CFG->dataroot.'/temp/'.'joomdle_system_check.xml';
+		file_put_contents ($tmp_file, $response);
+
+		$response = trim ($response);
+		$data = xmlrpc_decode($response);
+
+		if (is_array ($data))
+			if (xmlrpc_is_fault ($data))
+			{
+				return  "XML-RPC Error (".$data['faultCode']."): ".$data['faultString'];
+			}
+
+		return $data;
+    }
+
+    function call_method_curl_debug ($method, $params = '', $params2 = '', $params3 = '' , $params4 = '', $params5 = '')
+    {
+		global $CFG;
+
+		$joomla_xmlrpc_url = $this->_get_xmlrpc_url ();
+
+
+		$options = array ();
+
+		if ($params == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array (), $options);
+		else if ($params2 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params), $options);
+		else if ($params3 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2), $options);
+		else if ($params4 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3), $options);
+		else if ($params5 == '')
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3, $params4), $options);
+		else
+			$request = xmlrpc_encode_request("joomdle.".$method, array ($params, $params2, $params3, $params4, $params5), $options);
+
+		$headers = array();
+		array_push($headers,"Content-Type: text/xml");
+		array_push($headers,"Content-Length: ".strlen($request));
+		array_push($headers,"\r\n");
+
+		$ch = curl_init();
+		curl_setopt( $ch, CURLOPT_URL, $joomla_xmlrpc_url); # URL to post to
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 ); # return into a variable
+		curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers ); # custom headers, see above
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, $request );
+		curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' ); # This POST is special, and uses its specified Content-type
+
+		 // use proxy if one is configured
+		if (!empty($CFG->proxyhost)) {
+			if (empty($CFG->proxyport)) {
+				curl_setopt($ch, CURLOPT_PROXY, $CFG->proxyhost);
+			} else {
+
+				curl_setopt($ch, CURLOPT_PROXY, $CFG->proxyhost.':'.$CFG->proxyport);
+			}
+			curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, false);
+		}
+
+		$response = curl_exec( $ch ); # run!
+		curl_close($ch);
+
+		// Save raw reply to file
+		$tmp_file = $CFG->dataroot.'/temp/'.'joomdle_system_check.xml';
+		file_put_contents ($tmp_file, $response);
+
+		$response = trim ($response);
 		$data = xmlrpc_decode($response);
 
 		if (is_array ($response))
@@ -501,7 +621,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 		else
 		{
 			$system['joomdle_configured'] = 1;
-			$data = $this->call_method ("test");
+			$data = $this->call_method_debug ("test");
 			if (is_array ($data))
 			{
 				//j1.5 devuelve un error xmlrpc con esta info
@@ -511,6 +631,12 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 				$system['test_data'] = $data;
 
 		}
+
+		// Joomdle version
+		$pluginman = core_plugin_manager::instance();
+		$pluginfo = $pluginman->get_plugin_info('auth_joomdle');
+		$system['release'] = $pluginfo->release;
+
 		return $system;
     }
 
@@ -1333,6 +1459,27 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 	{
 		global $CFG, $DB;
 
+		// Prepare reply for "not found" course
+		$not_found = array ();
+		$not_found['remoteid'] = 0;
+		$not_found['cat_id'] = 0;
+		$not_found['cat_name'] = "";
+		$not_found['cat_description'] = "";
+		$not_found['sortorder'] = "";
+		$not_found['fullname'] = "";
+		$not_found['shortname'] = "";
+		$not_found['idnumber'] = "";
+		$not_found['summary'] = "";
+		$not_found['startdate'] = 0;
+		$not_found['numsections'] = 0;
+		$not_found['lang'] = "";
+		$not_found['self_enrolment'] = 0;
+		$not_found['enroled'] = 0;
+		$not_found['in_enrol_date'] = false;
+		$not_found['guest'] = 0;
+		$not_found['summary_files'] = array ();
+
+
 		$username = utf8_decode ($username);
 		$username = strtolower ($username);
 
@@ -1361,6 +1508,9 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 
 		$params = array ($id);
 		$record =  $DB->get_record_sql($query, $params);
+
+		if (!$record)
+			return $not_found;
 
 		$options['noclean'] = true;
 
@@ -2434,6 +2584,9 @@ class auth_plugin_joomdle extends auth_plugin_manual {
                     ";
             $cat_item = $DB->get_record_sql($query);
 
+			if (!$cat_item)
+				continue; //XXX
+
             $query = "SELECT g.finalgrade,g.rawgrademax
               FROM {$CFG->prefix}grade_grades g
              WHERE g.itemid = ?
@@ -2599,19 +2752,26 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 		return count($alumnos);
     }
 
-    function get_course_students($id, $search = '') 
-	{
-		global $CFG;
 
-		$context = context_course::instance($id);
-		/* 5 indica estudiantes (table mdl_role) */
-		$alumnos = get_role_users(5 , $context);
+    function get_course_students($id, $search = '', $active = 0)
+    {
+        global $CFG, $DB;
 
-		$students = array ();
+        $context = context_course::instance($id);
+        /* 5 indica estudiantes (table mdl_role) */
+        $alumnos = get_role_users(5 , $context);
 
-		foreach ($alumnos as $alumno)
-		{
-			if ($search)
+        $conditions = array ('courseid' => $id, 'enrol' => 'manual');
+        $enrol = $DB->get_record('enrol', $conditions);
+
+        if (!$enrol)
+            return array ();
+
+        $students = array ();
+
+        foreach ($alumnos as $alumno)
+        {
+            if ($search)
             {
                 if ( (stripos ($alumno->username, $search) === false)
                         && ( stripos ($alumno->firstname, $search) === false)
@@ -2622,15 +2782,56 @@ class auth_plugin_joomdle extends auth_plugin_manual {
             }
 
 
-			$a['username'] = $alumno->username;
-			$a['firstname'] = $alumno->firstname;
-			$a['lastname'] = $alumno->lastname;
-			$a['id'] = $alumno->id;
+            $include = true;
+            $username = $alumno->username;
+            switch ($active)
+            {
+                case 0:
+                    // Skip non active enrolments
+                    $conditions = array ('username' => $username);
+                    $user = $DB->get_record('user', $conditions);
 
-			$students[] = $a;
-		}
+                    if (!$user)
+                        continue;
 
-		return ($students);
+                    $conditions = array ('enrolid' => $enrol->id, 'userid' => $user->id);
+                    $ue = $DB->get_record('user_enrolments', $conditions);
+                    if ($ue->status)
+                        $include = false;
+                    break;
+                case 1:
+                    // Skip active enrolments
+                    $conditions = array ('username' => $username);
+                    $user = $DB->get_record('user', $conditions);
+
+                    if (!$user)
+                        continue;
+
+                    $conditions = array ('enrolid' => $enrol->id, 'userid' => $user->id);
+                    $ue = $DB->get_record('user_enrolments', $conditions);
+                    if (!$ue->status)
+                        $include = false;
+                    break;
+
+                case 2:
+                    // Return all users
+                    break;
+            }
+
+            if (!$include)
+                continue;
+
+
+            $a['firstname'] = $alumno->firstname;
+            $a['lastname'] = $alumno->lastname;
+            $a['username'] = $alumno->username;
+            $a['email'] = $alumno->email;
+            $a['id'] = $alumno->id;
+
+            $students[] = $a;
+        }
+
+        return ($students);
     }
 
 
@@ -3074,7 +3275,6 @@ function user_exists ($username)
 	return 0;
 }
 
-/*
 function get_userinfo($username) {
 	global $CFG, $DB;
 
@@ -3086,7 +3286,6 @@ function get_userinfo($username) {
 
 	return $juser_info;
 }
-*/
 
 
 function create_joomdle_user_additional ($username, $app)
@@ -3104,7 +3303,7 @@ function create_joomdle_user_additional ($username, $app)
 
 // Copy of create_user_record() in moodle/lib/moodlelib.php that removes password sync
 // This used only when creating new accounts from Joomla
-function create_joomdle_user_record($username, $password, $auth = 'joomdle') {
+function create_joomdle_user_record($username, $password, $auth = 'joomdle', &$userinfo) {
     global $CFG, $DB;
     require_once($CFG->dirroot.'/user/profile/lib.php');
     require_once($CFG->dirroot.'/user/lib.php');
@@ -3166,13 +3365,19 @@ function create_joomdle_user_record($username, $password, $auth = 'joomdle') {
     // Trigger event.
     \core\event\user_created::create_from_userid($newuser->id)->trigger();
 
+	/*
+	$event = \core\event\user_created::create(array('context' => context_system::instance(), 'objectid' => $newuser->id, 
+				'relateduserid' => $newuser->id));
+	$event->trigger();
+*/
+
     return $newuser;
 }
 
 
 /**
 * Creates a new Joomdle user
-* XXX Also used to update user profile if the user already exists
+* Also used to update user profile if the user already exists
 * 
 * @param string $username Joomla username
 */
@@ -3182,14 +3387,107 @@ function create_joomdle_user ($username, $app = '')
 
 	$username = utf8_decode ($username);
 	$username = strtolower ($username);
-	/* Creamos el nuevo usuario de Moodle si no está creado */
+	// Crete new user if not exists
 	$conditions = array ('username' => $username);
 	$user = $DB->get_record('user',$conditions);
 	if (!$user)
-		$user = $this->create_joomdle_user_record($username, "", "joomdle");
+	{
+		$newinfo = array ();
+		$user = $this->create_joomdle_user_record($username, "", "joomdle", $userinfo);
+//		$newinfo = $this->get_userinfo($username); 
 
+		// Set first access as now
+		$conditions = array ('id' => $user->id);
+		$DB->set_field('user', 'firstaccess', time (), $conditions);
+	}
+	else
+	{
+        $needsupdate = false;
+
+        $updateuser = new stdClass();
+        $updateuser->id = $user->id;
+
+		// Update user info
+		if ($newinfo = $this->get_userinfo($username)) {
+            $newinfo = truncate_userinfo($newinfo);
+
+			$updatekeys = array_keys($newinfo);
+
+            foreach ($updatekeys as $key) {
+                if (isset($newinfo[$key])) {
+                    $value = $newinfo[$key];
+                } else {
+                    $value = '';
+                }
+
+				if (isset($user->{$key}) and $user->{$key} != $value) { // Only update if it's changed.
+					$needsupdate = true;
+					$updateuser->$key = $value;
+				}
+            }
+        }
+        if ($needsupdate) {
+            require_once($CFG->dirroot . '/user/lib.php');
+            user_update_user($updateuser);
+        }
+	}
+
+	/* Get user pic */
+	if ((array_key_exists ('pic_url', $newinfo)) && ($newinfo['pic_url']))
+	{
+		if ($newinfo['pic_url'] != 'none')
+		{
+			$joomla_url = get_config ('auth/joomdle', 'joomla_url');
+			if (strncmp ($newinfo['pic_url'], 'http', 4) != 0)
+				$pic_url = $joomla_url.'/'.$newinfo['pic_url'];  // Only add joomla_url if it is not a full URL already
+			else $pic_url = $newinfo['pic_url'];
+
+			$pic = $this->get_file ($pic_url);
+			if ($pic)
+			{
+				$tmp_file = $CFG->dataroot.'/temp/'.'tmp_pic';
+				file_put_contents ($tmp_file, $pic);
+
+				$user = get_complete_user_data('username', $username); // We need this to get user id
+				$context = context_user::instance($user->id);
+				process_new_icon($context, 'user', 'icon', 0, $tmp_file);
+
+				$conditions = array ('id' => $user->id);
+				$DB->set_field('user', 'picture', 1, $conditions);
+			}
+		}
+	}
+
+	/* Custom fields */
+    if ($fields = $DB->get_records('user_info_field')) {
+		foreach ($fields as $field)
+		{
+			if ((array_key_exists ('cf_'.$field->id, $newinfo)) && ($newinfo['cf_'.$field->id]))
+			{
+				$data = new stdClass();
+				$data->fieldid = $field->id;
+				$data->data = $newinfo['cf_'.$field->id];
+				$data->userid = $user->id;
+				/* update custom field */
+				 if ($dataid = $DB->get_field('user_info_data', 'id', array('userid'=>$user->id, 'fieldid'=>$data->fieldid)))
+				 {
+						$data->id = $dataid;
+						$DB->update_record('user_info_data', $data);
+				} else {
+						$DB->insert_record('user_info_data', $data);
+				}
+
+			}
+		}
+	}
+
+	return 1;
+
+/* 
+XXX TO BE REMOVED XXX
 	// Get user info from Joomla
 	$juser_info = $this->call_method ("getUserInfo", $username, $app);
+
 
 	if (array_key_exists ('email', $juser_info))
 		$email = $juser_info['email'];
@@ -3268,7 +3566,7 @@ function create_joomdle_user ($username, $app = '')
 	//XXX Maybe this can be optimized for a single DB call...$bool = update_record('user', addslashes_recursive($localuser)); en ment/aut.php
 	if (!xmlrpc_is_fault($juser_info)) {
 
-		/* Actualizamos la informacion del usuario recien creado con los datos de Joomla */
+		// Actualizamos la informacion del usuario recien creado con los datos de Joomla
 		$conditions = array ('id' => $user->id);
 		if ($firstname)
 			$DB->set_field('user', 'firstname', $firstname, $conditions);
@@ -3277,9 +3575,9 @@ function create_joomdle_user ($username, $app = '')
 		if ($email)
 			$DB->set_field('user', 'email', $email, $conditions);
 
-		/* Set first access as now */
+		// Set first access as now
 		$DB->set_field('user', 'firstaccess', time (), $conditions);
-		/* Optional data in Joomla, only fill if has a value */
+		// Optional data in Joomla, only fill if has a value
 		if ($city)
 			$DB->set_field('user', 'city', ($city), $conditions);
 		if ($country)
@@ -3325,7 +3623,7 @@ function create_joomdle_user ($username, $app = '')
 			$DB->set_field('user', 'alternatename', $alternatename, $conditions);
 	}
 
-	/* Get user pic */
+	// Get user pic 
 	if ((array_key_exists ('pic_url', $juser_info)) && ($juser_info['pic_url']))
 	{
 		if ($juser_info['pic_url'] != 'none')
@@ -3354,7 +3652,7 @@ function create_joomdle_user ($username, $app = '')
 	}
 
 
-	/* Custom fields */
+	// Custom fields 
     if ($fields = $DB->get_records('user_info_field')) {
 		foreach ($fields as $field)
 		{
@@ -3364,7 +3662,7 @@ function create_joomdle_user ($username, $app = '')
 				$data->fieldid = $field->id;
 				$data->data = $juser_info['cf_'.$field->id];
 				$data->userid = $user->id;
-				/* update custom field */
+				// update custom field 
 				 if ($dataid = $DB->get_field('user_info_data', 'id', array('userid'=>$user->id, 'fieldid'=>$data->fieldid)))
 				 {
 						$data->id = $dataid;
@@ -3378,6 +3676,8 @@ function create_joomdle_user ($username, $app = '')
 	}
 
 	return 1;
+XXX TO BE REMOVED XXX
+*/
 }
 
 function create_moodle_only_user ($user_data)
@@ -3420,9 +3720,12 @@ function create_moodle_only_user ($user_data)
     if ($email)
         $DB->set_field('user', 'email', $email, $conditions);
     if ($city)
-        $DB->set_field('user', 'city', ($city), $conditions);
+        $DB->set_field('user', 'city', utf8_encode ($city), $conditions);
 	if ($country)
 		$DB->set_field('user', 'country', $country, $conditions);
+
+	// Set  maildisplay to 0 (dont show email to anyone)
+	$DB->set_field('user', 'maildisplay', 0, $conditions);
 
     update_internal_user_password($user, $password);
 
@@ -4259,6 +4562,7 @@ function get_moodle_users ($limitstart, $limit, $order, $order_dir, $search )
 
 	if ($limit)
 		$limit_c = " LIMIT $limitstart, $limit";
+	else $limit_c = "";
 
 	// kludge for ordering by name
 	if ($order == 'name')
@@ -4502,9 +4806,7 @@ function user_id ($username)
 
 	$username = utf8_decode ($username);
 	$username = strtolower ($username);
-	/* START Academy Patch M#048 Ignore MNet users in Joomdle webservice function */
-    $conditions = array("username" => $username, "mnethostid" => 1);
-    /* END Academy Patch M#048 */
+	$conditions = array("username" => $username);
 	$user = $DB->get_record("user", $conditions);
 
 	if (!$user)
@@ -4838,7 +5140,33 @@ function migrate_to_joomdle ($username)
 
 		$context = context_user::instance($child_user->id);
 		
-		role_assign($parent_role_id, $parent_user->id, $context->id ); //, $timestart, 0, $hidden);
+		role_assign($parent_role_id, $parent_user->id, $context->id );
+
+		return true;
+	}
+
+	function remove_parent_role ($child, $parent)
+	{
+		$child = utf8_decode ($child);
+		$child = strtolower ($child);
+		$parent = utf8_decode ($parent);
+		$parent = strtolower ($parent);
+
+		$parent_user = get_complete_user_data ('username', $parent);
+		if (!$parent_user)
+            return false;
+
+		$child_user = get_complete_user_data ('username', $child);
+        if (!$child_user)
+            return false;
+
+		$parent_role_id = get_config('auth/joomdle', 'parent_role_id');
+		if (!$parent_role_id)
+            return false;
+
+		$context = context_user::instance($child_user->id);
+		
+		role_unassign($parent_role_id, $parent_user->id, $context->id );
 
 		return true;
 	}
@@ -5245,9 +5573,7 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 		if (!$enrol)
 			return;
 
-        /* START Academy Patch M#048 Ignore MNet users in Joomdle webservice function */
-        $conditions = array("username" => $username, "mnethostid" => 1);
-        /* END Academy Patch M#048 */
+        $conditions = array ('username' => $username);
         $user = $DB->get_record('user', $conditions);
 
 		if (!$user)
@@ -5722,6 +6048,9 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 			case "simple":
 				return $this->my_certificates_simple ($username);
 				break;
+			case "custom":
+				return $this->my_certificates_custom ($username);
+				break;
 		}
 	}
 
@@ -5733,8 +6062,11 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
         $username = strtolower ($username);
 
         $user = get_complete_user_data ('username', $username);
-        $user_id = $user->id;
 
+		if (!$user)
+			return array ();
+
+        $user_id = $user->id;
 
         $cursos = enrol_get_users_courses ($user->id, true);
 
@@ -5812,6 +6144,54 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 
         return $c;
     }
+
+	function my_certificates_custom ($username)
+    {
+        global $CFG, $DB;
+
+        $username = utf8_decode ($username);
+        $username = strtolower ($username);
+
+        $user = get_complete_user_data ('username', $username);
+
+        if (!$user)
+            return array ();
+
+        $user_id = $user->id;
+
+        $cursos = enrol_get_users_courses ($user->id, true);
+
+        if (!count ($cursos))
+            return array ();
+
+        $c_ids = array ();
+        foreach ($cursos as $curso)
+        {
+            $c_ids[] = $curso->id;
+        }
+        $ids_str = implode (',', $c_ids);
+
+        $certs = $DB->get_records_sql("SELECT  c.name, c.id, ci.timecreated as certdate
+                FROM {$CFG->prefix}customcert c
+                LEFT JOIN {$CFG->prefix}customcert_issues ci ON c.id = ci.customcertid
+                WHERE ci.userid = $user_id
+                AND c.course  in ($ids_str)
+                ORDER BY ci.timecreated DESC");
+
+        $c = array ();
+        foreach ($certs as $cert)
+        {
+            $coursemodule = get_coursemodule_from_instance ("customcert", $cert->id);
+            $certificate['id'] =  $coursemodule->id;
+            $certificate['name']  = $cert->name;
+            $certificate['date']  = $cert->certdate;
+
+            $c[] = $certificate;
+        }
+
+        return $c;
+    }
+
 
 	function get_page ($id)
 	{   
@@ -6183,7 +6563,8 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
         $course->summary  = utf8_decode ( $course_ext['summary'] );
         $course->lang     = utf8_decode ( $course_ext['course_lang'] );
         $course->startdate     =   $course_ext['startdate'] ;
-        $course->category     =   $course_ext['category'] ;
+		if ($course_ext['category']) // Don't touch category if it is not set
+			$course->category     =   $course_ext['category'] ;
         if ($course_ext['idnumber']) // Don't touch idnumber if not set, in case it is used by an external application
 			$course->idnumber  = $course_ext['idnumber'];
 
@@ -6209,9 +6590,16 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
             return;
 
         $ua = core_useragent::get_user_agent_string ();
-        $r = $this->call_method ("logout", $USER->username, $ua);
-
+        $r_old = $this->call_method ("logout", $USER->username, $ua);
+		$r = 'joomla_remember_me_' . $r_old;
+	
         // Delete user key from table in Joomla if we had a remember me cookie
+      //  if ((!array_key_exists ($r, $_COOKIE))  && ($_COOKIE[$r]))
+        if (!array_key_exists ($r, $_COOKIE))
+		{
+			// Try with pre-3.6 cookie if not found
+			$r = $r_old;
+		}
         if ((array_key_exists ($r, $_COOKIE))  && ($_COOKIE[$r]))
         {
             $cookieValue = $_COOKIE[$r];
@@ -6386,6 +6774,17 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 		set_section_visible($course_id, $section, $active);
     }
 
+    function set_course_visible ($course_id, $active)
+    {
+        global $CFG, $DB;
+
+        $course = new object();
+        $course->id     =   $course_id;
+        $course->visible     =   $active;
+
+        $DB->update_record('course', $course);
+    }
+
     function create_events ($events)
     {
         global $CFG, $DB, $USER;
@@ -6457,6 +6856,218 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
         return $cs;
     }
 
+	function get_course_progress ($id, $username)
+	{
+		global $CFG, $DB;
+
+		require_once($CFG->dirroot.'/blocks/progress/lib.php');
+
+		$username = utf8_decode ($username);
+		$username = strtolower ($username);
+
+		if ($username)
+				$user = get_complete_user_data ('username', $username);
+
+		$modules = block_progress_modules_in_use($id);
+
+		$context = context_course::instance($id);
+
+
+		$blockinfo = new stdClass;
+		$instance = new stdClass;
+
+		$conditions = array ('blockname' => 'progress', 'parentcontextid' => $context->id);
+		$instance = $DB->get_record('block_instances', $conditions);
+
+		if (!$instance)
+			return array ();
+
+		$block_progress = block_instance('progress', $instance);
+
+		$events = block_progress_event_information($block_progress->config, $modules, $id, $user->id);
+		$context = block_progress_get_course_context($id);
+		$conditions = array ('id' => $id);
+		$course = $DB->get_record ('course', $conditions);
+		$events = block_progress_filter_visibility($events, $user->id, $context, $course);
+
+
+		$numevents = count($events);
+		// Determine links to activities.
+		for ($i = 0; $i < $numevents; $i++) {
+			$events[$i]['link'] = $CFG->wwwroot.'/mod/'.$events[$i]['type'].'/view.php?id='.$events[$i]['cm']->id;
+		}
+
+		$attempts = block_progress_attempts($modules,
+											$block_progress->config,
+											$events,
+											$user->id,
+											$id);
+
+		$counter = 1;
+		$i = 0;
+		$now = time();
+		$simple = false;
+		foreach ($events as $event) {
+			$attempted = $attempts[$event['type'].$event['id']];
+			$action = isset($block_progress->config->{'action_'.$event['type'].$event['id']}) ?
+					  $block_progress->config->{'action_'.$event['type'].$event['id']} :
+					  $modules[$event['type']]['defaultAction'];
+
+			if ($attempted === 'submitted') {
+				$events[$i]['attempted'] = 'submitted';
+
+			} else if ($attempted === true) {
+				$events[$i]['attempted'] = 'attempted';
+
+			} else if (((!isset($block_progress->config->orderby) || $block_progress->config->orderby == 'orderbytime') && $event['expected'] < $now) ||
+					 ($attempted === 'failed')) {
+				$events[$i]['attempted'] = 'failed';
+
+			} else {
+				$events[$i]['attempted'] = 'not_attempted';
+			}
+
+			if (!empty($event['cm']->available) || $simple) {
+				$events[$i]['available'] = true;
+			} else {
+				$events[$i]['available'] = true;
+			}
+
+			$i++;
+		}
+
+		$es = array ();
+		foreach ($events as $event)
+		{
+			$e = array ();
+			$e['name'] = $event['name'];
+			$e['type'] = $event['type'];
+			$e['id'] = $event['id'];
+			$e['link'] = $event['link'];
+			$e['attempted'] = $event['attempted'];
+			$e['available'] = $event['available'];
+
+			$es[] = $e;
+		}
+
+		return $es;
+	}
+
+	function my_courses_progress ($username)
+	{
+		$courses = $this->my_courses ($username);
+
+		$c = array ();
+		foreach ($courses as $course)
+		{
+			$course['progress'] = $this->get_course_progress ($course['id'], $username);
+
+			$c[] = $course;
+		}
+
+		return $c;
+	}
+
+
+	function my_completed_courses ($username)
+	{
+			global $CFG, $DB;
+			$user = get_complete_user_data ('username', $username);
+
+			$query =
+				"SELECT
+				course as remoteid, timecompleted, fullname
+				FROM
+				{$CFG->prefix}course_completions cc
+				LEFT JOIN {$CFG->prefix}course c ON c.id = cc.course 
+				WHERE
+				userid = ?
+				and timecompleted is not NULL
+				";
+
+			$params = array ($user->id);
+			$records =  $DB->get_records_sql($query, $params);
+
+			$courses = array ();
+			foreach ($records as $record)
+			{
+				$r = array ();
+				$r['remoteid'] = $record->remoteid;
+				$r['timecompleted'] = $record->timecompleted;
+				$r['fullname'] = $record->fullname;
+
+				$courses[] = $r;
+			}
+
+			return $courses;
+	}
+
+	function users_completed_courses ($users)
+	{
+		$data = array ();
+		foreach ($users as $user)
+		{
+			$user['courses'] = $this->my_completed_courses ($user['username']);
+
+			$data[] = $user;
+		}
+
+		return $data;
+	}
+
+    function get_completed_course_users ($id)
+    {
+        global $CFG, $DB;
+
+        $query =
+            "SELECT
+            userid, timecompleted, username, email, firstname, lastname
+            FROM
+            {$CFG->prefix}course_completions cc
+            LEFT JOIN {$CFG->prefix}user u ON u.id = cc.userid 
+            WHERE
+            cc.course = ?
+            and timecompleted is not NULL
+            ";
+
+        $params = array ($id);
+        $records =  $DB->get_records_sql($query, $params);
+
+        $users = array ();
+        foreach ($records as $record)
+        {
+            $r = array ();
+            $r['firstname'] = $record->firstname;
+            $r['lastname'] = $record->lastname;
+            $r['username'] = $record->username;
+            $r['email'] = $record->email;
+            $r['timecompleted'] = $record->timecompleted;
+
+            $users[] = $r;
+        }
+
+        return $users;
+    }
+
+	function change_username ($old_username, $new_username)
+	{
+		global $CFG;
+
+		require_once $CFG->dirroot.'/user/lib.php';
+
+		$user = get_complete_user_data ('username', $old_username);
+
+		if (!$user)
+			return false;
+
+		$new_user = new stdClass();
+		$new_user->id = $user->id;
+		$new_user->username = $new_username;
+
+		user_update_user ($new_user);
+
+		return true;
+	}
 
 	/* Logs the user in both Joomla and Moodle once auth is passed */
 	function user_authenticated_hook (&$user, $username, $password)
