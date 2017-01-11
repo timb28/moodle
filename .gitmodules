@@ -1,79 +1,79 @@
 [submodule "course/format/flexsections"]
-    path = course/format/flexsections
-    url = https://github.com/HarcourtsAcademy/moodle-format_flexsections.git
-    branch = HA-Moodle30
+	path = course/format/flexsections
+	url = https://github.com/HarcourtsAcademy/moodle-format_flexsections.git
+	branch = HA-Moodle30
 [submodule "lib/editor/atto/plugins/fullscreen"]
-    path = lib/editor/atto/plugins/fullscreen
-    url = https://github.com/dthies/moodle-atto_fullscreen.git
+	path = lib/editor/atto/plugins/fullscreen
+	url = https://github.com/dthies/moodle-atto_fullscreen.git
 [submodule "lib/editor/atto/plugins/htmlplus"]
-    path = lib/editor/atto/plugins/htmlplus
-    url = https://github.com/andrewnicols/moodle-atto_htmlplus.git
+	path = lib/editor/atto/plugins/htmlplus
+	url = https://github.com/andrewnicols/moodle-atto_htmlplus.git
 [submodule "lib/editor/atto/plugins/styles"]
-    path = lib/editor/atto/plugins/styles
-    url = https://github.com/moodleuulm/moodle-atto_styles.git
+	path = lib/editor/atto/plugins/styles
+	url = https://github.com/moodleuulm/moodle-atto_styles.git
 [submodule "auth/lenauth"]
-    path = auth/lenauth
-    url = https://github.com/HarcourtsAcademy/moodle-auth_lenauth.git
-    branch = HA-Moodle30
+	path = auth/lenauth
+	url = https://github.com/HarcourtsAcademy/moodle-auth_lenauth.git
+	branch = HA-Moodle30
 [submodule "blocks/configurable_reports"]
-    path = blocks/configurable_reports
-    url = https://github.com/HarcourtsAcademy/moodle-block_configurablereports.git
-    branch = HA-Moodle30
+	path = blocks/configurable_reports
+	url = https://github.com/HarcourtsAcademy/moodle-block_configurablereports.git
+	branch = HA-Moodle30
 [submodule "blocks/fn_marking"]
-    path = blocks/fn_marking
-    url = https://github.com/fernandooliveira/moodle-block_marking_manager.git
+	path = blocks/fn_marking
+	url = https://github.com/fernandooliveira/moodle-block_marking_manager.git
 [submodule "blocks/forum_aggregator"]
-    path = blocks/forum_aggregator
-    url = https://github.com/HarcourtsAcademy/moodle-block_forum_aggregator.git
-    branch = HA-Moodle30
+	path = blocks/forum_aggregator
+	url = https://github.com/HarcourtsAcademy/moodle-block_forum_aggregator.git
+	branch = HA-Moodle30
 [submodule "blocks/forum_post"]
-    path = blocks/forum_post
-    url = https://github.com/HarcourtsAcademy/moodle-block_forum_post.git
-    branch = HA-Moodle30
+	path = blocks/forum_post
+	url = https://github.com/HarcourtsAcademy/moodle-block_forum_post.git
+	branch = HA-Moodle30
 [submodule "blocks/quickmail"]
-    path = blocks/quickmail
-    url = https://github.com/HarcourtsAcademy/quickmail.git
-    branch = HA-Moodle30
+	path = blocks/quickmail
+	url = https://github.com/HarcourtsAcademy/quickmail.git
+	branch = HA-Moodle30
 [submodule "blocks/unanswered_discussions"]
-    path = blocks/unanswered_discussions
-    url = https://github.com/HarcourtsAcademy/moodle-block_unanswered_discussions.git
-    branch = HA-Moodle30
+	path = blocks/unanswered_discussions
+	url = https://github.com/HarcourtsAcademy/moodle-block_unanswered_discussions.git
+	branch = HA-Moodle30
 [submodule "enrol/apply"]
-    path = enrol/apply
-    url = https://github.com/HarcourtsAcademy/apply.git
-    branch = HA-Moodle30
+	path = enrol/apply
+	url = https://github.com/HarcourtsAcademy/apply.git
+	branch = HA-Moodle30
 [submodule "enrol/metamnet"]
-    path = enrol/metamnet
-    url = https://github.com/HarcourtsAcademy/moodle-enrol_metamnet.git
+	path = enrol/metamnet
+	url = https://github.com/HarcourtsAcademy/moodle-enrol_metamnet.git
 [submodule "mod/certificate"]
-    path = mod/certificate
-    url = https://github.com/HarcourtsAcademy/moodle-mod_certificate.git
-    branch = HA-Moodle30
+	path = mod/certificate
+	url = https://github.com/HarcourtsAcademy/moodle-mod_certificate.git
+	branch = HA-Moodle30
 [submodule "mod/game"]
-    path = mod/game
-    url = https://github.com/HarcourtsAcademy/moodle-mod_game.git
-    branch = HA-Moodle30
+	path = mod/game
+	url = https://github.com/HarcourtsAcademy/moodle-mod_game.git
+	branch = HA-Moodle30
 [submodule "mod/hvp"]
-    path = mod/hvp
-    url = https://github.com/h5p/h5p-moodle-plugin.git
-    branch = rc3
+	path = mod/hvp
+	url = https://github.com/h5p/h5p-moodle-plugin.git
+	branch = HA-Moodle30
 [submodule "mod/questionnaire"]
-    path = mod/questionnaire
-    url = https://github.com/HarcourtsAcademy/moodle-mod_questionnaire.git
-    branch = HA-Moodle30
+	path = mod/questionnaire
+	url = https://github.com/HarcourtsAcademy/moodle-mod_questionnaire.git
+	branch = HA-Moodle30
 [submodule "mod/subcourse"]
-    path = mod/subcourse
-    url = https://github.com/HarcourtsAcademy/moodle-mod_subcourse.git
-    branch = HA-Moodle30
+	path = mod/subcourse
+	url = https://github.com/HarcourtsAcademy/moodle-mod_subcourse.git
+	branch = HA-Moodle30
 [submodule "mod/videofile"]
-    path = mod/videofile
-    url = https://github.com/HarcourtsAcademy/moodle-mod_videofile.git
-    branch = HA-Moodle30
+	path = mod/videofile
+	url = https://github.com/HarcourtsAcademy/moodle-mod_videofile.git
+	branch = HA-Moodle30
 [submodule "question/type/pmatch"]
-    path = question/type/pmatch
-    url = https://github.com/HarcourtsAcademy/moodle-qtype_pmatch.git
-    branch = HA-Moodle30
+	path = question/type/pmatch
+	url = https://github.com/HarcourtsAcademy/moodle-qtype_pmatch.git
+	branch = HA-Moodle30
 [submodule "question/type/oumultiresponse"]
-    path = question/type/oumultiresponse
-    url = https://github.com/HarcourtsAcademy/moodle-qtype_oumultiresponse.git
-    branch = HA-Moodle30
+	path = question/type/oumultiresponse
+	url = https://github.com/HarcourtsAcademy/moodle-qtype_oumultiresponse.git
+	branch = HA-Moodle30
