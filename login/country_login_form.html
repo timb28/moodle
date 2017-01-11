@@ -1,0 +1,43 @@
+<?php
+
+// Countries that are linked to the Global Moodle
+$countries = array(
+    "au"=>"Australia",
+    "ca"=>"Canada",
+    "id"=>"Indonesia",
+    "nz"=>"New Zealand",
+    "za"=>"South Africa",
+    "us"=>"USA"
+);
+
+// Remove the domain and Moodle path from the wantsurl
+$wantsurl = $SESSION->wantsurl;
+if (!empty($wantsurl)) {
+  if (stripos($wantsurl, "http://") >= 0) {
+    $wantsurl = str_replace($CFG->wwwroot, "", $wantsurl);
+  } elseif (stripos($wantsurl, "https://") >= 0) {
+    $wantsurl = str_replace($CFG->httpswwwroot, "", $wantsurl);
+  }
+}
+
+?>
+<div class="loginbox clearfix">
+  <div class="loginpanel">
+        <?php
+            if (!empty($errormsg)) {
+                echo html_writer::start_tag('div', array('class'=>'subcontent loginsub alert alert-info'));
+                echo html_writer::start_tag('div', array('class' => 'loginerrors'));
+                echo html_writer::link('#', $errormsg, array('id' => 'loginerrormessage', 'class' => 'accesshide'));
+                echo $OUTPUT->error_text($errormsg);
+                echo html_writer::end_tag('div');
+                echo html_writer::end_tag('div');
+            }
+        ?>
+    <h2>Select your country to login</h2>
+    <div class="subcontent loginsub">
+      <?php foreach($countries as $countrycode => $countryname) { ?>
+      <div class="big-button-wrapper"><a href="https://<?= $_SERVER['HTTP_HOST'] ?>/<?= $countrycode ?>/moodle/auth/mnet/jump.php?hostwwwroot=<?= urlencode($CFG->wwwroot); ?>&wantsurl=<?= $wantsurl; ?>&remoteurl=1"><img alt="<?= $countryname ?>" src="pix/country-<?= $countrycode ?>.gif" height="132" width="200"><span class="big-button-text-overlay"><?= $countryname ?></span></a></div>
+      <?php } ?>
+    </div>
+  </div>
+</div>
