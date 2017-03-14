@@ -2217,84 +2217,6 @@ class core_moodlelib_testcase extends advanced_testcase {
     }
 
     /**
-     * Provider for get_max_upload_file_size.
-     *
-     * @return array
-     */
-    public function get_max_upload_file_size_provider() {
-        $inisize = min(array(get_real_size(ini_get('post_max_size')), get_real_size(ini_get('upload_max_filesize'))));
-        return [
-            'POST: inisize smallest' => [
-                $inisize + 10,
-                $inisize + 20,
-                $inisize + 30,
-                true,
-                $inisize,
-            ],
-            'POST: sitebytes smallest' => [
-                $inisize - 30,
-                $inisize - 20,
-                $inisize - 10,
-                true,
-                $inisize - 30,
-            ],
-            'POST: coursebytes smallest' => [
-                $inisize - 20,
-                $inisize - 30,
-                $inisize - 10,
-                true,
-                $inisize - 30,
-            ],
-            'POST: modulebytes smallest' => [
-                $inisize - 20,
-                $inisize - 10,
-                $inisize - 30,
-                true,
-                $inisize - 30,
-            ],
-            'POST: User can ignore site limit (respect ini)' => [
-                USER_CAN_IGNORE_FILE_SIZE_LIMITS,
-                0,
-                0,
-                true,
-                $inisize,
-            ],
-            'NOPOST: inisize smallest' => [
-                $inisize + 10,
-                $inisize + 20,
-                $inisize + 30,
-                false,
-                $inisize + 10,
-            ],
-            'NOPOST: User can ignore site limit (no limit)' => [
-                USER_CAN_IGNORE_FILE_SIZE_LIMITS,
-                0,
-                0,
-                false,
-                USER_CAN_IGNORE_FILE_SIZE_LIMITS,
-            ],
-        ];
-    }
-
-    /**
-     * Test get_max_upload_file_size with various combinations.
-     *
-     * @dataProvider get_max_upload_file_size_provider
-     */
-    public function test_get_max_upload_file_size($sitebytes, $coursebytes, $modulebytes, $ispost, $expectation) {
-        $this->assertEquals($expectation, get_max_upload_file_size($sitebytes, $coursebytes, $modulebytes, $ispost));
-    }
-
-    /**
-     * Test that when get_max_upload_file_size is called with no sizes, and no post, an exception is thrown.
-     */
-    public function test_get_max_upload_file_size_no_sizes() {
-        // If not using post we have to provide at least one other limit.
-        $this->setExpectedException('coding_exception', 'You must specify at least one filesize limit.');
-        get_max_upload_file_size(0, 0, 0, false);
-    }
-
-    /**
      * Test function password_is_legacy_hash().
      */
     public function test_password_is_legacy_hash() {
@@ -3008,6 +2930,9 @@ class core_moodlelib_testcase extends advanced_testcase {
         $result = random_bytes_emulate(666);
         $this->assertSame(666, strlen($result));
 
+        $result = random_bytes_emulate(40);
+        $this->assertSame(40, strlen($result));
+
         $this->assertDebuggingNotCalled();
 
         $result = random_bytes_emulate(0);
@@ -3087,5 +3012,58 @@ class core_moodlelib_testcase extends advanced_testcase {
         $result = complex_random_string(-1);
         $this->assertSame('', $result);
         $this->assertDebuggingCalled();
+    }
+
+    /**
+     * Test that generate_email_processing_address() returns valid email address.
+     */
+    public function test_generate_email_processing_address() {
+        global $CFG;
+        $this->resetAfterTest();
+
+        $data = (object)[
+            'id' => 42,
+            'email' => 'my.email+from_moodle@example.com',
+        ];
+
+        $modargs = 'B'.base64_encode(pack('V', $data->id)).substr(md5($data->email), 0, 16);
+
+        $CFG->maildomain = 'example.com';
+        $CFG->mailprefix = 'mdl+';
+        $this->assertEquals(1, validate_email(generate_email_processing_address(0, $modargs)));
+
+        $CFG->maildomain = 'mail.example.com';
+        $CFG->mailprefix = 'mdl-';
+        $this->assertEquals(1, validate_email(generate_email_processing_address(23, $modargs)));
+    }
+
+    /**
+     * Test safe method unserialize_array().
+     */
+    public function test_unserialize_array() {
+        $a = [1, 2, 3];
+        $this->assertEquals($a, unserialize_array(serialize($a)));
+        $this->assertEquals($a, unserialize_array(serialize($a)));
+        $a = ['a' => 1, 2 => 2, 'b' => 'cde'];
+        $this->assertEquals($a, unserialize_array(serialize($a)));
+        $this->assertEquals($a, unserialize_array(serialize($a)));
+        $a = ['a' => 1, 2 => 2, 'b' => 'c"d"e'];
+        $this->assertEquals($a, unserialize_array(serialize($a)));
+        $a = ['a' => 1, 2 => ['c' => 'd', 'e' => 'f'], 'b' => 'cde'];
+        $this->assertEquals($a, unserialize_array(serialize($a)));
+
+        // Can not unserialize if any string contains semicolons.
+        $a = ['a' => 1, 2 => 2, 'b' => 'c"d";e'];
+        $this->assertEquals(false, unserialize_array(serialize($a)));
+
+        // Can not unserialize if there are any objects.
+        $a = (object)['a' => 1, 2 => 2, 'b' => 'cde'];
+        $this->assertEquals(false, unserialize_array(serialize($a)));
+        $a = ['a' => 1, 2 => 2, 'b' => (object)['a' => 'cde']];
+        $this->assertEquals(false, unserialize_array(serialize($a)));
+
+        // Array used in the grader report.
+        $a = array('aggregatesonly' => [51, 34], 'gradesonly' => [21, 45, 78]);
+        $this->assertEquals($a, unserialize_array(serialize($a)));
     }
 }
