@@ -45,7 +45,8 @@ class block_training_pathways extends block_base {
         $this->content->footer = '';
         
         $recommended_paths = new recommended_paths();
-        $this->content->text = $recommended_paths->paths;
+        error_log('recommended paths: ' . print_r($recommended_paths, true));
+        $this->content->text = $recommended_paths->view_paths();
 
         
         return $this->content;

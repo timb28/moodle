@@ -28,18 +28,42 @@ namespace block_training_pathways;
 
 class recommended_paths {
     
-    public $paths;
+    public  $paths;
     
     public function __construct() {
         global $DB, $USER;
         if ($this->paths == null) {
+            // The user must have a region and role.
             if ($USER->profile['region'] == null || $USER->profile['role'] == null) {
                 return;
             }
             
-            $results = $DB->get_records_sql('SELECT * FROM {block_training_pathways} WHERE regions like ?', array( $USER->profile['region'] ));
-            $this->paths = print_r($results, true);
+            // Get all Training Pathways for the user's region and role
+            // that they aren't enrolled in.
+            $sql = 'SELECT * FROM {block_training_pathways} btp
+                    WHERE btp.regions LIKE ?
+                    AND btp.course NOT IN
+                        (SELECT courseid FROM {enrol} e
+                        JOIN {user_enrolments} ue
+                        ON e.id = ue.enrolid
+                        WHERE ue.userid = ?)';
+            $params = array( $USER->profile['region'], $USER->id );
+            $results = $DB->get_records_sql($sql,$params);
+            $this->paths = $results;
         }
         
+    }
+    
+    public function view_paths() {
+        if (empty($this->paths)) {
+            return false;
+        }
+        
+        $return = '';
+        foreach($this->paths as $path) {
+            $return.= $path->name;
+        }
+        
+        return $return;
     }
 }
