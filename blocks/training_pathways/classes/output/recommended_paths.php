@@ -24,11 +24,11 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_training_pathways;
+namespace block_training_pathways\output;
 
-class recommended_paths {
+class recommended_paths implements \renderable, \templatable {
     
-    public  $paths;
+    protected $paths;
     
     public function __construct() {
         global $DB, $USER;
@@ -54,16 +54,32 @@ class recommended_paths {
         
     }
     
-    public function view_paths() {
+//    public function output_paths() {
+//        if (empty($this->paths)) {
+//            return false;
+//        }
+//        $data->name = 'Name';
+//        return $this->render_from_template('block_training_pathways/recommended_training_pathways', $data);
+//    }
+    
+    /**
+     * Export this data so it can be used as the context for a mustache template.
+     *
+     * @return stdClass
+     */
+    //public function export_for_template(\block_training_pathways_renderer $output) {
+    public function export_for_template(\renderer_base $output) {
+        $data = new \stdClass();
+        
         if (empty($this->paths)) {
-            return false;
+            return $data;
         }
         
-        $return = '';
-        foreach($this->paths as $path) {
-            $return.= $path->name;
+        $data->paths = array();
+        foreach ($this->paths as $path) {
+            $data->paths[] = $path->name;
         }
-        
-        return $return;
+ 
+        return $data;
     }
 }

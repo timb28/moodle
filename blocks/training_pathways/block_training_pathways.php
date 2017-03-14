@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-use block_training_pathways\recommended_paths;
+use block_training_pathways\output\recommended_paths;
 
 class block_training_pathways extends block_base {
 
@@ -34,8 +34,7 @@ class block_training_pathways extends block_base {
     }
 
     function get_content() {
-        global $CFG;
-
+        global $CFG, $PAGE;
         if ($this->content !== null) {
             return $this->content;
         }
@@ -44,9 +43,13 @@ class block_training_pathways extends block_base {
         $this->content->text   = '';
         $this->content->footer = '';
         
-        $recommended_paths = new recommended_paths();
-        error_log('recommended paths: ' . print_r($recommended_paths, true));
-        $this->content->text = $recommended_paths->view_paths();
+        $recommended_paths = new \block_training_pathways\output\recommended_paths();
+        //error_log('recommended paths: ' . print_r($recommended_paths, true));
+        //$this->content->text = $recommended_paths->output_paths();
+        //$output = $PAGE->get_renderer('block_training_pathways\output\block_training_pathways_renderer');
+        $output = $PAGE->get_renderer('block_training_pathways');
+        $this->content->text = $output->render($recommended_paths);
+        error_log('rec paths: ' . print_r($output->render($recommended_paths), true));
 
         
         return $this->content;
