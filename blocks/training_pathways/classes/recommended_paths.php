@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'block_training_pathways', language 'en'
+ * block_training_pathways class that contains the recommended Training Pathways
  *
  * @package   block_training_pathways
  * @author    Tim Butler
@@ -24,11 +24,13 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['blocktitle'] = 'Recommended Training Pathways';
-// $string['descconfig'] = 'Description of the config section';
-// $string['descfoo'] = 'Config description';
-// $string['headerconfig'] = 'Config section header';
-// $string['labelfoo'] = 'Config label';
-$string['training_pathways:addinstance'] = 'Add a Training Pathways block';
-$string['training_pathways:myaddinstance'] = 'Add a Training Pathways block to my course dashboard';
-$string['pluginname'] = 'Training Pathways';
+namespace block_training_pathways;
+
+class recommended_paths {
+    
+    public $paths;
+    
+    public function __construct() {
+        $this->paths = 'test';
+    }
+}

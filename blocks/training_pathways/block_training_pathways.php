@@ -25,10 +25,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+use block_training_pathways\recommended_paths;
+
 class block_training_pathways extends block_base {
 
     function init() {
-        $this->title = get_string('pluginname', 'block_training_pathways');
+        $this->title = get_string('blocktitle', 'block_training_pathways');
     }
 
     function get_content() {
@@ -41,7 +43,12 @@ class block_training_pathways extends block_base {
         $this->content         = new stdClass();
         $this->content->text   = '';
         $this->content->footer = '';
+        
+//        require_once($CFG->dirroot . '/blocks/training_pathways/locallib.php');
+        $recommended_paths = new recommended_paths();
+        $this->content->text = $recommended_paths->paths;
 
+        
         return $this->content;
     }
 
