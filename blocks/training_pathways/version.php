@@ -17,14 +17,14 @@
 /**
  * Version details
  *
- * @package    block_training_pathways
- * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   block_training_pathways
+ * @author    Tim Butler
+ * @copyright 2017 onwards Harcourts Academy {@link http://www.harcourtsacademy.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2013011300;        // The current plugin version (Date: YYYYMMDDXX)
+$plugin->version   = 2017031402;        // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2012112900;        // Requires this Moodle version
 $plugin->component = 'block_training_pathways'; // Full name of the plugin (used for diagnostics)
-$plugin->cron = 300;

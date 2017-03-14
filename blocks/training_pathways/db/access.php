@@ -18,7 +18,8 @@
  * training_pathways block caps.
  *
  * @package   block_training_pathways
- * @copyright Daniel Neis <danielneis@gmail.com>
+ * @author    Tim Butler
+ * @copyright 2017 onwards Harcourts Academy {@link http://www.harcourtsacademy.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

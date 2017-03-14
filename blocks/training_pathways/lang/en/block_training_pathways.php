@@ -19,15 +19,16 @@
  * Strings for component 'block_training_pathways', language 'en'
  *
  * @package   block_training_pathways
- * @copyright Daniel Neis <danielneis@gmail.com>
+ * @author    Tim Butler
+ * @copyright 2017 onwards Harcourts Academy {@link http://www.harcourtsacademy.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 $string['blockstring'] = 'Block string';
-$string['descconfig'] = 'Description of the config section';
-$string['descfoo'] = 'Config description';
-$string['headerconfig'] = 'Config section header';
-$string['labelfoo'] = 'Config label';
-$string['training_pathways:addinstance'] = 'Add a training_pathways block';
-$string['training_pathways:myaddinstance'] = 'Add a training_pathways block to my moodle';
-$string['pluginname'] = 'training_pathways';
+// $string['descconfig'] = 'Description of the config section';
+// $string['descfoo'] = 'Config description';
+// $string['headerconfig'] = 'Config section header';
+// $string['labelfoo'] = 'Config label';
+$string['training_pathways:addinstance'] = 'Add a Training Pathways block';
+$string['training_pathways:myaddinstance'] = 'Add a Training Pathways block to my course dashboard';
+$string['pluginname'] = 'Training Pathways';
