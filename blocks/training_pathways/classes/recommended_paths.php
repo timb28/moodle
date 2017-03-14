@@ -31,6 +31,15 @@ class recommended_paths {
     public $paths;
     
     public function __construct() {
-        $this->paths = 'test';
+        global $DB, $USER;
+        if ($this->paths == null) {
+            if ($USER->profile['region'] == null || $USER->profile['role'] == null) {
+                return;
+            }
+            
+            $results = $DB->get_records_sql('SELECT * FROM {block_training_pathways} WHERE regions like ?', array( $USER->profile['region'] ));
+            $this->paths = print_r($results, true);
+        }
+        
     }
 }

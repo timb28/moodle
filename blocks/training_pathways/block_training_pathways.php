@@ -44,7 +44,6 @@ class block_training_pathways extends block_base {
         $this->content->text   = '';
         $this->content->footer = '';
         
-//        require_once($CFG->dirroot . '/blocks/training_pathways/locallib.php');
         $recommended_paths = new recommended_paths();
         $this->content->text = $recommended_paths->paths;
 
