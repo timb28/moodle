@@ -4,15 +4,15 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-#region-main .block_course_overview {
+#region-main .block {
     background: none;
 }
 
-#region-main .block_course_overview .content {
+#region-main .block .content {
     padding: 0;
     margin: 0;
 }
 
-#region-main .block_course_overview .header h2 {
+#region-main .block .header h2 {
     padding: 0;
 }
