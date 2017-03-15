@@ -49,7 +49,6 @@ class block_training_pathways extends block_base {
         //$output = $PAGE->get_renderer('block_training_pathways\output\block_training_pathways_renderer');
         $output = $PAGE->get_renderer('block_training_pathways');
         $this->content->text = $output->render($recommended_paths);
-        error_log('rec paths: ' . print_r($output->render($recommended_paths), true));
 
         
         return $this->content;

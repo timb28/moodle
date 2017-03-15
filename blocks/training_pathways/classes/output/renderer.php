@@ -39,7 +39,15 @@ class renderer extends \plugin_renderer_base {
      */
     public function render_recommended_paths(\block_training_pathways\output\recommended_paths $paths) {
         $data = $paths->export_for_template($this, $this->target === RENDERER_TARGET_GENERAL);
-        return $this->render_from_template('block_training_pathways/recommended_paths', $data);
+        $return = '';
+        if (!empty($data) && is_array($data->paths)) {
+            foreach ($data->paths as $path) {
+                $return.= $this->render_from_template('block_training_pathways/recommended_paths', $path);
+            }
+            
+        }
+        
+        return $return;
     }
 
 }
