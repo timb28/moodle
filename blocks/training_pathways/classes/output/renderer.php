@@ -34,17 +34,18 @@ class renderer extends \plugin_renderer_base {
     /**
      * Display the recommended training pathways using the template.
      *
-     * @param \mod_forum\output\forum_post $post The post to display.
+     * @param block_training_pathways\output\recommended_paths $paths The recommended paths to display.
      * @return string
      */
     public function render_recommended_paths(\block_training_pathways\output\recommended_paths $paths) {
         $data = $paths->export_for_template($this, $this->target === RENDERER_TARGET_GENERAL);
         $return = '';
         if (!empty($data) && is_array($data->paths)) {
+            $return.= '<div class="accordion recommended_paths" id="accordion2">';
             foreach ($data->paths as $path) {
                 $return.= $this->render_from_template('block_training_pathways/recommended_paths', $path);
             }
-            
+            $return.= '</div>';
         }
         
         return $return;

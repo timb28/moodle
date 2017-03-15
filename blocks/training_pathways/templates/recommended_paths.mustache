@@ -40,11 +40,47 @@
     }                                                                                                                               
                                                                                                                                     
   }}
-<div class="recommended_paths">                                                                                                         
-    <h4>{{name}}</h4>
-    <div class="description">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse-{{id}}">
+        <h4>{{name}}</h4>
+      </a>
+    </div>
+    <div id="collapse-{{id}}" class="accordion-body collapse {{#first}}in{{/first}}">
+      <div class="accordion-inner">
+        <div class="description">
         {{{description}}}
     </div>
     <a href="{{informationurl}}" class="btn btn-link">More Information</a>
     <a href="{{registrationurl}}" class="btn btn-primary">Register for Pathway</a>
-</div>
+      </div>
+    </div>
+  </div>
+
+
+{{!
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+        Collapsible Group Item #1
+      </a>
+    </div>
+    <div id="collapseOne" class="accordion-body collapse in">
+      <div class="accordion-inner">
+        Anim pariatur cliche...
+      </div>
+    </div>
+  </div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+        Collapsible Group Item #2
+      </a>
+    </div>
+    <div id="collapseTwo" class="accordion-body collapse">
+      <div class="accordion-inner">
+        Anim pariatur cliche...
+      </div>
+    </div>
+  </div>
+}}
