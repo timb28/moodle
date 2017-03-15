@@ -17,7 +17,6 @@
 [submodule "blocks/configurable_reports"]
 	path = blocks/configurable_reports
 	url = https://github.com/HarcourtsAcademy/moodle-block_configurablereports.git
-	branch = MOODLE_30_STABLE
 [submodule "blocks/fn_marking"]
 	path = blocks/fn_marking
 	url = https://github.com/fernandooliveira/moodle-block_marking_manager.git
