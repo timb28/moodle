@@ -77,7 +77,10 @@ class recommended_paths implements \renderable, \templatable {
         
         $data->paths = array();
         foreach ($this->paths as $path) {
-            $data->paths[] = $path->name;
+            $data->paths['name']            = $path->name;
+            $data->paths['description']     = $path->description;
+            $data->paths['informationurl']  = $path->informationurl;
+            $data->paths['registrationurl'] = $path->registrationurl;
         }
  
         return $data;

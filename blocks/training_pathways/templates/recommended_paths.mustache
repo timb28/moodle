@@ -42,6 +42,11 @@
   }}
 <div class="recommended_paths">                                                                                                         
     {{#paths}}
-    <h4>{{.}}</h4>
+    <h4>{{name}}</h4>
+    <div class="description">
+        {{{description}}}
+    </div>
+    <a href="{{informationurl}}" class="btn btn-link">More Information</a>
+    <a href="{{registrationurl}}" class="btn btn-primary">Register for Pathway</a>
     {{/paths}}
 </div>
