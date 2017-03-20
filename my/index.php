@@ -73,6 +73,19 @@ if (isguestuser()) {  // Force them to see system default, no editing allowed
     $pagetitle = $strmymoodle;
 }
 
+/* START Academy Patch M#051 Redirect MNet students to their local Moodle My Moodle page. */
+if (is_mnet_remote_user($USER)) {
+    // Redirect to their My Moodle page.
+    $sql = "SELECT h.id, h.name, h.wwwroot,
+                       a.name as application, a.display_name
+                  FROM {mnet_host} h, {mnet_application} a
+                 WHERE h.id = ? AND h.applicationid = a.id";
+
+    $remotehost = $DB->get_record_sql($sql, array($USER->mnethostid));
+    redirect($remotehost->wwwroot);
+}
+/* END Academy Patch M#051 */
+
 // Get the My Moodle page info.  Should always return something unless the database is broken.
 if (!$currentpage = my_get_page($userid, MY_PAGE_PRIVATE)) {
     print_error('mymoodlesetup');
