@@ -51,7 +51,7 @@ class recommended_paths implements \renderable, \templatable {
             $results = $DB->get_records_sql($sql,$params);
             $this->paths = $results;
         }
-        
+
     }
     
 //    public function output_paths() {
@@ -81,7 +81,7 @@ class recommended_paths implements \renderable, \templatable {
             $data->paths[$path->id]['name']            = $path->name;
             $data->paths[$path->id]['description']     = $path->description;
             $data->paths[$path->id]['informationurl']  = $path->informationurl;
-            $data->paths[$path->id]['registrationurl'] = $path->registrationurl;
+            $data->paths[$path->id]['registrationurl'] = new \moodle_url('/course/view.php', array('id' => $path->course));
         }
  
         return $data;
