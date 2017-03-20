@@ -70,12 +70,12 @@ class recommended_paths implements \renderable, \templatable {
     //public function export_for_template(\block_training_pathways_renderer $output) {
     public function export_for_template(\renderer_base $output) {
         $data = new \stdClass();
+        $data->paths = array();
         
         if (empty($this->paths)) {
             return $data;
         }
         
-        $data->paths = array();
         foreach ($this->paths as $path) {
             $data->paths[$path->id]['id']              = $path->id;
             $data->paths[$path->id]['name']            = $path->name;

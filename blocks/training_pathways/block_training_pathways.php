@@ -27,6 +27,10 @@ defined('MOODLE_INTERNAL') || die();
 
 use block_training_pathways\output\recommended_paths;
 
+/**
+ * TODO: Don't display empty block.
+ */
+
 class block_training_pathways extends block_base {
 
     function init() {
