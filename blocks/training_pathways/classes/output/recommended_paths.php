@@ -40,9 +40,17 @@ class recommended_paths implements \renderable, \templatable {
             
             // Get all Training Pathways for the user's region and role
             // that they aren't enrolled in.
-            $sql = 'SELECT * FROM {block_training_pathways} btp
-                    WHERE btp.regions LIKE ?
-                    AND btp.course NOT IN
+            $sql = 'SELECT
+                        tp.id,
+                        c.fullname,
+                        c.summary,
+                        tp.informationurl,
+                        tp.course
+                    FROM {block_training_pathways} tp
+                        JOIN
+                        {course} c ON tp.course = c.id
+                    WHERE tp.regions LIKE ?
+                    AND tp.course NOT IN
                         (SELECT courseid FROM {enrol} e
                         JOIN {user_enrolments} ue
                         ON e.id = ue.enrolid
@@ -78,8 +86,8 @@ class recommended_paths implements \renderable, \templatable {
         
         foreach ($this->paths as $path) {
             $data->paths[$path->id]['id']              = $path->id;
-            $data->paths[$path->id]['name']            = $path->name;
-            $data->paths[$path->id]['description']     = $path->description;
+            $data->paths[$path->id]['name']            = $path->fullname;
+            $data->paths[$path->id]['description']     = $path->summary;
             $data->paths[$path->id]['informationurl']  = $path->informationurl;
             $data->paths[$path->id]['registrationurl'] = new \moodle_url('/course/view.php', array('id' => $path->course));
         }
