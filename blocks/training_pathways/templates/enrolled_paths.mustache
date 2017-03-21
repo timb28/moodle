@@ -52,7 +52,17 @@
 
     <div class="progress">
         {{# subcourses }}
-      <div data-toggle="tooltip" data-placement="top" title="" data-original-title="Getting Started the Harcourts Way" class="bar bar-success" style="width: {{ progresswidth }};"><i class="fa fa-check" aria-hidden="true"></i> {{ name }}</div>
+            {{# isenrolled }}
+                {{# iscomplete }}
+      <div data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ name }}" class="bar bar-success" style="width: {{ progresswidth }};"><i class="fa fa-check" aria-hidden="true"></i></div>
+                {{/ iscomplete }}
+                {{^ iscomplete }}
+      <div data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ name }}" class="bar bar-info" style="width: {{ progresswidth }};"><i class="fa fa-play" aria-hidden="true"></i></div>
+                {{/ iscomplete }}
+            {{/ isenrolled }}
+            {{^ isenrolled }}
+      <div data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ name }}" class="bar bar-warning" style="width: {{ progresswidth }};"><i class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
+            {{/ isenrolled }}
         {{/ subcourses }}
     </div>
 {{#js}}

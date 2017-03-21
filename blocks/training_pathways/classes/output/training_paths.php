@@ -26,6 +26,8 @@
 
 namespace block_training_pathways\output;
 
+require_once($CFG->dirroot . '/mod/subcourse/lib.php');
+
 class training_paths implements \renderable, \templatable {
     
     protected $paths;
@@ -115,9 +117,14 @@ class training_paths implements \renderable, \templatable {
         foreach ($instances as $cminfo) {
             // Don't list instances that are not visible or available to the user.
             if ($cminfo->uservisible && $cminfo->available) {
+                // Get course details from the subcourse instance.
                 $subcourses[$cminfo->id]['name']    = $cminfo->get_formatted_name();
                 $subcourses[$cminfo->id]['url']     = $cminfo->url;
-                $subcourses[$cminfo->id]['course']  = $cminfo->url->get_param('id');
+                
+                $subcourse = $this->get_subcourse($cminfo->instance);
+                
+                $subcourses[$cminfo->id]['isenrolled']  = $subcourse->isenrolled;
+                $subcourses[$cminfo->id]['iscomplete']  = ($subcourse->grade >= $subcourse->maxgrade ? true : false);
             }
         }
 
@@ -125,6 +132,32 @@ class training_paths implements \renderable, \templatable {
         $subcoursewidth = (count($subcourses) > 1 ? 100 / count($subcourses) . '%' : '0%');
 
         return array($subcoursewidth, new \ArrayIterator($subcourses));
+    }
+    
+    /**
+     * Must return the instance of this module,
+     * indexed by user.  It also returns a maximum allowed grade.
+     *
+     * @param int $subcourseid ID of an instance of this module
+     * @return stdClass|null object with an array of grades and with the maximum grade
+     */
+    private function get_subcourse($subcourseid) {
+        global $DB, $USER;
+        $subcourse = $DB->get_record("subcourse", array("id" => $subcourseid), 'id, refcourse');
+        if (empty($subcourse->refcourse)) {
+            return null;
+        }
+        $refgrades = subcourse_fetch_refgrades($subcourse->id, $subcourse->refcourse);
+        $return = new \stdClass();
+        $return->course = $subcourse->refcourse;
+
+        $subcoursecontext = \context_course::instance($subcourse->refcourse);
+        $return->isenrolled = is_enrolled($subcoursecontext);
+
+        $return->grade = $refgrades->grades[$USER->id]->rawgrade;
+        $return->maxgrade = $refgrades->grademax;
+
+        return $return;
     }
 
 }
