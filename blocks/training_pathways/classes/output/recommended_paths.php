@@ -39,7 +39,6 @@ class recommended_paths implements \renderable, \templatable {
             }
             
             // Get all Training Pathways for the user's region and role
-            // that they aren't enrolled in.
             $sql = 'SELECT
                         tp.id,
                         c.fullname,
@@ -50,25 +49,13 @@ class recommended_paths implements \renderable, \templatable {
                         JOIN
                         {course} c ON tp.course = c.id
                     WHERE tp.regions LIKE ?
-                    AND tp.course NOT IN
-                        (SELECT courseid FROM {enrol} e
-                        JOIN {user_enrolments} ue
-                        ON e.id = ue.enrolid
-                        WHERE ue.userid = ?)';
-            $params = array( $USER->profile['region'], $USER->id );
+                    AND tp.roles LIKE ?';
+            $params = array( $USER->profile['region'], $USER->profile['role'] );
             $results = $DB->get_records_sql($sql,$params);
             $this->paths = $results;
         }
 
     }
-    
-//    public function output_paths() {
-//        if (empty($this->paths)) {
-//            return false;
-//        }
-//        $data->name = 'Name';
-//        return $this->render_from_template('block_training_pathways/recommended_training_pathways', $data);
-//    }
     
     /**
      * Export this data so it can be used as the context for a mustache template.
