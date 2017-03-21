@@ -26,7 +26,7 @@
 
 namespace block_training_pathways\output;
 
-class recommended_paths implements \renderable, \templatable {
+class training_paths implements \renderable, \templatable {
     
     protected $paths;
     

@@ -24,11 +24,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['blocktitle'] = 'Recommended Training Pathways';
-// $string['descconfig'] = 'Description of the config section';
-// $string['descfoo'] = 'Config description';
-// $string['headerconfig'] = 'Config section header';
-// $string['labelfoo'] = 'Config label';
+$string['blocktitle'] = 'Training Pathways';
 $string['training_pathways:addinstance'] = 'Add a Training Pathways block';
 $string['training_pathways:myaddinstance'] = 'Add a Training Pathways block to my course dashboard';
 $string['pluginname'] = 'Training Pathways';

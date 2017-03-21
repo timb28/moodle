@@ -34,10 +34,10 @@ class renderer extends \plugin_renderer_base {
     /**
      * Display the recommended training pathways using the template.
      *
-     * @param block_training_pathways\output\recommended_paths $paths The recommended paths to display.
+     * @param block_training_pathways\output\training_paths $paths The recommended paths to display.
      * @return string
      */
-    public function render_recommended_paths(\block_training_pathways\output\recommended_paths $paths) {
+    public function render_training_paths(\block_training_pathways\output\training_paths $paths) {
         $data = $paths->export_for_template($this, $this->target === RENDERER_TARGET_GENERAL);
         $return = '';
         if (!empty($data) && is_array($data->paths) && !empty($data->paths)) {

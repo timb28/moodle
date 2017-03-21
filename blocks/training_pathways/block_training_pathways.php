@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-use block_training_pathways\output\recommended_paths;
+use block_training_pathways\output\training_paths;
 
 /**
  * TODO: Don't display empty block.
@@ -47,12 +47,9 @@ class block_training_pathways extends block_base {
         $this->content->text   = '';
         $this->content->footer = '';
         
-        $recommended_paths = new \block_training_pathways\output\recommended_paths();
-        //error_log('recommended paths: ' . print_r($recommended_paths, true));
-        //$this->content->text = $recommended_paths->output_paths();
-        //$output = $PAGE->get_renderer('block_training_pathways\output\block_training_pathways_renderer');
+        $training_paths = new \block_training_pathways\output\training_paths();
         $output = $PAGE->get_renderer('block_training_pathways');
-        $this->content->text = $output->render($recommended_paths);
+        $this->content->text = $output->render($training_paths);
 
         
         return $this->content;
