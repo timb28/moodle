@@ -65,6 +65,10 @@ class block_training_pathways extends block_base {
     public function instance_allow_multiple() {
           return false;
     }
+    
+    public function is_empty() {
+        return empty($this->content) && empty($this->content->text);
+    }
 
     function has_config() {return false;}
 
