@@ -82,14 +82,16 @@ class training_paths implements \renderable, \templatable {
                 $data->enrolledpaths[$path->id]['id']                   = $path->id;
                 $data->enrolledpaths[$path->id]['name']                 = $path->fullname;
                 $data->enrolledpaths[$path->id]['description']          = $path->summary;
-                $data->enrolledpaths[$path->id]['informationurl']       = $path->informationurl;
+                $data->enrolledpaths[$path->id]['infourl']              = $path->informationurl;
                 $data->enrolledpaths[$path->id]['courseurl']            = new \moodle_url('/course/view.php',
                         array('id' => $path->course));
+                list($data->enrolledpaths[$path->id]['progresswidth'], 
+                        $data->enrolledpaths[$path->id]['subcourses'])  = $this->get_subcourses($enrolledcourses[$path->course]);
             } else {
                 $data->recommendedpaths[$path->id]['id']                = $path->id;
                 $data->recommendedpaths[$path->id]['name']              = $path->fullname;
                 $data->recommendedpaths[$path->id]['description']       = $path->summary;
-                $data->recommendedpaths[$path->id]['informationurl']    = $path->informationurl;
+                $data->recommendedpaths[$path->id]['infourl']           = $path->informationurl;
                 $data->recommendedpaths[$path->id]['courseurl']         = new \moodle_url('/course/view.php',
                         array('id' => $path->course));
             }
@@ -98,4 +100,31 @@ class training_paths implements \renderable, \templatable {
  
         return $data;
     }
+    
+    /**
+     * Gets information on pathway courses via mod_subcourse instances.
+     * 
+     * @param type $course
+     * @return ArrayIterator
+     */
+    private function get_subcourses($course) {
+        $subcourses = array();
+        
+        $cms = get_fast_modinfo($course);
+        $instances = $cms->get_instances_of('subcourse');
+        foreach ($instances as $cminfo) {
+            // Don't list instances that are not visible or available to the user.
+            if ($cminfo->uservisible && $cminfo->available) {
+                $subcourses[$cminfo->id]['name']    = $cminfo->get_formatted_name();
+                $subcourses[$cminfo->id]['url']     = $cminfo->url;
+                $subcourses[$cminfo->id]['course']  = $cminfo->url->get_param('id');
+            }
+        }
+
+        // Calculate the width of the progress bars
+        $subcoursewidth = (count($subcourses) > 1 ? 100 / count($subcourses) . '%' : '0%');
+
+        return array($subcoursewidth, new \ArrayIterator($subcourses));
+    }
+
 }

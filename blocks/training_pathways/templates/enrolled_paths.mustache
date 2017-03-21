@@ -49,6 +49,12 @@
       <div class="bar bar-info" style="width: 20%;"><i class="fa fa-play" aria-hidden="true"></i></div>
       <div class="bar bar-warning" style="width: 20%;"><i class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
     </div>
+
+    <div class="progress">
+        {{# subcourses }}
+      <div data-toggle="tooltip" data-placement="top" title="" data-original-title="Getting Started the Harcourts Way" class="bar bar-success" style="width: {{ progresswidth }};"><i class="fa fa-check" aria-hidden="true"></i> {{ name }}</div>
+        {{/ subcourses }}
+    </div>
 {{#js}}
 require(['jquery','theme_bootstrapbase/bootstrap'], function($) {
     // Effects! Can we have "blink"?
