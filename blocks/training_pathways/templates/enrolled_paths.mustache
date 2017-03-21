@@ -40,19 +40,19 @@
     }                                                                                                                               
                                                                                                                                     
   }}
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse-{{id}}">
-        <h4>{{name}}</h4>
-      </a>
+  <div class="well">
+    <h4><a href="{{courseurl}}">{{name}}</a></h4>
+    <div class="progress">
+      <div data-toggle="tooltip" data-placement="top" title="" data-original-title="Getting Started the Harcourts Way" class="bar bar-success" style="width: 20%;"><i class="fa fa-check" aria-hidden="true"></i></div>
+      <div data-toggle="tooltip" data-placement="top" title="" data-original-title="Sales Registration" class="bar bar-success" style="width: 20%;"><i class="fa fa-check" aria-hidden="true"></i></div>
+      <div data-toggle="tooltip" data-placement="top" title="" data-original-title="iStart Online" class="bar bar-warning" style="width: 20%;"><i class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
+      <div class="bar bar-info" style="width: 20%;"><i class="fa fa-play" aria-hidden="true"></i></div>
+      <div class="bar bar-warning" style="width: 20%;"><i class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
     </div>
-    <div id="collapse-{{id}}" class="accordion-body collapse">
-      <div class="accordion-inner">
-        <div class="description">
-        {{{description}}}
-    </div>
-    <a href="{{informationurl}}" class="btn btn-link" target="_blank">More Information</a>
-    <a href="{{courseurl}}" class="btn btn-primary">Register for Pathway</a>
-      </div>
-    </div>
+{{#js}}
+require(['jquery','theme_bootstrapbase/bootstrap'], function($) {
+    // Effects! Can we have "blink"?
+    $('[data-toggle="tooltip"]').tooltip()    
+});
+{{/js}}
   </div>

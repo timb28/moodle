@@ -39,10 +39,24 @@ class renderer extends \plugin_renderer_base {
      */
     public function render_training_paths(\block_training_pathways\output\training_paths $paths) {
         $data = $paths->export_for_template($this, $this->target === RENDERER_TARGET_GENERAL);
+        if (empty($data)) {
+            return;
+        }
+
         $return = '';
-        if (!empty($data) && is_array($data->paths) && !empty($data->paths)) {
+        if (is_array($data->enrolledpaths) && !empty($data->enrolledpaths)) {
+            $return.= '<div class="enrolled_paths">';
+
+            foreach ($data->enrolledpaths as $path) {
+                $return.= $this->render_from_template('block_training_pathways/enrolled_paths', $path);
+            }
+            $return.= '</div>';
+        }
+        
+        if (is_array($data->recommendedpaths) && !empty($data->recommendedpaths)) {
+            $return.= '<h4>Recommended Training Pathways</h4>';
             $return.= '<div class="accordion recommended_paths" id="accordion2">';
-            foreach ($data->paths as $path) {
+            foreach ($data->recommendedpaths as $path) {
                 $return.= $this->render_from_template('block_training_pathways/recommended_paths', $path);
             }
             $return.= '</div>';

@@ -65,18 +65,35 @@ class training_paths implements \renderable, \templatable {
     //public function export_for_template(\block_training_pathways_renderer $output) {
     public function export_for_template(\renderer_base $output) {
         $data = new \stdClass();
-        $data->paths = array();
+        $data->enrolledpaths    = array();
+        $data->recommendedpaths = array();
         
         if (empty($this->paths)) {
             return $data;
         }
         
+        // Get all enrolled courses.
+        $enrolledcourses = enrol_get_my_courses('id');
+        
         foreach ($this->paths as $path) {
-            $data->paths[$path->id]['id']              = $path->id;
-            $data->paths[$path->id]['name']            = $path->fullname;
-            $data->paths[$path->id]['description']     = $path->summary;
-            $data->paths[$path->id]['informationurl']  = $path->informationurl;
-            $data->paths[$path->id]['registrationurl'] = new \moodle_url('/course/view.php', array('id' => $path->course));
+
+            // Sort enrolled paths from recommended paths 
+            if (array_key_exists($path->course, $enrolledcourses)) {
+                $data->enrolledpaths[$path->id]['id']                   = $path->id;
+                $data->enrolledpaths[$path->id]['name']                 = $path->fullname;
+                $data->enrolledpaths[$path->id]['description']          = $path->summary;
+                $data->enrolledpaths[$path->id]['informationurl']       = $path->informationurl;
+                $data->enrolledpaths[$path->id]['courseurl']            = new \moodle_url('/course/view.php',
+                        array('id' => $path->course));
+            } else {
+                $data->recommendedpaths[$path->id]['id']                = $path->id;
+                $data->recommendedpaths[$path->id]['name']              = $path->fullname;
+                $data->recommendedpaths[$path->id]['description']       = $path->summary;
+                $data->recommendedpaths[$path->id]['informationurl']    = $path->informationurl;
+                $data->recommendedpaths[$path->id]['courseurl']         = new \moodle_url('/course/view.php',
+                        array('id' => $path->course));
+            }
+
         }
  
         return $data;
