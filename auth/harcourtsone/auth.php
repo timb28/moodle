@@ -13,7 +13,7 @@ class auth_plugin_harcourtsone extends auth_plugin_base {
     /**
      * Constructor.
      */
-    function auth_plugin_harcourtsone() {
+    public function __construct() {
         $this->authtype = 'harcourtsone';
     }
     
