@@ -57,7 +57,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
     /**
      * Constructor.
      */
-    function auth_plugin_joomdle() {
+    public function __construct() {
         $this->authtype = 'joomdle';
 		$this->config = get_config('auth/joomdle');
     }
