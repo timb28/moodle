@@ -28,3 +28,8 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->version   = 2017031402;        // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2012112900;        // Requires this Moodle version
 $plugin->component = 'block_training_pathways'; // Full name of the plugin (used for diagnostics)
+$plugin->maturity = MATURITY_ALPHA;
+$plugin->release = 'v0.1';
+$plugin->dependencies = array(
+    'mod_subcourse' => ANY_VERSION,   // The Subcourse activity must be present (any version).
+);
