@@ -33,3 +33,17 @@ a.btn-success.disabled:hover,
 a.btn-success.disabled {
     color: #FFF;
 }
+
+/* Empty Progress Bars for Training Pathways */
+.progress .bar.bar-empty {
+    background-color: transparent;
+    background-color: #a8a8a8;
+    background-image: -moz-linear-gradient(top, #999, #bfbfbf);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#999), to(#bfbfbf));
+    background-image: -webkit-linear-gradient(top, #999, #bfbfbf);
+    background-image: -o-linear-gradient(top, #999, #bfbfbf);
+    background-image: linear-gradient(to bottom, #999, #bfbfbf);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff999999', endColorstr='#ffbfbfbf', GradientType=0);
+    text-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}

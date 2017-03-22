@@ -43,14 +43,6 @@
   <div class="well">
     <h4><a href="{{courseurl}}">{{name}}</a></h4>
     <div class="progress">
-      <div data-toggle="tooltip" data-placement="top" title="" data-original-title="Getting Started the Harcourts Way" class="bar bar-success" style="width: 20%;"><i class="fa fa-check" aria-hidden="true"></i></div>
-      <div data-toggle="tooltip" data-placement="top" title="" data-original-title="Sales Registration" class="bar bar-success" style="width: 20%;"><i class="fa fa-check" aria-hidden="true"></i></div>
-      <div data-toggle="tooltip" data-placement="top" title="" data-original-title="iStart Online" class="bar bar-warning" style="width: 20%;"><i class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
-      <div class="bar bar-info" style="width: 20%;"><i class="fa fa-play" aria-hidden="true"></i></div>
-      <div class="bar bar-warning" style="width: 20%;"><i class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
-    </div>
-
-    <div class="progress">
         {{# subcourses }}
             {{# isenrolled }}
                 {{# iscomplete }}
@@ -61,7 +53,7 @@
                 {{/ iscomplete }}
             {{/ isenrolled }}
             {{^ isenrolled }}
-      <div data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ name }}" class="bar bar-warning" style="width: {{ progresswidth }};"><i class="fa fa-calendar-times-o" aria-hidden="true"></i></div>
+      <div data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ name }}" class="bar bar-empty" style="width: {{ progresswidth }};"><i class="fa fa-square-o" aria-hidden="true"></i></div>
             {{/ isenrolled }}
         {{/ subcourses }}
     </div>
