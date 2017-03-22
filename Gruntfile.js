@@ -79,12 +79,15 @@ module.exports = function(grunt) {
         },
         less: {
             academy_clean: {
-                files: {
-                    "theme/academy_clean/style/fontawesome-no-woff2.css": "theme/academy_clean/less/fontawesome-no-woff2.less",
-                    "theme/academy_clean/style/fontawesome-woff2.css": "theme/academy_clean/less/fontawesome-woff2.less",
-                    "theme/academy_clean/style/fontawesome.css": "theme/academy_clean/less/fontawesome.less",
-                    "theme/academy_clean/style/user-profile-country.css": "theme/academy_clean/less/user-profile-country.less",
-                },
+                files: [
+                    {   
+                        expand: true,
+                        cwd: "theme/academy_clean/less/",
+                        src: "*.less",
+                        dest: "theme/academy_clean/style/",
+                        ext: ".css"
+                    }   
+                ],
                 options: {
                     compress: true
                 }
