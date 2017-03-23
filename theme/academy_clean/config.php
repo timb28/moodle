@@ -54,7 +54,8 @@ $THEME->sheets = array( 'academy',
                         'custom',
                         'videofile',
                         'istart',
-                        'mod_feedback'
+                        'mod_feedback',
+                        'mod_subcourse'
     );
 $THEME->supportscssoptimisation = false;
 $THEME->yuicssmodules = array();
