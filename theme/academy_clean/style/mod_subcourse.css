@@ -27,6 +27,13 @@ li.activity.subcourse > div {
 li.activity.subcourse .mod-indent-outer {
     display: block;
 }
+body.editing li.activity.subcourse .mod-indent-outer {
+    display: block;
+    padding-left: 0;
+}
+.editing .section .activity .activityinstance {
+    padding-left: 32px;
+}
 
 li.activity.subcourse div.activityheading,
 .panel-heading {
