@@ -34,7 +34,7 @@ class mod_gradedtask_mod_form extends moodleform_mod {
         $mform = $this->_form;
 
         $mform->addElement('header', 'generalhdr', get_string('general'));
-        $this->standard_intro_elements(true, get_string('gradedtasktext', 'gradedtask'));
+        $this->standard_intro_elements(get_string('gradedtasktext', 'gradedtask'));
 
         $mform->addElement('header', 'gradedtasksettings', get_string('gradedtasksettings', 'gradedtask'));
         $mform->setExpanded('gradedtasksettings', true);
