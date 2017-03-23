@@ -151,6 +151,21 @@ class training_paths implements \renderable, \templatable {
         $return = new \stdClass();
         $return->course = $subcourse->refcourse;
 
+
+
+        
+        // TODO: Update this with code to work with MNet report courses.
+        if ($subcourse->refcourse < 0) {
+            $return->isenrolled = false;
+            $return->grade = 100;
+            $return->maxgrade = 100;
+            return $return;
+        }
+
+        
+        
+        
+
         $subcoursecontext = \context_course::instance($subcourse->refcourse);
         $return->isenrolled = is_enrolled($subcoursecontext);
 
