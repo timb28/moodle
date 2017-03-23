@@ -100,6 +100,16 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
 
         return parent::add_instance($course, $fields);
     }
+    
+    /**
+     * It isn't possible to hide/show enrol instance via standard UI.
+     *
+     * @param stdClass $instance
+     * @return bool
+     */
+    public function can_hide_show_instance($instance) {
+        return false;
+    }
 
     /**
      * Creates course enrol form, checks if form submitted
