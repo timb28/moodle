@@ -119,40 +119,52 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
      * @return string html text, usually a form in a text box
      */
     function enrol_page_hook(stdClass $instance) {
-        global $OUTPUT, $CFG, $PAGE;
+        global $COURSE, $OUTPUT, $CFG, $PAGE;
 
         ob_start();
+        
+        if (isguestuser()) { // force login only for guest user, not real users with guest role
+            if ($CFG->loginhttps) {
+                // This actually is not so secure ;-), 'cause we're
+                // in unencrypted connection...
+                $wwwroot = str_replace("http://", "https://", $CFG->wwwroot);
+            } else {
+                $wwwroot = $CFG->wwwroot;
+            }
+            redirect($wwwroot.'/login/');
+        }
 
         if ($instance->customtext1 == NULL) { // no cost, other enrolment methods (instances) should be used
-            echo html_writer::tag('p', get_string('nourl', 'enrol_harcourtsone'));
-        } else {
-            if (isguestuser()) { // force login only for guest user, not real users with guest role
-                if ($CFG->loginhttps) {
-                    // This actually is not so secure ;-), 'cause we're
-                    // in unencrypted connection...
-                    $wwwroot = str_replace("http://", "https://", $CFG->wwwroot);
-                } else {
-                    $wwwroot = $CFG->wwwroot;
-                }
-                redirect($wwwroot.'/login/');
+            if (empty($COURSE->summary)) {
+                echo html_writer::tag('p', get_string('nourl', 'enrol_harcourtsone'));
             } else {
-                echo html_writer::start_div('mdl-align alert alert-block');
+                $coursecontext = \context_course::instance($COURSE->id);
+                $options = array('filter' => false, 'overflowdiv' => true, 'noclean' => true, 'para' => false);
+                $summary = file_rewrite_pluginfile_urls($COURSE->summary, 'pluginfile.php', $coursecontext->id, 'course', 'summary', null);
+                $summary = format_text($summary, $COURSE->summaryformat, $options, $COURSE->id);
+                
+                echo html_writer::start_div('alert alert-info');
                 echo html_writer::tag('p', get_string("enrolinstructions", "enrol_harcourtsone"));
-                echo html_writer::start_tag('p');
-                echo html_writer::link($instance->customtext1, get_string("enrolbutton", "enrol_harcourtsone"), array('class'=>'btn'));
-                echo html_writer::end_tag('p');
-                echo html_writer::end_div();
-
-                /* Match the padding of 'alert' to  vertically align the elements. */
-                echo html_writer::start_div('mdl-align alert-block', array('style'=>'padding: 8px 35px 8px 14px;'));
-                echo html_writer::tag('p', get_string("reloadinstructions", "enrol_harcourtsone"));
-                echo html_writer::start_tag('p');
-                echo html_writer::link($PAGE->url, get_string("reloadbutton", "enrol_harcourtsone"), array('class'=>'btn'));
-                echo html_writer::end_tag('p');
+                echo html_writer::div($summary);
                 echo html_writer::end_div();
             }
-
+        } else {
+            echo html_writer::start_div('mdl-align alert alert-info');
+            echo html_writer::tag('p', get_string("enrolinstructions", "enrol_harcourtsone"));
+            echo html_writer::start_tag('p');
+            echo html_writer::link($instance->customtext1, get_string("enrolbutton", "enrol_harcourtsone"), array('class'=>'btn'));
+            echo html_writer::end_tag('p');
+            echo html_writer::end_div();
         }
+        
+        /* Match the padding of 'alert' to  vertically align the elements. */
+        echo html_writer::start_div('mdl-align alert-block', array('style'=>'padding: 8px 35px 8px 14px;'));
+        echo html_writer::tag('p', get_string("reloadinstructions", "enrol_harcourtsone"));
+        echo html_writer::start_tag('p');
+        echo html_writer::link($PAGE->url, get_string("reloadbutton", "enrol_harcourtsone"), array('class'=>'btn'));
+        echo html_writer::end_tag('p');
+        echo html_writer::end_div();
+
 
         return $OUTPUT->box(ob_get_clean());
     }
