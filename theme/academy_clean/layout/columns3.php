@@ -43,7 +43,7 @@ if (right_to_left()) {
 $courseclass = ' course-shortname-'.trim($COURSE->shortname);
 
 // Add user's country to body class
-$countryclass = ' user-profile-country-'.strtolower(trim($USER->country));
+$countryclass = (!empty($USER->country) ? ' user-profile-country-'.strtolower(trim($USER->country)) : '');
 
 // Enable CSS to target pages presented to guest users.
 $roleclass = '';
