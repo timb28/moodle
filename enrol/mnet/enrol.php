@@ -431,4 +431,79 @@ class enrol_mnet_mnetservice_enrol {
 
         return $list;
     }
+    
+    /**
+     * Returns the course grade for the given user.
+     * 
+     * Academy Patch M#052 mod_subcourse can work with MNet remote courses the same as local courses.
+     * 
+     * @global type $CFG
+     * @global type $DB
+     * @param type $courseid ID of our course
+     * @param type $username username of the student
+     * @return stdClass containing course grade information and student grade
+     * @throws coding_exception
+     */
+    public function course_grades($courseid, $username) {
+        global $CFG, $DB;
+
+        if (!$client = get_mnet_remote_client()) {
+            die('Callable via XML-RPC only');
+        }
+
+        if (empty($courseid)) {
+            throw new coding_exception('Empty referenced course id');
+        }
+        
+        if (empty($username)) {
+            throw new coding_exception('Empty referenced username');
+        }
+        
+        $fetchedfields = array('hidden', 'gradetype', 'grademax', 'grademin', 'gradepass', 'scaleid');
+
+        $return = new stdClass();
+
+        require_once($CFG->dirroot . '/lib/grade/grade_item.php');
+        $refgradeitem = \grade_item::fetch_course_item($courseid);
+
+        // Get grade_item info.
+        foreach ($fetchedfields as $property) {
+            if (!empty($refgradeitem->$property)) {
+                $return->$property = $refgradeitem->$property;
+            } else {
+                $return->$property = null;
+            }
+        }
+
+        // If the grade is a scale, don't use it.
+        if (($refgradeitem->gradetype == GRADE_TYPE_SCALE)) {
+            $gradeitemonly = true;
+            debugging('Unable to fetch grades: the remote final grade item uses local scale.');
+            $return->gradetype = GRADE_TYPE_SCALE;
+        }
+        
+        // If the remote course is not graded, don't use it.
+        if (($refgradeitem->gradetype == GRADE_TYPE_NONE)) {
+            $gradeitemonly = true;
+            debugging('Unable to fetch grades: the course does not have a grade.');
+            $return->gradetype = GRADE_TYPE_NONE;
+        }
+
+        if (!$gradeitemonly) {
+            // Get grades.
+            $user = $DB->get_record('user', array('username'=>$username, 'mnethostid'=>$client->id));
+            
+            require_once($CFG->dirroot . '/lib/grade/grade_grade.php');
+            $grade = new \grade_grade(array('itemid' => $refgradeitem->id, 'userid' => $user->id));
+            $grade->grade_item =& $refgradeitem;
+            
+            $return->grade = new stdClass();
+            $return->grade->userid         = $user->id;
+            $return->grade->finalgrade     = $grade->finalgrade;
+            $return->grade->feedback       = $grade->feedback;
+            $return->grade->feedbackformat = $grade->feedbackformat;
+        }
+        
+        return $return;
+    }
 }

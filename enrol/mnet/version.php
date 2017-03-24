@@ -24,6 +24,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/** START Academy Patch M#052 mod_subcourse can work with MNet remote courses the same as local courses.
 $plugin->version   = 2015111600;        // The current plugin version (Date: YYYYMMDDXX)
+ */
+$plugin->version   = 2017032401;        // The current plugin version (Date: YYYYMMDDXX)
+/* END Academy Patch M#052. */
 $plugin->requires  = 2015111000;        // Requires this Moodle version
 $plugin->component = 'enrol_mnet';      // Full name of the plugin (used for diagnostics)
