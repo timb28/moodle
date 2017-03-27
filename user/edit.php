@@ -241,7 +241,7 @@ if ($usernew = $userform->get_data()) {
     }
 
     // Update user picture.
-    if (empty($CFG->disableuserimages)) {
+    if (empty($CFG->disableuserimages) && !empty($usernew->imagefile)) { // Academy Patch M#053 Only show missing profile fields.
         useredit_update_picture($usernew, $userform, $filemanageroptions);
     }
 

@@ -286,6 +286,16 @@ function useredit_shared_definition(&$mform, $editoroptions, $filemanageroptions
 
     $strrequired = get_string('required');
     $stringman = get_string_manager();
+    
+     /* START Academy Patch M#053 Ask users to only complete missing required profile fields. */
+    $showmissing = optional_param('showmissing', false, PARAM_BOOL);  
+    if (user_not_fully_set_up($USER) || $showmissing) {
+        $mform->addElement('html', '<div class="alert alert-info"> <i class="fa fa-user fa-3x pull-left"></i> '.
+                '<h4>'.get_string('completemissingprofilefieldsheading').'</h4>'.
+                '<div>'.get_string('completemissingprofilefields').'</div>'.
+                '</div>');
+    }
+    /* END Academy Patch M#053. */
 
     // Add the necessary names.
     foreach (useredit_get_required_name_fields() as $fullname) {
