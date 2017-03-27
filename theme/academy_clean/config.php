@@ -35,27 +35,29 @@ $THEME->name = 'academy_clean';
 //
 $THEME->doctype = 'html5';
 $THEME->parents = array('bootstrapbase');
-$THEME->sheets = array( 'academy',
+$THEME->sheets = array( 
+                        'academy',
                         'auth_lenauth',
-                        'blocks',
-                        'block_course_overview',
                         'block_configurable_reports',
+                        'block_course_overview',
+                        'blocks',
                         'bootstrapbase',
-                        'course',
                         'content',
-                        'fontawesome',
+                        'course',
+                        'custom',
                         'fontawesome-woff2',
+                        'fontawesome',
                         'form',
+                        'istart',
+                        'joomla',
+                        'mod_feedback',
+                        'mod_subcourse',
+                        'print',
                         'questionnaire',
                         'quiz_questions',
-                        'joomla',
-                        'print',
                         'user-profile-country',
-                        'custom',
                         'videofile',
-                        'istart',
-                        'mod_feedback',
-                        'mod_subcourse'
+
     );
 $THEME->supportscssoptimisation = false;
 $THEME->yuicssmodules = array();
