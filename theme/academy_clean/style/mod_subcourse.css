@@ -8,6 +8,11 @@ and open the template in the editor.
     Author     : timbutler
 */
 
+/* Hide progress checkboxes */
+.modtype_subcourse .autocompletion {
+    display:none;
+}
+
 /* Adapted from Bootstrap 3 Panels */
 li.activity.subcourse,
 .panel {
