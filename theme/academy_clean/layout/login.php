@@ -89,7 +89,7 @@ echo $OUTPUT->doctype() ?>
             <?php
             $auth_instructions = '';
 
-            if ( file_exists( $CFG->dirroot . '/auth/lenauth/out.php' ) ) :
+            if ( file_exists( $CFG->dirroot . '/auth/lenauth/out.php' ) && is_enabled_auth('lenauth') ) :
                 include_once $CFG->dirroot . '/auth/lenauth/out.php';
                 $auth_instructions = auth_lenauth_out::getInstance()->lenauth_output('style3-text');
             endif;
