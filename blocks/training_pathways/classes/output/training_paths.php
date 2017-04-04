@@ -50,9 +50,10 @@ class training_paths implements \renderable, \templatable {
                     FROM {block_training_pathways} tp
                         JOIN
                         {course} c ON tp.course = c.id
-                    WHERE tp.regions LIKE ?
-                    AND tp.roles LIKE ?';
-            $params = array( $USER->profile['region'], $USER->profile['role'] );
+                    WHERE '.$DB->sql_like('tp.regions', ':region').'
+                    AND '.$DB->sql_like('tp.roles', ':role');
+            $params = array('region' => '%'.$USER->profile['region'].'%',
+                            'role'   => '%'.$USER->profile['role']  .'%');
             $results = $DB->get_records_sql($sql,$params);
             $this->paths = $results;
         }
