@@ -77,7 +77,8 @@ $string['messageprovider:expiry_notification'] = 'Self enrolment expiry notifica
 $string['newenrols'] = 'Allow new enrolments';
 $string['newenrols_desc'] = 'Allow users to self enrol into new courses by default.';
 $string['newenrols_help'] = 'This setting determines whether a user can enrol into this course.';
-$string['nopassword'] = 'No enrolment key required.';
+//$string['nopassword'] = 'No enrolment key required.';
+$string['nopassword'] = 'Are you sure you want to enrol?'; // Academy customised.
 $string['password'] = 'Enrolment key';
 $string['password_help'] = 'An enrolment key enables access to the course to be restricted to only those who know the key.
 
