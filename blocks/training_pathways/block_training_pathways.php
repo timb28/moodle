@@ -64,7 +64,7 @@ class block_training_pathways extends block_base {
     }
     
     public function is_empty() {
-        return empty($this->content) && empty($this->content->text);
+        return empty($this->content) or (empty($this->content->text) and empty($this->content->footer));
     }
 
     function has_config() {return false;}
