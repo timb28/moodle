@@ -1,0 +1,15 @@
+/********************************************************
+**
+** Theme name: Academy Clean
+** Creation Date: 05/04/17
+** Author: Harcourts International Pty Ltd
+** Author URI: http://www.academyrealestatetraining.com
+**
+*********************************************************/
+
+/* Remove the curved corners on the recommended and enrolled training pathways. */
+.path-my .well,
+.path-my .accordion-group {
+  border-radius: 0;
+}
+

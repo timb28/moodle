@@ -36,7 +36,7 @@ class training_paths implements \renderable, \templatable {
         global $DB, $USER;
         if ($this->paths == null) {
             // The user must have a region and role.
-            if ($USER->profile['region'] == null || $USER->profile['role'] == null) {
+            if (empty($USER->profile['region']) or empty($USER->profile['role'])) {
                 return;
             }
             

@@ -40,6 +40,7 @@ $THEME->sheets = array(
                         'auth_lenauth',
                         'block_configurable_reports',
                         'block_course_overview',
+                        'block_training_pathways',
                         'blocks',
                         'bootstrapbase',
                         'content',
