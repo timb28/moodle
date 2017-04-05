@@ -27,7 +27,7 @@ $string['enrolbutton'] = '<i class="icon-user"></i> Register';
 $string['reloadinstructions'] = '<strong>Note:</strong> Your enrollment can take up to 10 minutes to activate.';
 $string['reloadbutton'] = '<i class="icon-refresh"></i> Retry';
 $string['pluginname'] = 'HarcourtsOne';
-$string['pluginname_desc'] = 'The Harcourts One enrolment plugin allows you to direct potential students to a HarcourtsOne course to register.';
+$string['pluginname_desc'] = 'The HarcourtsOne enrolment plugin allows you to direct potential students to a HarcourtsOne course to register.';
 $string['customtext1'] = 'HarcourtsOne URL';
 $string['logininstructions'] = 'Please login to continue';
 $string['loginbutton'] = 'Login';
