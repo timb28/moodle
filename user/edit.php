@@ -193,7 +193,10 @@ if ($usernew = $userform->get_data()) {
             $returnurl = new moodle_url('/user/profile.php', array('id' => $user->id));
         }
     } else {
-        $returnurl = new moodle_url('/user/preferences.php', array('userid' => $user->id));
+        /* START Academy Patch M#053 Ask users to only complete missing required profile fields. */
+        // $returnurl = new moodle_url('/user/preferences.php', array('userid' => $user->id));
+        $returnurl = new moodle_url('/');
+        /* END Academy Patch M#053 */
     }
 
     $emailchangedhtml = '';
