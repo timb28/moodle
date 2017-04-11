@@ -24,6 +24,7 @@
 
 ## Enrolments ##
 ./enrol/enrol_apply-install.sh
+./enrol/enrol_auto-install.sh
 ./enrol/enrol_metamnet-install.sh
 
 ## Activities
