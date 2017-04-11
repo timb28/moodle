@@ -13,7 +13,22 @@
   border-radius: 0;
 }
 
+@media (min-width: 670px) {
+  .enrolled_paths h2 {
+    padding-top: 12px;
+  }
+}
+
 /* Hide registration buttons appearing in course summaries displayed by mod_subcourse. */
 .summary.is-enrolled .hide-if-enrolled {
-    display: none;
+  display: none;
+}
+
+.accordion-group {
+  margin-bottom: 15px;
+}
+
+.accordion-group h2 {
+  margin-bottom: 0;
+  padding: 7px 0;
 }
