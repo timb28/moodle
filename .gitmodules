@@ -75,3 +75,7 @@
 	path = question/type/oumultiresponse
 	url = https://github.com/HarcourtsAcademy/moodle-qtype_oumultiresponse.git
 	branch = HA-Moodle30
+[submodule "enrol/auto"]
+	path = enrol/auto
+	url = https://github.com/eugeneventer/moodle-enrol_auto.git
+	branch = MOODLE_32_STABLE
