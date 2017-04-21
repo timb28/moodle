@@ -616,23 +616,25 @@ class theme_academy_clean_block_course_overview_renderer extends block_course_ov
                 }
             }
 
-            if ($config->showcategories != BLOCKS_COURSE_OVERVIEW_SHOWCATEGORIES_NONE) {
-                // List category parent or categories path here.
-                $currentcategory = coursecat::get($course->category, IGNORE_MISSING);
-                if ($currentcategory !== null) {
-                    $html .= html_writer::start_tag('div', array('class' => 'categorypath'));
-                    if ($config->showcategories == BLOCKS_COURSE_OVERVIEW_SHOWCATEGORIES_FULL_PATH) {
-                        foreach ($currentcategory->get_parents() as $categoryid) {
-                            $category = coursecat::get($categoryid, IGNORE_MISSING);
-                            if ($category !== null) {
-                                $html .= $category->get_formatted_name().' / ';
+            if (empty($course->remoteid)) { // Academy Patch M#045 Display remote MNet courses on a student’s Dashboard
+                if ($config->showcategories != BLOCKS_COURSE_OVERVIEW_SHOWCATEGORIES_NONE) {
+                    // List category parent or categories path here.
+                    $currentcategory = coursecat::get($course->category, IGNORE_MISSING);
+                    if ($currentcategory !== null) {
+                        $html .= html_writer::start_tag('div', array('class' => 'categorypath'));
+                        if ($config->showcategories == BLOCKS_COURSE_OVERVIEW_SHOWCATEGORIES_FULL_PATH) {
+                            foreach ($currentcategory->get_parents() as $categoryid) {
+                                $category = coursecat::get($categoryid, IGNORE_MISSING);
+                                if ($category !== null) {
+                                    $html .= $category->get_formatted_name().' / ';
+                                }
                             }
                         }
+                        $html .= $currentcategory->get_formatted_name();
+                        $html .= html_writer::end_tag('div');
                     }
-                    $html .= $currentcategory->get_formatted_name();
-                    $html .= html_writer::end_tag('div');
                 }
-            }
+            } // Academy Patch M#045 Display remote MNet courses on a student’s Dashboard
 
             $html .= $this->output->box('', 'flush');
             $html .= $this->output->box_end();
