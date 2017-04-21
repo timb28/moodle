@@ -44,6 +44,28 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
         return true;
     }
 
+    /**
+     * Is it possible to delete enrol instance via standard UI?
+     *
+     * @param stdClass $instance
+     * @return bool
+     */
+    public function can_delete_instance($instance) {
+        $context = context_course::instance($instance->courseid);
+        return has_capability('enrol/harcourtsone:config', $context);
+    }
+
+    /**
+     * Is it possible to hide/show enrol instance via standard UI?
+     *
+     * @param stdClass $instance
+     * @return bool
+     */
+    public function can_hide_show_instance($instance) {
+        $context = context_course::instance($instance->courseid);
+        return has_capability('enrol/harcourtsone:config', $context);
+    }
+
     public function allow_enrol(stdClass $instance) {
         // Users with enrol cap can't enrol other users manually manually.
         return false;
@@ -77,38 +99,7 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
             return NULL;
         }
 
-        if ($DB->record_exists('enrol', array('courseid'=>$courseid, 'enrol'=>'harcourtsone'))) {
-            return NULL;
-        }
-
         return new moodle_url('/enrol/harcourtsone/edit.php', array('courseid'=>$courseid));
-    }
-
-    /**
-     * Add new instance of enrol plugin.
-     * @param stdClass $course
-     * @param array instance fields
-     * @return int id of new instance, null if can not be created
-     */
-    public function add_instance($course, array $fields = NULL) {
-        global $DB;
-
-        if ($DB->record_exists('enrol', array('courseid'=>$course->id, 'enrol'=>'harcourtsone'))) {
-            // only one instance allowed, sorry
-            return NULL;
-        }
-
-        return parent::add_instance($course, $fields);
-    }
-    
-    /**
-     * It isn't possible to hide/show enrol instance via standard UI.
-     *
-     * @param stdClass $instance
-     * @return bool
-     */
-    public function can_hide_show_instance($instance) {
-        return false;
     }
 
     /**
