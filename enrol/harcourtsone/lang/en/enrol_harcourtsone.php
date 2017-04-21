@@ -28,7 +28,16 @@ $string['reloadinstructions'] = '<strong>Note:</strong> Your enrollment can take
 $string['reloadbutton'] = '<i class="icon-refresh"></i> Retry';
 $string['pluginname'] = 'HarcourtsOne';
 $string['pluginname_desc'] = 'The HarcourtsOne enrolment plugin allows you to direct potential students to a HarcourtsOne course to register.';
-$string['customtext1'] = 'HarcourtsOne URL';
+
+$string['customtext1']      = 'Registration link';
+$string['customtext2']      = 'Registration label';
+$string['customtext3']      = 'Registration icon';
+$string['customtext4']      = 'Information link';
+$string['customchar1']      = 'Information label';
+$string['customchar2']      = 'Limit to profile field shortname';
+$string['customchar3']      = 'Profile field value';
+
+$string['limitinstance'] = 'Limit instance visibility';
 $string['logininstructions'] = 'Please login to continue';
 $string['loginbutton'] = 'Login';
 $string['harcourtsone:config'] = 'Configure HarcourtsOne enrol instances';

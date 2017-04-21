@@ -44,8 +44,35 @@ class enrol_harcourtsone_edit_form extends moodleform {
         $mform->addElement('select', 'status', get_string('status', 'enrol_harcourtsone'), $options);
         $mform->setDefault('status', $plugin->get_config('status'));
         
+        // Registration URL
         $mform->addElement('text', 'customtext1', get_string('customtext1', 'enrol_harcourtsone'), array('size'=>35));
         $mform->setType('customtext1', PARAM_URL);
+
+        // Registration Link Label
+        $mform->addElement('text', 'customtext2', get_string('customtext2', 'enrol_harcourtsone'), array('size'=>35));
+        $mform->setType('customtext2', PARAM_TEXT);
+
+        // Registration Link Icon
+        $mform->addElement('text', 'customtext3', get_string('customtext3', 'enrol_harcourtsone'), array('size'=>35));
+        $mform->setType('customtext3', PARAM_TEXT);
+
+        // Information URL
+        $mform->addElement('text', 'customtext4', get_string('customtext4', 'enrol_harcourtsone'), array('size'=>35));
+        $mform->setType('customtext4', PARAM_URL);
+        
+        // Information Label
+        $mform->addElement('text', 'customchar1', get_string('customchar1', 'enrol_harcourtsone'), array('size'=>35));
+        $mform->setType('customchar1', PARAM_TEXT);
+
+        $mform->addElement('header', 'header', get_string('limitinstance', 'enrol_harcourtsone'));
+
+        // Only display to users with this profile field (leave blank to show to all)
+        $mform->addElement('text', 'customchar2', get_string('customchar2', 'enrol_harcourtsone'), array('size'=>35));
+        $mform->setType('customchar2', PARAM_TEXT);
+
+        // Only display to users with this profile field value (leave blank to show to all)
+        $mform->addElement('text', 'customchar3', get_string('customchar3', 'enrol_harcourtsone'), array('size'=>35));
+        $mform->setType('customchar3', PARAM_TEXT);
 
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
