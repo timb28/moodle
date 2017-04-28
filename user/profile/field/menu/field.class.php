@@ -107,6 +107,9 @@ class profile_field_menu extends profile_field_base {
                 $optiongroupitems[$key] = $option;
             }
         }
+        if (!empty($optiongroupitems)) {
+            $optiongroups['Other'] = array_reverse($optiongroupitems);
+        }
 
         $optiongroups = array_reverse($optiongroups);
 
