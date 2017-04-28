@@ -85,7 +85,43 @@ class profile_field_menu extends profile_field_base {
      * @param moodleform $mform Moodle form instance
      */
     public function edit_field_add($mform) {
-        $mform->addElement('select', $this->inputname, format_string($this->field->name), $this->options);
+        /* START Academy Patch M#054 Enable option groups in custom user profile fields. */
+        global $CFG;
+
+        // Select options starting with '--- ' are option group headings
+        $optiongroups = array();
+        $optiongroupitems = array();
+        $useoptiongroups = false;
+        foreach (array_reverse($this->options) as $key => $option) {
+            if ($key == '') {
+                // Skip the [] => Choose... item
+                continue;
+            }
+
+            preg_match('/(--- )(.*)/', $key, $matches);
+            if (!empty($matches) && $matches[2]) {
+                $useoptiongroups = true;
+                $optiongroups[$matches[2]] = array_reverse($optiongroupitems);
+                $optiongroupitems = array();
+            } else {
+                $optiongroupitems[$key] = $option;
+            }
+        }
+
+        $optiongroups = array_reverse($optiongroups);
+
+        if ($useoptiongroups) {
+            require_once $CFG->libdir.'/form/selectgroups.php';
+            $selectgroups = new \MoodleQuickForm_selectgroups($this->inputname, format_string($this->field->name), $optiongroups, null, true);
+            $mform->addElement($selectgroups);
+        } else {
+            $mform->addElement('select', $this->inputname, format_string($this->field->name), $this->options);
+        }
+
+        /* $mform->addElement('select', $this->inputname, format_string($this->field->name), $this->options); */
+
+        /* END Academy Patch M#054 */
+
     }
 
     /**
