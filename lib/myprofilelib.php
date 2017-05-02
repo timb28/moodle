@@ -73,7 +73,9 @@ function core_myprofile_navigation(core_user\output\myprofile\tree $tree, $user,
     }
 
     // Edit profile.
-    if (isloggedin() && !isguestuser($user) && !is_mnet_remote_user($user)) {
+    /* START Academy Patch M#055 MNet users can manage custom profile fields. */
+    if (isloggedin() && !isguestuser($user)) {
+        /* END Academy Patch M#055. */
         if (($iscurrentuser || is_siteadmin($USER) || !is_siteadmin($user)) && has_capability('moodle/user:update',
                     $systemcontext)) {
             $url = new moodle_url('/user/editadvanced.php', array('id' => $user->id, 'course' => $courseid,

@@ -79,6 +79,7 @@ if (!empty($CFG->usetags)) {
 // user_not_fully_set_up() check, otherwise the remote user could end up in
 // endless loop between user/view.php and herein. Note that required custom
 // fields are not supported in MNet environment anyway.
+/* START Academy Patch M#055 MNet users can manage custom profile fields.
 if (is_mnet_remote_user($user)) {
     if (user_not_fully_set_up($user, true)) {
         $hostwwwroot = $DB->get_field('mnet_host', 'wwwroot', array('id' => $user->mnethostid));
@@ -86,6 +87,7 @@ if (is_mnet_remote_user($user)) {
     }
     redirect($CFG->wwwroot . "/user/view.php?course={$course->id}");
 }
+END Academy Patch M#055. */
 
 // Load the appropriate auth plugin.
 $userauth = get_auth_plugin($user->auth);

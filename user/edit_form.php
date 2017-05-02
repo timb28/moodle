@@ -133,11 +133,17 @@ class user_edit_form extends moodleform {
             $customfields = $authplugin->get_custom_user_profile_fields();
             $customfieldsdata = profile_user_record($userid, false);
             $fields = array_merge($fields, $customfields);
-            
-            
+
+
             /* START Academy Patch M#053 Ask users to only complete missing required profile fields. */
             $this->showmissing();
             /* END Academy Patch M#053. */
+
+            /* START Academy Patch M#055 MNet users can manage custom profile fields. */
+            if (is_mnet_remote_user($user) && !user_not_fully_set_up($user, true)) {
+                $this->show_only_custom_fields($customfields);
+            }
+            /* END Academy Patch M#055. */
             
             
             foreach ($fields as $field) {
@@ -278,8 +284,39 @@ class user_edit_form extends moodleform {
                 $mform->removeElement(''); // Remove the 'Please complete your profile' HTML message.
             }
         }
-        /* END Academy Patch M#053. */
     }
+    /* END Academy Patch M#053. */
+
+    /* START Academy Patch M#055 MNet users can manage custom profile fields. */
+    /**
+     * Removes all user profile fields that are not core or custom profile fields.
+     *
+     * @param array $customfields
+     * @return void
+     */
+    public function show_only_custom_fields($customfields) {
+        $mform = $this->_form;
+
+        $coreelements = array(
+                                '',
+                                '_qf__user_edit_form',
+                                'course',
+                                'id',
+                                'moodle',
+                                'sesskey',
+                                'submitbutton',
+                              );
+
+        $keepelements = array_merge($coreelements, $customfields);
+
+        foreach ($mform->_elementIndex as $elementname => $id) {
+            if (!in_array($elementname, $keepelements)) {
+                $mform->removeElement($elementname);
+            }
+        }
+
+    }
+    /* END Academy Patch M#055. */
 }
 
 
