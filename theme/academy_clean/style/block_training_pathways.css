@@ -20,7 +20,7 @@
 }
 
 /* Hide registration buttons appearing in course summaries displayed by mod_subcourse. */
-.summary.is-enrolled .hide-if-enrolled {
+.subcourse-info.is-enrolled .hide-if-enrolled {
   display: none;
 }
 
