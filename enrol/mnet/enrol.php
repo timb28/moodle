@@ -124,6 +124,8 @@ class enrol_mnet_mnetservice_enrol {
         if (empty($user)) {
             throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
         }
+
+        error_log('user enrolments: ' . print_r($username, true));
         
         $courses = enrol_get_users_courses($user->id, true, 'id, shortname, fullname, idnumber, visible,
                    summary, summaryformat, format, showgrades, lang, enablecompletion');
@@ -421,7 +423,6 @@ class enrol_mnet_mnetservice_enrol {
 
         list($sort, $sortparams) = users_order_by_sql('u');
         $sql .= " ORDER BY $sort";
-
         $rs = $DB->get_recordset_sql($sql, array_merge($params, $sortparams));
         $list = array();
         foreach ($rs as $record) {
