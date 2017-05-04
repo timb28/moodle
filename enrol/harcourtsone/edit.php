@@ -67,13 +67,7 @@ if ($mform->is_cancelled()) {
 
         $instance->status         = $data->status;
         $instance->name           = $data->name;
-        $instance->customchar1    = $data->customchar1;
-        $instance->customchar2    = $data->customchar2;
-        $instance->customchar3    = $data->customchar3;
         $instance->customtext1    = $data->customtext1;
-        $instance->customtext2    = $data->customtext2;
-        $instance->customtext3    = $data->customtext3;
-        $instance->customtext4    = $data->customtext4;
         $instance->timemodified   = time();
         $DB->update_record('enrol', $instance);
 
