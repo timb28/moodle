@@ -333,6 +333,52 @@ class mnetservice_enrol {
                 $list[$enrolment->id] = $enrolment;
             }
 
+            /* START Academy Patch M#056 MNet req_course_enrolments returns home site course enrolments for roaming users. */
+            if (!empty($usernames)) {
+                list($usql, $params) = $DB->get_in_or_equal($usernames, SQL_PARAMS_NAMED);
+                list($sort, $sortparams) = users_order_by_sql();
+                $params['mnethostid'] = $mnethostid;
+                $sql = "SELECT username,id
+                          FROM {user}
+                         WHERE mnethostid = :mnethostid
+                               AND username $usql
+                               AND deleted = 0
+                               AND confirmed = 1
+                      ORDER BY $sort";
+                $usersbyusername = $DB->get_records_sql($sql, array_merge($params, $sortparams));
+            } else {
+                $usersbyusername = array();
+            }
+
+            // populate the returned list and update local cache of enrolment records
+            foreach ($response as $remote) {
+                if (empty($usersbyusername[$remote['username']])) {
+                    // we do not know this user or she is deleted or not confirmed or is 'guest'
+                    continue;
+                }
+                $enrolment                  = new stdclass();
+                $enrolment->hostid          = $mnethostid;
+                $enrolment->userid          = $usersbyusername[$remote['username']]->id;
+                $enrolment->remotecourseid  = $remotecourseid;
+                $enrolment->rolename        = $remote['name']; // $remote['shortname'] not used
+                $enrolment->enroltime       = $remote['timemodified'];
+                $enrolment->enroltype       = $remote['enrol'];
+
+                $current = $DB->get_record('mnetservice_enrol_enrolments', array('hostid'=>$enrolment->hostid, 'userid'=>$enrolment->userid,
+                                       'remotecourseid'=>$enrolment->remotecourseid, 'enroltype'=>$enrolment->enroltype), 'id, enroltime');
+                if (empty($current)) {
+                    $enrolment->id = $DB->insert_record('mnetservice_enrol_enrolments', $enrolment);
+                } else {
+                    $enrolment->id = $current->id;
+                    if ($current->enroltime != $enrolment->enroltime) {
+                        $DB->update_record('mnetservice_enrol_enrolments', $enrolment);
+                    }
+                }
+
+                $list[$enrolment->id] = $enrolment;
+            }
+            /* END Academy Patch M#056 */
+
             // prune stale enrolment records
             if (empty($list)) {
                 $DB->delete_records('mnetservice_enrol_enrolments', array('hostid'=>$mnethostid, 'remotecourseid'=>$remotecourseid));
@@ -468,7 +514,7 @@ class mnetservice_enrol {
     
     /* START Academy Patch M#045 Display remote MNet courses on a student’s Dashboard */
     /**
-     * Send request to get all course enrolments for a user
+     * Send request to get course enrolments for a user
      *
      * @uses mnet_xmlrpc_client Invokes XML-RPC request
      * @param id $mnethostid MNet remote host id
@@ -485,7 +531,7 @@ class mnetservice_enrol {
         $request = new mnet_xmlrpc_client();
         $request->set_method('enrol/mnet/enrol.php/user_enrolments');
         $request->add_param($username);
-        
+
         if ($request->send($peer)) {
             return $request->response;
         } else {
