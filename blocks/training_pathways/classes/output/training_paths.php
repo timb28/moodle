@@ -31,16 +31,23 @@ require_once($CFG->dirroot . '/mod/subcourse/lib.php');
 class training_paths implements \renderable, \templatable {
     
     protected $paths;
+
+    // How long a learner needs to be in real estate to be considered experienced.
+    const DAYSTOBEEXPERIENCED = 365;
     
     public function __construct() {
         global $DB, $USER;
         if ($this->paths == null) {
             // The user must have a region and role.
-            if (empty($USER->profile['region']) or empty($USER->profile['role'])) {
+            if (empty($USER->profile['region']) 
+                or empty($USER->profile['role'])
+                or empty($USER->profile['industrystartdate'])) {
                 return;
             }
-            
-            // Get all Training Pathways for the user's region and role
+
+            $isexperienced = ((time() - $USER->profile['industrystartdate']) / DAYSECS) >= self::DAYSTOBEEXPERIENCED;
+
+            // Get all Training Pathways matching the user's region, role and experience.
             $sql = 'SELECT
                         tp.id,
                         c.fullname,
@@ -50,12 +57,47 @@ class training_paths implements \renderable, \templatable {
                     FROM {block_training_pathways} tp
                         JOIN
                         {course} c ON tp.course = c.id
-                    WHERE '.$DB->sql_like('tp.regions', ':region').'
+                    WHERE experienced = :experienced
+                    AND '.$DB->sql_like('tp.regions', ':region').'
                     AND '.$DB->sql_like('tp.roles', ':role');
             $params = array('region' => '%'.$USER->profile['region'].'%',
-                            'role'   => '%'.$USER->profile['role']  .'%');
-            $results = $DB->get_records_sql($sql,$params);
-            $this->paths = $results;
+                            'role'   => '%'.$USER->profile['role']  .'%',
+                            'experienced' => $isexperienced);
+            $matchingpaths = $DB->get_records_sql($sql,$params);
+
+            /* Get all Training Pathways the user is enrolled in.
+               Do this to avoid a user losing access to a pathway
+              they have enrolled in but are no longer eligible for.
+              E.g. User changes from not experienced to experienced. */
+            $sql = 'SELECT 
+                        tp.id,
+                        c.fullname,
+                        c.summary,
+                        tp.informationurl,
+                        tp.course
+                    FROM
+                        {block_training_pathways} tp
+                            JOIN
+                        {enrol} e ON tp.course = e.courseid
+                            JOIN
+                        {user_enrolments} ue ON ue.enrolid = e.id
+                            JOIN
+                        {course} c ON tp.course = c.id
+                    WHERE
+                        ue.userid = :userid
+                    GROUP BY tp.id';
+            $params = array('userid' => $USER->id);
+            $enrolledpaths = $DB->get_records_sql($sql, $params);
+
+            // Combine the matching and enrolled paths and avoid duplicates.
+            $combinedpaths = null;
+            foreach ($matchingpaths as $pathid => $path) {
+                $combinedpaths[$pathid] = $path;
+            }
+            foreach ($enrolledpaths as $pathid => $path) {
+                $combinedpaths[$pathid] = $path;
+            }
+            $this->paths = $combinedpaths;
         }
 
     }
