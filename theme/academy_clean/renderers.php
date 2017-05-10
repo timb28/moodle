@@ -155,6 +155,9 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
             return $output;
         }
 
+        // If the user is not enrolled, don't link the module to the sub-course.
+//        error_log('mod: ' . print_r($mod, true));
+
         $indentclasses = 'mod-indent';
         if (!empty($mod->indent)) {
             $indentclasses .= ' mod-indent-'.$mod->indent;
@@ -178,8 +181,72 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
         $output .= html_writer::start_tag('div');
 
         // Display the link to the module (or do nothing if module has no url)
-        $cmname = $this->course_section_cm_name($mod, $displayoptions);
-        
+        /* Start code section from course_section_cm_name($mod, $displayoptions) */
+
+        //Accessibility: for files get description via icon, this is very ugly hack!
+        $instancename = $mod->get_formatted_name();
+        $altname = $mod->modfullname;
+        // Avoid unnecessary duplication: if e.g. a forum name already
+        // includes the word forum (or Forum, etc) then it is unhelpful
+        // to include that in the accessible description that is added.
+        if (false !== strpos(core_text::strtolower($instancename),
+                core_text::strtolower($altname))) {
+            $altname = '';
+        }
+        // File type after name, for alphabetic lists (screen reader).
+        if ($altname) {
+            $altname = get_accesshide(' '.$altname);
+        }
+
+        // For items which are hidden but available to current user
+        // ($mod->uservisible), we show those as dimmed only if the user has
+        // viewhiddenactivities, so that teachers see 'items which might not
+        // be available to some students' dimmed but students do not see 'item
+        // which is actually available to current student' dimmed.
+        $linkclasses = '';
+        $accesstext = '';
+        $textclasses = '';
+        if ($mod->uservisible) {
+            $conditionalhidden = $this->is_cm_conditionally_hidden($mod);
+            $accessiblebutdim = (!$mod->visible || $conditionalhidden) &&
+                has_capability('moodle/course:viewhiddenactivities', $mod->context);
+            if ($accessiblebutdim) {
+                $linkclasses .= ' dimmed';
+                $textclasses .= ' dimmed_text';
+                if ($conditionalhidden) {
+                    $linkclasses .= ' conditionalhidden';
+                    $textclasses .= ' conditionalhidden';
+                }
+                // Show accessibility note only if user can access the module himself.
+                $accesstext = get_accesshide(get_string('hiddenfromstudents').':'. $mod->modfullname);
+            }
+        } else {
+            $linkclasses .= ' dimmed';
+            $textclasses .= ' dimmed_text';
+        }
+
+        // Get on-click attribute value if specified and decode the onclick - it
+        // has already been encoded for display (puke).
+        $onclick = htmlspecialchars_decode($mod->onclick, ENT_QUOTES);
+
+        $groupinglabel = $mod->get_grouping_label($textclasses);
+
+        // Display link itself.
+        $activitylink = html_writer::empty_tag('img', array('src' => $mod->get_icon_url(),
+                'class' => 'iconlarge activityicon', 'alt' => ' ', 'role' => 'presentation')) . $accesstext .
+                html_writer::tag('span', $instancename . $altname, array('class' => 'instancename'));
+        if ($mod->uservisible and !empty($mod->url)) {
+            $cmname = html_writer::link($mod->url, $activitylink, array('class' => $linkclasses, 'onclick' => $onclick)) .
+                    $groupinglabel;
+        } else {
+            // We may be displaying this just in order to show information
+            // about visibility, without the actual link ($mod->uservisible)
+            $cmname = html_writer::tag('div', $activitylink, array('class' => $textclasses)) .
+                    $groupinglabel;
+        }
+        /* End code section from course_section_cm_name($mod, $displayoptions) */
+
+
         $output .= html_writer::start_div('activityheading'); // Academy added
 
         if (!empty($cmname)) {
@@ -206,10 +273,6 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
         // it should work similarly (at least in terms of ordering) to an
         // activity.
         $contentpart = $this->course_section_cm_text($mod, $displayoptions);
-        $url = $mod->url;
-        if (empty($url)) {
-            $output .= $contentpart;
-        }
 
         $modicons = '';
         if ($this->page->user_is_editing()) {
@@ -226,13 +289,7 @@ class theme_academy_clean_core_course_renderer extends core_course_renderer {
         
         $output .= html_writer::end_tag('div'); // .activityheading - Academy added
 
-        // If there is content AND a link, then display the content here
-        // (AFTER any icons). Otherwise it was displayed before
-        if (!empty($url)) {
-//            $output .= html_writer::start_div('panel-body');
-            $output .= $contentpart;
-//            $output .= html_writer::end_div();
-        }
+        $output .= $contentpart;
 
         // show availability info (if module is not available)
         $output .= $this->course_section_cm_availability($mod, $displayoptions);
