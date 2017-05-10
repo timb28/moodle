@@ -57,7 +57,7 @@ class training_paths implements \renderable, \templatable {
                     FROM {block_training_pathways} tp
                         JOIN
                         {course} c ON tp.course = c.id
-                    WHERE experienced = :experienced
+                    WHERE (experienced = -1 or experienced = :experienced)
                     AND '.$DB->sql_like('tp.regions', ':region').'
                     AND '.$DB->sql_like('tp.roles', ':role');
             $params = array('region' => '%'.$USER->profile['region'].'%',
