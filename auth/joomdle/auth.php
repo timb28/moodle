@@ -6572,7 +6572,9 @@ function question_rewrite_question_urls($text, $file, $contextid, $component,
 	}
 
 	function cron() {
+		/* Start Academy Patch M#057 Disable auth/joomla cron task
 		$this->update_joomla_sessions();
+		END Academy Patch M#057 */
 	}
 
 
