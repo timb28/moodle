@@ -26,10 +26,11 @@ class enrol_snipcart_plugin extends enrol_plugin {
     
     private $currencies = array(
         'AU' => 'AUD',
+        'CA' => 'CAD',
+        'ID' => 'IDR',
         'NZ' => 'NZD',
         'US' => 'USD',
         'ZA' => 'ZAR',
-        'CA' => 'CAD',
     );
     
     /**
