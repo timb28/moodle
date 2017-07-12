@@ -6,6 +6,11 @@
         Styles for displaying course content.
 */
 
+/* Global Moodle: Hide the 'Your Progress' label that shrinks course banner images */
+body.www-academyrealestatetraining-com--moodle #completionprogressid {
+    display: none;
+}
+
 .coursebox .content .courseimage,
 .coursebox .content .coursefile {float:left;width:inherit;clear:left;}
 
