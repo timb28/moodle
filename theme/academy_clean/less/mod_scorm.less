@@ -15,5 +15,10 @@
   #scormpage iframe#scorm_object {
     width: 100%;
     height: 100%;
+    @media (max-width: 669px) {
+      /* Workaround iOS Safari button bar covering Next Lesson navigation at bottom
+         of Articulate Rise activities. */
+      height: 90vh; 
+    }
   }
 }
