@@ -52,6 +52,7 @@ $THEME->sheets = array(
                         'istart',
                         'joomla',
                         'mod_feedback',
+                        'mod_scorm',
                         'mod_subcourse',
                         'print',
                         'questionnaire',
