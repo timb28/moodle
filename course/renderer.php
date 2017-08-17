@@ -450,7 +450,7 @@ class core_course_renderer extends plugin_renderer_base {
     public function course_section_cm_completion($course, &$completioninfo, cm_info $mod, $displayoptions = array()) {
         global $CFG;
         $output = '';
-        if (!$mod->is_visible_on_course_page()) {
+        if (!empty($displayoptions['hidecompletion']) || !isloggedin() || isguestuser() || !$mod->uservisible) {
             return $output;
         }
         if ($completioninfo === null) {
@@ -728,7 +728,24 @@ class core_course_renderer extends plugin_renderer_base {
      * @return string
      */
     public function availability_info($text, $additionalclasses = '') {
+
         $data = ['text' => $text, 'classes' => $additionalclasses];
+        $additionalclasses = array_filter(explode(' ', $additionalclasses));
+
+        if (in_array('ishidden', $additionalclasses)) {
+            $data['ishidden'] = 1;
+
+        } else if (in_array('isstealth', $additionalclasses)) {
+            $data['isstealth'] = 1;
+
+        } else if (in_array('isrestricted', $additionalclasses)) {
+            $data['isrestricted'] = 1;
+
+            if (in_array('isfullinfo', $additionalclasses)) {
+                $data['isfullinfo'] = 1;
+            }
+        }
+
         return $this->render_from_template('core/availability_info', $data);
     }
 
@@ -752,7 +769,7 @@ class core_course_renderer extends plugin_renderer_base {
             if (!empty($mod->availableinfo)) {
                 $formattedinfo = \core_availability\info::format_info(
                         $mod->availableinfo, $mod->get_course());
-                $output = $this->availability_info($formattedinfo);
+                $output = $this->availability_info($formattedinfo, 'isrestricted');
             }
             return $output;
         }
@@ -775,9 +792,9 @@ class core_course_renderer extends plugin_renderer_base {
             // Display information about conditional availability.
             // Don't add availability information if user is not editing and activity is hidden.
             if ($mod->visible || $this->page->user_is_editing()) {
-                $hidinfoclass = '';
+                $hidinfoclass = 'isrestricted isfullinfo';
                 if (!$mod->visible) {
-                    $hidinfoclass = 'hide';
+                    $hidinfoclass .= ' hide';
                 }
                 $ci = new \core_availability\info_module($mod);
                 $fullinfo = $ci->get_full_information();
@@ -926,6 +943,34 @@ class core_course_renderer extends plugin_renderer_base {
 
         $output .= html_writer::end_tag('div');
         return $output;
+    }
+
+    /**
+     * Message displayed to the user when they try to access unavailable activity following URL
+     *
+     * This method is a very simplified version of {@link course_section_cm()} to be part of the error
+     * notification only. It also does not check if module is visible on course page or not.
+     *
+     * The message will be displayed inside notification!
+     *
+     * @param cm_info $cm
+     * @return string
+     */
+    public function course_section_cm_unavailable_error_message(cm_info $cm) {
+        if ($cm->uservisible) {
+            return null;
+        }
+        if (!$cm->availableinfo) {
+            return get_string('activityiscurrentlyhidden');
+        }
+
+        $altname = get_accesshide(' ' . $cm->modfullname);
+        $name = html_writer::empty_tag('img', array('src' => $cm->get_icon_url(),
+                'class' => 'iconlarge activityicon', 'alt' => ' ', 'role' => 'presentation')) .
+            html_writer::tag('span', ' '.$cm->get_formatted_name() . $altname, array('class' => 'instancename'));
+        $formattedinfo = \core_availability\info::format_info($cm->availableinfo, $cm->get_course());
+        return html_writer::div($name, 'activityinstance-error') .
+        html_writer::div($formattedinfo, 'availabilityinfo-error');
     }
 
     /**
@@ -2055,7 +2100,6 @@ class core_course_renderer extends plugin_renderer_base {
                 set_attributes(array('class' => 'frontpage-category-names'));
         return $this->coursecat_tree($chelper, coursecat::get(0));
     }
-
 }
 
 /**

@@ -955,7 +955,9 @@ function file_save_draft_area_files($draftitemid, $contextid, $component, $filea
                 if (!empty($repoid)) {
                     $context = context::instance_by_id($contextid, MUST_EXIST);
                     $repo = repository::get_repository_by_id($repoid, $context);
-
+                    if (!empty($options)) {
+                        $repo->options = $options;
+                    }
                     $file_record['repositoryid'] = $repoid;
                     // This hook gives the repo a place to do some house cleaning, and update the $reference before it's saved
                     // to the file store. E.g. transfer ownership of the file to a system account etc.
@@ -3869,9 +3871,10 @@ class curl_cache {
  * @param null|string $preview the preview mode, defaults to serving the original file
  * @param boolean $offline If offline is requested - don't serve a redirect to an external file, return a file suitable for viewing
  *                         offline (e.g. mobile app).
+ * @param bool $embed Whether this file will be served embed into an iframe.
  * @todo MDL-31088 file serving improments
  */
-function file_pluginfile($relativepath, $forcedownload, $preview = null, $offline = false) {
+function file_pluginfile($relativepath, $forcedownload, $preview = null, $offline = false, $embed = false) {
     global $DB, $CFG, $USER;
     // relative path must start with '/'
     if (!$relativepath) {
@@ -3895,7 +3898,7 @@ function file_pluginfile($relativepath, $forcedownload, $preview = null, $offlin
 
     $fs = get_file_storage();
 
-    $sendfileoptions = ['preview' => $preview, 'offline' => $offline];
+    $sendfileoptions = ['preview' => $preview, 'offline' => $offline, 'embed' => $embed];
 
     // ========================================================================================================================
     if ($component === 'blog') {
@@ -4630,7 +4633,18 @@ function file_pluginfile($relativepath, $forcedownload, $preview = null, $offlin
             if (!plugin_supports('mod', $modname, FEATURE_MOD_INTRO, true)) {
                 send_file_not_found();
             }
-            require_course_login($course, true, $cm);
+
+            // Require login to the course first (without login to the module).
+            require_course_login($course, true);
+
+            // Now check if module is available OR it is restricted but the intro is shown on the course page.
+            $cminfo = cm_info::create($cm);
+            if (!$cminfo->uservisible) {
+                if (!$cm->showdescription || !$cminfo->is_visible_on_course_page()) {
+                    // Module intro is not visible on the course page and module is not available, show access error.
+                    require_course_login($course, true, $cminfo);
+                }
+            }
 
             // all users may access it
             $filename = array_pop($args);
