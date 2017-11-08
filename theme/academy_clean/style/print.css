@@ -1,0 +1,31 @@
+/* 
+    Document   : print
+    Created on : 30/08/2011, 12:22:04 PM
+    Author     : TimButler
+    Description:
+        CSS for printed pages.
+*/
+
+@media print {
+
+    #page-header, #userinfo, #region-post, #page-bottom, #page-footer {
+        display: none;
+    }
+
+    .block-region {
+        display: none;
+    }
+
+    #region-main-wrap, #region-main {
+        float: none;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    
+    #changenumsections {
+        display: none;
+    }
+
+}
+

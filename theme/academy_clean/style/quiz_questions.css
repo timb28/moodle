@@ -1,0 +1,25 @@
+/* Drag and Drop onto images and drag and drop onto text. */
+.que.ddwtos .group1, .que.ddimageortext .group1, form.mform fieldset#id_previewareaheader .group1 {
+    background-color: #d5d6d7;
+}
+.que.ddwtos .group2, .que.ddimageortext .group2, form.mform fieldset#id_previewareaheader .group2 {
+    background-color: #85cbf6;
+}
+.que.ddwtos .group3, .que.ddimageortext .group3, form.mform fieldset#id_previewareaheader .group3 {
+    background-color: #e8c4c4;
+}
+.que.ddwtos .group4, .que.ddimageortext .group4, form.mform fieldset#id_previewareaheader .group4 {
+    background-color: #d4edaf;
+}
+.que.ddwtos .group5, .que.ddimageortext .group5, form.mform fieldset#id_previewareaheader .group5 {
+    background-color: #c6bbe7;
+}
+.que.ddwtos .group6, .que.ddimageortext .group6, form.mform fieldset#id_previewareaheader .group6 {
+    background-color: #d4c08e;
+}
+.que.ddwtos .group7, .que.ddimageortext .group7, form.mform fieldset#id_previewareaheader .group7 {
+    background-color: #dfbedc;
+}
+.que.ddwtos .group8, .que.ddimageortext .group8, form.mform fieldset#id_previewareaheader .group8 {
+    background-color: #9deec3;
+}

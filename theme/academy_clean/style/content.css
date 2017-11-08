@@ -1,0 +1,95 @@
+/* 
+    Document   : content
+    Created on : 10/05/2011, 11:21:08 AM
+    Author     : timbutler
+    Description:
+        Contains Academy specific styles for content and assessments.
+*/
+
+/** Reports **/
+.pagelayout-report #completion-progress-wrapper {
+    overflow-x: scroll;
+}
+
+.pagelayout-report ul.progress-actions li {
+    padding: .4em;
+    list-style: none;
+}
+
+/** Extend Bootstrap definitition lists */
+@media (max-width: 767px) {
+    .dl-horizontal.dl-narrow dd {
+        margin-bottom: 1em;
+    }
+}
+@media (min-width: 768px) {
+    .dl-horizontal.dl-narrow dt {
+    width: 10%;
+    }
+    .dl-horizontal.dl-narrow dd {
+        margin: 0 0 1em 10%;
+        padding-left: 1em;
+    }
+}
+
+/* All content */
+img.img-bordered {
+    border: 1px solid #ddd;
+}
+
+img.img-padded {
+    margin: 6px;
+}
+
+img.img-align-left {
+    float: left;
+    margin: 0 6px 6px 0;
+}
+
+img.img-align-right {
+    float: right;
+    margin: 0 0 6px 6px;
+}
+
+/* Assessments */
+.unassessed-assessment input.answer {
+    display: block;
+    width: 360px;
+    margin: 1em;
+}
+
+/* Lessons */
+table.roleplaymedia th,
+table.roleplaymedia td {
+  padding: 0;
+}
+
+/* Pages */
+#page-mod-page-view .modified {
+    display: none;
+}
+
+/* NZ Online CE */
+table.table-indented {
+    margin-left: 2em;
+    margin-right: 2em;
+}
+
+table.ce2013-weblink {
+    width: 100%;
+}
+
+/* Alert icons */
+.ha-alert .icon {
+    background-size: contain;
+    width: 34px;
+    height: 34px;
+    margin-top: 4px;
+    float: left;
+}
+.ha-alert .message {
+    margin-left: 40px;
+}
+.ha-alert .ha-icon-circled-info {
+    background: url([[pix:theme|icon-circled-info]]) 0% 50% no-repeat;
+}

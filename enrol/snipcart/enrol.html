@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * Displays interface for purchasing access to the course.
+ *
+ * @package   enrol_snipcart
+ * @author    Tim Butler
+ * @copyright (c) 2015 Harcourts International Limited {@link http://www.harcourtsacademy.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+ 
+defined('MOODLE_INTERNAL') || die();
+
+$context = context_course::instance($course->id);
+
+?>
+<p class="course-summary"><img src="<?= $plugin->get_course_image_url($course) ?>" alt="<?= $course->fullname ?>" /><?= $course->summary ?></p>
+<div align="center">
+
+<p class="payment-required"><?php print_string('paymentrequired', 'enrol_snipcart') ?></p>
+            
+<noscript>
+  <div class="alert alert-block alert-error">
+      <p><strong><?= get_string('warning', 'moodle') ?></strong> <?= get_string('javascriptrequired', 'group') ?></p>
+      <p><?= get_string('nojavascript', 'enrol_snipcart') ?></p>
+  </div>
+</noscript>
+
+<?= $plugin->get_add_to_cart_button($USER, $course, $enrol); ?>
+
+</div>

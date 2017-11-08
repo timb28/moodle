@@ -1,0 +1,143 @@
+/* 
+    Document   : questionnaire
+    Created on : 31/07/2013, 3:39:19 PM
+    Author     : timbutler
+    Description:
+        Styles for the Questionnaire module.
+*/
+
+#page-mod-questionnaire-complete img.req,
+#page-mod-questionnaire-preview img.req {
+    float: left;
+    position:relative;
+    top: -2em;
+}
+
+#page-mod-questionnaire-complete .floatprinticon,
+#page-mod-questionnaire-preview .floatprinticon,
+#page-mod-questionnaire-report .floatprinticon,
+#page-mod-questionnaire-myreport .floatprinticon,
+#page-mod-questionnaire-print .floatprinticon {
+    display: none;
+}
+
+body.path-mod-questionnaire .surveyTitle,
+body.path-mod-questionnaire .surveySubtitle,
+body.path-mod-questionnaire .addInfo {
+    clear: both;
+    margin: 0 0 4px;
+    padding: 10px 0;
+}
+
+body.path-mod-questionnaire .generalbox {
+    border: 0;
+}
+
+body#page-mod-questionnaire-complete .surveyPage,
+#page-mod-questionnaire-preview .surveyPage {
+    background-color: transparent;
+    border-bottom: 1px solid rgb(227,227,227);
+    clear: right;
+    margin-bottom: 5px;
+    margin-top: 1em;
+    margin-right: 7px;
+    padding: 0;
+    font-size: 1.8em;
+}
+
+#page-mod-questionnaire-complete .qn-container,
+#page-mod-questionnaire-preview .qn-container,
+#page-mod-questionnaire-report .qn-container,
+#page-mod-questionnaire-myreport .qn-container,
+#page-mod-questionnaire-print .qn-container,
+.reportQuestionTitle {
+    border: 0;
+    margin: 0;
+    padding: 0.3em 0 0.8em;
+}
+
+body.path-mod-questionnaire .qn-info {
+    background: none;
+    padding: 0 1em;
+}
+
+#page-mod-questionnaire-complete .qn-number,
+#page-mod-questionnaire-complete .qn-legend,
+#page-mod-questionnaire-preview .qn-number,
+#page-mod-questionnaire-preview .qn-legend,
+#page-mod-questionnaire-report .qn-legend,
+#page-mod-questionnaire-report .individualresp .qn-legend,
+#page-mod-questionnaire-print .qn-legend,
+#page-mod-questionnaire-myreport .qn-legend {
+    width: 50px;
+    float: left;
+    border: none;
+    margin: 0;
+}
+
+.qn-content {
+    margin: 0 0 0 50px;
+}
+
+#page-mod-questionnaire-complete .qn-question,
+#page-mod-questionnaire-preview .qn-question,
+#page-mod-questionnaire-report .individualresp .qn-question,
+#page-mod-questionnaire-report .qn-question,
+#page-mod-questionnaire-myreport .qn-question,
+#page-mod-questionnaire-print .qn-question,
+#page-mod-questionnaire-questions .qn-question {
+    background: none;
+    border: none;
+    margin-left: 0;
+    padding: 0;
+    margin: 0;
+    font-size: 1.2em;
+    line-height: 1.6em;
+}
+
+body.path-mod-questionnaire .qn-question p {
+    margin: 0;
+}
+
+body.path-mod-questionnaire .qn-answer span {
+    margin: 0.5em;
+}
+
+body.path-mod-questionnaire .qn-type {
+    border-bottom: 0;
+    margin-left: 35px;
+    padding: 5px;
+}
+
+body.path-mod-questionnaire .message,
+body.path-mod-questionnaire .notifyproblem {
+    background-color: #ffcccc;
+    border-color: #FF0000;
+    border-style: solid;
+    border-width: 2px;
+    margin-bottom: 10px;
+    padding: 5px;
+    width: 699px;
+}
+
+body.path-mod-questionnaire .qn-answer textarea {
+    width: 95%;
+    max-height: 25em;
+
+}
+
+#page-mod-questionnaire-complete :checked + label,
+#page-mod-questionnaire-preview :checked + label {
+   font-weight: bold;
+}
+
+
+#page-mod-questionnaire-complete .raterow:hover,
+#page-mod-questionnaire-preview .raterow:hover {
+    background-color: transparent;
+}
+#page-mod-questionnaire-complete .raterow td:hover,
+#page-mod-questionnaire-preview .raterow td:hover {
+    background-color: #e4f1fa;
+    cursor: pointer;
+}
