@@ -2906,7 +2906,12 @@ function xmldb_main_upgrade($oldversion) {
             ['hub', '%' . $DB->sql_like_escape('_' . $cleanoldhuburl)]);
         foreach ($entries as $entry) {
             $newname = substr($entry->name, 0, -strlen($cleanoldhuburl)) . $cleannewhuburl;
-            $DB->update_record('config_plugins', ['id' => $entry->id, 'name' => $newname]);
+            try {
+                $DB->update_record('config_plugins', ['id' => $entry->id, 'name' => $newname]);
+            } catch (dml_exception $e) {
+                // Entry with new name already exists, remove the one with an old name.
+                $DB->delete_records('config_plugins', ['id' => $entry->id]);
+            }
         }
 
         // Update published courses.
@@ -2914,6 +2919,46 @@ function xmldb_main_upgrade($oldversion) {
 
         // Main savepoint reached.
         upgrade_main_savepoint(true, 2017051501.05);
+    }
+
+    if ($oldversion < 2017051501.09) {
+
+        // This script in included in each major version upgrade process so make sure we don't run it twice.
+        if (empty($CFG->linkcoursesectionsupgradescriptwasrun)) {
+            // Check if the site is using a boost-based theme.
+            // If value of 'linkcoursesections' is set to the old default value, change it to the new default.
+            if (upgrade_theme_is_from_family('boost', $CFG->theme)) {
+                set_config('linkcoursesections', 1);
+            }
+            set_config('linkcoursesectionsupgradescriptwasrun', 1);
+        }
+
+        // Main savepoint reached.
+        upgrade_main_savepoint(true, 2017051501.09);
+    }
+
+    if ($oldversion < 2017051502.01) {
+
+        // Force all messages to be reindexed.
+        set_config('core_message_message_sent_lastindexrun', '0', 'core_search');
+        set_config('core_message_message_received_lastindexrun', '0', 'core_search');
+
+        // Main savepoint reached.
+        upgrade_main_savepoint(true, 2017051502.01);
+    }
+
+    if ($oldversion < 2017051502.04) {
+
+        // Remove duplicate registrations.
+        $newhuburl = "https://moodle.net";
+        $registrations = $DB->get_records('registration_hubs', ['huburl' => $newhuburl], 'confirmed DESC, id ASC');
+        if (count($registrations) > 1) {
+            $reg = array_shift($registrations);
+            $DB->delete_records_select('registration_hubs', 'huburl = ? AND id <> ?', [$newhuburl, $reg->id]);
+        }
+
+        // Main savepoint reached.
+        upgrade_main_savepoint(true, 2017051502.04);
     }
 
     return true;
