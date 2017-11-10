@@ -137,6 +137,11 @@ class completion_criteria_course extends completion_criteria {
         $prereq = $DB->get_record('course', array('id' => $this->courseinstance));
         $coursecontext = context_course::instance($prereq->id, MUST_EXIST);
         $fullname = format_string($prereq->fullname, true, array('context' => $coursecontext));
+        
+        /* START Academy Patch M#006 Use course short names in completion report tables */
+        $fullname = format_string($prereq->shortname, true, array('context' => $coursecontext));
+        /* END Academy Patch M#006  */
+
         return shorten_text(urldecode($fullname));
     }
 
