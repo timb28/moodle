@@ -11,9 +11,6 @@
 [submodule "lib/editor/atto/plugins/styles"]
 	path = lib/editor/atto/plugins/styles
 	url = https://github.com/moodleuulm/moodle-atto_styles.git
-[submodule "auth/lenauth"]
-	path = auth/lenauth
-	url = https://github.com/HarcourtsAcademy/moodle-auth_lenauth.git
 [submodule "blocks/configurable_reports"]
 	path = blocks/configurable_reports
 	url = https://github.com/HarcourtsAcademy/moodle-block_configurablereports.git
