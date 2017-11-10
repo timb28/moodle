@@ -89,11 +89,6 @@ echo $OUTPUT->doctype() ?>
             <?php
             $auth_instructions = '';
 
-            if ( file_exists( $CFG->dirroot . '/auth/lenauth/out.php' ) && is_enabled_auth('lenauth') ) :
-                include_once $CFG->dirroot . '/auth/lenauth/out.php';
-                $auth_instructions = auth_lenauth_out::getInstance()->lenauth_output('style3-text');
-            endif;
-
             $CFG->auth_instructions = $CFG->auth_instructions . $auth_instructions;
 
             echo $OUTPUT->course_content_header();
