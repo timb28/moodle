@@ -23,6 +23,6 @@
  */
 
 function joomdle_wrapper_course_get_url ($course) {
-    $joomlaurl = get_config ('auth/joomdle', 'joomla_url');
+    $joomlaurl = get_config ('auth_joomdle', 'joomla_url');
     return $joomlaurl . "/index.php?option=com_joomdle&view=wrapper&moodle_page_type=course&id=".$course->id;
 }

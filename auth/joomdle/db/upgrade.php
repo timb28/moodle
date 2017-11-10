@@ -35,6 +35,11 @@ function xmldb_auth_joomdle_upgrade($oldversion) {
     $joomdle_upgrade = new joomdle_upgrade ();
     $joomdle_upgrade->add_new_functions ();
 
+    // Change in configuration storage
+    if ($oldversion < 2008080289) {
+        $joomdle_upgrade->change_config_storage ();
+    }
+
     return true;
 }
 
@@ -63,6 +68,14 @@ class joomdle_upgrade {
                         $name, $service->id);
             }
         }
+    }
+
+    public function change_config_storage ()
+    {
+        global $CFG, $DB;
+
+        $sql = "UPDATE {config_plugins} SET plugin = REPLACE(plugin, '/', '_') WHERE plugin='auth/joomdle'";
+        $DB->execute($sql);
     }
 
 }

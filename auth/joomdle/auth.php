@@ -59,7 +59,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
      */
     public function __construct() {
         $this->authtype = 'joomdle';
-        $this->config = get_config('auth/joomdle');
+    //    $this->config = get_config('auth/joomdle');
     }
 
     public function can_signup() {
@@ -201,6 +201,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
      *
      * @param array $page An object containing all the data for this page.
      */
+    /*
     public function config_form($config, $err, $user_fields) {
         include("config.html");
     }
@@ -300,21 +301,22 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 
         return true;
     }
+*/
 
     private function _get_xmlrpc_url () {
-        $joomla_lang = get_config('auth/joomdle', 'joomla_lang');
-        $joomla_sef = get_config('auth/joomdle', 'joomla_sef');
-        $joomla_auth_token = get_config('auth/joomdle', 'joomla_auth_token');
+        $joomla_lang = get_config('auth_joomdle', 'joomla_lang');
+        $joomla_sef = get_config('auth_joomdle', 'joomla_sef');
+        $joomla_auth_token = get_config('auth_joomdle', 'joomla_auth_token');
 
         if ($joomla_lang == '')
-            $joomla_xmlrpc_server_url = get_config ('auth/joomdle', 'joomla_url').
+            $joomla_xmlrpc_server_url = get_config ('auth_joomdle', 'joomla_url').
                 '/index.php?option=com_joomdle&task=ws.server&format=xmlrpc';
         else
             if ($joomla_sef)
-                $joomla_xmlrpc_server_url = get_config ('auth/joomdle', 'joomla_url').
+                $joomla_xmlrpc_server_url = get_config ('auth_joomdle', 'joomla_url').
                     '/index.php/'.$joomla_lang.'/?option=com_joomdle&task=ws.server&format=xmlrpc';
             else
-                $joomla_xmlrpc_server_url = get_config ('auth/joomdle', 'joomla_url').
+                $joomla_xmlrpc_server_url = get_config ('auth_joomdle', 'joomla_url').
                     '/index.php?lang='.$joomla_lang.'&option=com_joomdle&task=ws.server&format=xmlrpc';
 
         // Add auth token.
@@ -325,7 +327,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 
 
     public function call_method ($method, $params = '', $params2 = '', $params3 = '' , $params4 = '', $params5 = '') {
-        $connection_method = get_config('auth/joomdle', 'connection_method');
+        $connection_method = get_config('auth_joomdle', 'connection_method');
 
         if ($connection_method == 'fgc')
             $response = $this->call_method_fgc ($method, $params, $params2, $params3, $params4, $params5);
@@ -433,7 +435,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
     }
 
     private function call_method_debug ($method, $params = '', $params2 = '', $params3 = '' , $params4 = '', $params5 = '') {
-        $connection_method = get_config('auth/joomdle', 'connection_method');
+        $connection_method = get_config('auth_joomdle', 'connection_method');
 
         if ($connection_method == 'fgc')
             $response = $this->call_method_fgc_debug ($method, $params, $params2, $params3, $params4, $params5);
@@ -551,7 +553,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
     }
 
     public function get_file ($file) {
-        $connection_method = get_config('auth/joomdle', 'connection_method');
+        $connection_method = get_config('auth_joomdle', 'connection_method');
 
         if ($connection_method == 'fgc')
             $response = file_get_contents ($file, false, null);
@@ -597,7 +599,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         $system['joomdle_auth'] = is_enabled_auth('joomdle');
         $system['mnet_auth'] = 1; // Left this way so we can have the same system check code for 19 and 20.
 
-        $joomla_url = get_config ('auth/joomdle', 'joomla_url');
+        $joomla_url = get_config ('auth_joomdle', 'joomla_url');
         if ($joomla_url == '') {
             $system['joomdle_configured'] = 0;
         }
@@ -3331,7 +3333,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         /* Get user pic */
         if ((array_key_exists ('pic_url', $newinfo)) && ($newinfo['pic_url'])) {
             if ($newinfo['pic_url'] != 'none') {
-                $joomla_url = get_config ('auth/joomdle', 'joomla_url');
+                $joomla_url = get_config ('auth_joomdle', 'joomla_url');
                 if (strncmp ($newinfo['pic_url'], 'http', 4) != 0)
                     $pic_url = $joomla_url.'/'.$newinfo['pic_url'];  // Only add joomla_url if it is not a full URL already.
                 else $pic_url = $newinfo['pic_url'];
@@ -4671,6 +4673,9 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         list($courses, $group, $user_id_not_used) = calendar_set_filters($coursestoload, $ignorefilters);
         $USER = $ws_user; // reset global var
 
+        if (!$end_date)
+            $end_date = PHP_INT_MAX;
+
         $events = calendar_get_events($start_date, $end_date, $user->id, $group, $courses);
 
         $es = array ();
@@ -4726,7 +4731,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         if (!$child_user)
             return false;
 
-        $parent_role_id = get_config('auth/joomdle', 'parent_role_id');
+        $parent_role_id = get_config('auth_joomdle', 'parent_role_id');
         if (!$parent_role_id)
             return false;
 
@@ -4749,7 +4754,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         if (!$child_user)
             return false;
 
-        $parent_role_id = get_config('auth/joomdle', 'parent_role_id');
+        $parent_role_id = get_config('auth_joomdle', 'parent_role_id');
         if (!$parent_role_id)
             return false;
 
@@ -4844,7 +4849,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 
     public function get_parents ($username) {
         global $CFG, $DB;
-        $parent_role_id = get_config('auth/joomdle', 'parent_role_id');
+        $parent_role_id = get_config('auth_joomdle', 'parent_role_id');
 
         $username = strtolower ($username);
         $user = get_complete_user_data ('username', $username);
@@ -4875,7 +4880,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
     public function get_all_parents () {
         global $DB, $CFG;
 
-        $parent_role_id = get_config('auth/joomdle', 'parent_role_id');
+        $parent_role_id = get_config('auth_joomdle', 'parent_role_id');
 
         $params = array ('roleid' => $parent_role_id);
         $query = "SELECT distinct (userid) FROM {$CFG->prefix}role_assignments" .
@@ -6084,12 +6089,18 @@ class auth_plugin_joomdle extends auth_plugin_manual {
             $this->call_method ("deleteUserKey", $cookieArray[1]);
         }
 
+        // Logout with redirect, to work in cross-domain with "remember me" set
+        if (get_config ('auth_joomdle', 'logout_with_redirect')) {
+            $redirect = get_config ('auth_joomdle', 'joomla_url').'/index.php?option=com_joomdle&task=logout';
+            return;
+        }
+        
         setcookie($r, false,  time() - 42000, '/');
 
-        $logout_redirect_to_joomla = get_config('auth/joomdle', 'logout_redirect_to_joomla');
+        $logout_redirect_to_joomla = get_config('auth_joomdle', 'logout_redirect_to_joomla');
 
         if ($logout_redirect_to_joomla)
-            $redirect = get_config ('auth/joomdle', 'joomla_url').'/components/com_joomdle/views/wrapper/getout.php';
+            $redirect = get_config ('auth_joomdle', 'joomla_url').'/components/com_joomdle/views/wrapper/getout.php';
     }
 
     public function get_scorm_item_track_data ($id, $username, $item) {
@@ -6567,7 +6578,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 
         complete_user_login ($user);
 
-        $redirectless_sso = get_config('auth/joomdle', 'redirectless_sso');
+        $redirectless_sso = get_config('auth_joomdle', 'redirectless_sso');
 
         if ($redirectless_sso) {
             // Redirect-less login.
@@ -6578,7 +6589,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         // Normal login.
         $login_data = base64_encode ($username.':'.$password);
 
-        $redirect_url = get_config ('auth/joomdle', 'joomla_url').
+        $redirect_url = get_config ('auth_joomdle', 'joomla_url').
             '/index.php?option=com_joomdle&view=joomdle&task=login&data='.$login_data;
         if (property_exists ($SESSION, 'wantsurl'))
                 $redirect_url .= '&wantsurl='. urlencode ($SESSION->wantsurl);
@@ -6594,7 +6605,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 
         $username = str_replace (' ', '%20', $username);
         $login_data = base64_encode ($username.':'.$password);
-        $url = get_config ('auth/joomdle', 'joomla_url').'/index.php?option=com_joomdle&view=joomdle&task=login&data='.$login_data;
+        $url = get_config ('auth_joomdle', 'joomla_url').'/index.php?option=com_joomdle&view=joomdle&task=login&data='.$login_data;
 
         $ch = curl_init();
         // Set url.

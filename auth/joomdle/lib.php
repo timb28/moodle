@@ -15,21 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Joomdle connection test to Joomla
- *
- * @package    auth_joomdle
+ * @package   auth_joomdle
  * @copyright  2009 Qontori Pte Ltd
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
-require_once($CFG->dirroot.'/auth/joomdle/auth.php');
+defined('MOODLE_INTERNAL') || die();
 
-// It gives a warning if no context set, I guess it does nor matter which we use.
-$PAGE->set_context(context_system::instance());
+function joomdle_get_connection_methods () {
 
-$joomlaurl = get_config ('auth_joomdle', 'joomla_url');
-$fileurl = $joomlaurl.'/components/com_joomdle/connection_test.php';
+	$cms = array ( 'fgc' => 'file_get_contents', 'curl' => 'cURL' );
 
-$auth = new auth_plugin_joomdle ();
-echo $auth->get_file ($fileurl);
+    return $cms;
+}

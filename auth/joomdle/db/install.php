@@ -60,6 +60,12 @@ class joomdle_moodle_config {
         require_once($CFG->dirroot . '/lib/moodlelib.php');
         require_once($CFG->dirroot . '/user/lib.php');
 
+        // First check user does not exist already
+        $user = get_complete_user_data('username', 'joomdle_connector');
+        if ($user) {
+            return;
+        }
+
         // Create user.
         $username = 'joomdle_connector';
         $password = random_string(20);
@@ -82,10 +88,15 @@ class joomdle_moodle_config {
         global $CFG, $DB;
 
         // Create new role.
-        $roleid = create_role ('Joomdle Web Services', 'joomdlews',
-                'Role to give required capabilities to the Joomdle Connector user');
-        set_role_contextlevels ($roleid, array (CONTEXT_SYSTEM));
-
+        $role = $DB->get_record('role', array('shortname' => 'joomdlews'));
+        if (!$role) {
+            $roleid = create_role ('Joomdle Web Services', 'joomdlews',
+                    'Role to give required capabilities to the Joomdle Connector user');
+            set_role_contextlevels ($roleid, array (CONTEXT_SYSTEM));
+        } else {
+            $roleid = $role->id;
+        }
+        
         // Enable xmlrpc capability for role.
         $context = context_system::instance();
         assign_capability('webservice/xmlrpc:use', CAP_ALLOW, $roleid, $context->id, true);
@@ -107,6 +118,16 @@ class joomdle_moodle_config {
         global $CFG, $DB;
 
         require_once($CFG->dirroot . '/webservice/lib.php');
+
+        // Check that it does not exist yet.
+        $webservicemanager = new webservice;
+
+        // Get Joomdle web service.
+        $service = $webservicemanager->get_external_service_by_shortname ('joomdle');
+
+        if ($service) {
+            return;
+        }
 
         $servicedata = new stdClass ();
         $servicedata->name = 'Joomdle';
@@ -164,7 +185,15 @@ class joomdle_moodle_config {
         // Get Joomdle web service.
         $service = $webservicemanager->get_external_service_by_shortname ('joomdle');
 
+        if (!$service) {
+            return;
+        }
+
         $user = get_complete_user_data('username', 'joomdle_connector');
+
+        if (!$user) {
+            return;
+        }
 
         $serviceuser = new stdClass();
         $serviceuser->externalserviceid = $service->id;
@@ -182,8 +211,16 @@ class joomdle_moodle_config {
 
         $user = get_complete_user_data('username', 'joomdle_connector');
 
+        if (!$user) {
+            return;
+        }
+
         // Get Joomdle web service.
         $selectedservice = $webservicemanager->get_external_service_by_shortname ('joomdle');
+
+        if (!$selectedservice) {
+            return;
+        }
 
         // Check the the user is allowed for the service.
         if ($selectedservice->restrictedusers) {

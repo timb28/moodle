@@ -37,7 +37,9 @@ class auth_joomdle_handler {
 	{
 		global $CFG, $DB;
 
-        $sync_to_joomla = get_config('auth/joomdle', 'sync_to_joomla');
+        $sync_to_joomla = get_config('auth_joomdle', 'sync_to_joomla');
+        $forward_events = get_config('auth_joomdle', 'forward_events');
+
 		if (!$sync_to_joomla)
 			return true;
 
@@ -52,18 +54,8 @@ class auth_joomdle_handler {
 
         $auth_joomdle = new auth_plugin_joomdle ();
 
-		/*
-        $password_clear = '';
-        if (array_key_exists ('password', $_POST))
-            $password_clear =  $_POST['password']; //Self registration
-        if ((array_key_exists ('newpassword', $_POST)) && (!$password_clear))
-            $password_clear =  $_POST['newpassword']; //admin form
-		*/
-
         /* Create user in Joomla */
         $userinfo['username'] = $user->username;
-//        $userinfo['password'] = $password_clear;
-//        $userinfo['password2'] = $password_clear;
         $userinfo['password'] = $user->password;
         $userinfo['password2'] = $user->password;
 
@@ -122,8 +114,12 @@ class auth_joomdle_handler {
 
         $auth_joomdle->call_method ("createUser", $userinfo);
 
-        return true;
+        // "Forward" event to Joomla
+        if ($forward_events) {
+            $auth_joomdle->call_method ('moodleEvent', 'UserCreated',  $userinfo);
+        }
 
+        return true;
 	}
 
 
@@ -131,7 +127,9 @@ class auth_joomdle_handler {
 	{
 		global $CFG, $DB;
 
-        $sync_to_joomla = get_config('auth/joomdle', 'sync_to_joomla');
+        $sync_to_joomla = get_config('auth_joomdle', 'sync_to_joomla');
+        $forward_events = get_config('auth_joomdle', 'forward_events');
+
 		if (!$sync_to_joomla)
 			return true;
 
@@ -199,6 +197,11 @@ class auth_joomdle_handler {
 
 		$auth_joomdle->call_method ("updateUser", $userinfo);
 
+        // "Forward" event to Joomla
+        if ($forward_events) {
+            $auth_joomdle->call_method ('moodleEvent', 'UserUpdated',  $userinfo);
+        }
+
 		return true;
     }
 
@@ -206,7 +209,9 @@ class auth_joomdle_handler {
 	{
         global $CFG, $DB;
 
-        $sync_to_joomla = get_config('auth/joomdle', 'sync_to_joomla');
+        $sync_to_joomla = get_config('auth_joomdle', 'sync_to_joomla');
+        $forward_events = get_config('auth_joomdle', 'forward_events');
+
 		if (!$sync_to_joomla)
 			return true;
 
@@ -218,6 +223,14 @@ class auth_joomdle_handler {
         $auth_joomdle = new auth_plugin_joomdle ();
 
         $auth_joomdle->call_method ("deleteUser", $user->username);
+
+        // "Forward" event to Joomla
+        if ($forward_events) {
+            $data = array ();
+            $data['username'] = $user->username;
+            $auth_joomdle->call_method ('moodleEvent', 'UserDeleted',  $data);
+        }
+
         return true;
 	}
 
@@ -225,13 +238,15 @@ class auth_joomdle_handler {
 	{
         global $CFG, $DB;
 
+        $forward_events = get_config('auth_joomdle', 'forward_events');
+
 		$course = $event->get_record_snapshot('course', $event->objectid);
 
-        $activities = get_config('auth/joomdle', 'jomsocial_activities');
-        $groups = get_config('auth/joomdle', 'jomsocial_groups');
-        $autosell = get_config('auth/joomdle', 'auto_sell');
-        $joomla_user_groups = get_config('auth/joomdle', 'joomla_user_groups');
-        $use_kunena_forums = get_config('auth/joomdle', 'use_kunena_forums');
+        $activities = get_config('auth_joomdle', 'jomsocial_activities');
+        $groups = get_config('auth_joomdle', 'jomsocial_groups');
+        $autosell = get_config('auth_joomdle', 'auto_sell');
+        $joomla_user_groups = get_config('auth_joomdle', 'joomla_user_groups');
+        $use_kunena_forums = get_config('auth_joomdle', 'use_kunena_forums');
 
         $auth_joomdle = new auth_plugin_joomdle ();
 
@@ -268,17 +283,34 @@ class auth_joomdle_handler {
             // Create news forum
         }
 
+        // "Forward" event to Joomla
+        if ($forward_events) {
+            $data = array ();
+            $data['course_id'] = $course->id;
+            $data['course_name'] = $course->fullname;
+            $data['summary'] = $course->summary;
+            $data['category'] = $course->category;
+            $data['category_name'] = $cat->name;
+            $data['course_shortname'] = $course->shortname;
+            $data['idnumber'] = $course->idnumber;
+            $data['startdate'] = $course->startdate;
+            $data['enddate'] = $course->enddate;
+            $auth_joomdle->call_method ('moodleEvent', 'CourseCreated',  $data);
+        }
+
         return true;
     }
 
     public static function course_deleted (\core\event\course_deleted $event)
     {
+        $forward_events = get_config('auth_joomdle', 'forward_events');
+
 		$course = $event->get_record_snapshot('course', $event->objectid);
 
-        $groups_delete = get_config('auth/joomdle', 'jomsocial_groups_delete');
-        $autosell = get_config('auth/joomdle', 'auto_sell');
-        $use_kunena_forums = get_config('auth/joomdle', 'use_kunena_forums');
-        $joomla_user_groups = get_config('auth/joomdle', 'joomla_user_groups');
+        $groups_delete = get_config('auth_joomdle', 'jomsocial_groups_delete');
+        $autosell = get_config('auth_joomdle', 'auto_sell');
+        $use_kunena_forums = get_config('auth_joomdle', 'use_kunena_forums');
+        $joomla_user_groups = get_config('auth_joomdle', 'joomla_user_groups');
 
         $auth_joomdle = new auth_plugin_joomdle ();
 
@@ -297,15 +329,26 @@ class auth_joomdle_handler {
         if ($use_kunena_forums)
             $auth_joomdle->call_method ("removeCourseForums", (int) $course->id);
 
+        // "Forward" event to Joomla
+        if ($forward_events) {
+            $data = array ();
+            $data['course_name'] = $course->fullname;
+            $auth_joomdle->call_method ('moodleEvent', 'CourseDeleted',  $data);
+        }
+
         return true;
     }
 
     public static function course_updated (\core\event\course_updated $event)
     {
+        global $CFG, $DB;
+
+        $forward_events = get_config('auth_joomdle', 'forward_events');
+
 		$course = $event->get_record_snapshot('course', $event->objectid);
 
-        $groups = get_config('auth/joomdle', 'jomsocial_groups');
-        $autosell = get_config('auth/joomdle', 'auto_sell');
+        $groups = get_config('auth_joomdle', 'jomsocial_groups');
+        $autosell = get_config('auth_joomdle', 'auto_sell');
 
         $auth_joomdle = new auth_plugin_joomdle ();
 
@@ -318,6 +361,25 @@ class auth_joomdle_handler {
             $auth_joomdle->call_method ("updateCourseShop", array ((int) $course->id));
         }
 
+        // "Forward" event to Joomla
+        if ($forward_events) {
+            $data = array ();
+            $data['course_id'] = $course->id;
+            $data['course_name'] = $course->fullname;
+            $data['summary'] = $course->summary;
+            $data['category'] = $course->category;
+
+            $conditions = array ('id' => $course->category);
+            $cat = $DB->get_record('course_categories',$conditions);
+
+            $data['category_name'] = $cat->name;
+            $data['course_shortname'] = $course->shortname;
+            $data['idnumber'] = $course->idnumber;
+            $data['startdate'] = $course->startdate;
+            $data['enddate'] = $course->enddate;
+            $auth_joomdle->call_method ('moodleEvent', 'CourseUpdated',  $data);
+        }
+
         return true;
 
     }
@@ -326,14 +388,15 @@ class auth_joomdle_handler {
     {
         global $CFG, $DB;
 
-        $activities = get_config('auth/joomdle', 'jomsocial_activities');
-        $groups = get_config('auth/joomdle', 'jomsocial_groups');
-        $enrol_parents = get_config('auth/joomdle', 'enrol_parents');
-        $parent_role_id = get_config('auth/joomdle', 'parent_role_id');
-        $points = get_config('auth/joomdle', 'give_points');
-        $auto_mailing_lists = get_config('auth/joomdle', 'auto_mailing_lists');
-        $use_kunena_forums = get_config('auth/joomdle', 'use_kunena_forums');
-        $joomla_user_groups = get_config('auth/joomdle', 'joomla_user_groups');
+        $activities = get_config('auth_joomdle', 'jomsocial_activities');
+        $groups = get_config('auth_joomdle', 'jomsocial_groups');
+        $enrol_parents = get_config('auth_joomdle', 'enrol_parents');
+        $parent_role_id = get_config('auth_joomdle', 'parent_role_id');
+        $points = get_config('auth_joomdle', 'give_points');
+        $auto_mailing_lists = get_config('auth_joomdle', 'auto_mailing_lists');
+        $use_kunena_forums = get_config('auth_joomdle', 'use_kunena_forums');
+        $joomla_user_groups = get_config('auth_joomdle', 'joomla_user_groups');
+        $forward_events = get_config('auth_joomdle', 'forward_events');
 
         $auth_joomdle = new auth_plugin_joomdle ();
 
@@ -455,6 +518,15 @@ class auth_joomdle_handler {
                 if ($roleid == 3)
                     $auth_joomdle->call_method ('addForumsModerator',  (int) $courseid, $user->username);
             }
+
+            // "Forward" event to Joomla
+            if ($forward_events) {
+                $data = array ();
+                $data['course_id'] = $courseid;
+                $data['username'] = $user->username;
+                $data['course_name'] = $course->fullname;
+                $auth_joomdle->call_method ('moodleEvent', 'RoleAssigned',  $data);
+            }
         }
 
         return true;
@@ -464,11 +536,12 @@ class auth_joomdle_handler {
     {
         global $DB, $CFG;
 
-        $groups = get_config('auth/joomdle', 'jomsocial_groups');
-        $auto_mailing_lists = get_config('auth/joomdle', 'auto_mailing_lists');
-        $use_kunena_forums = get_config('auth/joomdle', 'use_kunena_forums');
-        $joomla_user_groups = get_config('auth/joomdle', 'joomla_user_groups');
-        $parent_role_id = get_config('auth/joomdle', 'parent_role_id');
+        $groups = get_config('auth_joomdle', 'jomsocial_groups');
+        $auto_mailing_lists = get_config('auth_joomdle', 'auto_mailing_lists');
+        $use_kunena_forums = get_config('auth_joomdle', 'use_kunena_forums');
+        $joomla_user_groups = get_config('auth_joomdle', 'joomla_user_groups');
+        $parent_role_id = get_config('auth_joomdle', 'parent_role_id');
+        $forward_events = get_config('auth_joomdle', 'forward_events');
 
         $auth_joomdle = new auth_plugin_joomdle ();
 
@@ -542,6 +615,15 @@ class auth_joomdle_handler {
                 if ($roleid == 3)
                     $auth_joomdle->call_method ('removeForumsModerator',  (int) $courseid, $user->username);
             }
+
+            // "Forward" event to Joomla
+            if ($forward_events) {
+                $data = array ();
+                $data['course_id'] = $courseid;
+                $data['username'] = $user->username;
+                $data['course_name'] = $course->fullname;
+                $auth_joomdle->call_method ('moodleEvent', 'RoleUnassigned',  $data);
+            }
         }
 
         return true;
@@ -552,8 +634,9 @@ class auth_joomdle_handler {
     {
         global $DB , $CFG;
 
-        $activities = get_config('auth/joomdle', 'jomsocial_activities');
-        $points = get_config('auth/joomdle', 'give_points');
+        $activities = get_config('auth_joomdle', 'jomsocial_activities');
+        $points = get_config('auth_joomdle', 'give_points');
+        $forward_events = get_config('auth_joomdle', 'forward_events');
 
         $auth_joomdle = new auth_plugin_joomdle ();
 
@@ -567,12 +650,23 @@ class auth_joomdle_handler {
         if ($points)
                 $auth_joomdle->call_method ('addPoints', 'joomdle.quiz_attempt', $user->username,   (int) $event->courseid, $course->fullname);
 
+        // "Forward" event to Joomla
+        if ($forward_events) {
+            $data = array ();
+            $data['course_id'] = $event->courseid;
+            $data['course_name'] = $course->fullname;
+            $data['quiz_name'] = $quiz->name;
+            $data['username'] = $user->username;
+            $auth_joomdle->call_method ('moodleEvent', 'QuizAttemptSubmitted',  $data);
+        }
+
         return true;
     }
 
     public static function course_module_created (\core\event\course_module_created $event)
     {
-        $use_kunena_forums = get_config('auth/joomdle', 'use_kunena_forums');
+        $use_kunena_forums = get_config('auth_joomdle', 'use_kunena_forums');
+        $forward_events = get_config('auth_joomdle', 'forward_events');
 
         $auth_joomdle = new auth_plugin_joomdle ();
 
@@ -584,12 +678,23 @@ class auth_joomdle_handler {
             }
         }
 
+        // "Forward" event to Joomla
+        if ($forward_events) {
+            $data = array ();
+            $data['course_id'] = $event->courseid;
+            $data['objectid'] = $event->objectid;
+            $data['name'] = $event->other['name'];
+            $data['module'] = $event->other['modulename'];
+            $auth_joomdle->call_method ('moodleEvent', 'CourseModuleCreated',  $data);
+        }
+
         return true;
     }
 
     public static function course_module_deleted (\core\event\course_module_deleted $event)
     {
-        $use_kunena_forums = get_config('auth/joomdle', 'use_kunena_forums');
+        $use_kunena_forums = get_config('auth_joomdle', 'use_kunena_forums');
+        $forward_events = get_config('auth_joomdle', 'forward_events');
 
         $auth_joomdle = new auth_plugin_joomdle ();
 
@@ -601,12 +706,22 @@ class auth_joomdle_handler {
             }
         }
 
+        // "Forward" event to Joomla
+        if ($forward_events) {
+            $data = array ();
+            $data['course_id'] = $event->courseid;
+            $data['objectid'] = $event->objectid;
+            $data['module'] = $event->other['modulename'];
+            $auth_joomdle->call_method ('moodleEvent', 'CourseModuleDeleted',  $data);
+        }
+
         return true;
     }
 
     public static function course_module_updated (\core\event\course_module_updated $event)
     {
-        $use_kunena_forums = get_config('auth/joomdle', 'use_kunena_forums');
+        $use_kunena_forums = get_config('auth_joomdle', 'use_kunena_forums');
+        $forward_events = get_config('auth_joomdle', 'forward_events');
 
         $auth_joomdle = new auth_plugin_joomdle ();
 
@@ -618,6 +733,16 @@ class auth_joomdle_handler {
             }
         }
 
+        // "Forward" event to Joomla
+        if ($forward_events) {
+            $data = array ();
+            $data['course_id'] = $event->courseid;
+            $data['objectid'] = $event->objectid;
+            $data['name'] = $event->other['name'];
+            $data['module'] = $event->other['modulename'];
+            $auth_joomdle->call_method ('moodleEvent', 'CourseModuleUpdated',  $data);
+        }
+
         return true;
     }
 
@@ -625,8 +750,9 @@ class auth_joomdle_handler {
     {
         global $DB , $CFG;
 
-        $activities = get_config('auth/joomdle', 'jomsocial_activities');
-        $points = get_config('auth/joomdle', 'give_points');
+        $activities = get_config('auth_joomdle', 'jomsocial_activities');
+        $points = get_config('auth_joomdle', 'give_points');
+        $forward_events = get_config('auth_joomdle', 'forward_events');
 
         $auth_joomdle = new auth_plugin_joomdle ();
 
@@ -639,12 +765,23 @@ class auth_joomdle_handler {
         if ($points)
 			$auth_joomdle->call_method ('addPoints', 'joomdle.course_completed', $user->username,   (int) $event->courseid, $course->fullname);
 
+        // "Forward" event to Joomla
+        if ($forward_events) {
+            $data = array ();
+            $data['course_id'] = $event->courseid;
+            $data['course_name'] = $course->fullname;
+            $data['username'] = $user->username;
+            $auth_joomdle->call_method ('moodleEvent', 'CourseCompleted',  $data);
+        }
+
         return true;
     }
 
     public static function user_password_updated (\core\event\user_password_updated $event)
 	{
-        $sync_to_joomla = get_config('auth/joomdle', 'sync_to_joomla');
+        $sync_to_joomla = get_config('auth_joomdle', 'sync_to_joomla');
+        $forward_events = get_config('auth_joomdle', 'forward_events');
+
 		if (!$sync_to_joomla)
 			return true;
 
@@ -655,5 +792,12 @@ class auth_joomdle_handler {
 
         $auth_joomdle = new auth_plugin_joomdle ();
 		$auth_joomdle->call_method ('changePassword', $user->username, $user->password);
+
+        if ($forward_events) {
+            $data = array ();
+            $data['username'] = $user->username;
+            $data['password'] = $user->password;
+            $auth_joomdle->call_method ('moodleEvent', 'UserPasswordUpdated',  $data);
+        }
 	}
 }

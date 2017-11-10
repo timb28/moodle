@@ -45,6 +45,6 @@ Password: <input type=password name="password">
 <?php
 } else {
     // Redirect to Joomla.
-    $url = get_config('auth/joomdle', 'joomla_url');
+    $url = get_config('auth_joomdle', 'joomla_url');
     header ("Location: $url");
 }

@@ -55,36 +55,40 @@ if ($override_itemid) {
     $itemid = $override_itemid;
 }
 
+// First check this is a Joomdle user
+$user = get_complete_user_data('username', $username);
+if (($user->auth == 'joomdle') || (!$user)) {
+    if (($username != 'guest') && ((!isloggedin()) || (isguestuser()))) {
 
-if (($username != 'guest') && ((!isloggedin()) || (isguestuser()))) {
-    /* Logged user trying to access */
-    $logged = $auth->call_method ("confirmJoomlaSession", $username, $token);
+        /* Logged user trying to access */
+        $logged = $auth->call_method ("confirmJoomlaSession", $username, $token);
 
-    if (is_array ($logged) && xmlrpc_is_fault($logged)) {
-        trigger_error("xmlrpc: $response[faultString] ($response[faultCode])");
-    } else {
-        if ($logged) {
-            // Log in.
-            $user = get_complete_user_data('username', $username);
-            if (!$user) {
-                if ($create_user) {
-                    $auth->create_joomdle_user ($username);
-                } else {
-                    /* If the user does not exists and we don't have to create it, we are done */
-                    $redirect_url = get_config ('auth/joomdle', 'joomla_url');
-                    redirect($redirect_url);
+        if (is_array ($logged) && xmlrpc_is_fault($logged)) {
+            trigger_error("xmlrpc: $response[faultString] ($response[faultCode])");
+        } else {
+            if ($logged) {
+                // Log in.
+                $user = get_complete_user_data('username', $username);
+                if (!$user) {
+                    if ($create_user) {
+                        $auth->create_joomdle_user ($username);
+                    } else {
+                        /* If the user does not exists and we don't have to create it, we are done */
+                        $redirect_url = get_config ('auth_joomdle', 'joomla_url');
+                        redirect($redirect_url);
+                    }
                 }
-            }
-            $user = get_complete_user_data('username', $username);
-            complete_user_login($user);
+                $user = get_complete_user_data('username', $username);
+                complete_user_login($user);
 
-        } // Logged.
-    }
-} // Username != guest.
+            } // Logged.
+        }
+    } // Username != guest.
+} // auth = joomdle
 
 // Redirect.
 if ($use_wrapper) {
-    $redirect_url = get_config ('auth/joomdle', 'joomla_url');
+    $redirect_url = get_config ('auth_joomdle', 'joomla_url');
     switch ($mtype)
     {
         case "event":
@@ -123,7 +127,7 @@ if ($use_wrapper) {
                 if ($wantsurl) {
                     $redirect_url = urldecode ($wantsurl);
                 } else {
-                    $redirect_url = get_config ('auth/joomdle', 'joomla_url');
+                    $redirect_url = get_config ('auth_joomdle', 'joomla_url');
                 }
             }
     }
@@ -172,7 +176,7 @@ if ($use_wrapper) {
                 $redirect_url .= "/mod/$mtype/view.php?id=$id";
             } else {
                 preg_match('@^(?:https?://)?([^/]+)@i',
-                    get_config ('auth/joomdle', 'joomla_url'), $matches);
+                    get_config ('auth_joomdle', 'joomla_url'), $matches);
                 $host = $matches[0];
 
                 /* If not full URL, see if path/host is needed */
@@ -181,14 +185,14 @@ if ($use_wrapper) {
                     (substr ($wantsurl, 0, 8) != 'https://')) {
                     /* If no initial slash, it is a joomla relative path. We add path */
                     if ($wantsurl[0] != '/') {
-                        $path = parse_url (get_config ('auth/joomdle', 'joomla_url'), PHP_URL_PATH);
+                        $path = parse_url (get_config ('auth_joomdle', 'joomla_url'), PHP_URL_PATH);
                         $wantsurl = $path.'/'.$wantsurl;
                     }
 
                     if ($wantsurl) {
                         $redirect_url = $host.urldecode ($wantsurl);
                     } else {
-                        $redirect_url = get_config ('auth/joomdle', 'joomla_url');
+                        $redirect_url = get_config ('auth_joomdle', 'joomla_url');
                     }
                 } else {
                     $redirect_url = $wantsurl;

@@ -2057,7 +2057,7 @@ class joomdle_helpers_external extends external_api {
                         'lastname' => new external_value(PARAM_TEXT, 'lastname'),
                         'username' => new external_value(PARAM_TEXT, 'username'),
                         'email' => new external_value(PARAM_TEXT, 'email'),
-                  'id' => new external_value(PARAM_INT, 'user id'),
+                        'id' => new external_value(PARAM_INT, 'user id'),
                     )
                 )
             );
