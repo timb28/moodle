@@ -94,13 +94,13 @@ class block_snipcart extends block_base {
             </div>
             <div class="snipcart-actions faded">
               <a href="#" class="snipcart-checkout btn btn-small btn-success">'
-                    . '<img src="'.$OUTPUT->pix_url('shopping_cart', 'block_snipcart').'" /> '
+                    . '<img src="'.$OUTPUT->image_url('shopping_cart', 'block_snipcart').'" /> '
                     . get_string('checkout', 'block_snipcart') . '</a>
             </div>
             <div class="snipcart-payment-types">
-              <span class="snipcart-payment-type"><img src="'.$OUTPUT->pix_url('amex', 'block_snipcart').'" alt="American Express accepted" /></span>
-              <span class="snipcart-payment-type"><img src="'.$OUTPUT->pix_url('master_card', 'block_snipcart').'" alt="Master Card accepted" /></span>
-              <span class="snipcart-payment-type"><img src="'.$OUTPUT->pix_url('visa', 'block_snipcart').'" alt="Visa accepted" /></span>
+              <span class="snipcart-payment-type"><img src="'.$OUTPUT->image_url('amex', 'block_snipcart').'" alt="American Express accepted" /></span>
+              <span class="snipcart-payment-type"><img src="'.$OUTPUT->image_url('master_card', 'block_snipcart').'" alt="Master Card accepted" /></span>
+              <span class="snipcart-payment-type"><img src="'.$OUTPUT->image_url('visa', 'block_snipcart').'" alt="Visa accepted" /></span>
             </div>
 
             <script type="text/javascript">
