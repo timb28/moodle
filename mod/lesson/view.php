@@ -251,6 +251,16 @@ if ($pageid != LESSON_EOL) {
 
     $data = $lesson->process_eol_page($outoftime);
     $lessoncontent = $lessonoutput->display_eol_page($lesson, $data);
+    
+    // Academy Patch M#016 Enable lesson activity chaining
+    if (!$course->showgrades && $lesson->activitylink == 0) {
+         redirect(new moodle_url('/course/view.php', array('id'=>$course->id)));
+    }
+
+    // Academy Patch M#016 Enable lesson activity chaining
+    if (!$course->showgrades && $lesson->activitylink) {
+        redirect($lesson->url_for_activitylink());
+    }
 
     lesson_add_fake_blocks($PAGE, $cm, $lesson, $timer);
     echo $lessonoutput->header($lesson, $cm, $currenttab, $extraeditbuttons, $lessonpageid, get_string("congratulations", "lesson"));
