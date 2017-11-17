@@ -22,8 +22,8 @@
 // 5- Run this script directly from your browser: you should see 'Hello, FIRSTNAME'
 
 /// SETUP - NEED TO BE CHANGED
-$token = 'd426b9cdbca709af7c6f0f4a04621cbb';
-$domainname = 'http://420-c73/dev-moodle';
+$token = '';
+$domainname = '';
 
 /// FUNCTION NAME
 $functionname = 'academy_get_course_complete_for_user';
