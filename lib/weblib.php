@@ -1088,12 +1088,14 @@ function page_get_doc_link_path(moodle_page $page) {
  */
 function validate_email($address) {
 
-    return (bool)preg_match('#^[-!\#$%&\'*+\\/0-9=?A-Z^_`a-z{|}~]+'.
-                 '(\.[-!\#$%&\'*+\\/0-9=?A-Z^_`a-z{|}~]+)*'.
+    /** START Academy Patch M#024 Enable comments in email addresses. */
+    return (bool)preg_match('#^[-!\#$%&\'*+\\/0-9=?A-Z^_`a-z{|}~\(\)]+'.
+                 '(\.[-!\#$%&\'*+\\/0-9=?A-Z^_`a-z{|}~\(\)]+)*'.
                   '@'.
                   '[-!\#$%&\'*+\\/0-9=?A-Z^_`a-z{|}~]+\.'.
                   '[-!\#$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+$#',
                   $address);
+    /** END Academy Patch M#024 */
 }
 
 /**
