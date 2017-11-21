@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/lib.php');
 
 $THEME->name = 'academyboost';
-$THEME->sheets = [];
+$THEME->sheets = ['academy'];
 $THEME->editor_sheets = [];
 $THEME->scss = function($theme) {
     return theme_boost_get_main_scss_content($theme);
