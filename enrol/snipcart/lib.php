@@ -206,7 +206,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
                 . ">".get_string('addtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "</a>
 
             <script type='text/javascript'>
-                $(window).load(function() {
+                $(window).on('load', function() {
                     Snipcart.execute('bind', 'order.completed', function (order) {
                         var url = '{$CFG->wwwroot}/enrol/snipcart/completed.php?order=' + order.token + '&eid={$instance->id}';
                         window.location.href = url;
@@ -229,11 +229,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
                                 image: '$courseimageurl'
                             });
 
-                            var oldLabel = $(this).html();
-                            $(this).addClass('btn-disabled');
-                            $(this).addClass('disabled');
-                            $(this).removeClass('btn-primary');
-                            $(this).removeAttr('data-toggle');
+                            $(this).addClass('snipcart-checkout');
                             var width = $(this).css('width');
                             var height = $(this).css('height');
                             $(this).html('". get_string('addedtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) ."');

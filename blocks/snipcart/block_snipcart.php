@@ -104,7 +104,7 @@ class block_snipcart extends block_base {
             </div>
 
             <script type="text/javascript">
-                $(window).load(function() {
+                $(window).on("load", function() {
                     $(".snipcart-actions").addClass("fadein");
                     
                     Snipcart.api.setCurrency("' . strtolower($currency) . '");
