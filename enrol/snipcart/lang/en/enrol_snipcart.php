@@ -11,7 +11,7 @@
 
 $string['accountname'] = 'Name';
 $string['addtocart'] = '{$a->cost} Add to cart';
-$string['addedtocart'] = '{$a->cost} Added. <a href="#" onmousedown="javascript:Snipcart.api.showCart();" class="snipcart-checkout" >View cart</a>';
+$string['addedtocart'] = 'Added';
 $string['assignrole'] = 'Assign role';
 $string['copyright'] = '© Copyright Harcourts International';
 $string['cost'] = 'Enrol cost';
