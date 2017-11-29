@@ -58,7 +58,7 @@ if (isset($_COOKIE['snipcart_order_token'])) {
     unset($_COOKIE['snipcart_order_token']);
     setcookie('snipcart_order_token', '', 1, '/'); // empty value and 1 second expiry 
 }
-/* END Academy Patch M#03 */
+/* END Academy Patch M#037 */
 
 /// Initialize variables
 $errormsg = '';
