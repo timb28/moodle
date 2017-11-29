@@ -25,10 +25,6 @@
 	path = blocks/forum_post
 	url = https://github.com/HarcourtsAcademy/moodle-block_forum_post.git
 	branch = HA-Moodle30
-[submodule "blocks/quickmail"]
-	path = blocks/quickmail
-	url = https://github.com/HarcourtsAcademy/quickmail.git
-	branch = HA-Moodle30
 [submodule "blocks/unanswered_discussions"]
 	path = blocks/unanswered_discussions
 	url = https://github.com/HarcourtsAcademy/moodle-block_unanswered_discussions.git
