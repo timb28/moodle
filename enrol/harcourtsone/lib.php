@@ -165,7 +165,7 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
             echo html_writer::start_div('mdl-align alert alert-info');
             echo html_writer::tag('p', get_string("enrolinstructions", "enrol_harcourtsone"));
             echo html_writer::start_tag('p');
-            echo html_writer::link($instance->customtext1, get_string("enrolbutton", "enrol_harcourtsone"), array('class'=>'btn'));
+            echo html_writer::link($instance->customtext1, get_string("enrolbutton", "enrol_harcourtsone"), array('class'=>'btn btn-primary'));
             echo html_writer::end_tag('p');
             echo html_writer::end_div();
         }
@@ -174,7 +174,7 @@ class enrol_harcourtsone_plugin extends enrol_plugin {
         echo html_writer::start_div('mdl-align alert-block', array('style'=>'padding: 8px 35px 8px 14px;'));
         echo html_writer::tag('p', get_string("reloadinstructions", "enrol_harcourtsone"));
         echo html_writer::start_tag('p');
-        echo html_writer::link($PAGE->url, get_string("reloadbutton", "enrol_harcourtsone"), array('class'=>'btn'));
+        echo html_writer::link($PAGE->url, get_string("reloadbutton", "enrol_harcourtsone"), array('class'=>'btn btn-secondary'));
         echo html_writer::end_tag('p');
         echo html_writer::end_div();
 
