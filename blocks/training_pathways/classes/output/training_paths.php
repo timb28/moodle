@@ -26,7 +26,7 @@
 
 namespace block_training_pathways\output;
 
-require_once($CFG->dirroot . '/mod/subcourse/lib.php');
+require_once($CFG->dirroot . '/mod/subcourse/locallib.php');
 
 class training_paths implements \renderable, \templatable {
     
