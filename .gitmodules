@@ -64,3 +64,6 @@
 	path = enrol/auto
 	url = https://github.com/eugeneventer/moodle-enrol_auto.git
 	branch = MOODLE_32_STABLE
+[submodule "mod/lightboxgallery"]
+	path = mod/lightboxgallery
+	url = https://github.com/andrewhancox/Moodle-jQuery-Lightbox-Gallery.git
