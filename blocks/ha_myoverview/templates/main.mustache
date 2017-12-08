@@ -23,7 +23,7 @@
     {}
 }}
 
-<div id="block-myoverview-{{uniqid}}" class="block-myoverview" data-region="myoverview">
+<div id="block-myoverview-{{uniqid}}" class="block-myoverview" data-region="ha_myoverview">
     <ul id="block-myoverview-view-choices-{{uniqid}}" class="nav nav-tabs" role="tablist">
         <li class="nav-item">
             <a class="nav-link {{#viewingtimeline}}active{{/viewingtimeline}}" href="#myoverview_timeline_view" role="tab" data-toggle="tab" data-tabname="timeline">
@@ -37,10 +37,10 @@
         </li>
     </ul>
     <div class="tab-content content-centred">
-        <div role="tabpanel" class="tab-pane fade {{#viewingtimeline}}in active{{/viewingtimeline}}" id="myoverview_timeline_view">
+        <div role="tabpanel" class="tab-pane fade {{#viewingtimeline}}in active{{/viewingtimeline}}" id="ha_myoverview_timeline_view">
             {{> block_ha_myoverview/timeline-view }}
         </div>
-        <div role="tabpanel" class="tab-pane fade {{#viewingcourses}}in active{{/viewingcourses}}" id="myoverview_courses_view">
+        <div role="tabpanel" class="tab-pane fade {{#viewingcourses}}in active{{/viewingcourses}}" id="ha_myoverview_courses_view">
             {{#coursesview}}
                 {{> block_ha_myoverview/courses-view }}
             {{/coursesview}}

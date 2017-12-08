@@ -38,7 +38,7 @@
         </div>
     </div>
     <div class="tab-content">
-        <div class="tab-pane active fade in" id="myoverview_courses_view_in_progress">
+        <div class="tab-pane active fade in" id="ha_myoverview_courses_view_in_progress">
             {{#inprogress}}
                 {{< block_ha_myoverview/courses-view-by-status }}
                     {{$id}}courses-view-in-progress{{/id}}
@@ -57,7 +57,7 @@
                 </div>
             {{/inprogress}}
         </div>
-        <div class="tab-pane fade" id="myoverview_courses_view_future">
+        <div class="tab-pane fade" id="ha_myoverview_courses_view_future">
             {{#future}}
                 {{< block_ha_myoverview/courses-view-by-status }}
                     {{$id}}courses-view-future{{/id}}
@@ -76,7 +76,7 @@
                 </div>
             {{/future}}
         </div>
-        <div class="tab-pane fade" id="myoverview_courses_view_past">
+        <div class="tab-pane fade" id="ha_myoverview_courses_view_past">
             {{#past}}
                 {{< block_ha_myoverview/courses-view-by-status }}
                     {{$id}}courses-view-past{{/id}}

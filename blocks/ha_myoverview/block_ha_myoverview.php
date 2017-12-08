@@ -51,7 +51,7 @@ class block_ha_myoverview extends block_base {
         }
 
         // Check if the tab to select wasn't passed in the URL, if so see if the user has any preference.
-        if (!$tab = optional_param('myoverviewtab', null, PARAM_ALPHA)) {
+        if (!$tab = optional_param('ha_myoverviewtab', null, PARAM_ALPHA)) {
             // Check if the user has no preference, if so get the site setting.
             if (!$tab = get_user_preferences('block_ha_myoverview_last_tab')) {
                 $config = get_config('block_ha_myoverview');
