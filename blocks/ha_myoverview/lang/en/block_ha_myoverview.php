@@ -22,6 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['allcourses'] = 'All Courses';
 $string['defaulttab'] = 'Default tab';
 $string['defaulttab_desc'] = 'The tab that will be displayed when a user first views their course overview. When returning to their course overview, the user\'s active tab is remembered.';
 $string['future'] = 'Future';
@@ -29,6 +30,7 @@ $string['inprogress'] = 'In progress';
 $string['morecourses'] = 'More courses';
 $string['ha_myoverview:addinstance'] = 'Add a new course overview block';
 $string['ha_myoverview:myaddinstance'] = 'Add a new course overview block to Dashboard';
+$string['mycourses'] = 'My Courses';
 $string['nocourses'] = 'No courses';
 $string['nocoursesinprogress'] = 'No in progress courses';
 $string['nocoursesfuture'] = 'No future courses';
@@ -37,6 +39,7 @@ $string['noevents'] = 'No upcoming activities due';
 $string['next30days'] = 'Next 30 days';
 $string['next7days'] = 'Next 7 days';
 $string['past'] = 'Past';
+$string['pathways'] = 'Training Pathways';
 $string['pluginname'] = 'Harcourts Course overview';
 $string['recentlyoverdue'] = 'Recently overdue';
 $string['sortbycourses'] = 'Sort by courses';
