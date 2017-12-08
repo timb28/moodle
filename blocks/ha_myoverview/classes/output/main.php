@@ -63,10 +63,12 @@ class main implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         global $USER;
 
-        $courses = enrol_get_my_courses('*', 'fullname ASC');
+        $courses = $this->enrol_get_available_courses();
         $coursesprogress = [];
 
         foreach ($courses as $course) {
+
+            // TODO: Check if user is enrolled and branch as appropriate.
 
             $completion = new \completion_info($course);
 
@@ -107,5 +109,36 @@ class main implements renderable, templatable {
             'viewingtimeline' => $viewingtimeline,
             'viewingcourses' => $viewingcourses
         ];
+    }
+
+    private function enrol_get_available_courses() {
+        global $DB, $USER;
+
+        $enrolledcourses = enrol_get_my_courses('*', 'fullname ASC');
+        $autoenrolcourses = [];
+
+        if (enrol_is_enabled('auto')) {
+            // Get auto enrol courses that aren't a pathway and the user isn't enrolled in.
+            $sql = "SELECT c.*, '-1' AS roleid
+                    FROM
+                        {course} c
+                            JOIN
+                        {enrol} e ON c.id = e.courseid
+                    WHERE
+                        e.enrol = 'auto'
+                            AND c.id NOT IN (SELECT
+                                course
+                            FROM
+                                {block_training_pathways})
+                            AND e.id NOT IN (SELECT
+                                enrolid
+                            FROM
+                                {user_enrolments}
+                            WHERE
+                                userid = :userid);";
+            $params['userid']  = $USER->id;
+            $autoenrolcourses = $DB->get_records_sql($sql, $params, 0, 0);
+        }
+        return array_merge($autoenrolcourses, $enrolledcourses);
     }
 }
