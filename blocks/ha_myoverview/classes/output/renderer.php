@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * myoverview block rendrer
+ * ha_myoverview block rendrer
  *
  * @package    block_ha_myoverview
  * @copyright  2016 Ryan Wyllie <ryan@moodle.com>
@@ -28,7 +28,7 @@ use plugin_renderer_base;
 use renderable;
 
 /**
- * myoverview block renderer
+ * ha_myoverview block renderer
  *
  * @package    block_ha_myoverview
  * @copyright  2016 Ryan Wyllie <ryan@moodle.com>

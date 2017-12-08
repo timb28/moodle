@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Class containing data for courses view in the myoverview block.
+ * Class containing data for courses view in the ha_myoverview block.
  *
  * @package    block_ha_myoverview
  * @copyright  2017 Ryan Wyllie <ryan@moodle.com>
@@ -30,7 +30,7 @@ use templatable;
 use core_course\external\course_summary_exporter;
 
 /**
- * Class containing data for courses view in the myoverview block.
+ * Class containing data for courses view in the ha_myoverview block.
  *
  * @copyright  2017 Simey Lameze <simey@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
