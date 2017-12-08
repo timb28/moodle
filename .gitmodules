@@ -67,3 +67,6 @@
 [submodule "mod/lightboxgallery"]
 	path = mod/lightboxgallery
 	url = https://github.com/andrewhancox/Moodle-jQuery-Lightbox-Gallery.git
+[submodule "theme/snap"]
+	path = theme/snap
+	url = https://github.com/moodlerooms/moodle-theme_snap.git
