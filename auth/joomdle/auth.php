@@ -4421,7 +4421,10 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         global $DB;
 
         $username = strtolower ($username);
-        $conditions = array("username" => $username);
+        /* START Academy Patch M#048 Ignore MNet users in Joomdle webservice function */
+        $conditions = array("username" => $username, "mnethostid" => 1);
+        /* END Academy Patch M#048 */
+
         $user = $DB->get_record("user", $conditions);
 
         if (!$user)
