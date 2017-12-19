@@ -6666,7 +6666,10 @@ class auth_plugin_joomdle extends auth_plugin_manual {
     }
 
     public function cron() {
-        $this->update_joomla_sessions();
+        /* Start Academy Patch M#057 Disable auth/joomla cron task
+ 		$this->update_joomla_sessions();
+ 		END Academy Patch M#057 */
+
     }
 
 }
