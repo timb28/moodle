@@ -152,6 +152,19 @@ class user_edit_form extends moodleform {
             $customfields = $authplugin->get_custom_user_profile_fields();
             $customfieldsdata = profile_user_record($userid, false);
             $fields = array_merge($fields, $customfields);
+
+
+            /* START Academy Patch M#053 Ask users to only complete missing required profile fields. */
+            $this->showmissing();
+            /* END Academy Patch M#053. */
+
+            /* START Academy Patch M#055 MNet users can manage custom profile fields. */
+            if (is_mnet_remote_user($user) && !user_not_fully_set_up($user, true)) {
+                $this->show_only_custom_fields($customfields);
+            }
+            /* END Academy Patch M#055. */
+
+
             foreach ($fields as $field) {
                 if ($field === 'description') {
                     // Hard coded hack for description field. See MDL-37704 for details.
@@ -232,6 +245,66 @@ class user_edit_form extends moodleform {
 
         return $errors;
     }
+
+    /* START Academy Patch M#053 Ask users to only complete missing required profile fields. */
+    /**
+     * Hides all non-required elements and required elements with pre-existing data.
+     *
+     * @global type $USER
+     */
+    public function showmissing() {
+        global $USER;
+
+        $showmissing = optional_param('showmissing', false, PARAM_BOOL);
+        if (user_not_fully_set_up($USER) || $showmissing) {
+            $mform = $this->_form;
+
+            $mform->showmissing = true;
+            $mform->addElement('hidden', 'showmissing', $showmissing);
+
+            $shownelements = 0;
+            $elementstohide = null;
+            $coreelements = array(
+                                    '',
+                                    '_qf__user_edit_form',
+                                    'course',
+                                    'id',
+                                    'moodle',
+                                    'sesskey',
+                                    'showmissing',
+                                    'submitbutton'
+                                   );
+
+            foreach ($mform->_elementIndex as $elementname => $id) {
+                // Skip over core form elements. Removing these would break the form.
+                if (in_array($elementname, $coreelements)) {
+                    continue;
+                }
+
+                if (!in_array($elementname, $mform->_required)) {
+                    // Hide non-required form elements.
+                    $elementstohide[] = $elementname;
+
+                } elseif (!empty($mform->_defaultValues[$elementname]) && $mform->_defaultValues[$elementname] ) {
+                    // Hide required elements that have pre-existing data.
+                    $elementstohide[] = $elementname;
+                } else {
+                    $shownelements++;
+                }
+            }
+
+            // If there are no form elements to show, don't hide any fields so the full edit user profile form appears.
+            if ($shownelements > 0) {
+                // There are some visible elements so hide those that should be hidden.
+                foreach ($elementstohide as $elementname) {
+                    $mform->removeElement($elementname);
+                }
+            } else {
+                $mform->removeElement(''); // Remove the 'Please complete your profile' HTML message.
+            }
+        }
+    }
+    /* END Academy Patch M#053. */
 }
 
 

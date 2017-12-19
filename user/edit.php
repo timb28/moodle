@@ -189,7 +189,10 @@ if ($usernew = $userform->get_data()) {
             $returnurl = new moodle_url('/user/profile.php', array('id' => $user->id));
         }
     } else {
-        $returnurl = new moodle_url('/user/preferences.php', array('userid' => $user->id));
+        /* START Academy Patch M#053 Ask users to only complete missing required profile fields. */
+        // $returnurl = new moodle_url('/user/preferences.php', array('userid' => $user->id));
+        $returnurl = new moodle_url('/');
+        /* END Academy Patch M#053 */
     }
 
     $emailchangedhtml = '';
@@ -239,7 +242,7 @@ if ($usernew = $userform->get_data()) {
     }
 
     // Update user picture.
-    if (empty($CFG->disableuserimages)) {
+    if (empty($CFG->disableuserimages) && !empty($usernew->imagefile)) { // Academy Patch M#053 Only show missing profile fields.
         core_user::update_picture($usernew, $filemanageroptions);
     }
 
