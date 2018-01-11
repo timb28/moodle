@@ -321,9 +321,11 @@ switch ($errorcode) {
     case AUTH_LOGIN_FAILED:
         $errormsg = get_string("invalidlogin");
         break;
-    case AUTH_LOGIN_LOCKOUT:
-        $errormsg = get_string('sessionerroruser', 'error');
-        break;
+/* Ignore "Your session has timed out. Please log in again." errors
+ *     case AUTH_LOGIN_LOCKOUT:
+ *         $errormsg = get_string('sessionerroruser', 'error');
+ *         break;
+ */
     case AUTH_LOGIN_UNAUTHORISED:
         $errormsg = get_string("unauthorisedlogin", "", $frm->username);
         break;
