@@ -305,6 +305,37 @@ class user_edit_form extends moodleform {
         }
     }
     /* END Academy Patch M#053. */
+
+    /* START Academy Patch M#055 MNet users can manage custom profile fields. */
+    /**
+     * Removes all user profile fields that are not core or custom profile fields.
+     *
+     * @param array $customfields
+     * @return void
+     */
+    public function show_only_custom_fields($customfields) {
+        $mform = $this->_form;
+
+        $coreelements = array(
+                                '',
+                                '_qf__user_edit_form',
+                                'course',
+                                'id',
+                                'moodle',
+                                'sesskey',
+                                'submitbutton',
+                              );
+
+        $keepelements = array_merge($coreelements, $customfields);
+
+        foreach ($mform->_elementIndex as $elementname => $id) {
+            if (!in_array($elementname, $keepelements)) {
+                $mform->removeElement($elementname);
+            }
+        }
+
+    }
+    /* END Academy Patch M#055. */
 }
 
 
