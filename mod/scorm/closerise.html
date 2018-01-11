@@ -1,0 +1,22 @@
+<!-- START Academy Patch M#058 Add ability to cleanly exit Articulate Rise SCORM activities. -->
+<html>
+<script>
+  function OnLoad() {
+      // Reload the course page to show any completion message.
+      window.opener.parent.parent.opener.location.reload();
+
+      // Close the Rise window.
+      window.opener.parent.parent.close();
+
+      // Close this window.
+      window.parent.close();
+    }
+</script>
+</head>
+<body onload="OnLoad()">
+<center>
+<br><br><br><br><br>
+This window should close automatically. Please close this window to return to your course.
+</center>
+</body></html>
+<!-- END Academy Patch M#058 -->
