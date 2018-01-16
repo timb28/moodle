@@ -324,11 +324,13 @@ class enrol_mnet_mnetservice_enrol {
                   JOIN {enrol} e ON ue.enrolid = e.id
                   JOIN {role} r ON e.roleid = r.id
                  WHERE u.mnethostid = :mnethostid
+                       OR u.mnethostid = :localmnethostid ## Academy Patch M#056 MNet req_course_enrolments
                        AND e.courseid = :courseid
                        AND u.id <> :guestid
                        AND u.confirmed = 1
                        AND u.deleted = 0";
         $params['mnethostid'] = $client->id;
+        $params['localmnethostid'] = $CFG->mnet_localhost_id; // Academy Patch M#056 MNet req_course_enrolments
         $params['courseid'] = $courseid;
         $params['guestid'] = $CFG->siteguest;
 
