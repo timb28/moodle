@@ -229,6 +229,15 @@ class enrol_snipcart_plugin extends enrol_plugin {
                                 image: '$courseimageurl'
                             });
 
+                            // Increment the shopping cart counter
+                            var counter = $('div[data-region=\"shoppingcart-count-container\"]');
+                            var countervalue = parseInt(counter.text);
+                            if (isNaN(countervalue)) {
+                                countervalue = 0
+                            }
+                            counter.text(countervalue + 1);
+                            counter.removeClass('hidden');
+
                             $(this).addClass('snipcart-checkout');
                             var width = $(this).css('width');
                             var height = $(this).css('height');
