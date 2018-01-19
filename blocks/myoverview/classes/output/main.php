@@ -28,8 +28,10 @@ use renderable;
 use renderer_base;
 use templatable;
 use core_completion\progress;
+use context_helper; // Academy Patch M#061
 
 require_once($CFG->dirroot . '/blocks/myoverview/lib.php');
+require_once($CFG->libdir . '/accesslib.php'); // Academy Patch M#061
 require_once($CFG->libdir . '/completionlib.php');
 
 /**
@@ -50,8 +52,9 @@ class main implements renderable, templatable {
      *
      * @param string $tab The tab to display.
      */
-    public function __construct($tab) {
+    public function __construct($tab, $sortby) { // Academy Patch M#061
         $this->tab = $tab;
+        $this->sortby = $sortby; // Academy Patch M#061
     }
 
     /**
@@ -63,13 +66,23 @@ class main implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         global $CFG, $USER;
 
-        if (empty($CFG->navsortmycoursessort)) {
-            $sort = 'visible DESC, sortorder ASC';
-        } else {
-            $sort = 'visible DESC, '.$CFG->navsortmycoursessort.' ASC';
-        }
+        /* START Academy Patch M#061 My Overview block customisations. */
+        if ($this->sortby == BLOCK_MYOVERVIEW_SORT_DEFAULT) {
+            if (empty($CFG->navsortmycoursessort)) {
+                $sort = 'visible DESC, sortorder ASC';
+            } else {
+                $sort = 'visible DESC, '.$CFG->navsortmycoursessort.' ASC';
+            }
 
-        $courses = enrol_get_my_courses('*', $sort);
+            $courses = enrol_get_my_courses('*', $sort);
+        } elseif ($this->sortby == BLOCK_MYOVERVIEW_SORT_ALPHA) {
+            $sort = 'visible DESC, fullname ASC';
+            $courses = enrol_get_my_courses('*', $sort);
+        } else {
+            // Sort order is BLOCK_MYOVERVIEW_SORT_ACCESSED
+            $courses = $this->enrol_get_my_courses_by_lastaccessed('*', 'visible DESC, sortorder ASC');
+        }
+        /* END Academy Patch M#061 */
         $coursesprogress = [];
 
         foreach ($courses as $course) {
@@ -114,4 +127,121 @@ class main implements renderable, templatable {
             'viewingcourses' => $viewingcourses
         ];
     }
+
+    /** START Academy Patch M#061 My Overview block customisations.
+     * Returns list of courses current $USER is enrolled in and can access
+     * Adapted from lib/enrollib::enrol_get_my_courses()
+     *
+     * - $fields is an array of field names to ADD
+     *   so name the fields you really need, which will
+     *   be added and uniq'd
+     *
+     * @param string|array $fields
+     * @param string $sort
+     * @param int $limit max number of courses
+     * @param array $courseids the list of course ids to filter by
+     * @return array
+     */
+   function enrol_get_my_courses_by_lastaccessed($fields = null, $sort = 'DESC',
+                                 $limit = 0, $courseids = []) {
+       global $DB, $USER;
+
+       // Guest account does not have any courses
+       if (isguestuser() or !isloggedin()) {
+           return(array());
+       }
+
+       $basefields = array('id', 'category', 'sortorder',
+                           'shortname', 'fullname', 'idnumber',
+                           'startdate', 'visible',
+                           'groupmode', 'groupmodeforce', 'cacherev');
+
+       if (empty($fields)) {
+           $fields = $basefields;
+       } else if (is_string($fields)) {
+           // turn the fields from a string to an array
+           $fields = explode(',', $fields);
+           $fields = array_map('trim', $fields);
+           $fields = array_unique(array_merge($basefields, $fields));
+       } else if (is_array($fields)) {
+           $fields = array_unique(array_merge($basefields, $fields));
+       } else {
+           throw new coding_exception('Invalid $fileds parameter in enrol_get_my_courses()');
+       }
+       if (in_array('*', $fields)) {
+           $fields = array('*');
+       }
+
+       $orderby = "ORDER BY la.timeaccess DESC";
+       $sort    = trim($sort);
+       if (!empty($sort) && $sort == 'ASC') {
+           $orderby = "ORDER BY la.timeaccess ASC";
+       }
+
+       $wheres = array("c.id <> :siteid");
+       $params = array('siteid'=>SITEID);
+
+       if (isset($USER->loginascontext) and $USER->loginascontext->contextlevel == CONTEXT_COURSE) {
+           // list _only_ this course - anything else is asking for trouble...
+           $wheres[] = "courseid = :loginas";
+           $params['loginas'] = $USER->loginascontext->instanceid;
+       }
+
+       $coursefields = 'c.' .join(',c.', $fields);
+       $ccselect = ', ' . context_helper::get_preload_record_columns_sql('ctx');
+       $ccjoin = "LEFT JOIN {context} ctx ON (ctx.instanceid = c.id AND ctx.contextlevel = :contextlevel)";
+       $params['contextlevel'] = CONTEXT_COURSE;
+       $wheres = implode(" AND ", $wheres);
+
+       if (!empty($courseids)) {
+           list($courseidssql, $courseidsparams) = $DB->get_in_or_equal($courseids, SQL_PARAMS_NAMED);
+           $wheres = sprintf("%s AND c.id %s", $wheres, $courseidssql);
+           $params = array_merge($params, $courseidsparams);
+       }
+
+       //note: we can not use DISTINCT + text fields due to Oracle and MS limitations, that is why we have the subselect there
+       $sql = "SELECT $coursefields $ccselect, la.timeaccess
+                 FROM {course} c
+                 JOIN (SELECT DISTINCT e.courseid
+                         FROM {enrol} e
+                         JOIN {user_enrolments} ue ON (ue.enrolid = e.id AND ue.userid = :userid)
+                        WHERE ue.status = :active AND e.status = :enabled AND ue.timestart < :now1 AND (ue.timeend = 0 OR ue.timeend > :now2)
+                      ) en ON (en.courseid = c.id)
+                 JOIN {user_lastaccess} la ON c.id = la.courseid AND la.userid = :userid2
+              $ccjoin
+                WHERE $wheres
+             $orderby";
+       $params['userid']  = $USER->id;
+       $params['userid2'] = $USER->id;
+       $params['active']  = ENROL_USER_ACTIVE;
+       $params['enabled'] = ENROL_INSTANCE_ENABLED;
+       $params['now1']    = round(time(), -2); // improves db caching
+       $params['now2']    = $params['now1'];
+
+       error_log('sql: ' . print_r($sql, true));
+       error_log('params: ' . print_r($params, true));
+
+       $courses = $DB->get_records_sql($sql, $params, 0, $limit);
+
+       // preload contexts and check visibility
+       foreach ($courses as $id=>$course) {
+           context_helper::preload_from_record($course);
+           if (!$course->visible) {
+               if (!$context = context_course::instance($id, IGNORE_MISSING)) {
+                   unset($courses[$id]);
+                   continue;
+               }
+               if (!has_capability('moodle/course:viewhiddencourses', $context)) {
+                   unset($courses[$id]);
+                   continue;
+               }
+           }
+           $courses[$id] = $course;
+       }
+
+       //wow! Is that really all? :-D
+
+       return $courses;
+   }
+   /* END Academy Patch M#061 */
 }

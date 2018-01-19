@@ -34,6 +34,14 @@ define('BLOCK_MYOVERVIEW_TIMELINE_VIEW', 'timeline');
  */
 define('BLOCK_MYOVERVIEW_COURSES_VIEW', 'courses');
 
+/** START Academy Patch M#061 My Overview block customisations.
+ * Sort order.
+ */
+define('BLOCK_MYOVERVIEW_SORT_DEFAULT', 'default');
+define('BLOCK_MYOVERVIEW_SORT_ALPHA', 'alpha');
+define('BLOCK_MYOVERVIEW_SORT_ACCESSED', 'accessed');
+/* END Academy Patch M#061 */
+
 /**
  * Returns the name of the user preferences as well as the details this plugin uses.
  *
