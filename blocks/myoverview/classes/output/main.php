@@ -218,9 +218,6 @@ class main implements renderable, templatable {
        $params['now1']    = round(time(), -2); // improves db caching
        $params['now2']    = $params['now1'];
 
-       error_log('sql: ' . print_r($sql, true));
-       error_log('params: ' . print_r($params, true));
-
        $courses = $DB->get_records_sql($sql, $params, 0, $limit);
 
        // preload contexts and check visibility
