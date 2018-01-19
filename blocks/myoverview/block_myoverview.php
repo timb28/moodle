@@ -63,10 +63,7 @@ class block_myoverview extends block_base {
 
         /* START Academy Patch M#061 My Overview block customisations. */
         // Enable sorting courses by last accessed
-        $sortby = BLOCK_MYOVERVIEW_SORT_ACCESSED;
-        if ($sortby = optional_param('sortby', null, PARAM_ALPHA)) {
-            error_log('sortby: ' . print_r($sortby, true));
-        }
+        $sortby = optional_param('sortby', BLOCK_MYOVERVIEW_SORT_ACCESSED, PARAM_ALPHA);
         /* END Academy Patch M#061 */
 
         $renderable = new \block_myoverview\output\main($tab, $sortby);
