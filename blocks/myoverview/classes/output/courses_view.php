@@ -28,6 +28,7 @@ use renderable;
 use renderer_base;
 use templatable;
 use core_course\external\course_summary_exporter;
+use theme_snap\local; // Academy Patch M#061
 
 /**
  * Class containing data for courses view in the myoverview block.
@@ -85,6 +86,11 @@ class courses_view implements renderable, templatable {
 
             // Include course visibility.
             $exportedcourse->visible = (bool)$course->visible;
+
+            /* START Academy Patch M#061 My Overview block customisations. */
+            // Get the cover image.
+            $exportedcourse->coverimageurl = \theme_snap\local::course_card_image_url($course->id);
+            /* END Academy Patch M#061 */
 
             $courseprogress = null;
 
