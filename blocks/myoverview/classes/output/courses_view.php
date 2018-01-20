@@ -29,6 +29,8 @@ use renderer_base;
 use templatable;
 use core_course\external\course_summary_exporter;
 use theme_snap\local; // Academy Patch M#061
+use core_tag_tag; // Academy Patch M#061
+use core_tag\output\taglist; // Academy Patch M#061
 
 /**
  * Class containing data for courses view in the myoverview block.
@@ -90,6 +92,25 @@ class courses_view implements renderable, templatable {
             /* START Academy Patch M#061 My Overview block customisations. */
             // Get the cover image.
             $exportedcourse->coverimageurl = \theme_snap\local::course_card_image_url($course->id);
+            /* END Academy Patch M#061 */
+
+            /* START Academy Patch M#061 My Overview block customisations. */
+            $taglist = new \core_tag\output\taglist(core_tag_tag::get_item_tags('core', 'course', $exportedcourse->id), null);
+            $outputtaglist = $taglist->export_for_template($output);
+            foreach ($outputtaglist->tags as $tag) {
+                if (($strpos = strpos($tag->name, ":")) !== FALSE) { 
+                    $type = trim(substr($tag->name, 0, $strpos));
+                    $value = trim(substr($tag->name, $strpos + 1));
+                }
+                switch ($type) {
+                    case 'duration':
+                        $exportedcourse->duration = $value;
+                        break;
+                    case 'experience':
+                        $exportedcourse->experience = $value;
+                        break;
+                }
+            }
             /* END Academy Patch M#061 */
 
             $courseprogress = null;
