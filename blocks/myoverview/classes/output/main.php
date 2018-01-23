@@ -52,9 +52,10 @@ class main implements renderable, templatable {
      *
      * @param string $tab The tab to display.
      */
-    public function __construct($tab, $sortby) { // Academy Patch M#061
+    public function __construct($tab, $sortby, $searchcriteria) { // Academy Patch M#061
         $this->tab = $tab;
         $this->sortby = $sortby; // Academy Patch M#061
+        $this->searchcriteria = $searchcriteria;
     }
 
     /**
@@ -64,7 +65,7 @@ class main implements renderable, templatable {
      * @return stdClass
      */
     public function export_for_template(renderer_base $output) {
-        global $CFG, $USER;
+        global $PAGE, $CFG, $USER;
 
         /* START Academy Patch M#061 My Overview block customisations. */
         if ($this->sortby == BLOCK_MYOVERVIEW_SORT_DEFAULT) {
@@ -82,6 +83,14 @@ class main implements renderable, templatable {
             // Sort order is BLOCK_MYOVERVIEW_SORT_ACCESSED
             $courses = $this->enrol_get_my_courses_by_lastaccessed('*', 'visible DESC, sortorder ASC');
         }
+
+        if (!empty($this->searchcriteria['search'])) {
+            // Trigger event, courses searched.
+            $eventparams = array('context' => $PAGE->context, 'other' => array('query' => $this->searchcriteria['search']));
+            $event = \core\event\courses_searched::create($eventparams);
+            $event->trigger();
+        }
+
         /* END Academy Patch M#061 */
         $coursesprogress = [];
 
@@ -126,7 +135,8 @@ class main implements renderable, templatable {
                 'noevents' => $noeventsurl
             ],
             'viewingallcourses' => $viewingallcourses, // Academy Patch M#061
-            'viewingcourses' => $viewingcourses
+            'viewingcourses' => $viewingcourses,
+            'searchcriteria' => $this->searchcriteria
         ];
     }
 

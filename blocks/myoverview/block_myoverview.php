@@ -62,11 +62,24 @@ class block_myoverview extends block_base {
         }
 
         /* START Academy Patch M#061 My Overview block customisations. */
-        // Enable sorting courses by last accessed
+        // Enable sorting courses by last accessed.
         $sortby = optional_param('sortby', BLOCK_MYOVERVIEW_SORT_ACCESSED, PARAM_ALPHA);
+
+        // Get search parameters.
+        $search     = optional_param('q', '', PARAM_RAW);           // search words
+        $role       = optional_param('r', '', PARAM_ALPHANUMEXT);    // role
+        $duration   = optional_param('d', '', PARAM_ALPHANUMEXT);    // duration
+        $experience = optional_param('e', '', PARAM_ALPHANUMEXT);    // experience level
+
+        $search = trim(strip_tags($search)); // trim & clean raw searched string
+
+        $searchcriteria = array();
+        foreach (array('search', 'role', 'duration', 'experience') as $param) {
+            $searchcriteria[$param] = $$param;
+        }
         /* END Academy Patch M#061 */
 
-        $renderable = new \block_myoverview\output\main($tab, $sortby);
+        $renderable = new \block_myoverview\output\main($tab, $sortby, $searchcriteria);
         $renderer = $this->page->get_renderer('block_myoverview');
 
         $this->content = new stdClass();
