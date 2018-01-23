@@ -108,13 +108,15 @@ class main implements renderable, templatable {
         $noeventsurl = $output->image_url('activities', 'block_myoverview')->out();
 
         // Now, set the tab we are going to be viewing.
-        $viewingtimeline = false;
+        /* START Academy Patch M#061 My Overview block customisations. */
+        $viewingallcourses = false;
         $viewingcourses = false;
-        if ($this->tab == BLOCK_MYOVERVIEW_TIMELINE_VIEW) {
-            $viewingtimeline = true;
+        if ($this->tab == BLOCK_MYOVERVIEW_ALLCOURSES_VIEW) {
+            $viewingallcourses = true;
         } else {
             $viewingcourses = true;
         }
+        /* END Academy Patch M#061 My Overview block customisations. */
 
         return [
             'midnight' => usergetmidnight(time()),
@@ -123,7 +125,7 @@ class main implements renderable, templatable {
                 'nocourses' => $nocoursesurl,
                 'noevents' => $noeventsurl
             ],
-            'viewingtimeline' => $viewingtimeline,
+            'viewingallcourses' => $viewingallcourses, // Academy Patch M#061
             'viewingcourses' => $viewingcourses
         ];
     }

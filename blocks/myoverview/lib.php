@@ -24,10 +24,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/* START Academy Patch M#061 My Overview block customisations. */
 /**
- * The timeline view.
+ * The all-courses view.
  */
-define('BLOCK_MYOVERVIEW_TIMELINE_VIEW', 'timeline');
+define('BLOCK_MYOVERVIEW_ALLCOURSES_VIEW', 'allcourses');
+/* END Academy Patch M#061 My Overview block customisations. */
 
 /**
  * The courses view.
@@ -52,8 +54,8 @@ function block_myoverview_user_preferences() {
     $preferences['block_myoverview_last_tab'] = array(
         'type' => PARAM_ALPHA,
         'null' => NULL_NOT_ALLOWED,
-        'default' => BLOCK_MYOVERVIEW_TIMELINE_VIEW,
-        'choices' => array(BLOCK_MYOVERVIEW_TIMELINE_VIEW, BLOCK_MYOVERVIEW_COURSES_VIEW)
+        'default' => BLOCK_MYOVERVIEW_ALLCOURSES_VIEW, // Academy Patch M#061
+        'choices' => array(BLOCK_MYOVERVIEW_ALLCOURSES_VIEW, BLOCK_MYOVERVIEW_COURSES_VIEW) // Academy Patch M#061
     );
 
     return $preferences;
