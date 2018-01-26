@@ -66,7 +66,7 @@ class block_myoverview extends block_base {
         $sortby = optional_param('sortby', BLOCK_MYOVERVIEW_SORT_ACCESSED, PARAM_ALPHA);
 
         // Get search parameters.
-        $search     = optional_param('q', '', PARAM_RAW);           // search words
+        $search     = optional_param('q', '', PARAM_TEXT);           // search words
         $role       = optional_param('r', '', PARAM_ALPHANUMEXT);    // role
         $duration   = optional_param('d', '', PARAM_ALPHANUMEXT);    // duration
         $experience = optional_param('e', '', PARAM_ALPHANUMEXT);    // experience level
