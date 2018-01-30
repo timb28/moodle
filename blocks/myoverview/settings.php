@@ -29,7 +29,7 @@ require_once($CFG->dirroot . '/blocks/myoverview/lib.php');
 if ($ADMIN->fulltree) {
 
     $options = [
-        BLOCK_MYOVERVIEW_TIMELINE_VIEW => get_string('timeline', 'block_myoverview'),
+        BLOCK_MYOVERVIEW_ALLCOURSES_VIEW => get_string('fulllistofcourses'), // Academy Patch M#061
         BLOCK_MYOVERVIEW_COURSES_VIEW => get_string('courses')
     ];
 
