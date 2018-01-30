@@ -1,7 +1,3 @@
-[submodule "course/format/flexsections"]
-	path = course/format/flexsections
-	url = https://github.com/HarcourtsAcademy/moodle-format_flexsections.git
-	branch = HA-Moodle30
 [submodule "lib/editor/atto/plugins/fullscreen"]
 	path = lib/editor/atto/plugins/fullscreen
 	url = https://github.com/dthies/moodle-atto_fullscreen.git
