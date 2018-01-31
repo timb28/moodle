@@ -33,6 +33,7 @@ use context_helper; // Academy Patch M#061
 require_once($CFG->dirroot . '/blocks/myoverview/lib.php');
 require_once($CFG->libdir . '/accesslib.php'); // Academy Patch M#061
 require_once($CFG->libdir . '/completionlib.php');
+require_once($CFG->libdir . '/coursecatlib.php'); // Academy Patch M#061
 
 /**
  * Class containing data for my overview block.
@@ -65,7 +66,7 @@ class main implements renderable, templatable {
      * @return stdClass
      */
     public function export_for_template(renderer_base $output) {
-        global $PAGE, $CFG, $USER;
+        global $CFG, $USER;
 
         /* START Academy Patch M#061 My Overview block customisations. */
         if ($this->sortby == BLOCK_MYOVERVIEW_SORT_DEFAULT) {
@@ -79,16 +80,19 @@ class main implements renderable, templatable {
         } elseif ($this->sortby == BLOCK_MYOVERVIEW_SORT_ALPHA) {
             $sort = 'visible DESC, fullname ASC';
             $courses = enrol_get_my_courses('*', $sort);
-        } else {
+        } elseif ($this->sortby == BLOCK_MYOVERVIEW_SORT_ACCESSED) {
             // Sort order is BLOCK_MYOVERVIEW_SORT_ACCESSED
             $courses = $this->enrol_get_my_courses_by_lastaccessed('*', 'visible DESC, sortorder ASC');
         }
 
-        if (!empty($this->searchcriteria['search'])) {
-            // Trigger event, courses searched.
-            $eventparams = array('context' => $PAGE->context, 'other' => array('query' => $this->searchcriteria['search']));
-            $event = \core\event\courses_searched::create($eventparams);
-            $event->trigger();
+        if (empty($this->searchcriteria['search'])) {
+            $options = array('recursive' => true,
+                             'sort' => array('id' => -1));
+            $coursecat = \coursecat::get('1');
+            $allcourses = $coursecat->get_courses($options);
+        } else {
+            error_log('searching : ' . print_r($this->searchcriteria, true));
+            $allcourses = $this->search_courses($this->searchcriteria);
         }
 
         /* END Academy Patch M#061 */
@@ -112,7 +116,7 @@ class main implements renderable, templatable {
             $coursesprogress[$course->id]['progress'] = $percentage;
         }
 
-        $coursesview = new courses_view($courses, $coursesprogress);
+        $coursesview = new courses_view($allcourses, $courses, $coursesprogress); // Academy Patch M#061
         $nocoursesurl = $output->image_url('courses', 'block_myoverview')->out();
         $noeventsurl = $output->image_url('activities', 'block_myoverview')->out();
 
@@ -251,6 +255,45 @@ class main implements renderable, templatable {
        //wow! Is that really all? :-D
 
        return $courses;
+   }
+
+   /** 
+     * Returns list of courses current $USER can access
+     * Adapted from lib/coursecat::search_courses()
+     *
+     * @return array
+     */
+   function search_courses(array $searchcriteria) {
+       global $PAGE;
+
+        // Trigger event, courses searched.
+        $eventparams = array('context' => $PAGE->context, 'other' => array('query' => $searchcriteria['search']));
+        $event = \core\event\courses_searched::create($eventparams);
+        $event->trigger();
+
+        $coursesinlist = \coursecat::search_courses($this->searchcriteria);
+
+
+
+        $coursefields = array('id','category','sortorder','fullname','shortname','idnumber','summary','summaryformat','format','showgrades','newsitems','startdate','enddate','marker','maxbytes','legacyfiles','showreports','visible','visibleold','groupmode','groupmodeforce','defaultgroupingid','lang','theme','timecreated','timemodified','requested','enablecompletion','completionnotify','cacherev','calendartype');
+
+        foreach ($coursesinlist as $courseinlist) {
+            if ($courseinlist instanceof stdClass) {
+                $courseinlist = new course_in_list($courseinlist);
+            }
+
+            if (!$courseinlist->can_access()) {
+                continue;
+            }
+
+            $course = new \stdClass();
+            foreach ($coursefields as $field) {
+                $course->$field = $courseinlist->$field;
+            }
+            $courses[$course->id] = $course;
+        }
+
+        return $courses;
    }
    /* END Academy Patch M#061 */
 }

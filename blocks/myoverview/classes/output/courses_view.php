@@ -42,6 +42,9 @@ class courses_view implements renderable, templatable {
     /** Quantity of courses per page. */
     const COURSES_PER_PAGE = 6;
 
+    /** @var array $allcourses List of courses the user is able to access. */
+    protected $allcourses = []; // Academy Patch M#061
+
     /** @var array $courses List of courses the user is enrolled in. */
     protected $courses = [];
 
@@ -54,9 +57,10 @@ class courses_view implements renderable, templatable {
      * @param array $courses list of courses.
      * @param array $coursesprogress list of courses progress.
      */
-    public function __construct($courses, $coursesprogress) {
+    public function __construct($allcourses, $courses, $coursesprogress) { // Academy Patch M#061
+        $this->allcourses = $allcourses;
         $this->courses = $courses;
-        $this->coursesprogress = $coursesprogress;
+        $this->coursesprogress = $coursesprogress; // Academy Patch M#061
     }
 
     /**
@@ -74,8 +78,66 @@ class courses_view implements renderable, templatable {
             'hascourses' => !empty($this->courses)
         ];
 
+        /* START Academy Patch M#061 My Overview block customisations. */
         // How many courses we have per status?
-        $coursesbystatus = ['past' => 0, 'inprogress' => 0, 'future' => 0];
+        $coursesbystatus = ['all' => 0, 'past' => 0, 'inprogress' => 0, 'future' => 0];
+        
+        foreach ($this->allcourses as $course) {
+            $courseid = $course->id;
+            $context = \context_course::instance($courseid);
+            $exporter = new course_summary_exporter($course, [
+                'context' => $context
+            ]);
+            $exportedcourse = $exporter->export($output);
+            // Convert summary to plain text.
+            $exportedcourse->summary = content_to_text($exportedcourse->summary, $exportedcourse->summaryformat);
+
+            // Include course visibility.
+            $exportedcourse->visible = (bool)$course->visible;
+
+            /* START Academy Patch M#061 My Overview block customisations. */
+            // Get the cover image.
+            $exportedcourse->coverimageurl = \theme_snap\local::course_card_image_url($course->id);
+            /* END Academy Patch M#061 */
+
+            /* START Academy Patch M#061 My Overview block customisations. */
+            $taglist = new \core_tag\output\taglist(core_tag_tag::get_item_tags('core', 'course', $exportedcourse->id), null);
+            $outputtaglist = $taglist->export_for_template($output);
+            foreach ($outputtaglist->tags as $tag) {
+                if (($strpos = strpos($tag->name, ":")) !== FALSE) { 
+                    $type = trim(substr($tag->name, 0, $strpos));
+                    $value = trim(substr($tag->name, $strpos + 1));
+                }
+                switch ($type) {
+                    case 'duration':
+                        $exportedcourse->duration = $value;
+                        break;
+                    case 'experience':
+                        $exportedcourse->experience = $value;
+                        break;
+                }
+            }
+            /* END Academy Patch M#061 */
+
+            $courseprogress = null;
+
+            if (isset($this->coursesprogress[$courseid])) {
+                $courseprogress = $this->coursesprogress[$courseid]['progress'];
+                $exportedcourse->hasprogress = !is_null($courseprogress);
+                $exportedcourse->progress = $courseprogress;
+            }
+
+            // All courses
+            $pastpages = floor($coursesbystatus['all'] / $this::COURSES_PER_PAGE);
+
+            $coursesview['all']['pages'][$pastpages]['courses'][] = $exportedcourse;
+            $coursesview['all']['pages'][$pastpages]['active'] = ($pastpages == 0 ? true : false);
+            $coursesview['all']['pages'][$pastpages]['page'] = $pastpages + 1;
+            $coursesview['all']['haspages'] = true;
+            $coursesbystatus['all']++;
+        }
+        /* END Academy Patch M#061 */
+
         foreach ($this->courses as $course) {
             $courseid = $course->id;
             $context = \context_course::instance($courseid);
