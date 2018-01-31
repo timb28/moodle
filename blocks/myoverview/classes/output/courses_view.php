@@ -111,9 +111,15 @@ class courses_view implements renderable, templatable {
                 switch ($type) {
                     case 'duration':
                         $exportedcourse->duration = $value;
+                        $exportedcourse->durationclass = preg_replace('/[\s:]+/','',$tag->name);
                         break;
                     case 'experience':
                         $exportedcourse->experience = $value;
+                        $exportedcourse->experienceclass = preg_replace('/[\s:]+/','',$tag->name);
+                        break;
+                    case 'role':
+                        $exportedcourse->role = $value;
+                        $exportedcourse->roleclass = preg_replace('/[\s:]+/','',$tag->name);
                         break;
                 }
             }
@@ -167,9 +173,15 @@ class courses_view implements renderable, templatable {
                 switch ($type) {
                     case 'duration':
                         $exportedcourse->duration = $value;
+                        $exportedcourse->durationclass = preg_replace('/[\s:]+/','',$tag->name);
                         break;
                     case 'experience':
                         $exportedcourse->experience = $value;
+                        $exportedcourse->experienceclass = preg_replace('/[\s:]+/','',$tag->name);
+                        break;
+                    case 'role':
+                        $exportedcourse->role = $value;
+                        $exportedcourse->roleclass = preg_replace('/[\s:]+/','',$tag->name);
                         break;
                 }
             }
