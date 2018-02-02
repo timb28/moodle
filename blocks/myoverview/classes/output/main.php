@@ -291,7 +291,6 @@ class main implements renderable, templatable {
             }
 
             if (!$courseinlist->visible) {
-                error_log('XXX can not access this course: ' . print_r($courseinlist, true));
                 continue;
             }
 
