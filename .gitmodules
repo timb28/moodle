@@ -30,7 +30,7 @@
 	branch = HA-Moodle33
 [submodule "mod/game"]
 	path = mod/game
-	url = https://github.com/HarcourtsAcademy/moodle-mod_game.git
+	url = https://github.com/bdaloukas/moodle-mod_game.git
 	branch = MOODLE_20_STABLE
 [submodule "mod/hvp"]
 	path = mod/hvp
