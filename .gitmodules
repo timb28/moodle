@@ -27,7 +27,7 @@
 [submodule "mod/certificate"]
 	path = mod/certificate
 	url = https://github.com/HarcourtsAcademy/moodle-mod_certificate.git
-	branch = HA-Moodle30
+	branch = HA-Moodle33
 [submodule "mod/game"]
 	path = mod/game
 	url = https://github.com/HarcourtsAcademy/moodle-mod_game.git
