@@ -232,7 +232,7 @@ class main implements renderable, templatable {
        foreach ($courses as $id=>$course) {
            context_helper::preload_from_record($course);
            if (!$course->visible) {
-               if (!$context = context_course::instance($id, IGNORE_MISSING)) {
+               if (!$context = \context_course::instance($id, IGNORE_MISSING)) {
                    unset($courses[$id]);
                    continue;
                }
