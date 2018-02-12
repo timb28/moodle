@@ -16,11 +16,11 @@
 [submodule "blocks/forum_aggregator"]
 	path = blocks/forum_aggregator
 	url = https://github.com/HarcourtsAcademy/moodle-block_forum_aggregator.git
-	branch = HA-Moodle30
+	branch = HA-Moodle33
 [submodule "blocks/forum_post"]
 	path = blocks/forum_post
 	url = https://github.com/HarcourtsAcademy/moodle-block_forum_post.git
-	branch = HA-Moodle30
+	branch = HA-Moodle33
 [submodule "enrol/metamnet"]
 	path = enrol/metamnet
 	url = https://github.com/HarcourtsAcademy/moodle-enrol_metamnet.git
@@ -35,31 +35,32 @@
 [submodule "mod/hvp"]
 	path = mod/hvp
 	url = https://github.com/h5p/h5p-moodle-plugin.git
-	branch = HA-Moodle30
+	branch = master
 [submodule "mod/questionnaire"]
 	path = mod/questionnaire
 	url = https://github.com/HarcourtsAcademy/moodle-mod_questionnaire.git
-	branch = HA-Moodle30
+	branch = MOODLE_33_STABLE
 [submodule "mod/subcourse"]
 	path = mod/subcourse
 	url = https://github.com/HarcourtsAcademy/moodle-mod_subcourse.git
-	branch = HA-Moodle30
+	branch = HA-Moodle33
 [submodule "mod/videofile"]
 	path = mod/videofile
 	url = https://github.com/HarcourtsAcademy/moodle-mod_videofile.git
-	branch = HA-Moodle30
+	branch = HA-Moodle33
 [submodule "question/type/pmatch"]
 	path = question/type/pmatch
-	url = https://github.com/HarcourtsAcademy/moodle-qtype_pmatch.git
-	branch = HA-Moodle30
+	url = https://github.com/moodleou/moodle-qtype_pmatch.git
+	branch = master
 [submodule "question/type/oumultiresponse"]
 	path = question/type/oumultiresponse
-	url = https://github.com/HarcourtsAcademy/moodle-qtype_oumultiresponse.git
-	branch = HA-Moodle30
+	url = https://github.com/moodleou/moodle-qtype_oumultiresponse.git
+	branch = master
 [submodule "enrol/auto"]
 	path = enrol/auto
 	url = https://github.com/eugeneventer/moodle-enrol_auto.git
 	branch = MOODLE_32_STABLE
 [submodule "theme/snap"]
 	path = theme/snap
-	url=https://github.com/HarcourtsAcademy/moodle-theme_snap.git
+	url = https://github.com/HarcourtsAcademy/moodle-theme_snap.git
+	branch = HA-Moodle33
