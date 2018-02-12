@@ -12,7 +12,7 @@
 	url = https://github.com/HarcourtsAcademy/moodle-block_configurablereports.git
 [submodule "blocks/fn_marking"]
 	path = blocks/fn_marking
-	url = https://github.com/fernandooliveira/moodle-block_marking_manager.git
+	url=https://github.com/HarcourtsAcademy/moodle-block_marking_manager.git
 [submodule "blocks/forum_aggregator"]
 	path = blocks/forum_aggregator
 	url = https://github.com/HarcourtsAcademy/moodle-block_forum_aggregator.git
