@@ -38,7 +38,7 @@
 	branch = master
 [submodule "mod/questionnaire"]
 	path = mod/questionnaire
-	url = https://github.com/HarcourtsAcademy/moodle-mod_questionnaire.git
+	url = https://github.com/PoetOS/moodle-mod_questionnaire.git
 	branch = MOODLE_33_STABLE
 [submodule "mod/subcourse"]
 	path = mod/subcourse
