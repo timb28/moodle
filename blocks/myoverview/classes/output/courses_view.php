@@ -58,7 +58,7 @@ class courses_view implements renderable, templatable {
      * @param array $coursesprogress list of courses progress.
      */
     public function __construct($allcourses, $courses, $coursesprogress) { // Academy Patch M#061
-        $this->allcourses = $allcourses;
+        $this->allcourses = empty($allcourses) ? array() : $allcourses; // Academy Patch M#061
         $this->courses = $courses;
         $this->coursesprogress = $coursesprogress; // Academy Patch M#061
     }

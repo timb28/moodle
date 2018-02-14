@@ -258,6 +258,8 @@ class main implements renderable, templatable {
    function search_courses(array $searchcriteria) {
         global $CFG, $PAGE;
 
+        $courses = null;
+
         if (empty($this->searchcriteria['search'])) {
             // No search criteria so get all courses.
             $options = array('recursive' => true,
