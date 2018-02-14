@@ -35,5 +35,5 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_configselect('block_myoverview/defaulttab',
         get_string('defaulttab', 'block_myoverview'),
-        get_string('defaulttab_desc', 'block_myoverview'), 'timeline', $options));
+        get_string('defaulttab_desc', 'block_myoverview'), 'allcourses', $options)); // Academy Patch M#061
 }
