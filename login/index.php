@@ -279,10 +279,12 @@ if ($frm and isset($frm->username)) {                             // Login WITH 
 }
 
 /// Detect problems with timedout sessions
+/* START Academy Patch M#063 Hide Session Timeout alerts from login page.
 if ($session_has_timed_out and !data_submitted()) {
     $errormsg = get_string('sessionerroruser', 'error');
     $errorcode = 4;
 }
+ END Academy Patch M#063 */
 
 /// First, let's remember where the user was trying to get to before they got here
 
