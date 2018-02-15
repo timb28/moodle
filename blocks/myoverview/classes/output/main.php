@@ -304,6 +304,10 @@ class main implements renderable, templatable {
                 $course->isenrolled = true;
             } else {
                 $course->isenrolled = false;
+                if (!enrol_selfenrol_available($courseinlist->id)) {
+                    // Not enrolled and can't self enrol
+                    continue;
+                }
             }
 
             foreach ($coursefields as $field) {
