@@ -1,6 +1,7 @@
 [submodule "lib/editor/atto/plugins/fullscreen"]
 	path = lib/editor/atto/plugins/fullscreen
-	url = https://github.com/dthies/moodle-atto_fullscreen.git
+	url = https://github.com/HarcourtsAcademy/moodle-atto_fullscreen.git
+	branch = HA-Moodle33
 [submodule "lib/editor/atto/plugins/htmlplus"]
 	path = lib/editor/atto/plugins/htmlplus
 	url = https://github.com/andrewnicols/moodle-atto_htmlplus.git
