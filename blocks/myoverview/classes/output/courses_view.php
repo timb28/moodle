@@ -98,6 +98,12 @@ class courses_view implements renderable, templatable {
             /* START Academy Patch M#061 My Overview block customisations. */
             // Get the cover image.
             $exportedcourse->coverimageurl = \theme_snap\local::course_card_image_url($course->id);
+
+            if ($course->isenrolled) {
+                $exportedcourse->isenrolled = true;
+            } else {
+                $exportedcourse->isenrolled = false;
+            }
             /* END Academy Patch M#061 */
 
             /* START Academy Patch M#061 My Overview block customisations. */

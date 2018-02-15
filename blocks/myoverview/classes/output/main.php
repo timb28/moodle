@@ -256,9 +256,10 @@ class main implements renderable, templatable {
      * @return array
      */
    function search_courses(array $searchcriteria) {
-        global $CFG, $PAGE;
+        global $CFG, $PAGE, $USER;
 
         $courses = null;
+        $enrolledcourses = enrol_get_all_users_courses($USER->id, true, 'id');
 
         if (empty($this->searchcriteria['search'])) {
             // No search criteria so get all courses.
@@ -297,6 +298,14 @@ class main implements renderable, templatable {
             }
 
             $course = new \stdClass();
+
+            // Determine if user is enrolled
+            if (array_key_exists($courseinlist->id,$enrolledcourses)) {
+                $course->isenrolled = true;
+            } else {
+                $course->isenrolled = false;
+            }
+
             foreach ($coursefields as $field) {
                 $course->$field = $courseinlist->$field;
             }
