@@ -266,6 +266,11 @@ class courses_view implements renderable, templatable {
 
         $exportedcourse->isenrolled = true;
 
+        if ($course->enablecompletion) {
+            $exportedcourse->hasprogress = $course->enablecompletion;
+            $exportedcourse->progress = $course->progress;
+        }
+
         return $exportedcourse;
     }
 }
