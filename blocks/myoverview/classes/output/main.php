@@ -88,7 +88,7 @@ class main implements renderable, templatable {
         $remotecourses = get_mnet_courses(); // Academy Patch M#065
         $courses = array_merge($courses, $remotecourses);// Academy Patch M#065
 
-        $allcourses = $this->search_courses($this->searchcriteria);
+        $allcourses = $this->search_courses($this->searchcriteria, $remotecourses);
 
         /* END Academy Patch M#061 */
         $coursesprogress = [];
@@ -100,7 +100,7 @@ class main implements renderable, templatable {
             if ($course->id < 0) {
                 if ($course->enablecompletion == 1) {
                     $coursesprogress[$course->id]['completed'] = (bool)$course->complete;
-                    $coursesprogress[$course->id]['progress'] = $course->complete;
+                    $coursesprogress[$course->id]['progress'] = $course->progress;
                 } else {
                     continue;
                 }
@@ -271,7 +271,7 @@ class main implements renderable, templatable {
      *
      * @return array
      */
-   function search_courses(array $searchcriteria) {
+   function search_courses(array $searchcriteria, array $remotecourses) {
         global $CFG, $PAGE, $USER;
 
         $courses = null;
@@ -302,9 +302,7 @@ class main implements renderable, templatable {
             $coursesinlist = \coursecat::search_courses($this->searchcriteria);
         }
 
-        $sortedcourses = get_mnet_courses();
-
-        $coursesinlist = array_merge($coursesinlist, $sortedcourses);
+        $coursesinlist = array_merge($coursesinlist, $remotecourses);
 
         $coursefields = array('id','category','sortorder','fullname','shortname','idnumber','summary','summaryformat','format','showgrades','newsitems','startdate','enddate','marker','maxbytes','legacyfiles','showreports','visible','visibleold','groupmode','groupmodeforce','defaultgroupingid','lang','theme','timecreated','timemodified','requested','enablecompletion','completionnotify','cacherev','calendartype','wwwroot');
 

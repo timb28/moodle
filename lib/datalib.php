@@ -1175,9 +1175,80 @@ function get_my_remotemnetcourses() {
         $course->hostname = $mnethostname;
         $course->wwwroot = $mnetwwwroot;
         $courses[$id] = $course;
+
+        if ($course->enablecompletion == 1) {
+            if ($course->complete) {
+                $course->progress = 1;
+            } else {
+                $course->progress = get_remote_course_progress($service, $mnethostid, $course->id, $username);
+            }
+        }
+
     }
 
+
     return $courses;
+}
+
+/**
+ * Get progress percentage of remote MNet course.
+ *
+ * @param mnetservice_enrol $service
+ * @param int $mnethostid
+ * @param int $courseid
+ * @param string $username
+ * @return null|float The percentage, or null if completion is not supported in the course,
+ *         or there are no activities that support completion.
+ */
+function get_remote_course_progress($service, $mnethostid, $courseid, $username) {
+    global $CFG, $DB, $USER;
+
+    $remotecoursegrades = array();
+
+    if (!$service instanceof \mnetservice_enrol) {
+        return;
+    }
+
+    if ($service->is_available()) {
+        $remotecoursegrades = $service->req_course_grades($mnethostid, $courseid, $username);
+    }
+
+    if (!is_array($remotecoursegrades)) {
+        return null;
+    }
+
+    $gradepass = $remotecoursegrades['gradepass'];
+
+
+    // Use the maximum grade if there is no passing grade set.
+    if ($gradepass == 0) {
+        $gradepass = $remotecoursegrades['grademax'];
+    }
+
+    if (!empty($remotecoursegrades['grade']) &&
+        isset($remotecoursegrades['grade']['finalgrade']) &&
+        !($remotecoursegrades['hidden'])) {
+
+        $grade = $remotecoursegrades['grade']['finalgrade'];
+
+        return percent_complete($gradepass, $grade);
+    } else {
+        return null;
+    }
+}
+
+/**
+ * Calculate percent complete from grades.
+ *
+ * @param int $maxgrade
+ * @param int $grade
+ * @return float The percentage
+ */
+function percent_complete($maxgrade, $grade) {
+    if ($grade >= $maxgrade) {
+        return 100;
+    }
+    return floor( ($grade / $maxgrade) * 100 );
 }
 /* END Academy Patch M#045 */
 

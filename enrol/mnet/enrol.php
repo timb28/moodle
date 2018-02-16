@@ -494,7 +494,9 @@ class enrol_mnet_mnetservice_enrol {
 
         if (!$gradeitemonly) {
             // Get grades.
-            $user = $DB->get_record('user', array('username'=>$username, 'mnethostid'=>$client->id));
+//            $user = $DB->get_record('user', array('username'=>$username, 'mnethostid'=>$client->id));
+// TODO: Figure out why the old code above uses a different mnet host id check - this is a local user?!?
+            $user = $DB->get_record('user', array('username'=>$username, 'mnethostid'=>'1'));
 
             require_once($CFG->dirroot . '/lib/grade/grade_grade.php');
             $grade = new \grade_grade(array('itemid' => $refgradeitem->id, 'userid' => $user->id));
