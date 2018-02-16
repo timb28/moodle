@@ -512,6 +512,34 @@ class mnetservice_enrol {
         }
     }
 
+    /* START Academy Patch M#045 Display remote MNet courses on a student's Dashboard */
+    /**
+     * Send request to get course enrolments for a user
+     *
+     * @uses mnet_xmlrpc_client Invokes XML-RPC request
+     * @param id $mnethostid MNet remote host id
+     * @param String $username our user
+     * @return array Array of {@link $COURSE} of course objects
+     */
+    public function req_user_enrolments($mnethostid, $username) {
+        global $CFG;
+        require_once($CFG->dirroot.'/mnet/xmlrpc/client.php');
+
+        $peer = new mnet_peer();
+        $peer->set_id($mnethostid);
+
+        $request = new mnet_xmlrpc_client();
+        $request->set_method('enrol/mnet/enrol.php/user_enrolments');
+        $request->add_param($username);
+
+        if ($request->send($peer)) {
+            return $request->response;
+        } else {
+            return serialize($request->error);
+        }
+    }
+    /* END Academy Patch M#045 */
+
     /**
      * Prepares error messages returned by our XML-RPC requests to be send as debug info to {@link print_error()}
      *

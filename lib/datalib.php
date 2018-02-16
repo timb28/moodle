@@ -1141,6 +1141,46 @@ function get_my_remotecourses($userid=0) {
     return $DB->get_records_sql($sql, array($userid));
 }
 
+/* START Academy Patch M#045 Display remote MNet courses on a student's Dashboard */
+/**
+ * List of remote courses that the current user is enrolled in by means other than MNet.
+ * @return array Array of {@link $COURSE} of course objects
+ */
+function get_my_remotemnetcourses() {
+    global $CFG, $DB, $USER;
+
+    require_once($CFG->dirroot.'/mnet/service/enrol/locallib.php');
+
+    $courses = array();
+
+    $username = $USER->username;
+    $mnethostid = $USER->mnethostid;
+    $mnethost = $DB->get_record('mnet_host', array('id' => $mnethostid));
+    $mnethostname = $mnethost->name;
+    $mnetwwwroot = $mnethost->wwwroot;
+
+    $service = mnetservice_enrol::get_instance();
+
+    if ($service->is_available()) {
+        $otherremotecourses = $service->req_user_enrolments($mnethostid, $username);
+    }
+
+    if (!is_array($otherremotecourses)) {
+        return array();
+    }
+
+    foreach ($otherremotecourses as $id => $course) {
+        $course = (object) $course; // is returned from MNet XML-RPC call as an array
+        $course->hostid = $mnethostid;
+        $course->hostname = $mnethostname;
+        $course->wwwroot = $mnetwwwroot;
+        $courses[$id] = $course;
+    }
+
+    return $courses;
+}
+/* END Academy Patch M#045 */
+
 /**
  * List of remote hosts that a user has access to via MNET.
  * Works on the SP

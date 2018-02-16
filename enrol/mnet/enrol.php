@@ -97,20 +97,98 @@ class enrol_mnet_mnetservice_enrol {
         return array_values($courses); // can not use keys for backward compatibility
     }
 
+    /* START Academy Patch M#045 Display remote MNet courses on a student's Dashboard */
     /**
-     * This method has never been implemented in Moodle MNet API
+     * Returns list of courses that user is enrolled in.
+     * Doesn't include meta course enrolments
      *
      * @uses mnet_remote_client Callable via XML-RPC only
-     * @return array empty array
+     * @param String $username of our user
+     * @return array of courses
      */
-    public function user_enrolments() {
-        global $CFG, $DB;
+    public function user_enrolments($username) {
+        global $CFG;
+
+        require_once($CFG->dirroot.'/enrol/externallib.php');
 
         if (!$client = get_mnet_remote_client()) {
             die('Callable via XML-RPC only');
         }
-        return array();
+
+        if (empty($username)) {
+            throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
+        }
+
+        $user = core_user::get_user_by_username($username, 'id');
+
+        if (empty($user)) {
+            throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
+        }
+
+        $courses = enrol_get_users_courses($user->id, true, 'id, shortname, fullname, idnumber, visible,
+                   summary, summaryformat, format, showgrades, lang, enablecompletion');
+
+        // Get meta course enrolments so they won't be included in returned courses
+        $metacourses = $this->meta_courses($user->id);
+
+        $cleanedcourses = array();
+        foreach ($courses as $id=>$course) {
+            if (!array_key_exists($id, $metacourses)) {
+                $cleanedcourses[$id] = $course;
+                $cleanedcourses[$id]->remoteid = $id;
+                $cleanedcourses[$id]->complete = $this->is_course_complete($course, $user->id);
+            }
+        }
+
+        return $cleanedcourses;
     }
+
+    /**
+     * Returns list of course ids for courses user is enrolled in via
+     * meta enrolment plugin
+     *
+     * @param int $userid of our user
+     * @return array of courses ids
+     */
+    private function meta_courses($userid) {
+        global $DB;
+
+        // Get meta course enrolments so they won't be included in returned courses
+        $sql = "SELECT e.courseid
+                FROM {user_enrolments} ue
+                JOIN {enrol} e ON ue.enrolid = e.id
+               WHERE enrol = 'meta' AND ue.userid = :userid";
+        $params['userid']  = $userid;
+        return $DB->get_records_sql($sql, $params);
+    }
+
+    /**
+     * Returns list of course ids for courses user is enrolled in via
+     * meta enrolment plugin
+     *
+     * @param stdClass $course Moodle course object.
+     * @param int $userid of the user
+     * @return bool true if the user has completed the course
+     */
+    private function is_course_complete($course, $userid) {
+        global $CFG;
+
+        require_once($CFG->libdir.'/completionlib.php');
+
+        if ($CFG->enablecompletion != COMPLETION_ENABLED) {
+            return false;
+        }
+
+        $coursecompletion = new completion_info($course);
+
+        if ($coursecompletion->is_course_complete($userid)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    /* END Academy Patch M#045 */
+
 
     /**
      * Enrol remote user to our course
