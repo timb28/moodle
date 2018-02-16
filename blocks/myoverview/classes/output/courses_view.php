@@ -32,6 +32,8 @@ use theme_snap\local; // Academy Patch M#061
 use core_tag_tag; // Academy Patch M#061
 use core_tag\output\taglist; // Academy Patch M#061
 
+/* START Academy Patch M#061 My Overview block customisations and M#065 Display remote MNet courses in block_myoverview. */
+        
 /**
  * Class containing data for courses view in the myoverview block.
  *
@@ -78,65 +80,14 @@ class courses_view implements renderable, templatable {
             'hascourses' => !empty($this->courses)
         ];
 
-        /* START Academy Patch M#061 My Overview block customisations. */
         // How many courses we have per status?
         $coursesbystatus = ['all' => 0, 'past' => 0, 'inprogress' => 0, 'future' => 0];
-        
+
         foreach ($this->allcourses as $course) {
-            $courseid = $course->id;
-            $context = \context_course::instance($courseid);
-            $exporter = new course_summary_exporter($course, [
-                'context' => $context
-            ]);
-            $exportedcourse = $exporter->export($output);
-            // Convert summary to plain text.
-            $exportedcourse->summary = content_to_text($exportedcourse->summary, $exportedcourse->summaryformat);
 
-            // Include course visibility.
-            $exportedcourse->visible = (bool)$course->visible;
-
-            /* START Academy Patch M#061 My Overview block customisations. */
-            // Get the cover image.
-            $exportedcourse->coverimageurl = \theme_snap\local::course_card_image_url($course->id);
-
-            if ($course->isenrolled) {
-                $exportedcourse->isenrolled = true;
-            } else {
-                $exportedcourse->isenrolled = false;
-            }
-            /* END Academy Patch M#061 */
-
-            /* START Academy Patch M#061 My Overview block customisations. */
-            $taglist = new \core_tag\output\taglist(core_tag_tag::get_item_tags('core', 'course', $exportedcourse->id), null);
-            $outputtaglist = $taglist->export_for_template($output);
-            foreach ($outputtaglist->tags as $tag) {
-                if (($strpos = strpos($tag->name, ":")) !== FALSE) { 
-                    $type = trim(substr($tag->name, 0, $strpos));
-                    $value = trim(substr($tag->name, $strpos + 1));
-                }
-                switch ($type) {
-                    case 'duration':
-                        $exportedcourse->duration = $value;
-                        $exportedcourse->durationclass = preg_replace('/[\s:]+/','',$tag->name);
-                        break;
-                    case 'experience':
-                        $exportedcourse->experience = $value;
-                        $exportedcourse->experienceclass = preg_replace('/[\s:]+/','',$tag->name);
-                        break;
-                    case 'role':
-                        $exportedcourse->role = $value;
-                        $exportedcourse->roleclass = preg_replace('/[\s:]+/','',$tag->name);
-                        break;
-                }
-            }
-            /* END Academy Patch M#061 */
-
-            $courseprogress = null;
-
-            if (isset($this->coursesprogress[$courseid])) {
-                $courseprogress = $this->coursesprogress[$courseid]['progress'];
-                $exportedcourse->hasprogress = !is_null($courseprogress);
-                $exportedcourse->progress = $courseprogress;
+            // MNet remote courses have negative id
+            if ($course->id > 0) {
+                $exportedcourse = $this->prepare_local_course($course, $output);
             }
 
             // All courses
@@ -148,59 +99,18 @@ class courses_view implements renderable, templatable {
             $coursesview['all']['haspages'] = true;
             $coursesbystatus['all']++;
         }
-        /* END Academy Patch M#061 */
 
         foreach ($this->courses as $course) {
-            $courseid = $course->id;
-            $context = \context_course::instance($courseid);
-            $exporter = new course_summary_exporter($course, [
-                'context' => $context
-            ]);
-            $exportedcourse = $exporter->export($output);
-            // Convert summary to plain text.
-            $exportedcourse->summary = content_to_text($exportedcourse->summary, $exportedcourse->summaryformat);
+            // User is always enrolled in these courses.
+            $course->isenrolled = true;
 
-            // Include course visibility.
-            $exportedcourse->visible = (bool)$course->visible;
-
-            /* START Academy Patch M#061 My Overview block customisations. */
-            // Get the cover image.
-            $exportedcourse->coverimageurl = \theme_snap\local::course_card_image_url($course->id);
-            /* END Academy Patch M#061 */
-
-            /* START Academy Patch M#061 My Overview block customisations. */
-            $taglist = new \core_tag\output\taglist(core_tag_tag::get_item_tags('core', 'course', $exportedcourse->id), null);
-            $outputtaglist = $taglist->export_for_template($output);
-            foreach ($outputtaglist->tags as $tag) {
-                if (($strpos = strpos($tag->name, ":")) !== FALSE) { 
-                    $type = trim(substr($tag->name, 0, $strpos));
-                    $value = trim(substr($tag->name, $strpos + 1));
-                }
-                switch ($type) {
-                    case 'duration':
-                        $exportedcourse->duration = $value;
-                        $exportedcourse->durationclass = preg_replace('/[\s:]+/','',$tag->name);
-                        break;
-                    case 'experience':
-                        $exportedcourse->experience = $value;
-                        $exportedcourse->experienceclass = preg_replace('/[\s:]+/','',$tag->name);
-                        break;
-                    case 'role':
-                        $exportedcourse->role = $value;
-                        $exportedcourse->roleclass = preg_replace('/[\s:]+/','',$tag->name);
-                        break;
-                }
-            }
-            /* END Academy Patch M#061 */
-
-            $courseprogress = null;
-
-            $classified = course_classify_for_timeline($course);
-
-            if (isset($this->coursesprogress[$courseid])) {
-                $courseprogress = $this->coursesprogress[$courseid]['progress'];
-                $exportedcourse->hasprogress = !is_null($courseprogress);
-                $exportedcourse->progress = $courseprogress;
+            // MNet remote courses have negative id
+            if ($course->id > 0) {
+                $exportedcourse = $this->prepare_local_course($course, $output);
+                $classified = course_classify_for_timeline($course);
+            } else {
+                $exportedcourse = $this->prepare_remote_course($course);
+                $classified = remote_course_classify_for_timeline($course);
             }
 
             if ($classified == COURSE_TIMELINE_PAST) {
@@ -255,4 +165,108 @@ class courses_view implements renderable, templatable {
 
         return $coursesview;
     }
+
+    /**
+     * Prepare local course for export.
+     *
+     * @param stdClass $course
+     * @param \renderer_base $output
+     * @return stdClass
+     */
+    private function prepare_local_course($course, $output) {
+        $courseid = $course->id;
+        $context = \context_course::instance($courseid);
+        $exporter = new course_summary_exporter($course, [
+            'context' => $context
+        ]);
+        $exportedcourse = $exporter->export($output);
+
+        // Convert summary to plain text.
+        $exportedcourse->summary = content_to_text($exportedcourse->summary, $exportedcourse->summaryformat);
+
+        // Include course visibility.
+        $exportedcourse->visible = (bool)$course->visible;
+
+        // Get the cover image.
+        $exportedcourse->coverimageurl = \theme_snap\local::course_card_image_url($course->id);
+
+        if ($course->isenrolled) {
+            $exportedcourse->action = "Open";
+        } else {
+            $exportedcourse->action = get_string('more');
+        }
+
+        if ($course->isenrolled) {
+            $exportedcourse->isenrolled = true;
+        } else {
+            $exportedcourse->isenrolled = false;
+        }
+
+        $taglist = new \core_tag\output\taglist(core_tag_tag::get_item_tags('core', 'course', $exportedcourse->id), null);
+        $outputtaglist = $taglist->export_for_template($output);
+        foreach ($outputtaglist->tags as $tag) {
+            if (($strpos = strpos($tag->name, ":")) !== FALSE) {
+                $type = trim(substr($tag->name, 0, $strpos));
+                $value = trim(substr($tag->name, $strpos + 1));
+            }
+            switch ($type) {
+                case 'duration':
+                    $exportedcourse->duration = $value;
+                    $exportedcourse->durationclass = preg_replace('/[\s:]+/','',$tag->name);
+                    break;
+                case 'experience':
+                    $exportedcourse->experience = $value;
+                    $exportedcourse->experienceclass = preg_replace('/[\s:]+/','',$tag->name);
+                    break;
+                case 'role':
+                    $exportedcourse->role = $value;
+                    $exportedcourse->roleclass = preg_replace('/[\s:]+/','',$tag->name);
+                    break;
+            }
+        }
+
+        $courseprogress = null;
+
+        if (isset($this->coursesprogress[$courseid])) {
+            $courseprogress = $this->coursesprogress[$courseid]['progress'];
+            $exportedcourse->hasprogress = !is_null($courseprogress);
+            $exportedcourse->progress = $courseprogress;
+        }
+
+        return $exportedcourse;
+    }
+
+    /**
+     * Prepare MNet remote course for export.
+     *
+     * @param stdClass $course
+     * @return stdClass
+     */
+    private function prepare_remote_course($course) {
+        $courseid = $course->id * -1;
+
+        $exportedcourse = new \stdClass();
+
+        $exportedcourse->id                 = $courseid;
+        $exportedcourse->fullname           = $course->fullname;
+        $exportedcourse->fullnamedisplay    = $course->fullname;
+        $exportedcourse->shortname          = $course->shortname;
+        $exportedcourse->idnumber           = $course->idnumber;
+        $exportedcourse->viewurl = (new \moodle_url($course->wwwroot . '/course/view.php', array('id' => $courseid)))->out(false);
+
+        // Convert summary to plain text.
+        $exportedcourse->summary            = content_to_text($course->summary, $course->summaryformat);
+        $exportedcourse->summaryformat      = $course->summaryformat;
+
+        $exportedcourse->startdate          = $course->startdate;
+        $exportedcourse->enddate            = $course->enddate;
+
+        // Include course visibility.
+        $exportedcourse->visible = (bool)$course->visible;
+
+        $exportedcourse->isenrolled = true;
+
+        return $exportedcourse;
+    }
 }
+/* END Academy Patch M#061 and M#065 */

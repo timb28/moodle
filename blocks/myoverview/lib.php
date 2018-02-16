@@ -60,3 +60,50 @@ function block_myoverview_user_preferences() {
 
     return $preferences;
 }
+
+/* START Academy Patch M#065 Display remote MNet courses in block_myoverview. */
+/**
+ * Returns a list of user courses including courses on MNet student's local Moodle
+ *
+ * @return array list of remote courses.
+ */
+function get_mnet_courses() {
+    global $USER;
+
+    // Get other remote courses the user is enrolled in on their local Moodle host.
+    $courses = array();
+    if (!is_mnet_remote_user($USER)) {
+        return;
+    }
+
+    $remotecourses = get_my_remotemnetcourses();
+
+    // Other Remote courses will have -ve remoteid as key, so it can be differentiated from normal courses
+    foreach ($remotecourses as $id => $remotecourse) {
+        $remoteid = $remotecourse->remoteid * -1;
+        $remotecourse->id = $remoteid;
+        $remotecourse->startdate = null;
+        $remotecourse->enddate = null;
+        $courses[$remoteid] = $remotecourse;
+    }
+
+    return $courses;
+}
+
+/**
+ * This function classifies a MNet remote course as past or in progress.
+ *
+ * @param stdClass $course Course record
+ * @return string (one of COURSE_TIMELINE_INPROGRESS or COURSE_TIMELINE_PAST)
+ */
+function remote_course_classify_for_timeline($course) {
+
+    // Course completed.
+    if (!empty($course->complete) && $course->complete == 1) {
+        return COURSE_TIMELINE_PAST;
+    }
+
+    // Everything else is in progress.
+    return COURSE_TIMELINE_INPROGRESS;
+}
+/* END Academy Patch M#065 */

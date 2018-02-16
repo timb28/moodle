@@ -85,6 +85,9 @@ class main implements renderable, templatable {
             $courses = $this->enrol_get_my_courses_by_lastaccessed('*', 'visible DESC, sortorder ASC');
         }
 
+        $remotecourses = get_mnet_courses(); // Academy Patch M#065
+        $courses = array_merge($courses, $remotecourses);// Academy Patch M#065
+
         $allcourses = $this->search_courses($this->searchcriteria);
 
         /* END Academy Patch M#061 */
@@ -92,21 +95,34 @@ class main implements renderable, templatable {
 
         foreach ($courses as $course) {
 
-            $completion = new \completion_info($course);
+            /* START Academy Patch M#065 Display remote MNet courses in block_myoverview. */
+            // Ignore MNet remote courses
+            if ($course->id < 0) {
+                if ($course->enablecompletion == 1) {
+                    $coursesprogress[$course->id]['completed'] = (bool)$course->complete;
+                    $coursesprogress[$course->id]['progress'] = $course->complete;
+                } else {
+                    continue;
+                }
+            } else {
+                $completion = new \completion_info($course);
 
-            // First, let's make sure completion is enabled.
-            if (!$completion->is_enabled()) {
-                continue;
+                // First, let's make sure completion is enabled.
+                if (!$completion->is_enabled()) {
+                    continue;
+                }
+
+                $percentage = progress::get_course_progress_percentage($course);
+                if (!is_null($percentage)) {
+                    $percentage = floor($percentage);
+                }
+
+                $coursesprogress[$course->id]['completed'] = $completion->is_course_complete($USER->id);
+                $coursesprogress[$course->id]['progress'] = $percentage;
             }
 
-            $percentage = progress::get_course_progress_percentage($course);
-            if (!is_null($percentage)) {
-                $percentage = floor($percentage);
-            }
-
-            $coursesprogress[$course->id]['completed'] = $completion->is_course_complete($USER->id);
-            $coursesprogress[$course->id]['progress'] = $percentage;
         }
+        /* END Academy Patch M#065 */
 
         $coursesview = new courses_view($allcourses, $courses, $coursesprogress); // Academy Patch M#061
         $nocoursesurl = $output->image_url('courses', 'block_myoverview')->out();
@@ -286,9 +302,15 @@ class main implements renderable, templatable {
             $coursesinlist = \coursecat::search_courses($this->searchcriteria);
         }
 
-        $coursefields = array('id','category','sortorder','fullname','shortname','idnumber','summary','summaryformat','format','showgrades','newsitems','startdate','enddate','marker','maxbytes','legacyfiles','showreports','visible','visibleold','groupmode','groupmodeforce','defaultgroupingid','lang','theme','timecreated','timemodified','requested','enablecompletion','completionnotify','cacherev','calendartype');
+        $sortedcourses = get_mnet_courses();
+
+        $coursesinlist = array_merge($coursesinlist, $sortedcourses);
+
+        $coursefields = array('id','category','sortorder','fullname','shortname','idnumber','summary','summaryformat','format','showgrades','newsitems','startdate','enddate','marker','maxbytes','legacyfiles','showreports','visible','visibleold','groupmode','groupmodeforce','defaultgroupingid','lang','theme','timecreated','timemodified','requested','enablecompletion','completionnotify','cacherev','calendartype','wwwroot');
 
         foreach ($coursesinlist as $courseinlist) {
+
+
             if ($courseinlist instanceof stdClass) {
                 $courseinlist = new course_in_list($courseinlist);
             }
@@ -300,7 +322,8 @@ class main implements renderable, templatable {
             $course = new \stdClass();
 
             // Determine if user is enrolled
-            if (array_key_exists($courseinlist->id,$enrolledcourses)) {
+            // MNet remote courses have negative id
+            if ($courseinlist->id < 0 || array_key_exists($courseinlist->id,$enrolledcourses)) {
                 $course->isenrolled = true;
             } else {
                 $course->isenrolled = false;
@@ -311,7 +334,7 @@ class main implements renderable, templatable {
             }
 
             foreach ($coursefields as $field) {
-                $course->$field = $courseinlist->$field;
+                $course->$field = isset($courseinlist->$field) ? $courseinlist->$field : null;
             }
             $courses[$course->id] = $course;
         }
