@@ -511,4 +511,69 @@ class enrol_mnet_mnetservice_enrol {
 
         return $return;
     }
+
+    /**
+     * Returns the course progress for the given user.
+     *
+     * Academy Patch M#066 Add MNet function to get remote course progress.
+     *
+     * @global type $CFG
+     * @global type $DB
+     * @param type $courseid ID of our course
+     * @param type $username username of the student
+     * @return stdClass containing course progress information
+     * @throws coding_exception
+     */
+    public function course_progress($courseid, $username) {
+        global $CFG, $DB;
+
+        require_once($CFG->libdir . '/completionlib.php');
+
+        if (!$client = get_mnet_remote_client()) {
+            die('Callable via XML-RPC only');
+        }
+
+        if (empty($courseid)) {
+            throw new coding_exception('Empty referenced course id');
+        }
+
+        if (empty($username)) {
+            throw new coding_exception('Empty referenced username');
+        }
+
+        $return = new stdClass();
+
+        $course = $DB->get_record('course', array('id'=>$courseid));
+        $user = $DB->get_record('user', array('username'=>$username, 'mnethostid'=>'1'));
+
+        $completion = new \completion_info($course);
+
+        // First, let's make sure completion is enabled.
+        if (!$completion->is_enabled()) {
+            return null;
+        }
+
+        // Before we check how many modules have been completed see if the course has.
+        if ($completion->is_course_complete($user->id)) {
+            $return->progress = 100;
+            return $return;
+        }
+
+        // Get the number of modules that support completion.
+        $modules = $completion->get_activities();
+        $count = count($modules);
+        if (!$count) {
+            return null;
+        }
+
+        // Get the number of modules that have been completed.
+        $completed = 0;
+        foreach ($modules as $module) {
+            $data = $completion->get_data($module, false, $user->id);
+            $completed += $data->completionstate == COMPLETION_INCOMPLETE ? 0 : 1;
+        }
+
+        $return->progress = ($completed / $count) * 100;
+        return $return;
+    }
 }

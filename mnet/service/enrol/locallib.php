@@ -431,6 +431,36 @@ class mnetservice_enrol {
     }
 
     /**
+     * Send request to get course progress for a user
+     *
+     * Academy Patch M#066 Add MNet function to get remote course progress.
+     *
+     * @uses mnet_xmlrpc_client Invokes XML-RPC request
+     * @param id $mnethostid MNet remote host id
+     * @param String $courseid our course
+     * @param String $username our user
+     * @return array Array of {@link $COURSE} of course objects
+     */
+    public function req_course_progress($mnethostid, $courseid, $username) {
+        global $CFG;
+        require_once($CFG->dirroot.'/mnet/xmlrpc/client.php');
+
+        $peer = new mnet_peer();
+        $peer->set_id($mnethostid);
+
+        $request = new mnet_xmlrpc_client();
+        $request->set_method('enrol/mnet/enrol.php/course_progress');
+        $request->add_param($courseid);
+        $request->add_param($username);
+
+        if ($request->send($peer)) {
+            return $request->response;
+        } else {
+            return serialize($request->error);
+        }
+    }
+
+    /**
      * Send request to enrol our user to the remote course
      *
      * Updates our remote enrolments cache if the enrolment was successful.

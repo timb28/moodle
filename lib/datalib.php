@@ -1141,7 +1141,8 @@ function get_my_remotecourses($userid=0) {
     return $DB->get_records_sql($sql, array($userid));
 }
 
-/* START Academy Patch M#045 Display remote MNet courses on a student's Dashboard */
+/* START Academy Patch M#045 Display remote MNet courses on a student's Dashboard. */
+/* START Academy Patch M#066 Add MNet function to get remote course progress. */
 /**
  * List of remote courses that the current user is enrolled in by means other than MNet.
  * @return array Array of {@link $COURSE} of course objects
@@ -1177,15 +1178,13 @@ function get_my_remotemnetcourses() {
         $courses[$id] = $course;
 
         if ($course->enablecompletion == 1) {
-            if ($course->complete) {
-                $course->progress = 1;
+            if (!empty($course->complete)) {
+                $course->progress = 100;
             } else {
                 $course->progress = get_remote_course_progress($service, $mnethostid, $course->id, $username);
             }
         }
-
     }
-
 
     return $courses;
 }
@@ -1201,56 +1200,23 @@ function get_my_remotemnetcourses() {
  *         or there are no activities that support completion.
  */
 function get_remote_course_progress($service, $mnethostid, $courseid, $username) {
-    global $CFG, $DB, $USER;
-
-    $remotecoursegrades = array();
+    $remotecourseprogress = array();
 
     if (!$service instanceof \mnetservice_enrol) {
         return;
     }
 
     if ($service->is_available()) {
-        $remotecoursegrades = $service->req_course_grades($mnethostid, $courseid, $username);
+        $remotecourseprogress = $service->req_course_progress($mnethostid, $courseid, $username);
     }
 
-    if (!is_array($remotecoursegrades)) {
+    if (!is_array($remotecourseprogress)) {
         return null;
     }
 
-    $gradepass = $remotecoursegrades['gradepass'];
-
-
-    // Use the maximum grade if there is no passing grade set.
-    if ($gradepass == 0) {
-        $gradepass = $remotecoursegrades['grademax'];
-    }
-
-    if (!empty($remotecoursegrades['grade']) &&
-        isset($remotecoursegrades['grade']['finalgrade']) &&
-        !($remotecoursegrades['hidden'])) {
-
-        $grade = $remotecoursegrades['grade']['finalgrade'];
-
-        return percent_complete($gradepass, $grade);
-    } else {
-        return null;
-    }
+    return $remotecourseprogress['progress'];
 }
-
-/**
- * Calculate percent complete from grades.
- *
- * @param int $maxgrade
- * @param int $grade
- * @return float The percentage
- */
-function percent_complete($maxgrade, $grade) {
-    if ($grade >= $maxgrade) {
-        return 100;
-    }
-    return floor( ($grade / $maxgrade) * 100 );
-}
-/* END Academy Patch M#045 */
+/* END Academy Patch M#045 and M#066 */
 
 /**
  * List of remote hosts that a user has access to via MNET.
