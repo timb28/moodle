@@ -85,8 +85,12 @@ class main implements renderable, templatable {
             $courses = $this->enrol_get_my_courses_by_lastaccessed('*', 'visible DESC, sortorder ASC');
         }
 
-        $remotecourses = get_mnet_courses(); // Academy Patch M#065
-        $courses = array_merge($courses, $remotecourses);// Academy Patch M#065
+        $remotecourses = get_mnet_courses();
+        if (!empty($remotecourses)) {
+            $courses = array_merge($courses, $remotecourses);
+        } else {
+            $remotecourses = array();
+        }
 
         $allcourses = $this->search_courses($this->searchcriteria, $remotecourses);
 
