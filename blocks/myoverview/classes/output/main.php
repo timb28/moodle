@@ -281,13 +281,13 @@ class main implements renderable, templatable {
         $courses = null;
         $enrolledcourses = enrol_get_all_users_courses($USER->id, true, 'id');
 
+        $options = array('recursive' => true,
+                         'summary' => true,
+                         'sort' => array('id' => -1));
+
         if (empty($this->searchcriteria['search'])) {
             // No search criteria so get all courses.
-            $options = array('recursive' => true,
-                             'summary' => true,
-                             'sort' => array('id' => -1));
-
-            if (!empty($CFG->searchcoursecategories)) {
+            if (!empty($CFG->searchcoursecategories) && !is_siteadmin($USER->id)) {
                 $coursesinlist = [];
                 foreach ($CFG->searchcoursecategories as $categoryid) {
                     $coursecat = \coursecat::get($categoryid);
@@ -317,7 +317,7 @@ class main implements renderable, templatable {
                 $courseinlist = new course_in_list($courseinlist);
             }
 
-            if (!$courseinlist->visible) {
+            if (!$courseinlist->visible && !is_siteadmin($USER->id)) {
                 continue;
             }
 
@@ -329,7 +329,7 @@ class main implements renderable, templatable {
                 $course->isenrolled = true;
             } else {
                 $course->isenrolled = false;
-                if (!enrol_selfenrol_available($courseinlist->id)) {
+                if (!enrol_selfenrol_available($courseinlist->id) && !is_siteadmin($USER->id)) {
                     // Not enrolled and can't self enrol
                     continue;
                 }
