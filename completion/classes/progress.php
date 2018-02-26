@@ -46,7 +46,8 @@ class progress {
      *         or there are no activities that support completion.
      */
     public static function get_course_progress_percentage($course, $userid = 0) {
-        global $USER;
+        global $CFG, $USER; // Academy Patch M#067
+        require_once("{$CFG->libdir}/completionlib.php"); // Academy Patch M#067
 
         // Make sure we continue with a valid userid.
         if (empty($userid)) {
@@ -65,15 +66,37 @@ class progress {
             return 100;
         }
 
+        /* START Academy Patch M#067 Extend core get_course_progress_percentage() to include sub-courses. */
+        // Get the number of modules and required courses that have been completed.
+        $completed = 0;
+
+        $coursescount = 0;
+        foreach ($completion->get_criteria(COMPLETION_CRITERIA_TYPE_COURSE) as $coursecriteria) {
+            if (!completion_can_view_data($userid, $coursecriteria->courseinstance)) {
+                continue;
+            }
+            
+            // Load course completion
+            $params = array(
+                'userid'    => $userid,
+                'course'    => $coursecriteria->courseinstance
+            );
+            $ccompletion = new \completion_completion($params);
+
+            if ($ccompletion->is_complete()) {
+                $completed++;
+            }
+            $coursescount++;
+        }
+        /* END Academy Patch M#067 */
+
         // Get the number of modules that support completion.
         $modules = $completion->get_activities();
-        $count = count($modules);
+        $count = count($modules) + $coursescount; // Academy Patch M#067
         if (!$count) {
             return null;
         }
 
-        // Get the number of modules that have been completed.
-        $completed = 0;
         foreach ($modules as $module) {
             $data = $completion->get_data($module, false, $userid);
             $completed += $data->completionstate == COMPLETION_INCOMPLETE ? 0 : 1;
