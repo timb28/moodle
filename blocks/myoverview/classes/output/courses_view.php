@@ -88,6 +88,8 @@ class courses_view implements renderable, templatable {
             // MNet remote courses have negative id
             if ($course->id > 0) {
                 $exportedcourse = $this->prepare_local_course($course, $output);
+            } else {
+                $exportedcourse = $this->prepare_remote_course($course, $output);
             }
 
             // All courses
@@ -266,9 +268,12 @@ class courses_view implements renderable, templatable {
 
         $exportedcourse->isenrolled = true;
 
-        if ($course->enablecompletion) {
-            $exportedcourse->hasprogress = $course->enablecompletion;
-            $exportedcourse->progress = round($course->progress);
+        $courseprogress = null;
+
+        if (isset($this->coursesprogress[$courseid * -1])) {
+            $courseprogress = $this->coursesprogress[$courseid * -1]['progress'];
+            $exportedcourse->hasprogress = !is_null($courseprogress);
+            $exportedcourse->progress = round($courseprogress);
         }
 
         return $exportedcourse;
