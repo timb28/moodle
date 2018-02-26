@@ -230,7 +230,7 @@ class courses_view implements renderable, templatable {
         if (isset($this->coursesprogress[$courseid])) {
             $courseprogress = $this->coursesprogress[$courseid]['progress'];
             $exportedcourse->hasprogress = !is_null($courseprogress);
-            $exportedcourse->progress = $courseprogress;
+            $exportedcourse->progress = round($courseprogress);
         }
 
         return $exportedcourse;
@@ -268,7 +268,7 @@ class courses_view implements renderable, templatable {
 
         if ($course->enablecompletion) {
             $exportedcourse->hasprogress = $course->enablecompletion;
-            $exportedcourse->progress = $course->progress;
+            $exportedcourse->progress = round($course->progress);
         }
 
         return $exportedcourse;
