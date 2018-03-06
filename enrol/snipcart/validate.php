@@ -50,21 +50,6 @@ if ( (float) $enrol->cost <= 0 ) {
 
     <p class="payment-required"><?php print_string('paymentrequired', 'enrol_snipcart') ?></p>
 
-    <script
-        src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
-        type="text/javascript"></script>
-
-    <script type="text/javascript"
-        src="https://cdn.snipcart.com/scripts/snipcart.js"
-        id="snipcart"
-        data-autopop="false"
-        data-api-key="<?= $publicapikey ?>">
-    </script>
-
-    <link id="snipcart-theme" type="text/css"
-        href="https://cdn.snipcart.com/themes/base/snipcart.min.css"
-        rel="stylesheet">
-
     <?= $plugin->get_add_to_cart_button($user, $course, $enrol, 'snipcart-add-item'); ?>
 
     </div>
