@@ -210,6 +210,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
             );
             
         } else {
+            $currencycode = strtolower($instance->currency);
             return "
                 <script
                     src='https://cdn.snipcart.com/scripts/snipcart.js'
@@ -235,6 +236,10 @@ class enrol_snipcart_plugin extends enrol_plugin {
 
                 <script type='text/javascript'>
                     $(window).on('load', function() {
+                        document.addEventListener('snipcart.ready', function() {
+                            Snipcart.api.cart.currency('$currencycode');
+                        });
+                        
                         $('#$addtocartid').text('".get_string('addtocart', 'enrol_snipcart',
                                 array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "');
                         $('#$addtocartid').addClass('fadein');
@@ -245,6 +250,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
                             window.location.href = url;
                         });
 
+
                         $('#$addtocartid')
                             .click(function(e){
                                 // Cancel the default action
@@ -253,7 +259,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
                                 Snipcart.execute('item.add', {
                                     id: '{$user->id}-{$instance->id}',
                                     name: '$coursefullname',
-                                    price: '{$instance->cost}',
+                                    price: '{\"$currencycode\": {$instance->cost}}',
                                     maxQuantity: '1',
                                     quantity: '1',
                                     shippable: 'false',
@@ -265,7 +271,8 @@ class enrol_snipcart_plugin extends enrol_plugin {
                                 $(this).addClass('snipcart-checkout');
 
                              });
-                    });
+                        });
+
 
                 </script>";
         }
