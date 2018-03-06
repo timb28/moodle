@@ -233,8 +233,10 @@ class enrol_snipcart_plugin extends enrol_plugin {
                     . " data-item-url='$itemurl'"
                     . " data-item-description='$shortcoursesummary'"
                     . " data-item-image='$courseimageurl'"
-                    . "><span class='spinner-three-quarters spinner-dark'></span>"
-                    . "<span class='loadingstat'>".get_string('loading')."</span></a>
+//                    . "><span class='spinner-three-quarters spinner-dark'></span>"
+//                    . "<span class='loadingstat'>".get_string('loading')."</span></a>
+                    . ">".get_string('addtocart', 'enrol_snipcart',
+                                array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "</a>
 
                 <script type='text/javascript'>
                     $(window).on('load', function() {
@@ -242,8 +244,8 @@ class enrol_snipcart_plugin extends enrol_plugin {
                             Snipcart.api.cart.currency('$currencycode');
                         });
                         
-                        $('#$addtocartid').text('".get_string('addtocart', 'enrol_snipcart',
-                                array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "');
+/*                        $('#$addtocartid').text('".get_string('addtocart', 'enrol_snipcart',
+                                array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "'); */
                         $('#$addtocartid').addClass('fadein');
                         $('#$addtocartid').removeClass('btn-disabled');
                         $('#$addtocartid').addClass('btn-primary');
