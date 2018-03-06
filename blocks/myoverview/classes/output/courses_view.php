@@ -176,6 +176,8 @@ class courses_view implements renderable, templatable {
      * @return stdClass
      */
     private function prepare_local_course($course, $output) {
+        global $CFG;
+
         $courseid = $course->id;
         $context = \context_course::instance($courseid);
         $exporter = new course_summary_exporter($course, [
@@ -191,6 +193,9 @@ class courses_view implements renderable, templatable {
 
         // Get the cover image.
         $exportedcourse->coverimageurl = \theme_snap\local::course_card_image_url($course->id);
+        if (empty($exportedcourse->coverimageurl)) {
+            $exportedcourse->coverimageurl = new \moodle_url($CFG->wwwroot . '/pix/course_banner.jpg');
+        }
 
         if ($course->isenrolled) {
             $exportedcourse->action = "Open";
@@ -264,7 +269,11 @@ class courses_view implements renderable, templatable {
         $exportedcourse->enddate            = $course->enddate;
 
         // Get the cover image.
-        $exportedcourse->coverimageurl = !empty($course->courseimageurl) ? new \moodle_url($course->courseimageurl) : null;
+        if (empty($course->courseimageurl)) {
+            $exportedcourse->coverimageurl = new \moodle_url($course->wwwroot . '/pix/course_banner.jpg');
+        } else {
+            $exportedcourse->coverimageurl = new \moodle_url($course->courseimageurl);
+        }
 
         // Include course visibility.
         $exportedcourse->visible = (bool)$course->visible;
