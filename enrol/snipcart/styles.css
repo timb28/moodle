@@ -44,3 +44,16 @@
     width: 1rem !important;
     height: 1rem !important;
 }
+
+/* Snipcart v2 customisations. */
+body .snip-layout .snip-btn--highlight {
+    color: white !important;
+    background: rgba(0,173,239,0.75);
+}
+body .snip-layout .snip-btn--highlight:hover {
+    background: rgba(0,173,239,1);
+}
+body #snipcart-discounts {
+    /* Hide the discount code message. */
+    display: none;
+}

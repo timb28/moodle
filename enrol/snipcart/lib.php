@@ -241,10 +241,10 @@ class enrol_snipcart_plugin extends enrol_plugin {
                 </script>
                 <link type='text/css' href='https://cdn.snipcart.com/themes/base/snipcart.min.css' rel='stylesheet' />-->
 
-                <a href='#' id='$addtocartid' class='snipcart-actions faded btn btn-disabled'"
+                <a href='#' id='$addtocartid' class='snipcart-add-item faded btn btn-disabled'"
                     . " data-item-id='{$user->id}-{$instance->id}'"
                     . " data-item-name='$coursefullname'"
-                    . " data-item-price='$cost'"
+                    . " data-item-price='{\"$currencycode\": {$instance->cost}}'"
                     . " data-item-max-quantity='1'"
                     . " data-item-quantity='1'"
                     . " data-item-shippable='false'"
@@ -255,23 +255,22 @@ class enrol_snipcart_plugin extends enrol_plugin {
                     . "<span class='loadingstat'>".get_string('loading')."</span></a>
 
                 <script type='text/javascript'>
-                    $(window).on('load', function() {
-                        document.addEventListener('snipcart.ready', function() {
-                            Snipcart.api.cart.currency('$currencycode');
+                    document.addEventListener('snipcart.ready', function() {
 
-                            Snipcart.execute('setBillingAddress', {
-                                email: \"$useremail\",
-                                name: \"$userfullname\",
-                                address1: \"$useraddress\",
-                                address2: \"\",
-                                country: \"$usercountry\",
-                                province: \"\",
-                                city: \"$usercity\",
-                                phone: \"$userphone\",
-                                postalCode: \"$userpostcode\"
-                            });
+                        Snipcart.api.items.clear();
+                        Snipcart.api.cart.currency('$currencycode');
+                        Snipcart.api.configure('show_cart_automatically', true);
 
+                        Snipcart.api.cart.billingAddress({
+                            'name': '$userfullname',
+                            'email': '$useremail',
+                            'address1': '$useraddress',
+                            'address2': '',
+                            'city': '$usercity',
+                            'country': '$usercountry',
+                            'postalCode': '$userpostcode'
                         });
+
                         
                         $('#$addtocartid').text('".get_string('addtocart', 'enrol_snipcart',
                                 array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "');
@@ -283,30 +282,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
                             window.location.href = url;
                         });
 
-
-                        $('#$addtocartid')
-                            .click(function(e){
-                                // Cancel the default action
-                                e.preventDefault();
-
-                                Snipcart.execute('item.add', {
-                                    id: '{$user->id}-{$instance->id}',
-                                    name: '$coursefullname',
-                                    price: '{\"$currencycode\": {$instance->cost}}',
-                                    maxQuantity: '1',
-                                    quantity: '1',
-                                    shippable: 'false',
-                                    url: '$itemurl',
-                                    description: '$shortcoursesummary',
-                                    image: '$courseimageurl'
-                                });
-
-                                $(this).addClass('snipcart-checkout');
-
-                             });
-                        });
-
-
+                    });
                 </script>";
         }
     }
