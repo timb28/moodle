@@ -146,7 +146,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
      * @param stdClass $instance for the enrolment instance
      * @return string of button html
      */
-    function get_add_to_cart_button($user, $course, $instance, $buttonclasses = '') {
+    function get_add_to_cart_button($user, $course, $instance, $json = false) {
         global $CFG, $PAGE;
 
         // Logged in users only
@@ -202,64 +202,73 @@ class enrol_snipcart_plugin extends enrol_plugin {
         $manager = \enrol_snipcart\get_snipcartaccounts_manager();
         $publicapikey = $manager->get_snipcartaccount_info($instance->currency, 'publicapikey');
 
-        return "
-            <script 
-                src='https://cdn.snipcart.com/scripts/snipcart.js'
-                id='snipcart'
-                defer
-                data-autopop='false'
-                data-api-key='$publicapikey'>
-            </script>
-            <link type='text/css' href='https://cdn.snipcart.com/themes/base/snipcart.min.css' rel='stylesheet' />
+        if ($json) {
+            return array(
+                'id' => '{'.$user->id.'}-{'.$instance->id.'}',
+                'price' => $cost,
+                'url' => $itemurl
+            );
+            
+        } else {
+            return "
+                <script
+                    src='https://cdn.snipcart.com/scripts/snipcart.js'
+                    id='snipcart'
+                    defer
+                    data-autopop='false'
+                    data-api-key='$publicapikey'>
+                </script>
+                <link type='text/css' href='https://cdn.snipcart.com/themes/base/snipcart.min.css' rel='stylesheet' />
 
-            <a href='#' id='$addtocartid' class='snipcart-actions faded btn btn-disabled $buttonclasses'"
-                . " data-item-id='{$user->id}-{$instance->id}'"
-                . " data-item-name='$coursefullname'"
-                . " data-item-price='$cost'"
-                . " data-item-max-quantity='1'"
-                . " data-item-quantity='1'"
-                . " data-item-shippable='false'"
-                . " data-item-url='$itemurl'"
-                . " data-item-description='$shortcoursesummary'"
-                . " data-item-image='$courseimageurl'"
-                . "><span class='spinner-three-quarters spinner-dark'></span>"
-                . "<span class='loadingstat'>".get_string('loading')."</span></a>
+                <a href='#' id='$addtocartid' class='snipcart-actions faded btn btn-disabled'"
+                    . " data-item-id='{$user->id}-{$instance->id}'"
+                    . " data-item-name='$coursefullname'"
+                    . " data-item-price='$cost'"
+                    . " data-item-max-quantity='1'"
+                    . " data-item-quantity='1'"
+                    . " data-item-shippable='false'"
+                    . " data-item-url='$itemurl'"
+                    . " data-item-description='$shortcoursesummary'"
+                    . " data-item-image='$courseimageurl'"
+                    . "><span class='spinner-three-quarters spinner-dark'></span>"
+                    . "<span class='loadingstat'>".get_string('loading')."</span></a>
 
-            <script type='text/javascript'>
-                $(window).on('load', function() {
-                    $('#$addtocartid').text('".get_string('addtocart', 'enrol_snipcart',
-                            array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "');
-                    $('#$addtocartid').addClass('fadein');
-                    $('#$addtocartid').removeClass('btn-disabled');
-                    $('#$addtocartid').addClass('btn-primary');
-                    Snipcart.execute('bind', 'order.completed', function (order) {
-                        var url = '{$CFG->wwwroot}/enrol/snipcart/completed.php?order=' + order.token + '&eid={$instance->id}';
-                        window.location.href = url;
+                <script type='text/javascript'>
+                    $(window).on('load', function() {
+                        $('#$addtocartid').text('".get_string('addtocart', 'enrol_snipcart',
+                                array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "');
+                        $('#$addtocartid').addClass('fadein');
+                        $('#$addtocartid').removeClass('btn-disabled');
+                        $('#$addtocartid').addClass('btn-primary');
+                        Snipcart.execute('bind', 'order.completed', function (order) {
+                            var url = '{$CFG->wwwroot}/enrol/snipcart/completed.php?order=' + order.token + '&eid={$instance->id}';
+                            window.location.href = url;
+                        });
+
+                        $('#$addtocartid')
+                            .click(function(e){
+                                // Cancel the default action
+                                e.preventDefault();
+
+                                Snipcart.execute('item.add', {
+                                    id: '{$user->id}-{$instance->id}',
+                                    name: '$coursefullname',
+                                    price: '{$instance->cost}',
+                                    maxQuantity: '1',
+                                    quantity: '1',
+                                    shippable: 'false',
+                                    url: '$itemurl',
+                                    description: '$shortcoursesummary',
+                                    image: '$courseimageurl'
+                                });
+
+                                $(this).addClass('snipcart-checkout');
+
+                             });
                     });
 
-                    $('#$addtocartid')
-                        .click(function(e){
-                            // Cancel the default action
-                            e.preventDefault();
-
-                            Snipcart.execute('item.add', {
-                                id: '{$user->id}-{$instance->id}',
-                                name: '$coursefullname',
-                                price: '{$instance->cost}',
-                                maxQuantity: '1',
-                                quantity: '1',
-                                shippable: 'false',
-                                url: '$itemurl',
-                                description: '$shortcoursesummary',
-                                image: '$courseimageurl'
-                            });
-
-                            $(this).addClass('snipcart-checkout');
-
-                         });
-                });
-
-            </script>";
+                </script>";
+        }
     }
     
     /**

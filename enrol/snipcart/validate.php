@@ -27,31 +27,6 @@ $enrolid    = required_param('eid',  PARAM_INT);
 $user = $DB->get_record('user', array('id'=>$userid));
 $enrol = $DB->get_record('enrol', array('id'=>$enrolid));
 $course = $DB->get_record('course', array('id'=>$enrol->courseid));
-$cost = $enrol->cost;
 
-$manager = \enrol_snipcart\get_snipcartaccounts_manager();
-$publicapikey = $manager->get_snipcartaccount_info($enrol->currency, 'publicapikey');
-       
-if ( (float) $enrol->cost <= 0 ) {
-    $cost = (float) $enrol->get_config('cost');
-} else {
-    $cost = (float) $enrol->cost;
-}
-
-?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
-    <div align="center">
-
-    <p class="payment-required"><?php print_string('paymentrequired', 'enrol_snipcart') ?></p>
-
-    <?= $plugin->get_add_to_cart_button($user, $course, $enrol, 'snipcart-add-item'); ?>
-
-    </div>
-    </body>
-</html>
+header('Content-type: application/json');
+echo json_encode($plugin->get_add_to_cart_button($user, $course, $enrol, true));
