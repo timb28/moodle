@@ -10,8 +10,8 @@
  */
 
 $string['accountname'] = 'Name';
-$string['addtocart'] = '{$a->cost} Add to cart';
-$string['addedtocart'] = 'Added';
+$string['addtocart'] = '{$a->cost} Buy now';
+$string['addedtocart'] = '{$a->cost} Buy now';
 $string['assignrole'] = 'Assign role';
 $string['copyright'] = '© Copyright Harcourts International';
 $string['cost'] = 'Enrol cost';

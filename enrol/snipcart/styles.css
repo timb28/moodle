@@ -25,3 +25,22 @@
 .category.with_children .snipcart-actions.faded {
     opacity: 1;
 }
+
+/* Snipcart Animations */
+#page-enrol-index .faded {
+    opacity: 0.75;
+}
+#page-enrol-index .faded.fadein {
+    opacity: 100;
+    transition-duration: 200ms, 0ms;
+    transition-property: opacity, visibility, width, height;
+    transition-delay: 0ms;
+}
+#page-enrol-index .loadingstat {
+    margin-left: 0.5em;
+}
+#page-enrol-index .spinner-three-quarters {
+    top: 0.2em;
+    width: 1rem !important;
+    height: 1rem !important;
+}

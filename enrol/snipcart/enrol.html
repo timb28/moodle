@@ -14,11 +14,10 @@ defined('MOODLE_INTERNAL') || die();
 $context = context_course::instance($course->id);
 
 ?>
-<p class="course-summary"><img src="<?= $plugin->get_course_image_url($course) ?>" alt="<?= $course->fullname ?>" /><?= $course->summary ?></p>
 <div align="center">
 
 <p class="payment-required"><?php print_string('paymentrequired', 'enrol_snipcart') ?></p>
-            
+
 <noscript>
   <div class="alert alert-block alert-error">
       <p><strong><?= get_string('warning', 'moodle') ?></strong> <?= get_string('javascriptrequired', 'group') ?></p>

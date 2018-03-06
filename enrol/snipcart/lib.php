@@ -148,12 +148,19 @@ class enrol_snipcart_plugin extends enrol_plugin {
      */
     function get_add_to_cart_button($user, $course, $instance, $buttonclasses = '') {
         global $CFG, $PAGE;
-        
+
+        // Logged in users only
+        if (!isloggedin() || isguestuser() || user_not_fully_set_up($user) ||
+            get_user_preferences('auth_forcepasswordchange') ||
+            ($CFG->sitepolicy && !$user->policyagreed && !is_siteadmin())) {
+            return '';
+        }
+
         // Notify the admin if a user's country is not set (ignore the guest user)
         if (!($user->country) and !($user->id == 1)) {
             $this->message_error_to_admin('A Moodle user cannot purchase a course because their country is not set', $user);
         }
-        
+
         if (!$this->can_user_access_instance($user->id, $instance->id)) {
             return;
         }
@@ -192,8 +199,20 @@ class enrol_snipcart_plugin extends enrol_plugin {
         $coursesummary = preg_replace('/\s+/', ' ', trim(strip_tags($course->summary)));
         $shortcoursesummary = mb_strimwidth($coursesummary, 0, 128, '…');
 
+        $manager = \enrol_snipcart\get_snipcartaccounts_manager();
+        $publicapikey = $manager->get_snipcartaccount_info($instance->currency, 'publicapikey');
+
         return "
-            <a href='#' id='$addtocartid' class='snipcart-actions faded btn btn-primary btn-small $buttonclasses'"
+            <script 
+                src='https://cdn.snipcart.com/scripts/snipcart.js'
+                id='snipcart'
+                defer
+                data-autopop='false'
+                data-api-key='$publicapikey'>
+            </script>
+            <link type='text/css' href='https://cdn.snipcart.com/themes/base/snipcart.min.css' rel='stylesheet' />
+
+            <a href='#' id='$addtocartid' class='snipcart-actions faded btn btn-disabled $buttonclasses'"
                 . " data-item-id='{$user->id}-{$instance->id}'"
                 . " data-item-name='$coursefullname'"
                 . " data-item-price='$cost'"
@@ -203,10 +222,16 @@ class enrol_snipcart_plugin extends enrol_plugin {
                 . " data-item-url='$itemurl'"
                 . " data-item-description='$shortcoursesummary'"
                 . " data-item-image='$courseimageurl'"
-                . ">".get_string('addtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "</a>
+                . "><span class='spinner-three-quarters spinner-dark'></span>"
+                . "<span class='loadingstat'>".get_string('loading')."</span></a>
 
             <script type='text/javascript'>
                 $(window).on('load', function() {
+                    $('#$addtocartid').text('".get_string('addtocart', 'enrol_snipcart',
+                            array('currency'=>$instance->currency, 'cost'=>$localisedcost)) . "');
+                    $('#$addtocartid').addClass('fadein');
+                    $('#$addtocartid').removeClass('btn-disabled');
+                    $('#$addtocartid').addClass('btn-primary');
                     Snipcart.execute('bind', 'order.completed', function (order) {
                         var url = '{$CFG->wwwroot}/enrol/snipcart/completed.php?order=' + order.token + '&eid={$instance->id}';
                         window.location.href = url;
@@ -229,20 +254,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
                                 image: '$courseimageurl'
                             });
 
-                            // Display the shopping cart counter
-                            var counter = $('div[data-region=\"shoppingcart-count-container\"]');
-                            counter.removeClass('hidden');
-
                             $(this).addClass('snipcart-checkout');
-                            var width = $(this).css('width');
-                            var height = $(this).css('height');
-                            $(this).html('". get_string('addedtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) ."');
-                            var newWidth = $(this).css('width');
-                            $(this).html('');
-                            $(this).css({'min-width': width, 'height': height});
-                            $(this).animate({'min-width': newWidth}, 300, function() {
-                                $(this).html('". get_string('addedtocart', 'enrol_snipcart', array('currency'=>$instance->currency, 'cost'=>$localisedcost)) ."');
-                              });
 
                          });
                 });
