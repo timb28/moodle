@@ -147,7 +147,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
      * @return string of button html
      */
     function get_add_to_cart_button($user, $course, $instance, $json = false) {
-        global $CFG, $PAGE;
+        global $DB, $CFG, $PAGE;
 
         // Logged in users only
         if (!isloggedin() || isguestuser() || user_not_fully_set_up($user) ||
@@ -213,6 +213,17 @@ class enrol_snipcart_plugin extends enrol_plugin {
             );
             
         } else {
+            $userfullname   = fullname($user);
+            $useremail      = trim(preg_replace('/\s*\([^)]*\)/', '', $user->email));
+            $userphone      = $user->phone1;
+            $useraddress    = $user->address;
+            $usercity       = $user->city;
+            $usercountry    = $user->country;
+
+            $postcodefieldid    = $DB->get_field('user_info_field', 'id', array( 'shortname' => 'postcode'));
+            $postcodefield      = $DB->get_record('user_info_data', array('userid' => $user->id, 'fieldid' => $postcodefieldid));
+            $userpostcode       = (!empty($postcodefield)) ? $postcodefield->data : '';
+
             return "
                 <script
                     src='https://cdn.snipcart.com/scripts/snipcart.js'
@@ -242,6 +253,19 @@ class enrol_snipcart_plugin extends enrol_plugin {
                     $(window).on('load', function() {
                         document.addEventListener('snipcart.ready', function() {
                             Snipcart.api.cart.currency('$currencycode');
+
+                            Snipcart.execute('setBillingAddress', {
+                                email: \"$useremail\",
+                                name: \"$userfullname\",
+                                address1: \"$useraddress\",
+                                address2: \"\",
+                                country: \"$usercountry\",
+                                province: \"\",
+                                city: \"$usercity\",
+                                phone: \"$userphone\",
+                                postalCode: \"$userpostcode\"
+                            });
+
                         });
                         
 /*                        $('#$addtocartid').text('".get_string('addtocart', 'enrol_snipcart',
