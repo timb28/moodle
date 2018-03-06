@@ -204,7 +204,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
 
         if ($json) {
             return array(
-                'id' => '{'.$user->id.'}-{'.$instance->id.'}',
+                'id' => $user->id.'-'.$instance->id,
                 'price' => $cost,
                 'url' => $itemurl
             );
