@@ -226,13 +226,20 @@ class enrol_snipcart_plugin extends enrol_plugin {
 
             return "
                 <script
+                    src='https://cdn.snipcart.com/scripts/2.0/snipcart.js'
+                    data-api-key='$publicapikey'
+                    id='snipcart'>
+                </script>
+
+                <link href='https://cdn.snipcart.com/themes/2.0/base/snipcart.min.css' rel='stylesheet' type='text/css' />
+<!--                <script
                     src='https://cdn.snipcart.com/scripts/snipcart.js'
                     id='snipcart'
                     defer
                     data-autopop='false'
                     data-api-key='$publicapikey'>
                 </script>
-                <link type='text/css' href='https://cdn.snipcart.com/themes/base/snipcart.min.css' rel='stylesheet' />
+                <link type='text/css' href='https://cdn.snipcart.com/themes/base/snipcart.min.css' rel='stylesheet' />-->
 
                 <a href='#' id='$addtocartid' class='snipcart-actions faded btn btn-disabled'"
                     . " data-item-id='{$user->id}-{$instance->id}'"
