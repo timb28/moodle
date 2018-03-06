@@ -202,15 +202,17 @@ class enrol_snipcart_plugin extends enrol_plugin {
         $manager = \enrol_snipcart\get_snipcartaccounts_manager();
         $publicapikey = $manager->get_snipcartaccount_info($instance->currency, 'publicapikey');
 
+        $currencycode = strtolower($instance->currency);
+
         if ($json) {
             return array(
                 'id' => $user->id.'-'.$instance->id,
                 'price' => $cost,
+                'price' => [$currencycode => $instance->cost],
                 'url' => $itemurl
             );
             
         } else {
-            $currencycode = strtolower($instance->currency);
             return "
                 <script
                     src='https://cdn.snipcart.com/scripts/snipcart.js'
