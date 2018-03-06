@@ -46,7 +46,6 @@ if ( (float) $enrol->cost <= 0 ) {
         <title></title>
     </head>
     <body>
-    <p class="course-summary"><img src="<?= $plugin->get_course_image_url($course) ?>" alt="<?= $course->fullname ?>" /><?= $course->summary ?></p>
     <div align="center">
 
     <p class="payment-required"><?php print_string('paymentrequired', 'enrol_snipcart') ?></p>
