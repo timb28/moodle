@@ -89,7 +89,7 @@ class courses_view implements renderable, templatable {
             if ($course->id > 0) {
                 $exportedcourse = $this->prepare_local_course($course, $output);
             } else {
-                $exportedcourse = $this->prepare_remote_course($course, $output);
+                $exportedcourse = $this->prepare_remote_course($course);
             }
 
             // All courses
@@ -262,6 +262,9 @@ class courses_view implements renderable, templatable {
 
         $exportedcourse->startdate          = $course->startdate;
         $exportedcourse->enddate            = $course->enddate;
+
+        // Get the cover image.
+        $exportedcourse->coverimageurl = !empty($course->courseimageurl) ? new \moodle_url($course->courseimageurl) : null;
 
         // Include course visibility.
         $exportedcourse->visible = (bool)$course->visible;

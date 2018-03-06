@@ -32,6 +32,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+use theme_snap\local; // Academy Patch M#061/
+
 /**
  * MNet server-side methods that are part of mnetservice_enrol
  *
@@ -137,6 +139,11 @@ class enrol_mnet_mnetservice_enrol {
                 $cleanedcourses[$id] = $course;
                 $cleanedcourses[$id]->remoteid = $id;
                 $cleanedcourses[$id]->complete = $this->is_course_complete($course, $user->id);
+                /* START Academy Patch M#061 My Overview block customisations */
+                if ($courseimageurl = \theme_snap\local::course_coverimage_url($id)) {
+                    $cleanedcourses[$id]->courseimageurl = $courseimageurl->out();
+                }
+                /* END Academy Patch M#061 */
             }
         }
 

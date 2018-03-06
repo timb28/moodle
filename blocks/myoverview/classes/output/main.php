@@ -308,7 +308,7 @@ class main implements renderable, templatable {
 
         $coursesinlist = array_merge($coursesinlist, $remotecourses);
 
-        $coursefields = array('id','category','sortorder','fullname','shortname','idnumber','summary','summaryformat','format','showgrades','newsitems','startdate','enddate','marker','maxbytes','legacyfiles','showreports','visible','visibleold','groupmode','groupmodeforce','defaultgroupingid','lang','theme','timecreated','timemodified','requested','enablecompletion','completionnotify','cacherev','calendartype','wwwroot');
+        $coursefields = array('id','category','sortorder','fullname','shortname','idnumber','summary','summaryformat','format','showgrades','newsitems','startdate','enddate','marker','maxbytes','legacyfiles','showreports','visible','visibleold','groupmode','groupmodeforce','defaultgroupingid','lang','theme','timecreated','timemodified','requested','enablecompletion','completionnotify','cacherev','calendartype','wwwroot','courseimageurl'); // Academy Patch M#061.
 
         foreach ($coursesinlist as $courseinlist) {
 
