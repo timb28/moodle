@@ -149,13 +149,6 @@ class enrol_snipcart_plugin extends enrol_plugin {
     function get_add_to_cart_button($user, $course, $instance, $json = false) {
         global $DB, $CFG, $PAGE;
 
-        // Logged in users only
-        if (!isloggedin() || isguestuser() || user_not_fully_set_up($user) ||
-            get_user_preferences('auth_forcepasswordchange') ||
-            ($CFG->sitepolicy && !$user->policyagreed && !is_siteadmin())) {
-            return '';
-        }
-
         // Notify the admin if a user's country is not set (ignore the guest user)
         if (!($user->country) and !($user->id == 1)) {
             $this->message_error_to_admin('A Moodle user cannot purchase a course because their country is not set', $user);
@@ -233,14 +226,6 @@ class enrol_snipcart_plugin extends enrol_plugin {
                 </script>
 
                 <link href='https://cdn.snipcart.com/themes/2.0/base/snipcart.min.css' rel='stylesheet' type='text/css' />
-<!--                <script
-                    src='https://cdn.snipcart.com/scripts/snipcart.js'
-                    id='snipcart'
-                    defer
-                    data-autopop='false'
-                    data-api-key='$publicapikey'>
-                </script>
-                <link type='text/css' href='https://cdn.snipcart.com/themes/base/snipcart.min.css' rel='stylesheet' />-->
 
                 <a href='#' id='$addtocartid' class='snipcart-add-item faded btn btn-disabled'"
                     . " data-item-id='{$user->id}-{$instance->id}'"
