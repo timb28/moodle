@@ -242,6 +242,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
                 <script type='text/javascript'>
                     document.addEventListener('snipcart.ready', function() {
 
+                        Snipcart.DEBUG = false;
                         Snipcart.api.items.clear();
                         Snipcart.api.cart.currency('$currencycode');
                         Snipcart.api.configure('show_cart_automatically', true);
