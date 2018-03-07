@@ -203,12 +203,13 @@ class enrol_snipcart_plugin extends enrol_plugin {
         $publicapikey = $manager->get_snipcartaccount_info($instance->currency, 'publicapikey');
 
         $currencycode = strtolower($instance->currency);
+        $price = number_format((float)$instance->cost, 2, '.', '');
 
         if ($json) {
             return array(
                 'id' => $user->id.'-'.$instance->id,
                 'price' => $cost,
-                'price' => [$currencycode => $instance->cost],
+                'price' => [$currencycode => $price],
                 'url' => $itemurl
             );
             
@@ -244,7 +245,7 @@ class enrol_snipcart_plugin extends enrol_plugin {
                 <a href='#' id='$addtocartid' class='snipcart-add-item faded btn btn-disabled'"
                     . " data-item-id='{$user->id}-{$instance->id}'"
                     . " data-item-name='$coursefullname'"
-                    . " data-item-price='{\"$currencycode\": {$instance->cost}}'"
+                    . " data-item-price='{\"$currencycode\": $price}'"
                     . " data-item-max-quantity='1'"
                     . " data-item-quantity='1'"
                     . " data-item-shippable='false'"
