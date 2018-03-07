@@ -236,7 +236,6 @@ class enrol_snipcart_plugin extends enrol_plugin {
                     . " data-item-shippable='false'"
                     . " data-item-url='$itemurl'"
                     . " data-item-description='$shortcoursesummary'"
-                    . " data-item-image='$courseimageurl'"
                     . "><span class='spinner-three-quarters spinner-dark'></span>"
                     . "<span class='loadingstat'>".get_string('loading')."</span></a>
 
