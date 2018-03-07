@@ -57,3 +57,8 @@ body #snipcart-discounts {
     /* Hide the discount code message. */
     display: none;
 }
+
+/* Hide the course image from the shopping cart (it's only used in the email). */
+body #snipcart-items-list .snip-product__thumbnail {
+    display: none;
+}
