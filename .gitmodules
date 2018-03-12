@@ -65,3 +65,6 @@
 	path = theme/snap
 	url = https://github.com/HarcourtsAcademy/moodle-theme_snap.git
 	branch = HA-Moodle33
+[submodule "blocks/advnotifications"]
+	path = blocks/advnotifications
+	url = https://github.com/learningworks/moodle-block_advnotifications.git
