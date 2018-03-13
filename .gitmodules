@@ -68,3 +68,6 @@
 [submodule "blocks/advnotifications"]
 	path = blocks/advnotifications
 	url = https://github.com/learningworks/moodle-block_advnotifications.git
+[submodule "mod/book/tool/wordimport"]
+	path = mod/book/tool/wordimport
+	url = https://github.com/ecampbell/moodle-booktool_wordimport.git
