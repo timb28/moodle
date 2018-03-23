@@ -451,11 +451,11 @@ function course_module_completion_updated(\core\event\course_module_completion_u
     $grade = new stdClass();
     $grade->userid = $recordsnapshot->userid;
     
-    if ($recordsnapshot->completionstate === 1) {
+    if ($recordsnapshot->completionstate == '1') {
       // Increasing grades for student
       $grade->rawgrade = $gradedtask->maxgrade;
       gradedtask_grade_item_update($gradedtask, $grade);
-    } else if ($recordsnapshot->completionstate === 0) {
+    } else if ($recordsnapshot->completionstate == '') {
       // Decreasing grades for student
       $grade->rawgrade = 0;
     }
