@@ -319,7 +319,7 @@ $string['popup'] = 'New window';
 $string['popuplaunched'] = 'This SCORM package has been launched in a popup window, If you have finished viewing this resource, click here to return to the course page';
 $string['popupmenu'] = 'In a drop down menu';
 $string['popupopen'] = 'Open package in a new window';
-$string['popupsblocked'] = 'It appears that popup windows are blocked, stopping this SCORM package from playing. Please check your browser settings before trying again.';
+$string['popupsblocked'] = 'This activity can\'t open because pop-up windows are blocked. Please search the web for "<a href="https://www.google.com/search?q=allow+pop-ups+in" target="_blank">allow pop-ups in</a> Chrome <i>or</i> Firefox <i>or</i> Safari <i>or</i> Edge", follow the instructions for your device then refresh this page.'; // Academy Patch
 $string['position_error'] = 'The {$a->tag} tag can\'t be child of {$a->parent} tag';
 $string['preferencesuser'] = 'Preferences for this report';
 $string['preferencespage'] = 'Preferences just for this page';
