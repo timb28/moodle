@@ -26,6 +26,12 @@
   margin-bottom: 0;
 }
 
+/*  START Academy Patch M#069 Patch Boost Theme to better support pure Bootstrap */
+.card-text {
+  line-height: normal;
+}
+/*  END Academy Patch M#069 */
+
 .card-text:last-child {
   margin-bottom: 0;
 }
