@@ -199,7 +199,7 @@
 //
 // Those changes are noted by `// Margin balancing`.
 
-@if $enable-flex {
+//@if $enable-flex { // Academy Patch M#069 Patch Boost Theme to better support pure Bootstrap
   @include media-breakpoint-up(sm) {
     .card-deck {
       display: flex;
@@ -209,35 +209,55 @@
       margin-left: -$card-deck-margin;
 
       .card {
-        flex: 1 0 0;
         margin-right: $card-deck-margin;
         margin-bottom: 0; // Margin balancing
         margin-left: $card-deck-margin;
-      }
-    }
-  }
-} @else {
-  @include media-breakpoint-up(sm) {
-    $space-between-cards: (2 * $card-deck-margin);
-    .card-deck {
-      display: table;
-      width: 100%;
-      margin-bottom: $card-spacer-y; // Margin balancing
-      table-layout: fixed;
-      border-spacing: $space-between-cards 0;
+        /*  START Academy Patch M#069 Patch Boost Theme to better support pure Bootstrap */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-flex: 1;
+        -ms-flex: 1 0 0%;
+        flex: 1 0 0%;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
 
-      .card {
-        display: table-cell;
-        margin-bottom: 0; // Margin balancing
-        vertical-align: top;
+        .card-body {
+          -webkit-box-flex: 1;
+          -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+          padding: 1.25rem;
+          /*  END Academy Patch M#069 */
+        }
       }
     }
-    .card-deck-wrapper {
-      margin-right: (-$space-between-cards);
-      margin-left: (-$space-between-cards);
-    }
   }
-}
+/*  START Academy Patch M#069 Patch Boost Theme to better support pure Bootstrap */
+// } @else {
+//   @include media-breakpoint-up(sm) {
+//     $space-between-cards: (2 * $card-deck-margin);
+//     .card-deck {
+//       display: table;
+//       width: 100%;
+//       margin-bottom: $card-spacer-y; // Margin balancing
+//       table-layout: fixed;
+//       border-spacing: $space-between-cards 0;
+
+//       .card {
+//         display: table-cell;
+//         margin-bottom: 0; // Margin balancing
+//         vertical-align: top;
+//       }
+//     }
+//     .card-deck-wrapper {
+//       margin-right: (-$space-between-cards);
+//       margin-left: (-$space-between-cards);
+//     }
+//   }
+// }
+/*  END Academy Patch M#069 */
 
 //
 // Card groups
@@ -245,22 +265,26 @@
 
 @include media-breakpoint-up(sm) {
   .card-group {
-    @if $enable-flex {
+    // @if $enable-flex { // Academy Patch M#069 Patch Boost Theme to better support pure Bootstrap
       display: flex;
       flex-flow: row wrap;
-    } @else {
-      display: table;
-      width: 100%;
-      table-layout: fixed;
-    }
+    /*  START Academy Patch M#069 Patch Boost Theme to better support pure Bootstrap */
+    // } @else {
+    //   display: table;
+    //   width: 100%;
+    //   table-layout: fixed;
+    // }
+    /*  END Academy Patch M#069 */
 
     .card {
-      @if $enable-flex {
+      // @if $enable-flex { // Academy Patch M#069 Patch Boost Theme to better support pure Bootstrap
         flex: 1 0 0;
-      } @else {
-        display: table-cell;
-        vertical-align: top;
-      }
+      /*  START Academy Patch M#069 Patch Boost Theme to better support pure Bootstrap */
+      // } @else {
+      //   display: table-cell;
+      //   vertical-align: top;
+      // }
+      /*  END Academy Patch M#069 */
 
       + .card {
         margin-left: 0;
