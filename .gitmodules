@@ -71,3 +71,6 @@ url=https://github.com/bdaloukas/moodle-mod_game.git
 [submodule "mod/book/tool/wordimport"]
 	path = mod/book/tool/wordimport
 	url = https://github.com/HarcourtsAcademy/moodle-booktool_wordimport.git
+[submodule "mod/lightboxgallery"]
+	path = mod/lightboxgallery
+	url = https://github.com/netspotau/moodle-mod_lightboxgallery.git
