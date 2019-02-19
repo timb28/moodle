@@ -74,3 +74,7 @@ url=https://github.com/bdaloukas/moodle-mod_game.git
 [submodule "mod/lightboxgallery"]
 	path = mod/lightboxgallery
 	url = https://github.com/netspotau/moodle-mod_lightboxgallery.git
+[submodule "availability/condition/days"]
+	path = availability/condition/days
+	url = https://github.com/vfremaux/moodle-availability_days.git
+	branch = MOODLE_33_STABLE
