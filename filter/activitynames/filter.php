@@ -87,9 +87,11 @@ class filter_activitynames extends moodle_text_filter {
                     $entitisedname  = s($currentname);
                     // Avoid empty or unlinkable activity names.
                     if (!empty($title)) {
+                        // Start HA002 Patch to open auto-linked activities in a new window.
                         $href_tag_begin = html_writer::start_tag('a',
                                 array('class' => 'autolink', 'title' => $title,
                                     'href' => $cm->url . '&redirect=1', 'target' => '_blank'));
+                        // End HA002 Patch 
                         self::$activitylist[$cm->id] = new filterobject($currentname, $href_tag_begin, '</a>', false, true);
                         if ($currentname != $entitisedname) {
                             // If name has some entity (&amp; &quot; &lt; &gt;) add that filter too. MDL-17545.
