@@ -1,0 +1,14 @@
+Change Log:
+===========
+
+Version 1.0.0
+
+Initial version of Homepage builder plugin, this was inbuild feature in theme Edwiser RemUI before now it is independent plugin.
+
+Fix - Courses section custom loader icon.
+Fix - Html section filter checkbox value issue when unset.
+Fix - Improved migrator validator.
+Tweak - Loading Courses in courses section using ajax service.
+Tweak - Added migrator button on Home page settings form of RemUI settings.
+Feature - Multilang support for all sections.
+Feature - Custom css style setting in all frontpage sections.
