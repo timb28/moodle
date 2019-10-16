@@ -33,6 +33,9 @@
  */
 class behat_partial_named_selector extends \Behat\Mink\Selector\PartialNamedSelector {
 
+    // Use the named selector trait.
+    use behat_named_selector;
+
     /**
      * Creates selector instance.
      */
@@ -74,6 +77,7 @@ class behat_partial_named_selector extends \Behat\Mink\Selector\PartialNamedSele
         'table_row' => 'table_row',
         'xpath_element' => 'xpath_element',
         'form_row' => 'form_row',
+        'autocomplete' => 'autocomplete',
     );
 
     /**
@@ -111,6 +115,7 @@ class behat_partial_named_selector extends \Behat\Mink\Selector\PartialNamedSele
         'form_row' => 'form_row',
         'autocomplete_selection' => 'autocomplete_selection',
         'autocomplete_suggestions' => 'autocomplete_suggestions',
+        'autocomplete' => 'autocomplete',
     );
 
     /**
@@ -199,6 +204,9 @@ XPATH
         , 'autocomplete_suggestions' => <<<XPATH
 .//ul[contains(concat(' ', normalize-space(@class), ' '), concat(' ', 'form-autocomplete-suggestions', ' '))]/li[@role='option'][contains(normalize-space(.), %locator%)]
 XPATH
+        , 'autocomplete' => <<<XPATH
+.//descendant::input[@id = //label[contains(normalize-space(string(.)), %locator%)]/@for]/ancestor::*[@data-fieldtype = 'autocomplete']
+XPATH
     );
 
     protected static $customselectors = [
@@ -241,6 +249,10 @@ XPATH
         '%ariaLabelMatch%' => [
             'moodle' => 'contains(./@aria-label, %locator%)',
         ],
+    ];
+
+    /** @var List of deprecated selectors */
+    protected static $deprecatedselectors = [
     ];
 
     /**
