@@ -1,0 +1,3 @@
+[submodule "mod/booking"]
+	path = mod/booking
+	url = https://github.com/HarcourtsAcademy/moodle-mod_booking.git
