@@ -232,7 +232,7 @@ class condition extends \core_availability\condition {
                     // are equal. Below change does not affect function behavior, just avoids the warning.
                     if (is_null($record->finalgrade) || $record->rawgrademax == $record->rawgrademin) {
                         // No grade = false.
-                        $cachedgrades[$record->id] = false;
+                        $cachedgrades[$record->id] = (int) 0; // Academy Patch M#070
                     } else {
                         // Otherwise convert grade to percentage.
                         $cachedgrades[$record->id] =
@@ -259,11 +259,28 @@ class condition extends \core_availability\condition {
                 } else {
                     // Treat the case where row exists but is null, same as
                     // case where row doesn't exist.
-                    $score = false;
+                    $score = (int) 0; // Academy Patch M#070
                 }
                 $cachedgrades[$gradeitemid] = $score;
             }
             $cache->set($userid, $cachedgrades);
+        /*  START Academy Patch M#070 Fix Availability Restriction Course Grade calculations before a grade has been recorded. */
+        } else {
+            // Just get current grade.
+            $record = $DB->get_record('grade_grades', array(
+                'userid' => $userid, 'itemid' => $gradeitemid));
+            // This function produces division by zero error warnings when rawgrademax and rawgrademin
+            // are equal. Below change does not affect function behavior, just avoids the warning.
+            if ($record && !is_null($record->finalgrade) && $record->rawgrademax != $record->rawgrademin) {
+                $score = (($record->finalgrade - $record->rawgrademin) * 100) /
+                    ($record->rawgrademax - $record->rawgrademin);
+            } else {
+                // Treat the case where row exists but is null, same as
+                // case where row doesn't exist.
+                $score = (int) 0;
+            }
+            $cachedgrades[$gradeitemid] = $score;
+            /*  END Academy Patch M#070 */
         }
         return $cachedgrades[$gradeitemid];
     }
