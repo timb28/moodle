@@ -160,8 +160,10 @@ class core_question_renderer extends plugin_renderer_base {
         if (is_numeric($number)) {
             $numbertext = get_string('questionx', 'question',
                     html_writer::tag('span', $number, array('class' => 'qno')));
+        /* START Academy Patch M#071 Hide unneeded content around Moodle Quiz Description Questions
         } else if ($number == 'i') {
             $numbertext = get_string('information', 'question');
+            END Academy Patch M#071 */
         }
         if (!$numbertext) {
             return '';
@@ -264,6 +266,8 @@ class core_question_renderer extends plugin_renderer_base {
      */
     protected function question_flag(question_attempt $qa, $flagsoption) {
         global $CFG;
+
+        return null; // Academy Patch M#071 Hide unneeded content around Moodle Quiz Description Questions.
 
         $divattributes = array('class' => 'questionflag');
 
