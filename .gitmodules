@@ -78,3 +78,6 @@ url=https://github.com/bdaloukas/moodle-mod_game.git
 	path = availability/condition/days
 	url = https://github.com/vfremaux/moodle-availability_days.git
 	branch = MOODLE_33_STABLE
+[submodule "question/type/essayautograde"]
+	path = question/type/essayautograde
+	url = https://github.com/gbateson/moodle-qtype_essayautograde
