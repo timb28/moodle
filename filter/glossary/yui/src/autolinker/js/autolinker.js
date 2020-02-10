@@ -86,8 +86,10 @@ Y.extend(AUTOLINKER, Y.Base, {
 
                 for (key in data.entries) {
                     definition = data.entries[key].definition + data.entries[key].attachments;
+                    /* START Academy Patch M#072 Make all auto-linked glossary entries open full width. */
                     alertpanel = new M.core.alert({title: data.entries[key].concept, draggable: true,
-                        message: definition, modal: false, yesLabel: M.util.get_string('ok', 'moodle')});
+                        message: definition, width: '90%', modal: true, yesLabel: M.util.get_string('ok', 'moodle')});
+                    /* END Academy Patch M#072 */
                     // Notify the filters about the modified nodes.
                     event.notifyFilterContentUpdated(alertpanel.get('boundingBox').getDOMNode());
                     Y.Node.one('#id_yuialertconfirm-' + alertpanel.get('COUNT')).focus();
@@ -95,6 +97,8 @@ Y.extend(AUTOLINKER, Y.Base, {
                     // Register alertpanel for stacking.
                     alertpanelid = '#moodle-dialogue-' + alertpanel.get('COUNT');
                     alertpanel.on('complete', this._deletealertpanel, this, alertpanelid);
+
+                    alertpanel.centerDialogue();
 
                     // We already have some windows opened, so set the right position...
                     if (!Y.Object.isEmpty(this.alertpanels)) {
