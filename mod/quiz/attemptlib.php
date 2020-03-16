@@ -1171,8 +1171,15 @@ class quiz_attempt {
      * @return whether the student should be given the option to restart this question now.
      */
     public function can_question_be_redone_now($slot) {
+        /* START Academy Patch M#074 Hide Quiz Redo button when the question has been graded correct. */
+        return $this->get_quiz()->canredoquestions && !$this->is_finished() &&
+            $this->get_question_state($slot)->is_finished() && !$this->get_question_state($slot)->is_correct();
+
+        /*
         return $this->get_quiz()->canredoquestions && !$this->is_finished() &&
                 $this->get_question_state($slot)->is_finished();
+
+         END Academy Patch M#074 */
     }
 
     /**
