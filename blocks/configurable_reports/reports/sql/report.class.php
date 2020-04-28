@@ -123,15 +123,12 @@ class report_sql extends report_base {
                 foreach ($rs as $row) {
                     if (empty($finaltable)) {
                         foreach ($row as $colname => $value) {
-                            $tablehead[] = str_replace('_', ' ', $colname);
+                            $tablehead[] = $colname;
                         }
                     }
                     $arrayrow = array_values((array) $row);
                     foreach ($arrayrow as $ii => $cell) {
                         $cell = format_text($cell, FORMAT_HTML, array('trusted' => true, 'noclean' => true, 'para' => false));
-                        /* Start HA#004 Patch to fix question marks in report URLs. */
-                        $cell = str_replace('%5B%5BQUESTIONMARK%5D%5D', '?', $cell);
-                        /* End HA#004 Patch */
                         $arrayrow[$ii] = str_replace('[[QUESTIONMARK]]', '?', $cell);
                     }
                     $totalrecords++;

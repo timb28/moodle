@@ -652,7 +652,7 @@ class report_base {
         if (is_array($pagecontents['header'])) {
             echo format_text($pagecontents['header']['text'], $pagecontents['header']['format']);
         } else {
-            echo format_text($pagecontents['header']['text'], FORMAT_HTML);
+            echo format_text($pagecontents['header'], FORMAT_HTML);
         }
 
         $a = new \stdClass();
@@ -667,7 +667,12 @@ class report_base {
             }
 
             foreach ($this->finalreport->table->data as $r) {
-                $recordtext = $recordtpl['text'];
+                if (is_array($recordtpl)) {
+                    $recordtext = $recordtpl['text'];
+                } else {
+                    $recordtext = $recordtpl;
+                }
+                
                 foreach ($this->finalreport->table->head as $key => $c) {
                     $recordtext = str_ireplace("[[$c]]", $r[$key], $recordtext);
                 }
@@ -679,7 +684,7 @@ class report_base {
         if (is_array($pagecontents['footer'])) {
             echo format_text($pagecontents['footer']['text'], $pagecontents['footer']['format']);
         } else {
-            echo format_text($pagecontents['footer']['text'], FORMAT_HTML);
+            echo format_text($pagecontents['footer'], FORMAT_HTML);
         }
 
         echo "</div>\n";
