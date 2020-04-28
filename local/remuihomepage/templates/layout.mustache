@@ -34,10 +34,16 @@
     max-width: 140px;
 }
 {{#transparentheader}}
-body#page-site-index.latest-frontpage.site-menubar-fold.animate-header .site-navbar .navbar-brand-logo i, body#page-site-index.latest-frontpage.site-menubar-fold.animate-header .site-navbar .nav-link {
-    color: {{headercolor}};
+body#page-site-index.latest-frontpage.site-menubar-fold.animate-header .site-navbar .navbar-brand-logo i,
+body#page-site-index.latest-frontpage.site-menubar-fold.animate-header .site-navbar .nav-link,
+body#page-site-index.latest-frontpage.animate-header:not(.drawer-open-left) .fixed-top.navbar .navbar-brand-logo i,
+body#page-site-index.latest-frontpage.animate-header:not(.drawer-open-left) .fixed-top.navbar .nav-link,
+body#page-site-index.latest-frontpage.animate-header:not(.drawer-open-left) .fixed-top.navbar .icon {
+    color: {{headercolor}} !important;
 }
-body#page-site-index.latest-frontpage.site-menubar-fold.animate-header .site-navbar .navbar-container .hamburger .hamburger-bar, body#page-site-index.latest-frontpage.site-menubar-fold.animate-header .site-navbar .navbar-container .hamburger:after, body#page-site-index.latest-frontpage.site-menubar-fold.animate-header .site-navbar .navbar-container .hamburger:before {
+body#page-site-index.latest-frontpage.site-menubar-fold.animate-header .site-navbar .navbar-container .hamburger .hamburger-bar,
+body#page-site-index.latest-frontpage.site-menubar-fold.animate-header .site-navbar .navbar-container .hamburger:after,
+body#page-site-index.latest-frontpage.site-menubar-fold.animate-header .site-navbar .navbar-container .hamburger:before {
     background: {{headercolor}};
 }
 {{/transparentheader}}
@@ -70,6 +76,6 @@ body#page-site-index.latest-frontpage.site-menubar-fold.animate-header .site-nav
 {{/userisediting}}
 {{#js}}
 require(['local_remuihomepage/frontpage'], function (FrontPage) {
-    FrontPage.init({{contextid}}, {{userisediting}});
+    FrontPage.init({{contextid}}, {{#userisediting}}1{{/userisediting}}{{userisediting}}{{^userisediting}}0{{/userisediting}});
 });
 {{/js}}

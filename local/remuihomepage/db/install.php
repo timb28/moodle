@@ -61,8 +61,8 @@ function xmldb_local_remuihomepage_install() {
     $table->add_field('visible', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
     $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
     $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-    $table->add_field('configdata', XMLDB_TYPE_TEXT, '1500', null, null, null, null);
-    $table->add_field('draftconfig', XMLDB_TYPE_TEXT, '1500', null, null, null, null);
+    $table->add_field('configdata', XMLDB_TYPE_TEXT, '1500', null, false, null, null);
+    $table->add_field('draftconfig', XMLDB_TYPE_TEXT, '1500', null, false, null, null);
 
     // Adding keys to table theme_remui_section_instance.
     $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));

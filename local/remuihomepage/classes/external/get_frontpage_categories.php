@@ -29,28 +29,29 @@ use \local_remuihomepage\frontpage\section_manager as section_manager;
 use context_system;
 use context_user;
 
-trait get_frontpage_section_courses_in_category {
+trait get_frontpage_categories {
     /**
-     * Describes the parameters for get_frontpage_section_courses_in_category
+     * Describes the parameters for get_frontpage_categories
      * @return external_function_parameters
      */
-    public static function get_frontpage_section_courses_in_category_parameters() {
+    public static function get_frontpage_categories_parameters() {
         return new external_function_parameters(
             array(
                 'instanceid' => new external_value(PARAM_INT, 'Section instance id'),
-                'categoryid' => new external_value(PARAM_INT, 'Category id', VALUE_DEFAULT, 0),
-                'start'      => new external_value(PARAM_INT, 'Start index', VALUE_DEFAULT, 0)
+                'offset'     => new external_value(PARAM_INT, 'Offset index', VALUE_DEFAULT, 0),
+                'limit'      => new external_value(PARAM_INT, 'Limit index', VALUE_DEFAULT, 20)
             )
         );
     }
 
     /**
-     * Get frontpage section courses in category
-     * @param  int   $instanceid Instance id of course section
-     * @param  int   $categoryid Category id
-     * @return array             Courses list
+     * Get categories for frontpage course section
+     * @param  integer  $instanceid Instance if of course section
+     * @param  integer $offset     Starting offset of category
+     * @param  integer $limit      Number categories to be fetched
+     * @return string              Service output
      */
-    public static function get_frontpage_section_courses_in_category($instanceid, $categoryid = 0, $start = 0) {
+    public static function get_frontpage_categories($instanceid, $offset = 0, $limit = 20) {
         global $PAGE, $OUTPUT, $USER;
 
         $PAGE->set_context(context_system::instance());
@@ -67,20 +68,16 @@ trait get_frontpage_section_courses_in_category {
         } else {
             $categories = $sm->get_categories(isset($configdata['categories']) ? $configdata['categories'] : []);
         }
-        $date = isset($configdata['date']) ? $configdata['date'] : 'all';
 
-        list($configdata['totalcourse'], $configdata['courses']) = $sm->get_courses_from_category($categories, $date, $start);
-        if (empty($configdata['courses'])) {
-            $configdata['coursesplaceholder'] = $OUTPUT->image_url('courses', 'block_myoverview')->out();
-        }
+        list($configdata['categorytotal'], $configdata['categorylist']) = $sm->get_category_details($categories, $offset, $limit);
         return json_encode($configdata);
     }
 
     /**
-     * Describes the get_frontpage_section_courses_in_category return value
+     * Describes the get_frontpage_categories return value
      * @return external_value
      */
-    public static function get_frontpage_section_courses_in_category_returns() {
+    public static function get_frontpage_categories_returns() {
         return new external_value(PARAM_RAW, 'Courses Data Json');
     }
 }

@@ -1,16 +1,16 @@
 <section data-instance="{{id}}" data-sectionname="{{sectionname}}" {{{sectionpropertiesoutput}}}>
-    {{> local_remuihomepage/hs_editmenu}}
+    {{> local_remuihomepage/editmenu}}
     <div class="m-auto px-sm-0 text-center {{sectioncontaineroutput}} ">
         <div>
             <div class=" pb-0 px-50 pt-0">
                 <div>
-                    {{#title}}{{> local_remuihomepage/hs_common_title}}{{/title}}
+                    {{#title}}{{> local_remuihomepage/common_title}}{{/title}}
                     
                     {{#email.text}}
                         {{#email}}
                         <a href="mailto:{{email.text}}">
                             <i class="fa fa-envelope"></i>
-                            {{> local_remuihomepage/hs_common_title}}
+                            {{> local_remuihomepage/common_title}}
                         </a>
                         {{/email}}
                     {{/email.text}}
@@ -19,13 +19,13 @@
                         {{#phone}}
                         <a href="tel:{{phone.text}}">
                             <i class="fa fa-phone"></i>
-                            {{> local_remuihomepage/hs_common_title}}
+                            {{> local_remuihomepage/common_title}}
                         </a>
                         {{/phone}}
                     {{/phone.text}}
 
                     {{#description}}
-                       {{> local_remuihomepage/hs_common_title}}
+                       {{> local_remuihomepage/common_title}}
                     {{/description}}
                 </div>
             </div>

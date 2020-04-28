@@ -79,6 +79,13 @@ $functions = array(
         'description'   => 'Update Section visibility',
         'type'          => 'write',
         'ajax'          => true,
+    ),
+    'local_remuihomepage_get_frontpage_categories' => array(
+        'classname'     => 'local_remuihomepage\external\api',
+        'methodname'    => 'get_frontpage_categories',
+        'description'   => 'Get categories for courses section',
+        'type'          => 'read',
+        'ajax'          => true,
     )
 );
 

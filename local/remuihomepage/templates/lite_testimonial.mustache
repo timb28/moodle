@@ -1,22 +1,22 @@
 <section  data-instance="{{id}}" data-sectionname="{{sectionname}}" {{{sectionpropertiesoutput}}}>
-    {{> local_remuihomepage/hs_editmenu}}
+    {{> local_remuihomepage/editmenu}}
     <div class="m-auto row px-sm-0 text-center {{sectioncontaineroutput}} ">
         {{#hastitledescription}}
         <div class="mx-auto row col-12 {{#view}}col-lg-6{{/view}} text-center justify-content-center p-0">
             <div class="pb-10 px-50 pt-0 pb-lg-50 pt-0" >
                 {{#title}}
-                {{> local_remuihomepage/hs_common_title}}
+                {{> local_remuihomepage/common_title}}
                 {{/title}}
 
                 {{#description}}
-                {{> local_remuihomepage/hs_common_title}}
+                {{> local_remuihomepage/common_title}}
                 {{/description}}
             </div>
         </div>
         {{/hastitledescription}}
 
-        <div id="testimonial_carousel_{{id}}" class="carousel slide w-p100" data-ride="carousel">
-            <div class="carousel-inner w-p75 m-auto ">
+        <div id="testimonial_carousel_{{id}}" class="carousel slide w-100" data-ride="carousel">
+            <div class="carousel-inner w-75 m-auto ">
                 {{#testimonial}}
                     <div class="item carousel-item {{#status}}active{{/status}}">
 
@@ -26,7 +26,7 @@
                                 <img src="{{imageurl}}" alt=""
                                 {{#shadowless}}style=" box-shadow: 0 2px 5px {{sectionproperties.shadowcolor}};"{{/shadowless}}>
                             </div>
-                            {{#testimonial}} {{> local_remuihomepage/hs_common_title}} {{/testimonial}}
+                            {{#testimonial}} {{> local_remuihomepage/common_title}} {{/testimonial}}
                             <p class="overview testimonial-name">
                                 <b class="text-uppercase" style="color: {{namecolor}};">{{{name.text}}}</b>
                                 <span style="color: {{designationcolor}};">
@@ -37,7 +37,7 @@
 
                         {{^view}}
                             <!-- LAYOUT 2 -->
-                            <div class="row w-p100 m-0 py-50">
+                            <div class="row w-100 m-0 py-50">
                                 <div class="col-lg-3 col-sm-12 mb-10">
                                     <div class="img-box">
                                         <img src="{{imageurl}}" alt=""
@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-9 col-sm-12 text-left mb-10 d-flex flex-column justify-content-center">
-                                    {{#testimonial}} {{> local_remuihomepage/hs_common_title}} {{/testimonial}}
+                                    {{#testimonial}} {{> local_remuihomepage/common_title}} {{/testimonial}}
                                     <p class="overview testimonial-name">
                                         <b class="text-uppercase" style="color: {{namecolor}};">{{{name.text}}}</b>
                                         <span style="color: {{designationcolor}};">

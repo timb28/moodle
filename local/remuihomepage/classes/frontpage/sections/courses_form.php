@@ -87,14 +87,11 @@ trait courses_form {
         $title = 'categories';
         $defaultval = (!isset($formdata[$title])) ? "" : $formdata[$title];
         if (class_exists('core_course_category')) {
-            $rescategories = \core_course_category::make_categories_list('moodle/course:create');
+            $categories = \core_course_category::make_categories_list('moodle/course:create');
         } else if (class_exists('coursecat')) {
-            $rescategories = \coursecat::make_categories_list('moodle/course:create');
+            $categories = \coursecat::make_categories_list('moodle/course:create');
         } else {
             return;
-        }
-        foreach ($rescategories as $key => $category) {
-            $categories[$key] = $category;
         }
         $options = array(
             'multiple' => true,

@@ -115,15 +115,16 @@ class migrator extends section_manager {
      * @return array           Slide configuration array
      */
     private function get_slider_image_video_from_settings($slide, $setting) {
-        if ($file = $this->create_file_from_settings($setting, 'section_slider')) {
-            $slide['image'] = stripos($file->get_mimetype(), 'image') !== false;
-            $slide['video'] = stripos($file->get_mimetype(), 'video') !== false;
-            $slide['fileitemid'] = $file->get_itemid();
-            $slide['fileurl'] = $this->get_file_url($file);
+        $file = $this->create_file_from_settings($setting, 'section_slider');
+        if (!$file) {
+            return false;
         }
+        $slide['image'] = stripos($file->get_mimetype(), 'image') !== false;
+        $slide['video'] = stripos($file->get_mimetype(), 'video') !== false;
+        $slide['fileitemid'] = $file->get_itemid();
+        $slide['fileurl'] = $this->get_file_url($file);
         return $slide;
     }
-
 
     /**
      * Add image and image url value in the object if file exist and file is image
@@ -169,17 +170,20 @@ class migrator extends section_manager {
         if ($frontpageimagecontent == 0) {
             $contenttype = get_config('theme_remui', 'contenttype');
             if ($contenttype == 0) {
-                return;
+                return false;
             }
-            $slides[] = $this->create_slide(
+            $slide = $this->create_slide(
                 $defaultslide,
                 strip_tags(get_config('theme_remui', 'addtext')),
                 'staticimage'
             );
+            if ($slide !== false) {
+                $slides[] = $slide;
+            }
         } else {
             $slidercount = get_config('theme_remui', 'slidercount');
             for ($i = 1; $i <= $slidercount; $i++) {
-                $slides[] = $this->create_slide(
+                $slide = $this->create_slide(
                     $defaultslide,
                     strip_tags(get_config('theme_remui', 'slidertext'. $i)),
                     'slideimage' . $i,
@@ -187,6 +191,9 @@ class migrator extends section_manager {
                     get_config('theme_remui', 'sliderurl' . $i),
                     $i == 1
                 );
+                if ($slide !== false) {
+                    $slides[] = $slide;
+                }
             }
         }
         $section['configdata']['slides'] = count($slides);
@@ -202,7 +209,7 @@ class migrator extends section_manager {
         $section = $this->section_configuration('aboutus');
         $aboutus = get_config('theme_remui', 'frontpageblockdisplay');
         if ($aboutus == 1) {
-            return;
+            return false;
         }
         $blocks = $section['configdata']['block'];
         $section['configdata']['title']['text'] = get_config('theme_remui', 'frontpageblockheading');
@@ -226,27 +233,46 @@ class migrator extends section_manager {
     }
 
     /**
+     * Verify testimonial settings are valid to add in section
+     * @param  int  $index Testimonial setting index
+     * @return bool        True if settings are valid else false
+     */
+    private function verify_testimonial_settings($index) {
+        if (get_config('theme_remui', 'testimonialname' . ($index)) == '') {
+            return false;
+        }
+        if (strip_tags(get_config('theme_remui', 'testimonialtext' . ($index))) == '') {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Create testimonial from older configs
      * @return int Testimonial section id
      */
     private function create_testimonial_from_older_configs() {
         global $OUTPUT;
         $section = $this->section_configuration('testimonial');
-        $testimonial = get_config('theme_remui', 'enablefrontpageaboutus');
-        if ($testimonial == 0) {
-            return;
+        $testimonial = (int)get_config('theme_remui', 'enablefrontpageaboutus');
+        $count = (int)get_config('theme_remui', 'testimonialcount');
+        if ($testimonial == 0 || $count == 0) {
+            return false;
         }
         $defaultimage = $OUTPUT->image_url('u/f2')->out();
         $testimonials = [];
         $defaulttestimonial = $section['configdata']['testimonial'][0];
         $section['configdata']['title']['text'] = get_config('theme_remui', 'frontpageaboutusheading');
         $section['configdata']['description']['text'] = strip_tags(get_config('theme_remui', 'frontpageaboutustext'));
-        $section['configdata']['testimonials'] = get_config('theme_remui', 'testimonialcount');
-        $count = $section['configdata']['testimonials'];
+        $section['configdata']['testimonials'] = $count;
+        $counter = 0;
         for ($i = 0; $i < $count; $i++) {
+            if ($this->verify_testimonial_settings($i + 1) !== true) {
+                continue;
+            }
             $testimonial = $defaulttestimonial;
             unset($testimonial['status']);
-            $testimonial['counter'] = $i;
+            $testimonial['counter'] = $counter++;
             $testimonial['imageurl'] = $defaultimage;
             $testimonial['name']['text'] = get_config('theme_remui', 'testimonialname' . ($i + 1));
             $testimonial['designation']['text'] = get_config('theme_remui', 'testimonialdesignation' . ($i + 1));
@@ -254,6 +280,9 @@ class migrator extends section_manager {
             $file = $this->create_file_from_settings('testimonialimage' . ($i + 1), 'section_testimonial');
             $testimonial = $this->add_image_to_object($testimonial, $file);
             $testimonials[] = $testimonial;
+        }
+        if (empty($testimonials)) {
+            return false;
         }
         $testimonials[0]['status'] = 'active';
         $section['configdata']['testimonial'] = $testimonials;
@@ -265,8 +294,9 @@ class migrator extends section_manager {
      * @return boolean true if older settings present
      */
     public function has_settings() {
-        $testimonial = get_config('theme_remui', 'enablefrontpageaboutus');
-        if ($testimonial != 0) {
+        $testimonial = (int)get_config('theme_remui', 'enablefrontpageaboutus');
+        $count = (int)get_config('theme_remui', 'testimonialcount');
+        if ($testimonial != 0 && $count > 0) {
             return true;
         }
         $aboutus = get_config('theme_remui', 'frontpageblockdisplay');
@@ -303,13 +333,22 @@ class migrator extends section_manager {
         $order = [];
 
         // Header content (Slider).
-        $order[] = $this->create_slider_from_older_configs();
+        $section = $this->create_slider_from_older_configs();
+        if ($section !== false) {
+            $order[] = $section;
+        }
 
         // Body Content (About us).
-        $order[] = $this->create_aboutus_from_older_configs();
+        $section = $this->create_aboutus_from_older_configs();
+        if ($section !== false) {
+            $order[] = $section;
+        }
 
         // About us or testimonial.
-        $order[] = $this->create_testimonial_from_older_configs();
+        $section = $this->create_testimonial_from_older_configs();
+        if ($section !== false) {
+            $order[] = $section;
+        }
 
         set_config('sections_order', json_encode($order), 'theme_remui');
         set_config('draft_sections_order', json_encode($order), 'theme_remui');

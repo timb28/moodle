@@ -96,8 +96,21 @@ class local_remuihomepage_plugin {
 
     public function layout($templatecontext) {
         global $USER, $PAGE, $CFG, $SITE;
+
+        // Purge plugin cache to regenerate section from db data.
+        // This is added to support multi-lang.
+        $configlang = get_config('local_remuihomepage', 'processed_lang');
+        if (optional_param('lang', '', PARAM_ALPHA) != '' || $configlang != current_language()) {
+            $cache = cache::make('local_remuihomepage', 'frontpage');
+            $cache->purge();
+        }
+
+        $class = "latest-frontpage full-sidebar";
+        if (isset($templatecontext["remui_lite"])) {
+            $class .= " remui_lite ";
+        }
         $templatecontext['bodyattributes'] = str_replace(
-            "class=\"", "class=\"latest-frontpage full-sidebar ",
+            "class=\"", "class=\"" . $class,
             $templatecontext['bodyattributes']
         );
         $sm = new \local_remuihomepage\frontpage\section_manager();
@@ -223,16 +236,18 @@ class local_remuihomepage_plugin {
             'local_remuihomepage/floating_buttons',
             $templatecontext
         );
-        $templatecontext['customfooter'] = $this->get_renderer()->render_from_template(
-            'local_remuihomepage/customfooter',
-            $templatecontext
-        );
         if ($CFG->branch == 35) {
             $templatecontext['bodyattributes'] = str_replace(
                 "class=\"", "class=\"v35-frontpage ",
                 $templatecontext['bodyattributes']
             );
         }
+        // -------------------------------------------------.
+        // Remui Lite Fixes.
+        $templatecontext['bodyattributes'] = str_replace("sidebar-pinned", "", $templatecontext['bodyattributes']);
+        $templatecontext['bodyattributes'] = str_replace("sidebar-open", "", $templatecontext['bodyattributes']);
+        $templatecontext['bodyattributes'] = str_replace("hasblocks", "", $templatecontext['bodyattributes']);
+        // -------------------------------------------------
         return $templatecontext;
     }
 }

@@ -41,4 +41,5 @@ class api extends external_api {
     use save_sections_order;
     use update_section_instance;
     use update_section_visibility;
+    use get_frontpage_categories;
 }

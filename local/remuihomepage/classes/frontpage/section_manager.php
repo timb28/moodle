@@ -557,6 +557,11 @@ class section_manager {
      */
     public function process_all_sections($records, $sectionnamelist = false) {
         global $PAGE, $USER;
+
+        // Save current language in db which is used while processing sections.
+        // This is added to support multi-lang.
+        set_config('processed_lang', current_language(), 'local_remuihomepage');
+
         $order = json_decode($this->get_sections_order(), true);
         $sections = [];
         $sectionnames = [];
