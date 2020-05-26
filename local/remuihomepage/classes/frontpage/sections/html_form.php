@@ -23,6 +23,64 @@ use context_system;
 trait html_form {
 
     /**
+     * Get the validation js script for html form
+     * @return string html string which contain js code for validation
+     */
+    private function html_form_validation_js() {
+        ob_start();
+        ?>
+        <script type="text/javascript">
+            function validate(styles) {
+                var Ajax = require('core/ajax');
+                return Ajax.call([{
+                    methodname: 'local_remuihomepage_html_section_validate_css',
+                    args: {
+                        styles: styles
+                    }
+                }])[0];
+            }
+            var remui_section_form_validate = async function(root) {
+                var valid = true;
+                var scrolled = false;
+                var scrollTo = function(element) {
+                    if (!scrolled) {
+                        $(element).closest('.modal-content').animate({
+                            scrollTop: $(element).closest('.felement').position().top
+                        }, 0);
+                        scrolled = true;
+                    }
+                }
+                var count = $(root).find('#id_blocks').val();
+                var styles = [];
+                for (var i = 0; i < count; i++) {
+                    styles.push($('#id_block_' + i + '_style').val());
+                }
+                try {
+                    var response = await validate(styles);
+                    response.forEach(function(error, i) {
+                        if (error != false) {
+                            $('#id_block_' + i + '_style').addClass('is-invalid')
+                            .siblings('.form-control-feedback').text(error)
+                            .closest('.fitem').addClass('has-danger');
+                            valid = false;
+                        } else {
+                            $('#id_block_' + i + '_style').removeClass('is-invalid')
+                            .closest('.fitem').addClass('has-danger');
+                        }
+                    });
+                } catch(exception) {
+                    var Notification = require('core/notification');
+                    Notification.exception(exception);
+                    valid = false;
+                };
+                return valid;
+             }
+        </script>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
      * Returns the html form.
      * @param  stdClass &$mform   Form object.
      * @param  array    $formdata Form data.
@@ -30,6 +88,8 @@ trait html_form {
      * @return stdClass           Form object with data.
      */
     private function htmlform(&$mform, $formdata, $configdata) {
+
+        $mform->addElement('html', $this->html_form_validation_js());
 
         // Number of rows Setting.
         $blocks = array_combine(range(1, 4), range(1, 4));

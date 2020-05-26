@@ -86,6 +86,13 @@ $functions = array(
         'description'   => 'Get categories for courses section',
         'type'          => 'read',
         'ajax'          => true,
+    ),
+    'local_remuihomepage_html_section_validate_css' => array(
+        'classname'     => 'local_remuihomepage\external\api',
+        'methodname'    => 'html_section_validate_css',
+        'description'   => 'Validate css from html sections',
+        'type'          => 'read',
+        'ajax'          => true,
     )
 );
 

@@ -23,8 +23,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2020012800;
+$plugin->version   = 2020051400;
 $plugin->requires  = 2018051704;
 $plugin->maturity  = MATURITY_STABLE; // This version's maturity level.
-$plugin->release   = '1.0.3';
+$plugin->release   = '1.0.4';
 $plugin->component = 'local_remuihomepage';

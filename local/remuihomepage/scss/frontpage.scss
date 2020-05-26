@@ -154,7 +154,7 @@ body#page-site-index.latest-frontpage {
         &.animate-header {
             .home-sections {
                 section:first-child.section-slider {
-                    .edit-menu{
+                    .edit-menu {
                         top: 100px;
                     }
                 }
@@ -207,7 +207,7 @@ body#page-site-index.latest-frontpage {
 
         }
         @media (min-width: 600px) and (max-width: 800px) {
-            &.editmodal{
+            &.editmodal {
                 width: 100% !important;
                 min-width: 100% !important;
             }
@@ -307,26 +307,28 @@ body#page-site-index.latest-frontpage {
             }
         }
 
-        &.section-slider{
-            &.panel{
+        &.section-slider {
+            &.panel {
                 border-radius: 0;
             }
-            .carousel-inner{
+            .carousel-inner {
                 @media only screen and (max-width: 600px) {
                     .view,
                     .view video,
-                    .carousel-item img{
+                    .carousel-item img {
                         min-height: 500px;
                         max-height: 500px;
                         width: auto !important;
+                        position: relative;
+                        transform: translateX(-50%);
+                        left: 50%;
                     }
                 }
             }
             a[class^="carousel-control-"] {
-                &.nonav{
+                &.nonav {
                     display: none;
                 }
-                
 
                 &:not(.nonav) {
                     i {
@@ -340,9 +342,9 @@ body#page-site-index.latest-frontpage {
                     }
                     &:not(.navarrows) {
                         i {
-                            display: flex;
+                            // display: flex;
                             background-color: #0000007a;
-                            justify-content: center;
+                            // justify-content: center;
                             @media (max-width: 600px) {
                                 width: 40px;
                                 height: 40px;
@@ -355,11 +357,11 @@ body#page-site-index.latest-frontpage {
                         }
                     }
                 }
-                @media (min-width: 800px) {
-                    i {
-                        padding-top: 10px;
-                    }
-                }
+                // @media (min-width: 800px) {
+                //     i {
+                //         padding-top: 10px;
+                //     }
+                // }
                 &.navarrowscircle {
                     i {
                         border-radius: 50%;
@@ -656,7 +658,7 @@ body#page-site-index.latest-frontpage {
             .item.carousel-item.active {
                 display: block;
             }
-            .img-box img{
+            .img-box img {
                 width: 135px;
                 height: 135px;
                 margin: 5px auto;
@@ -675,8 +677,8 @@ body#page-site-index.latest-frontpage {
         }
 
         @media (min-width: 600px) {
-            &.panel:hover{
-                .edit-menu{
+            &.panel:hover {
+                .edit-menu {
                     display: inline-flex;
                 }
             }
@@ -695,7 +697,7 @@ body#page-site-index.latest-frontpage {
             }
         }
 
-        &.section-slider{
+        &.section-slider {
             .carousel-control-next, .carousel-control-prev {
                 opacity: .4 !important;
             }
@@ -741,7 +743,7 @@ body#page-site-index.latest-frontpage {
     .modal {
         .mform {
             .form-inline {
-                input{
+                input {
                     width : 100%;
                     &[type="checkbox"] {
                         width: 10px;
@@ -802,7 +804,7 @@ body#page-site-index.latest-frontpage {
 
     .slick-arrow {
         margin: 0 5px;
-        &.slick-disabled{
+        &.slick-disabled {
             opacity: 0.4;
             box-shadow: none;
         }
@@ -819,42 +821,42 @@ body#page-site-index.latest-frontpage {
 
 // Only for 35
 .v35-frontpage {
-    .section-aboutus{
-        .card-body{
+    .section-aboutus {
+        .card-body {
             -ms-flex: 1 1 auto;
             flex: 1 1 auto;
             padding: 1.429rem;
         }
     }
 
-    .section-slider{
-        .view{
+    .section-slider {
+        .view {
             width: 100%;
         }
     }
 
-    .frontpage-courses-form-categories-list{
+    .frontpage-courses-form-categories-list {
         .form-autocomplete-suggestions {
             width: 100%;
             margin: 0;
         }
     }
     // Category card courses count background problem
-    .bg-transparent{
+    .bg-transparent {
         background: transparent;
     }
 
-    .modal{
-        .mform{
+    .modal {
+        .mform {
             .form-inline {
-                &.custom-file-picker{
+                &.custom-file-picker {
                     max-width: 25%
                 }
             }
         }
     }
 
-    .custom-file-picker{
+    .custom-file-picker {
         max-width: 25% !important;
     }
 }

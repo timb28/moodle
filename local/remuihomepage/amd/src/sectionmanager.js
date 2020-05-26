@@ -261,14 +261,15 @@ define([
      * Load all section configuration
      */
     SectionManager.prototype.LoadAllSections = function() {
-        Ajax.call([
-        {
+        Ajax.call([{
             methodname: 'local_remuihomepage_fetch_all_instances',
             args: {},
             done: this.addAllSections.bind(this),
-            fail: Notification.exception
-        }
-        ]);
+            fail: (function(ex) {
+                Notification.exception(ex);
+                this.hideAllSectionsLoader();
+            }).bind(this)
+        }]);
     };
 
     /**

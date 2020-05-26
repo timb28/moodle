@@ -24,6 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Edwiser RemUI Homepage Builder';
+$string['remuihomepage:editfrontpage'] = 'Edit Frontpage';
 $string['homepagesettings'] = 'Home Page Settings';
 $string['none'] = 'None';
 $string['fade'] = 'Fade';
@@ -222,6 +223,7 @@ div {
 $string['htmldefaultcontent'] = 'Put your content here';
 $string['applyfilter'] = 'Apply filters';
 $string['applyfilterdesc'] = 'Apply moodle filters on content before showing section.';
+$string['htmlcsserror'] = 'Invalid css content';
 
 // Separator Section.
 $string['separatorstyle'] = 'Separator style';

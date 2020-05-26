@@ -15,11 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace local_remuihomepage\frontpage;
+
 defined('MOODLE_INTERNAL') || die;
 define('SECTIONTABLE', 'remuihomepage_sections');
 
-use context_user;
+require_once($CFG->libdir . '/classes/scss.php');
+
 use local_remuihomepage\frontpage\sections\main_form as main_form;
+use context_user;
+use core_scss;
 use stdClass;
 use cache;
 
@@ -520,11 +524,12 @@ class section_manager {
      * @return String              Css Style
      */
     public function process_css($styles, $styleprefix) {
-        return preg_replace(
-            '/(([\.\#]?[\w\d\_\-]+\s*)+\{)/',
-            $styleprefix . " $0",
-            $styles
-        );
+        try {
+            $scss = new core_scss();
+            return $scss->compile($styleprefix . '{ ' . $styles . ' }');
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 
     /**

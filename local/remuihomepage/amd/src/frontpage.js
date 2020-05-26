@@ -498,13 +498,29 @@ define([
 
                     var form = root.find('form');
 
-                    if (typeof remui_section_form_validate != 'undefined' && !remui_section_form_validate(form)) {
-                        return;
+                    function updateSectionData() {
+                        // Convert all the form elements values to a serialised string.
+                        var formdata = JSON.stringify(form.serialize());
+                        SECTIONMANAGER.updateSection(id, formdata);
+                        CONFIGMODAL.hide();
                     }
-                    // Convert all the form elements values to a serialised string.
-                    var formdata = JSON.stringify(form.serialize());
-                    SECTIONMANAGER.updateSection(id, formdata);
-                    CONFIGMODAL.hide();
+
+                    if (typeof remui_section_form_validate != 'undefined') {
+                        response = remui_section_form_validate(form);
+                        if (typeof response === 'object') {
+                            response.then(function(response) {
+                                if (!response) {
+                                    return;
+                                }
+                                updateSectionData();
+                            });
+                            return;
+                        }
+                        if(!response) {
+                            return;
+                        }
+                    }
+                    updateSectionData();
                 });
 
                 // Destroy the modal when the modal is closed.

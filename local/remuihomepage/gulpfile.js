@@ -24,8 +24,8 @@ gulp.task('styles', function() {
     .pipe(gulp.dest('.'));
 });
 
-gulp.task('compress', function(done) {
-    gulp.src(['./amd/src/*.js'])
+gulp.task('compress', function() {
+    return gulp.src(['./amd/src/*.js'])
     .pipe(sourcemaps.init())
     .pipe(minify({
         ext:{
@@ -36,7 +36,6 @@ gulp.task('compress', function(done) {
     }))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('./amd/build'));
-    done();
 });
 
 gulp.task('purge', gulp.series(function() {
@@ -61,6 +60,7 @@ gulp.task('watch', function(done) {
     gulp.watch('./amd/src/*.js', gulp.series('compress', 'purgejs'));
     gulp.watch('./scss/**/*.scss', gulp.series('styles', 'purge'));
     gulp.watch(['./lang/**/*.php', './templates/**/*.mustache'], gulp.series('purge'));
+    done();
 });
 
 gulp.task('default', gulp.series('compress', 'styles', 'purge', 'watch'));

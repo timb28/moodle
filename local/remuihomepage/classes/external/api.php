@@ -42,4 +42,5 @@ class api extends external_api {
     use update_section_instance;
     use update_section_visibility;
     use get_frontpage_categories;
+    use html_section_validate_css;
 }
