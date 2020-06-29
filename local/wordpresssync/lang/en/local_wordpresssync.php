@@ -26,3 +26,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'WordPress Synchronisation';
+$string['settings'] = 'WordPress Synchronisation Settings';
+$string['settings_url'] = 'WordPress URL';
+$string['settings_urldesc'] = 'Domain name of WordPress site';
+$string['settings_username'] = 'WordPress Username';
+$string['settings_password'] = 'WordPress Password';

@@ -43,8 +43,6 @@ class local_wordpresssync_install {
     function create_user_profile_field() {
         global $DB;
 
-        error_log("Creating new user profile field");
-
         // Check if the field exists
         $fieldname = $DB->get_field('user_info_field', 'name', array('shortname' => FIELD_SHORTNAME));
 

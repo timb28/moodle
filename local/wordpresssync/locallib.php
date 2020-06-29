@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+define('WP_USER_ENDPOINT','wp-json/wp/v2/users/');
+
 /**
  * Handle the \core\event\user_created event.
  *
@@ -37,44 +39,117 @@ function user_created(\core\event\user_created $event) {
 }
 
 function sync_user_to_wordpress($user) {
-    global $DB;
-
-    error_log("Starting sync of new user to Wordpress.");
-
-    $user = $event->get_record_snapshot('user', $event->objectid);
+    global $DB, $CFG;
 
     // Don't sync incomplete users
     if (!$user->email)
         return true;
 
-    /* Create user in Joomla */
-    $userinfo['username'] = $user->username;
-    $userinfo['password'] = $user->password;
-    $userinfo['password2'] = $user->password;
+    /* Create user in WordPress */
+    $user->name = $user->firstname. " " . $user->lastname;
 
-    $userinfo['name'] = $user->firstname. " " . $user->lastname;
-    $userinfo['email'] = $user->email;
-    $userinfo['firstname'] = $user->firstname;
-    $userinfo['lastname'] = $user->lastname;
-
-    $userid = $user->id;
-    $usercontext = context_user::instance($userid);
-    $context_id = $usercontext->id;
+//    $usercontext = context_user::instance($userid);
+//    $context_id = $usercontext->id;
 
     /* Custom fields */
-    $query = "SELECT f.id, d.data 
-                    FROM {$CFG->prefix}user_info_field as f, {$CFG->prefix}user_info_data d 
-                    WHERE f.id=d.fieldid and userid = ?";
+//    $query = "SELECT f.id, d.data
+//                    FROM {$CFG->prefix}user_info_field as f, {$CFG->prefix}user_info_data d
+//                    WHERE f.id=d.fieldid and userid = ?";
+//
+//    $params = array ($userid);
+//    $records =  $DB->get_records_sql($query, $params);
+//
+//    $i = 0;
+//    $userinfo['custom_fields'] = array ();
+//    foreach ($records as $field)
+//    {
+//        $userinfo['custom_fields'][$i]['id']        = $field->id;
+//        $userinfo['custom_fields'][$i]['shortname'] = $field->shortname;
+//        $userinfo['custom_fields'][$i]['data']      = $field->data;
+//        $i++;
+//    }
 
-    $params = array ($userid);
-    $records =  $DB->get_records_sql($query, $params);
+    error_log("Starting sync of new user to WordPress:" . print_r($user, true));
+    create_wp_user($user);
+}
 
-    $i = 0;
-    $userinfo['custom_fields'] = array ();
-    foreach ($records as $field)
-    {
-        $userinfo['custom_fields'][$i]['id'] = $field->id;
-        $userinfo['custom_fields'][$i]['data'] = $field->data;
-        $i++;
+/**
+ * Calls WordPress API to create user
+ *
+ * @param stdClass $user
+ * @return true if token is valid
+ * @return false if token is invalid
+ */
+function create_wp_user($user) {
+    global $CFG, $ADMIN;
+
+    // Don't create incomplete users
+    if (!$user->email)
+        return true;
+
+    if( !function_exists("curl_init") &&
+        !function_exists("curl_setopt") &&
+        !function_exists("curl_exec") &&
+        !function_exists("curl_close") ) die ("cURL not installed.");
+
+
+    $wpurl = get_config('local_wordpresssync', 'wpurl')
+        . WP_USER_ENDPOINT;
+    $wpusername = get_config('local_wordpresssync', 'wpusername');
+    $wppassword = get_config('local_wordpresssync', 'wppassword');
+
+    if (!isset($wpurl) || !isset($wpusername) || !isset($wppassword)) {
+        error_log('WordPress settings not yet configured.');
+        return false;
     }
+
+    if (!preg_match('|^https://|i', $wpurl)) {
+        error_log('WordPress URL must use HTTPS.');
+        return false;
+    }
+
+    $post['username']   = $user->username;
+    $post['email']      = $user->email;
+    $post['password']   = $user->password;
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $wpurl);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 4);
+    // REMOVE before production
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    ///////////////////////////
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: multipart/form-data"));
+    curl_setopt($ch, CURLOPT_USERPWD, $wpusername . ":" . $wppassword);
+
+
+
+    // Execute the request
+    $response = curl_exec($ch);
+
+//    var_dump($response);
+    var_dump(json_decode($response));
+//    var_dump(curl_getinfo($ch));
+
+    // Get the HTTP status from the response header.
+    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+//    echo("<br/>HTTP Response: " . print_r($httpcode, true));
+    if( $httpcode>=200 && $httpcode<300 ) {
+        $newwpuser = json_decode($response);
+        if(!isset($newwpuser))
+            return false;
+
+        // Update the Moodle user data with their WordPress User ID
+        echo "New WP UserID = " . $newwpuser->id;
+    } else {
+        error_log("local_wordpresssync: Couldn't create WordPress user " . $user->username);
+        error_log("local_wordpresssync: WordPress error: " . $response);
+    }
+
+    // close cURL resource, and free up system resources
+    curl_close($ch);
+
+    return true;
 }
