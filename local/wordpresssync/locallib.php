@@ -32,7 +32,6 @@ define('WP_USER_ENDPOINT','wp-json/wp/v2/users/');
  * @param object $event The event object.
  */
 function user_created(\core\event\user_created $event) {
-    error_log("Moodle User Created:" . print_r($event, true));
     $newuser = $event->get_record_snapshot('user', $event->objectid);
     sync_user_to_wordpress($newuser);
     return;
@@ -47,29 +46,6 @@ function sync_user_to_wordpress($user) {
 
     /* Create user in WordPress */
     $user->name = $user->firstname. " " . $user->lastname;
-
-//    $usercontext = context_user::instance($userid);
-//    $context_id = $usercontext->id;
-
-    /* Custom fields */
-//    $query = "SELECT f.id, d.data
-//                    FROM {$CFG->prefix}user_info_field as f, {$CFG->prefix}user_info_data d
-//                    WHERE f.id=d.fieldid and userid = ?";
-//
-//    $params = array ($userid);
-//    $records =  $DB->get_records_sql($query, $params);
-//
-//    $i = 0;
-//    $userinfo['custom_fields'] = array ();
-//    foreach ($records as $field)
-//    {
-//        $userinfo['custom_fields'][$i]['id']        = $field->id;
-//        $userinfo['custom_fields'][$i]['shortname'] = $field->shortname;
-//        $userinfo['custom_fields'][$i]['data']      = $field->data;
-//        $i++;
-//    }
-
-    error_log("Starting sync of new user to WordPress:" . print_r($user, true));
     create_wp_user($user);
 }
 
@@ -111,6 +87,8 @@ function create_wp_user($user) {
     $post['username']   = $user->username;
     $post['email']      = $user->email;
     $post['password']   = $user->password;
+    $post['first_name']  = $user->firstname;
+    $post['last_name']   = $user->lastname;
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $wpurl);
@@ -129,13 +107,9 @@ function create_wp_user($user) {
     // Execute the request
     $response = curl_exec($ch);
 
-//    var_dump($response);
-//    var_dump(json_decode($response));
-//    var_dump(curl_getinfo($ch));
-
     // Get the HTTP status from the response header.
     $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-//    echo("<br/>HTTP Response: " . print_r($httpcode, true));
+
     if( $httpcode>=200 && $httpcode<300 ) {
         $newwpuser = json_decode($response);
         if(!isset($newwpuser))

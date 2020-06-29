@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-if ($hassiteconfig) { // Needs this condition or there is error on login page.
+if ($hassiteconfig && is_siteadmin($USER)) { // Needs this condition or there is error on login page.
     $settings = new admin_settingpage('wpsyncsettings', new lang_string('pluginname', 'local_wordpresssync'));
 
     $settings->add(new admin_setting_configtext(
