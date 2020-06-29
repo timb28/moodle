@@ -38,28 +38,33 @@ function user_created(\core\event\user_created $event) {
 }
 
 /**
- * Called for all enabled enrol plugins that returned true from is_cron_required().
- * @return void
+ * Synchronises a single user to WordPress
+ *
+ * @param $user stdClass User to sync
+ * @return bool true if sync succeeded
  */
-public function cron() {
-    global $CFG;
-
-    $trace = new text_progress_trace();
-    // enrol_cohort_sync($trace);
-    $trace->output('Starting WordPress user synchronisation...');
-    $trace->finished();
-}
-
 function sync_user_to_wordpress($user) {
     global $DB, $CFG;
 
+    error_log("### attempting to synch user:" . print_r($user, true));
+
     // Don't sync incomplete users
     if (!$user->email)
-        return true;
+        return false;
+
+    // Don't sync deleted and suspended users
+    if ($user->deleted || $user->suspended)
+        return false;
+
+    // Don't sync temporary accounts with usernames starting 'ac_...
+    if (strpos($user->username,'ac_') === 0)
+        return false;
+
+    error_log("Confirmed synching");
 
     /* Create user in WordPress */
     $user->name = $user->firstname. " " . $user->lastname;
-    create_wp_user($user);
+    return create_wp_user($user);
 }
 
 /**

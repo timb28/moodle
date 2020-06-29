@@ -61,6 +61,13 @@ class wordpress_sync_task extends \core\task\scheduled_task {
 //        $result = $plugin->sync(new \null_progress_trace());
 //        return $result;
 
+        $trace = new \text_progress_trace();
+        // enrol_cohort_sync($trace);
+        $trace->output('Starting WordPress user synchronisation...');
+
+        $trace->finished();
+        return true;
+
     }
 
 }
