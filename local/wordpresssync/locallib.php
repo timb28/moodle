@@ -130,7 +130,7 @@ function create_wp_user($user) {
     $response = curl_exec($ch);
 
 //    var_dump($response);
-    var_dump(json_decode($response));
+//    var_dump(json_decode($response));
 //    var_dump(curl_getinfo($ch));
 
     // Get the HTTP status from the response header.
@@ -143,6 +143,10 @@ function create_wp_user($user) {
 
         // Update the Moodle user data with their WordPress User ID
         echo "New WP UserID = " . $newwpuser->id;
+        $user->profile["wpuserid"] = $newwpuser->id;
+
+        echo "<p>Updating user profile.</p>";
+        update_user_profile($user->id,$newwpuser->id);
     } else {
         error_log("local_wordpresssync: Couldn't create WordPress user " . $user->username);
         error_log("local_wordpresssync: WordPress error: " . $response);
@@ -152,4 +156,12 @@ function create_wp_user($user) {
     curl_close($ch);
 
     return true;
+}
+
+function update_user_profile($userid, $wpuserid) {
+    global $CFG;
+
+    require_once($CFG->dirroot.'/user/profile/lib.php');
+
+    profile_save_data((object)['id' => $userid, 'profile_field_wpuserid' => $wpuserid]);
 }
