@@ -29,7 +29,52 @@ defined('MOODLE_INTERNAL') || die();
  *
  * @param object $event The event object.
  */
-function user_created($event) {
+function user_created(\core\event\user_created $event) {
     error_log("Moodle User Created:" . print_r($event, true));
+    $newuser = $event->get_record_snapshot('user', $event->objectid);
+    sync_user_to_wordpress($newuser);
     return;
+}
+
+function sync_user_to_wordpress($user) {
+    global $DB;
+
+    error_log("Starting sync of new user to Wordpress.");
+
+    $user = $event->get_record_snapshot('user', $event->objectid);
+
+    // Don't sync incomplete users
+    if (!$user->email)
+        return true;
+
+    /* Create user in Joomla */
+    $userinfo['username'] = $user->username;
+    $userinfo['password'] = $user->password;
+    $userinfo['password2'] = $user->password;
+
+    $userinfo['name'] = $user->firstname. " " . $user->lastname;
+    $userinfo['email'] = $user->email;
+    $userinfo['firstname'] = $user->firstname;
+    $userinfo['lastname'] = $user->lastname;
+
+    $userid = $user->id;
+    $usercontext = context_user::instance($userid);
+    $context_id = $usercontext->id;
+
+    /* Custom fields */
+    $query = "SELECT f.id, d.data 
+                    FROM {$CFG->prefix}user_info_field as f, {$CFG->prefix}user_info_data d 
+                    WHERE f.id=d.fieldid and userid = ?";
+
+    $params = array ($userid);
+    $records =  $DB->get_records_sql($query, $params);
+
+    $i = 0;
+    $userinfo['custom_fields'] = array ();
+    foreach ($records as $field)
+    {
+        $userinfo['custom_fields'][$i]['id'] = $field->id;
+        $userinfo['custom_fields'][$i]['data'] = $field->data;
+        $i++;
+    }
 }

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Plugin upgrade changes.
  *
  * @package     local_wordpresssync
  * @copyright   2020 Harcourts International Pty Ltd <academy@harcourts.net>
@@ -24,8 +24,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_wordpresssync';
-$plugin->release = '0.1.0';
-$plugin->version = 2020062906;
-$plugin->requires = 2017051500;
-$plugin->maturity = MATURITY_ALPHA;
+require_once($CFG->dirroot . '/local/wordpresssync/db/install.php');
+
+function xmldb_local_wordpresssync_upgrade($oldversion) {
+    global $DB;
+
+    // Create the required user profile field if necessary.
+    $wps_install = new local_wordpresssync_install();
+    $wps_install->create_user_profile_field();
+
+    return true;
+}

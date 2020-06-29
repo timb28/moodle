@@ -33,6 +33,8 @@ $observers = array(
     array(
         'eventname' => '\core\event\user_created',
         'callback' => 'user_created',
+        'includefile' => '/local/wordpresssync/locallib.php',
         'internal' => false,
+        'priority' => 9999,
     ),
 );
