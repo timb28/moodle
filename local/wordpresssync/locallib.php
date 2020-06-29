@@ -37,6 +37,19 @@ function user_created(\core\event\user_created $event) {
     return;
 }
 
+/**
+ * Called for all enabled enrol plugins that returned true from is_cron_required().
+ * @return void
+ */
+public function cron() {
+    global $CFG;
+
+    $trace = new text_progress_trace();
+    // enrol_cohort_sync($trace);
+    $trace->output('Starting WordPress user synchronisation...');
+    $trace->finished();
+}
+
 function sync_user_to_wordpress($user) {
     global $DB, $CFG;
 

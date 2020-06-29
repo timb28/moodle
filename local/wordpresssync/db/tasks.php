@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Definition of wordpresssync scheduled tasks.
  *
  * @package     local_wordpresssync
  * @copyright   2020 Harcourts International Pty Ltd <academy@harcourts.net>
@@ -24,8 +24,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_wordpresssync';
-$plugin->release = '0.1.0';
-$plugin->version = 2020062911;
-$plugin->requires = 2017051500;
-$plugin->maturity = MATURITY_ALPHA;
+$tasks = array(
+    array(
+        'classname' => '\local_wordpresssync\task\wordpress_sync_task',
+        'blocking' => 0,
+        'minute' => '15',
+        'hour' => '*',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*'
+    )
+);
