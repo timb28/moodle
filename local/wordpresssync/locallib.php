@@ -25,6 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 define('WP_USER_ENDPOINT','wp-json/wp/v2/users/');
+define('MAX_USERS_TO_SYNC',20);
 
 /**
  * Handle the \core\event\user_created event.
@@ -104,7 +105,7 @@ function create_wp_user($user) {
 
     $post['username']   = $user->username;
     $post['email']      = $user->email;
-    $post['password']   = $user->password;
+    $post['password']   = generate_password(); // Use random password
     $post['first_name']  = $user->firstname;
     $post['last_name']   = $user->lastname;
 
@@ -148,6 +149,38 @@ function create_wp_user($user) {
     curl_close($ch);
 
     return true;
+}
+
+/**
+ * Get suitable users to synchronise with Wordpress.
+ * Excludes suspended, deleted and temporary users.
+ *
+ * @param int $limitmin
+ * @param int $limitmax
+ * @return array of Users
+ * @throws dml_exception
+ */
+function get_users_to_sync(int $limitmin = 0, int $limitmax = MAX_USERS_TO_SYNC) {
+    global $DB;
+
+    $users = $DB->get_records_sql("SELECT DISTINCT u.*
+                                            FROM {user} u
+                                            LEFT JOIN {user_info_data} uid on u.id = uid.userid
+                                            JOIN {user_info_field} uif ON uid.fieldid = uif.id
+                                        WHERE
+                                              u.deleted = 0
+                                              AND u.suspended = 0
+                                              AND LOCATE('ac_', u.username) <> 1
+                                              AND u.id NOT IN (
+                                                SELECT
+                                                  uid2.userid FROM {user_info_data} uid2
+                                                  JOIN {user_info_field} uif2 ON uid2.fieldid = uif2.id
+                                                WHERE
+                                                  uif2.shortname = 'wpuserid'
+                                                  AND uid2.data > 0)
+                                        ORDER BY u.id DESC
+                                        ",null,$limitmin,$limitmax);
+    return $users;
 }
 
 function update_user_profile($userid, $wpuserid) {

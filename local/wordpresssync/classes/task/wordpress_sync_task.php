@@ -48,7 +48,8 @@ class wordpress_sync_task extends \core\task\scheduled_task {
      * Throw exceptions on errors (the job will be retried).
      */
     public function execute() {
-//        global $CFG;
+        global $CFG;
+        require_once($CFG->dirroot . '/local/wordpresssync/locallib.php');
 //
 //        require_once($CFG->dirroot . '/enrol/flatfile/lib.php');
 //
@@ -64,6 +65,7 @@ class wordpress_sync_task extends \core\task\scheduled_task {
         $trace = new \text_progress_trace();
         // enrol_cohort_sync($trace);
         $trace->output('Starting WordPress user synchronisation...');
+
 
         $trace->finished();
         return true;
