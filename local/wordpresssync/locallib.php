@@ -61,11 +61,86 @@ function sync_user_to_wordpress($user) {
     if (strpos($user->username,'ac_') === 0)
         return false;
 
-    error_log("Confirmed synching");
+    // Check if user exists in WP
+    $wpuser = get_wp_user($user);
 
-    /* Create user in WordPress */
+    if (isset($wpuser) && isset($wpuser->profile["wpuserid"]))
+        return $wpuser;
+
+    // Create user in WordPress
     $user->name = $user->firstname. " " . $user->lastname;
     return create_wp_user($user);
+}
+
+/**
+ * @param stdClass $user
+ * @return false|stdClass User with WP user id
+ * @throws dml_exception
+ */
+function get_wp_user(stdClass $user = null) {
+
+    if (is_null($user))
+        return false;
+
+    if( !function_exists("curl_init") &&
+        !function_exists("curl_setopt") &&
+        !function_exists("curl_exec") &&
+        !function_exists("curl_close") ) die ("cURL not installed.");
+
+
+    $wpurl = get_config('local_wordpresssync', 'wpurl')
+        . WP_USER_ENDPOINT;
+    $wpusername = get_config('local_wordpresssync', 'wpusername');
+    $wppassword = get_config('local_wordpresssync', 'wppassword');
+
+    if (!isset($wpurl) || !isset($wpusername) || !isset($wppassword)) {
+        error_log('local_wordpresssync: WordPress settings not yet configured.');
+        return false;
+    }
+
+    if (!preg_match('|^https://|i', $wpurl)) {
+        error_log('local_wordpresssync: WordPress URL must use HTTPS.');
+        return false;
+    }
+
+    $query['slug']   = $user->username;
+    $wpurl.= '?' . http_build_query($query);
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $wpurl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 4);
+    // REMOVE before production
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    ///////////////////////////
+    curl_setopt($ch, CURLOPT_USERPWD, $wpusername . ":" . $wppassword);
+
+    // Execute the request
+    $response = curl_exec($ch);
+
+    // Get the HTTP status from the response header.
+    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    if( $httpcode>=200 && $httpcode<300 ) {
+        $wpuserarray = json_decode($response);
+
+        if(!isset($wpuserarray) || !is_array($wpuserarray) || count($wpuserarray) == 0)
+            return false;
+
+        // Update the Moodle user data with their WordPress User ID
+        $wpuser = $wpuserarray[0];
+
+        $user->profile["wpuserid"] = $wpuser->id;
+        update_user_profile($user->id,$wpuser->id);
+    } else {
+        error_log("local_wordpresssync: WordPress error: " . $response);
+        return false;
+    }
+
+    // close cURL resource, and free up system resources
+    curl_close($ch);
+
+    return $user;
 }
 
 /**

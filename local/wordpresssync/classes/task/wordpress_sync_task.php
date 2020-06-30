@@ -50,26 +50,20 @@ class wordpress_sync_task extends \core\task\scheduled_task {
     public function execute() {
         global $CFG;
         require_once($CFG->dirroot . '/local/wordpresssync/locallib.php');
-//
-//        require_once($CFG->dirroot . '/enrol/flatfile/lib.php');
-//
-//        if (!enrol_is_enabled('flatfile')) {
-//            return;
-//        }
-//
-//        // Instance of enrol_flatfile_plugin.
-//        $plugin = enrol_get_plugin('flatfile');
-//        $result = $plugin->sync(new \null_progress_trace());
-//        return $result;
+
+        if (is_null(get_config('local_wordpresssync', 'wpurl')))
+            return;
 
         $trace = new \text_progress_trace();
         // enrol_cohort_sync($trace);
         $trace->output('Starting WordPress user synchronisation...');
-
-
+        $users = get_users_to_sync();
+        foreach ($users as $user) {
+            $trace->output("Synchronising user " . $user->username . " to Wordpress.");
+//            sync_user_to_wordpress($user);
+        }
         $trace->finished();
         return true;
-
     }
 
 }
