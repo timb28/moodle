@@ -25,6 +25,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig && is_siteadmin($USER)) { // Needs this condition or there is error on login page.
+    global $CFG;
+    require_once($CFG->dirroot . '/local/wordpresssync/locallib.php');
+
     $settings = new admin_settingpage('wpsyncsettings', new lang_string('pluginname', 'local_wordpresssync'));
 
     $settings->add(new admin_setting_configtext(
@@ -49,6 +52,14 @@ if ($hassiteconfig && is_siteadmin($USER)) { // Needs this condition or there is
         '',
         '',
         PARAM_TEXT
+    ));
+
+    $settings->add(new admin_setting_configtext(
+        'local_wordpresssync/wpmaxusers',
+        get_string('settings_maxusers', 'local_wordpresssync'),
+        '',
+        MAX_USERS_TO_SYNC,
+        PARAM_INT
     ));
 
     $ADMIN->add('localplugins', $settings);

@@ -31,3 +31,4 @@ $string['settings_url'] = 'WordPress URL';
 $string['settings_urldesc'] = 'Domain name of WordPress site';
 $string['settings_username'] = 'WordPress Username';
 $string['settings_password'] = 'WordPress Password';
+$string['settings_maxusers'] = 'Numbers of users to batch sync';

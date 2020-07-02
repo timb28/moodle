@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 define('WP_USER_ENDPOINT','wp-json/wp/v2/users/');
-define('MAX_USERS_TO_SYNC',20);
+define('MAX_USERS_TO_SYNC',10);
 
 /**
  * Handle the \core\event\user_created event.

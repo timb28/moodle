@@ -53,10 +53,14 @@ class wordpress_sync_task extends \core\task\scheduled_task {
         if (empty(get_config('local_wordpresssync', 'wpurl')))
             return false;
 
+        $maxusers = get_config('local_wordpresssync', 'wpmaxusers');
+        if (empty($maxusers))
+            $maxusers = MAX_USERS_TO_SYNC;
+
         $trace = new \text_progress_trace();
         $trace->output('Starting WordPress user synchronisation...');
 
-        $users = get_users_to_sync();
+        $users = get_users_to_sync(0, $maxusers);
         $synccount = 0;
         foreach ($users as $user) {
             if (sync_user_to_wordpress($user, $trace))
