@@ -52,7 +52,7 @@ function sync_user_to_wordpress($user, text_progress_trace $trace = null) {
         return false;
 
     // Don't sync deleted and suspended users
-    if ($user->deleted || $user->suspended)
+    if ($user->deleted || $user->suspended || $user->auth != 'manual')
         return false;
 
     // Don't sync temporary accounts with usernames starting 'ac_...
