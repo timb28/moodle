@@ -81,11 +81,14 @@ function sync_user_to_wordpress($user, text_progress_trace $trace = null) {
 }
 
 /**
+ * Create a Moodle User object, with WordPress ID, if one exists in WordPress.
+ *
  * @param stdClass $user
- * @return false|stdClass User with WP user id
+ * @return false|stdClass User with WP user id or false if user doesn't exist
  * @throws dml_exception
  */
 function get_wp_user(stdClass $user = null) {
+    global $CFG;
 
     if (is_null($user))
         return false;
@@ -118,9 +121,9 @@ function get_wp_user(stdClass $user = null) {
     curl_setopt($ch, CURLOPT_URL, $wpurl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 4);
-    // REMOVE before production
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    ///////////////////////////
+    if ($CFG->debugdeveloper) {
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    }
     curl_setopt($ch, CURLOPT_USERPWD, $wpusername . ":" . $wppassword);
 
     // Execute the request
@@ -152,9 +155,18 @@ function get_wp_user(stdClass $user = null) {
 }
 
 /**
- * Calls WordPress API to create user
+ * Creates a new WordPress user by calling the WordPress API.
+ * The following Moodle user details are sent:
+ * - username
+ * - email address
+ * - first name
+ * - last name
+ * - full name
  *
- * @param stdClass $user
+ * Note: The WordPress user is created with a random password
+ *       that doesn't match their Moodle account
+ *
+ * @param stdClass $user Moodle User to create in WordPress
  * @return true if token is valid
  * @return false if token is invalid
  */
@@ -198,9 +210,9 @@ function create_wp_user($user) {
     curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 4);
-    // REMOVE before production
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    ///////////////////////////
+    if ($CFG->debugdeveloper) {
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    }
     curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: multipart/form-data"));
     curl_setopt($ch, CURLOPT_USERPWD, $wpusername . ":" . $wppassword);
 
@@ -266,7 +278,13 @@ function get_users_to_sync(int $limitmin = 0, int $limitmax = MAX_USERS_TO_SYNC)
     return $users;
 }
 
-function update_user_profile($userid, $wpuserid) {
+/**
+ * Saves the WordPress user ID in the Moodle user profile for the given user.
+ *
+ * @param int $userid ID of user to update
+ * @param int $wpuserid WordPress user ID
+ */
+function update_user_profile(int $userid, int $wpuserid) {
     global $CFG;
 
     require_once($CFG->dirroot.'/user/profile/lib.php');

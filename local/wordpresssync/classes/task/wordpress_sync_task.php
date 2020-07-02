@@ -27,9 +27,8 @@ namespace local_wordpresssync\task;
 defined('MOODLE_INTERNAL') || die;
 
 /**
- * Simple task to run sync enrolments.
+ * Simple task to run sync Moodle user accounts with WordPress.
  *
- * @copyright  2014 Troy Williams
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class wordpress_sync_task extends \core\task\scheduled_task {
@@ -44,7 +43,7 @@ class wordpress_sync_task extends \core\task\scheduled_task {
     }
 
     /**
-     * Do the job.
+     * Find Moodle users and synchronise them with WordPress.
      * Throw exceptions on errors (the job will be retried).
      */
     public function execute() {
@@ -55,14 +54,15 @@ class wordpress_sync_task extends \core\task\scheduled_task {
             return;
 
         $trace = new \text_progress_trace();
-        // enrol_cohort_sync($trace);
         $trace->output('Starting WordPress user synchronisation...');
+
         $users = get_users_to_sync();
         $synccount = 0;
         foreach ($users as $user) {
             if (sync_user_to_wordpress($user, $trace))
                 $synccount++;
         }
+
         $trace->output($synccount . ' Moodle users synchronised.');
         $trace->finished();
         return true;
