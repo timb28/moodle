@@ -182,7 +182,7 @@ function create_wp_user($user) {
     }
 
     if (!preg_match('|^https://|i', $wpurl)) {
-        error_log('WordPress URL must use HTTPS.');
+        error_log('local_wordpresssync: WordPress URL must use HTTPS.');
         return false;
     }
 
