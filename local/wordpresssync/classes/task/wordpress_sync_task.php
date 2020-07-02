@@ -58,10 +58,12 @@ class wordpress_sync_task extends \core\task\scheduled_task {
         // enrol_cohort_sync($trace);
         $trace->output('Starting WordPress user synchronisation...');
         $users = get_users_to_sync();
+        $synccount = 0;
         foreach ($users as $user) {
-            $trace->output("Synchronising user " . $user->username . " to Wordpress.");
-//            sync_user_to_wordpress($user);
+            if (sync_user_to_wordpress($user, $trace))
+                $synccount++;
         }
+        $trace->output($synccount . ' Moodle users synchronised.');
         $trace->finished();
         return true;
     }

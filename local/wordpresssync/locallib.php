@@ -44,10 +44,8 @@ function user_created(\core\event\user_created $event) {
  * @param $user stdClass User to sync
  * @return bool true if sync succeeded
  */
-function sync_user_to_wordpress($user) {
+function sync_user_to_wordpress($user, text_progress_trace $trace = null) {
     global $DB, $CFG;
-
-    error_log("### attempting to synch user:" . print_r($user, true));
 
     // Don't sync incomplete users
     if (!$user->email)
@@ -61,6 +59,14 @@ function sync_user_to_wordpress($user) {
     if (strpos($user->username,'ac_') === 0)
         return false;
 
+    // Don't sync Moodle guest accounts
+    if (is_guest(context_course::instance(1), $user))
+        return false;
+
+    // Don't sync site admins
+    if (is_siteadmin($user->id))
+        return false;
+
     // Check if user exists in WP
     $wpuser = get_wp_user($user);
 
@@ -69,6 +75,8 @@ function sync_user_to_wordpress($user) {
 
     // Create user in WordPress
     $user->name = $user->firstname. " " . $user->lastname;
+    if (isset($trace))
+        $trace->output("Synchronising user " . $user->username . " to Wordpress.");
     return create_wp_user($user);
 }
 
