@@ -99,12 +99,15 @@ function get_wp_user(stdClass $user = null) {
         !function_exists("curl_close") ) die ("cURL not installed.");
 
 
-    $wpurl = get_config('local_wordpresssync', 'wpurl')
-        . WP_USER_ENDPOINT;
+    $wpurl = get_config('local_wordpresssync', 'wpurl');
+    if (empty($wpurl))
+        return false;
+
+    $wpurl.= WP_USER_ENDPOINT;
     $wpusername = get_config('local_wordpresssync', 'wpusername');
     $wppassword = get_config('local_wordpresssync', 'wppassword');
 
-    if (!isset($wpurl) || !isset($wpusername) || !isset($wppassword)) {
+    if (empty($wpusername) || empty($wppassword)) {
         debugging('local_wordpresssync: WordPress settings not yet configured.');
         return false;
     }
@@ -183,13 +186,16 @@ function create_wp_user($user) {
         !function_exists("curl_close") ) die ("cURL not installed.");
 
 
-    $wpurl = get_config('local_wordpresssync', 'wpurl')
-        . WP_USER_ENDPOINT;
+    $wpurl = get_config('local_wordpresssync', 'wpurl');
+    if (empty($wpurl))
+        return false;
+
+    $wpurl.= WP_USER_ENDPOINT;
     $wpusername = get_config('local_wordpresssync', 'wpusername');
     $wppassword = get_config('local_wordpresssync', 'wppassword');
 
-    if (!isset($wpurl) || !isset($wpusername) || !isset($wppassword)) {
-        debugging('WordPress settings not yet configured.');
+    if (empty($wpusername) || empty($wppassword)) {
+        debugging('local_wordpresssync: WordPress settings not yet configured.');
         return false;
     }
 

@@ -50,8 +50,8 @@ class wordpress_sync_task extends \core\task\scheduled_task {
         global $CFG;
         require_once($CFG->dirroot . '/local/wordpresssync/locallib.php');
 
-        if (is_null(get_config('local_wordpresssync', 'wpurl')))
-            return;
+        if (empty(get_config('local_wordpresssync', 'wpurl')))
+            return false;
 
         $trace = new \text_progress_trace();
         $trace->output('Starting WordPress user synchronisation...');
