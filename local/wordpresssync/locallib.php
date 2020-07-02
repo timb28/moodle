@@ -102,12 +102,12 @@ function get_wp_user(stdClass $user = null) {
     $wppassword = get_config('local_wordpresssync', 'wppassword');
 
     if (!isset($wpurl) || !isset($wpusername) || !isset($wppassword)) {
-        error_log('local_wordpresssync: WordPress settings not yet configured.');
+        debugging('local_wordpresssync: WordPress settings not yet configured.');
         return false;
     }
 
     if (!preg_match('|^https://|i', $wpurl)) {
-        error_log('local_wordpresssync: WordPress URL must use HTTPS.');
+        debugging('local_wordpresssync: WordPress URL must use HTTPS.');
         return false;
     }
 
@@ -141,7 +141,7 @@ function get_wp_user(stdClass $user = null) {
         $user->profile["wpuserid"] = $wpuser->id;
         update_user_profile($user->id,$wpuser->id);
     } else {
-        error_log("local_wordpresssync: WordPress error: " . $response);
+        debugging("local_wordpresssync: WordPress error: " . $response);
         return false;
     }
 
@@ -177,12 +177,12 @@ function create_wp_user($user) {
     $wppassword = get_config('local_wordpresssync', 'wppassword');
 
     if (!isset($wpurl) || !isset($wpusername) || !isset($wppassword)) {
-        error_log('WordPress settings not yet configured.');
+        debugging('WordPress settings not yet configured.');
         return false;
     }
 
     if (!preg_match('|^https://|i', $wpurl)) {
-        error_log('local_wordpresssync: WordPress URL must use HTTPS.');
+        debugging('local_wordpresssync: WordPress URL must use HTTPS.');
         return false;
     }
 
@@ -224,8 +224,8 @@ function create_wp_user($user) {
         echo "<p>Updating user profile.</p>";
         update_user_profile($user->id,$newwpuser->id);
     } else {
-        error_log("local_wordpresssync: Couldn't create WordPress user " . $user->username);
-        error_log("local_wordpresssync: WordPress error: " . $response);
+        debugging("local_wordpresssync: Couldn't create WordPress user " . $user->username);
+        debugging("local_wordpresssync: WordPress error: " . $response);
     }
 
     // close cURL resource, and free up system resources
