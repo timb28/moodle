@@ -264,7 +264,7 @@ function create_wp_user($user) {
 function get_users_to_sync(int $limitmin = 0, int $limitmax = MAX_USERS_TO_SYNC) {
     global $DB;
 
-    $users = $DB->get_records_sql("SELECT DISTINCT u.*
+    return $DB->get_records_sql("SELECT DISTINCT u.*
                                             FROM {user} u
                                             LEFT JOIN {user_info_data} uid on u.id = uid.userid
                                             JOIN {user_info_field} uif ON uid.fieldid = uif.id
@@ -281,7 +281,6 @@ function get_users_to_sync(int $limitmin = 0, int $limitmax = MAX_USERS_TO_SYNC)
                                                   AND uid2.data > 0)
                                         ORDER BY u.id DESC
                                         ",null,$limitmin,$limitmax);
-    return $users;
 }
 
 /**
