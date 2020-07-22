@@ -205,7 +205,8 @@ function create_wp_user($user) {
     }
 
     $post['username']   = $user->username;
-    $post['email']      = $user->email;
+    // Remove comments from email address
+    $post['email']      = preg_replace('/\([\s\S]+?\)/', '', $user->email);
     $post['password']   = generate_password(); // Use random password
     $post['first_name']  = $user->firstname;
     $post['last_name']   = $user->lastname;
@@ -222,8 +223,6 @@ function create_wp_user($user) {
     curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: multipart/form-data"));
     curl_setopt($ch, CURLOPT_USERPWD, $wpusername . ":" . $wppassword);
 
-
-
     // Execute the request
     $response = curl_exec($ch);
 
@@ -236,10 +235,10 @@ function create_wp_user($user) {
             return false;
 
         // Update the Moodle user data with their WordPress User ID
-        echo "New WP UserID = " . $newwpuser->id;
+        debugging("New WP UserID = " . $newwpuser->id);
         $user->profile["wpuserid"] = $newwpuser->id;
 
-        echo "<p>Updating user profile.</p>";
+        debugging("Updating user profile.");
         update_user_profile($user->id,$newwpuser->id);
     } else {
         debugging("local_wordpresssync: Couldn't create WordPress user " . $user->username);
