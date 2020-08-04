@@ -62,6 +62,14 @@ if ($hassiteconfig && is_siteadmin($USER)) { // Needs this condition or there is
         PARAM_INT
     ));
 
+    $settings->add(new admin_setting_configtext(
+        'local_wordpresssync/tempemaildomain',
+        get_string('settings_tempemaildomain', 'local_wordpresssync'),
+        '',
+        '',
+        PARAM_TEXT
+    ));
+
     $ADMIN->add('localplugins', $settings);
 
 }

@@ -158,27 +158,17 @@ function get_wp_user(stdClass $user = null) {
 }
 
 /**
- * Creates a new WordPress user by calling the WordPress API.
- * The following Moodle user details are sent:
- * - username
- * - email address
- * - first name
- * - last name
- * - full name
+ * Checks if a WordPress exists with the given email address
  *
- * Note: The WordPress user is created with a random password
- *       that doesn't match their Moodle account
- *
- * @param stdClass $user Moodle User to create in WordPress
- * @return true if token is valid
- * @return false if token is invalid
+ * @param string $emailaddress
+ * @return false|string False if no user exists with the email or the username if one does
+ * @throws dml_exception
  */
-function create_wp_user($user) {
-    global $CFG, $ADMIN;
+function get_wp_user_by_email(string $emailaddress = null) {
+    global $CFG;
 
-    // Don't create incomplete users
-    if (!$user->email)
-        return true;
+    if (is_null($emailaddress))
+        return false;
 
     if( !function_exists("curl_init") &&
         !function_exists("curl_setopt") &&
@@ -204,9 +194,115 @@ function create_wp_user($user) {
         return false;
     }
 
+    $query['search']   = $emailaddress;
+    $query['context']  = 'edit'; // required to receive the WordPress username
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $wpurl . "?"
+        . http_build_query($query, null, '&'));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 4);
+    if ($CFG->debugdeveloper) {
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    }
+    curl_setopt($ch, CURLOPT_USERPWD, $wpusername . ":" . $wppassword);
+
+    // Execute the request
+    $response = curl_exec($ch);
+
+    // Get the HTTP status from the response header.
+    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    if( $httpcode>=200 && $httpcode<300 ) {
+        $wpuserarray = json_decode($response);
+
+        if(!isset($wpuserarray) || !is_array($wpuserarray) || count($wpuserarray) == 0)
+            return false;
+
+        $wpuser = $wpuserarray[0];
+        return $wpuser->username;
+    } else {
+        debugging("local_wordpresssync: WordPress error: " . $response);
+        return false;
+    }
+
+    // close cURL resource, and free up system resources
+    curl_close($ch);
+
+    return $user;
+}
+
+/**
+ * Creates a new WordPress user by calling the WordPress API.
+ * The following Moodle user details are sent:
+ * - username
+ * - email address
+ * - first name
+ * - last name
+ * - full name
+ *
+ * Note: The WordPress user is created with a random password
+ *       that doesn't match their Moodle account
+ *
+ * @param stdClass $user Moodle User to create in WordPress
+ * @return true if user was created
+ * @return false if user was not created
+ * @throws dml_exception
+ */
+function create_wp_user($user) {
+    global $CFG, $ADMIN;
+
+    // Don't create incomplete users
+    if (!$user->email)
+        return true;
+
+    if( !function_exists("curl_init") &&
+        !function_exists("curl_setopt") &&
+        !function_exists("curl_exec") &&
+        !function_exists("curl_close") ) die ("cURL not installed.");
+
+
+    $wpurl = get_config('local_wordpresssync', 'wpurl');
+    if (empty($wpurl))
+        return false;
+
+    $wpurl.= WP_USER_ENDPOINT;
+    $wpusername = get_config('local_wordpresssync', 'wpusername');
+    $wppassword = get_config('local_wordpresssync', 'wppassword');
+    $tempemaildomain = str_replace('@','',
+                            get_config('local_wordpresssync', 'tempemaildomain')); // @ added later
+
+
+    if (empty($wpusername) || empty($wppassword)) {
+        debugging('local_wordpresssync: WordPress settings not yet configured.');
+        return false;
+    }
+
+    if (!preg_match('|^https://|i', $wpurl)) {
+        debugging('local_wordpresssync: WordPress URL must use HTTPS.');
+        return false;
+    }
+
+    if (!isset($tempemaildomain)) {
+        debugging('local_wordpresssync: A temporary email address domain must be configured.');
+        return false;
+    }
+
     $post['username']   = $user->username;
     // Remove comments from email address
-    $post['email']      = preg_replace('/\([\s\S]+?\)/', '', $user->email);
+    $rawemail = preg_replace('/\([\s\S]+?\)/', '', $user->email);
+
+    // Check if a WordPress user exists with the same email address and different username
+    $existingwpuser = get_wp_user_by_email($rawemail);
+    if (!empty($existingwpuser)) {
+        if ($existingwpuser == $user->username) {
+            return false;
+        } else {
+            $rawemail = uuid() . '@' . $tempemaildomain;
+        }
+    }
+
+    $post['email']      = $rawemail;
     $post['password']   = generate_password(); // Use random password
     $post['first_name']  = $user->firstname;
     $post['last_name']   = $user->lastname;
@@ -296,4 +392,34 @@ function update_user_profile(int $userid, int $wpuserid) {
     require_once($CFG->dirroot.'/user/profile/lib.php');
 
     profile_save_data((object)['id' => $userid, 'profile_field_wpuserid' => $wpuserid]);
+}
+
+/**
+ * Generates VALID RFC 4211 COMPLIANT Universally Unique Identifiers (UUID) version 4.
+ * See https://www.php.net/manual/en/function.uniqid.php#94959
+ *
+ * @return string UUID v4
+ *
+ */
+function uuid() {
+    return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+
+        // 32 bits for "time_low"
+        mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+
+        // 16 bits for "time_mid"
+        mt_rand(0, 0xffff),
+
+        // 16 bits for "time_hi_and_version",
+        // four most significant bits holds version number 4
+        mt_rand(0, 0x0fff) | 0x4000,
+
+        // 16 bits, 8 bits for "clk_seq_hi_res",
+        // 8 bits for "clk_seq_low",
+        // two most significant bits holds zero and one for variant DCE1.1
+        mt_rand(0, 0x3fff) | 0x8000,
+
+        // 48 bits for "node"
+        mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+    );
 }
