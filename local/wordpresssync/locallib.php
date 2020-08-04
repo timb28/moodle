@@ -376,7 +376,7 @@ function get_users_to_sync(int $limitmin = 0, int $limitmax = MAX_USERS_TO_SYNC)
                                                 WHERE
                                                   uif2.shortname = 'wpuserid'
                                                   AND uid2.data > 0)
-                                        ORDER BY u.id DESC
+                                        ORDER BY u.id ASC
                                         ",null,$limitmin,$limitmax);
 }
 
