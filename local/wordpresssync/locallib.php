@@ -62,8 +62,16 @@ function sync_user_to_wordpress($user, text_progress_trace $trace = null) {
     // Check if user exists in WP
     $wpuser = get_wp_user($user);
 
-    if (isset($wpuser) && isset($wpuser->profile["wpuserid"]))
-        return $wpuser;
+    if (isset($wpuser) && isset($wpuser->profile["wpuserid"])) {
+        // Update the Moodle user data with their WordPress User ID
+        debugging("Found existing WordPress user with idential username: " . $wpuser->id);
+        $user->profile["wpuserid"] = $wpuser->id;
+
+        debugging("Updating Moodle user profile.");
+        update_user_profile($user->id,$wpuser->id);
+
+        return false;
+    }
 
     // Create user in WordPress
     $user->name = $user->firstname. " " . $user->lastname;
