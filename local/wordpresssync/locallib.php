@@ -59,14 +59,6 @@ function sync_user_to_wordpress($user, text_progress_trace $trace = null) {
     if (strpos($user->username,'ac_') === 0)
         return false;
 
-    // Don't sync Moodle guest accounts
-    if (is_guest(context_course::instance(1), $user))
-        return false;
-
-    // Don't sync site admins
-    if (is_siteadmin($user->id))
-        return false;
-
     // Check if user exists in WP
     $wpuser = get_wp_user($user);
 
@@ -367,8 +359,8 @@ function get_users_to_sync(int $limitmin = 0, int $limitmax = MAX_USERS_TO_SYNC)
                                               u.deleted = 0
                                               AND u.suspended = 0
                                               AND LOCATE('ac_', u.username) <> 1
-                                              AND u.auth <> 'nologin'
-                                              AND u.auth <> 'mnet'
+                                              AND u.auth = 'manual'
+                                              AND u.id > 2
                                               AND u.id NOT IN (
                                                 SELECT
                                                   uid2.userid FROM {user_info_data} uid2
