@@ -62,7 +62,7 @@ function sync_user_to_wordpress($user, text_progress_trace $trace = null) {
     // Check if user exists in WP
     $wpuser = get_wp_user($user);
 
-    if (isset($wpuser) && isset($wpuser->profile["wpuserid"])) {
+    if (isset($wpuser) && isset($wpuser->id)) {
         // Update the Moodle user data with their WordPress User ID
         debugging("Found existing WordPress user with idential username: " . $wpuser->id);
         $user->profile["wpuserid"] = $wpuser->id;
@@ -117,11 +117,12 @@ function get_wp_user(stdClass $user = null) {
         return false;
     }
 
-    $query['slug']   = $user->username;
-    $wpurl.= '?' . http_build_query($query);
+    $query['search']   = $user->username;
+    $query['context']  = 'edit'; // required to receive the WordPress username
 
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $wpurl);
+    curl_setopt($ch, CURLOPT_URL, $wpurl . "?"
+        . http_build_query($query, null, '&'));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 4);
     if ($CFG->debugdeveloper) {
@@ -141,11 +142,15 @@ function get_wp_user(stdClass $user = null) {
         if(!isset($wpuserarray) || !is_array($wpuserarray) || count($wpuserarray) == 0)
             return false;
 
-        // Update the Moodle user data with their WordPress User ID
-        $wpuser = $wpuserarray[0];
+        // WP API User search returns an array of users who match.
+        foreach ($wpuserarray as $wpuser) {
+            // Find the WP user in the array that has the identical username.
+            if ($wpuser->username == $user->username) {
+                return $wpuser;
+            }
+        }
 
-        $user->profile["wpuserid"] = $wpuser->id;
-        update_user_profile($user->id,$wpuser->id);
+        return false;
     } else {
         debugging("local_wordpresssync: WordPress error: " . $response);
         return false;
