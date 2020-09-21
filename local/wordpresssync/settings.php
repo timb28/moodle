@@ -58,7 +58,7 @@ if ($hassiteconfig && is_siteadmin($USER)) { // Needs this condition or there is
         'local_wordpresssync/wpmaxusers',
         get_string('settings_maxusers', 'local_wordpresssync'),
         '',
-        MAX_USERS_TO_SYNC,
+        10,
         PARAM_INT
     ));
 

@@ -22,10 +22,11 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace wordpresssync;
+namespace local_wordpresssync;
+
+defined('MOODLE_INTERNAL') || die();
 
 define('WP_USER_ENDPOINT','wp-json/wp/v2/users/');
-define('MAX_USERS_TO_SYNC',10);
 
 class wordpress_api
 {
@@ -35,11 +36,11 @@ class wordpress_api
     /** Build the cURL session
      *
      * @param bool $ispost
-     * @param string $query
-     * @param string $postfields
+     * @param array $query
+     * @param array $postfields
      * @throws \dml_exception
      */
-    function __construct(bool $ispost = false, string $query, string $postfields = null) {
+    function __construct(bool $ispost = false, array $query, array $postfields = null) {
         global $CFG;
 
         if( !function_exists("curl_init") &&
@@ -70,9 +71,9 @@ class wordpress_api
         curl_setopt($this->ch, CURLOPT_URL, $wpurl . "?"
             . http_build_query($query, null, '&'));
         if ($ispost) {
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: multipart/form-data"));
+            curl_setopt($this->ch, CURLOPT_POST, true);
+            curl_setopt($this->ch, CURLOPT_POSTFIELDS, $postfields);
+            curl_setopt($this->ch, CURLOPT_HTTPHEADER, array("Content-Type: multipart/form-data"));
         }
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->ch, CURLOPT_TIMEOUT, 4);
@@ -86,15 +87,16 @@ class wordpress_api
      * Execute the request.
      */
     public function execute() {
-        return curl_exec($this->ch);
+        $response = curl_exec($this->ch);
 
         // Get the HTTP status from the response header.
         $httpcode = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
-
         if( $httpcode>=200 && $httpcode<300 ) $this->success = true;
 
         // Close the session to free resources
         curl_close($this->ch);
+
+        return $response;
 
     }
 

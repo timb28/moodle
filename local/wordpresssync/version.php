@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_wordpresssync';
-$plugin->release = '0.9.1';
-$plugin->version = 2020092101;
+$plugin->release = '0.9.3';
+$plugin->version = 2020092103;
 $plugin->requires = 2017051500;
 $plugin->maturity = MATURITY_RC;

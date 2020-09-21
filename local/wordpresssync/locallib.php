@@ -22,29 +22,25 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use core\event\user_created;
-use core\event\user_updated;
-use wordpresssync\wordpress_api;
-
 defined('MOODLE_INTERNAL') || die();
 
 /**
  * Handle the \core\event\user_created event.
  *
  * @param object $event The event object.
- * @throws dml_exception
+ * @throws dml_exception|\coding_exception
  */
-function user_created(user_created $event) {
+function user_created(\core\event\user_created $event) {
     $newuser = $event->get_record_snapshot('user', $event->objectid);
     sync_user_to_wordpress($newuser);
 }
 
 /** Handle the \core\event\user_updated event to check if an existing user account has been disabled.
  *
- * @param user_updated $event
+ * @param user_updatedAlias $event
  * @throws coding_exception
  */
-function user_updated(user_updated $event) {
+function user_updated(\core\event\user_updated $event) {
     $updateduser = $event->get_record_snapshot('user', $event->objectid);
 
     // Only proceed if the Moodle user has a WordPress account.
@@ -119,7 +115,7 @@ function get_wp_user(stdClass $user = null) {
     $query['context']  = 'edit'; // required to receive the WordPress username
 
     // Create and execute the cURL request to the WordPress API
-    $wpapi = new wordpress_api(false, $query);
+    $wpapi = new \local_wordpresssync\wordpress_api(false, $query);
     $response = $wpapi->execute();
 
     if( $wpapi->get_success() ) {
@@ -159,7 +155,7 @@ function get_wp_user_by_email(string $emailaddress = null) {
     $query['context']  = 'edit'; // required to receive the WordPress username
 
     // Create and execute the cURL request to the WordPress API
-    $wpapi = new wordpress_api(false, $query);
+    $wpapi = new \local_wordpresssync\wordpress_api(false, $query);
     $response = $wpapi->execute();
 
     if( $wpapi->get_success() ) {
@@ -220,17 +216,21 @@ function create_wp_user(stdClass $user) {
         }
     }
 
+    $query              = array();
     $post['email']      = $rawemail;
     $post['password']   = generate_password(); // Use random password
-    $post['first_name']  = $user->firstname;
-    $post['last_name']   = $user->lastname;
+    $post['first_name'] = $user->firstname;
+    $post['last_name']  = $user->lastname;
 
     // Create and execute the cURL request to the WordPress API
-    $wpapi = new wordpress_api(true, null, $post);
+    $wpapi = new \local_wordpresssync\wordpress_api(true, $query, $post);
     $response = $wpapi->execute();
 
     if( $wpapi->get_success() ) {
         $newwpuser = json_decode($response);
+
+        error_log("New WP User:" . print_r($newwpuser, true));
+
         if(!isset($newwpuser))
             return false;
 
@@ -257,7 +257,7 @@ function create_wp_user(stdClass $user) {
  * @return array of Users
  * @throws dml_exception
  */
-function get_users_to_sync(int $limitmin = 0, int $limitmax = MAX_USERS_TO_SYNC) {
+function get_users_to_sync(int $limitmin = 0, int $limitmax = 1) {
     global $DB;
 
     return $DB->get_records_sql("SELECT DISTINCT u.*
