@@ -37,24 +37,25 @@ function user_created(\core\event\user_created $event) {
 
 /** Handle the \core\event\user_updated event to check if an existing user account has been disabled.
  *
- * @param user_updatedAlias $event
+ * @param user_updated $event
  * @throws coding_exception
+ * @throws dml_exception
  */
 function user_updated(\core\event\user_updated $event) {
     $updateduser = $event->get_record_snapshot('user', $event->objectid);
 
     // Only proceed if the Moodle user has a WordPress account.
+    $updateduser->profile = (array)profile_user_record($updateduser->id);
+    if (!isset($updateduser->profile['wpuserid'])) return;
 
-
-    //error_log("User updated:" . print_r($updateduser, true));
     /* Disable the user in Wordpress if the Moodle account is disabled, suspended or deleted.
        Or re-enable the user in Wordpress if the Moodle account is not disabled, suspended or deleted. */
     if ($updateduser->auth == 'nologin' || $updateduser->suspended || $updateduser->deleted) {
-        error_log("Disable WordPress user");
+        debugging("---- Disable WordPress user for Moodle user: " . $updateduser->username);
+        disable_wp_user($updateduser->profile['wpuserid']);
     } else {
-        error_log("User is OK: " . print_r($updateduser, true));
-
-        //
+        debugging("++++ Reenable WordPress user: " . $updateduser->username);
+        enable_wp_user($updateduser->profile['wpuserid']);
     }
 }
 
@@ -115,7 +116,7 @@ function get_wp_user(stdClass $user = null) {
     $query['context']  = 'edit'; // required to receive the WordPress username
 
     // Create and execute the cURL request to the WordPress API
-    $wpapi = new \local_wordpresssync\wordpress_api(false, $query);
+    $wpapi = new \local_wordpresssync\wordpress_api(false, 'wp-json/wp/v2/users/', $query);
     $response = $wpapi->execute();
 
     if( $wpapi->get_success() ) {
@@ -155,7 +156,7 @@ function get_wp_user_by_email(string $emailaddress = null) {
     $query['context']  = 'edit'; // required to receive the WordPress username
 
     // Create and execute the cURL request to the WordPress API
-    $wpapi = new \local_wordpresssync\wordpress_api(false, $query);
+    $wpapi = new \local_wordpresssync\wordpress_api(false, 'wp-json/wp/v2/users/', $query);
     $response = $wpapi->execute();
 
     if( $wpapi->get_success() ) {
@@ -223,13 +224,11 @@ function create_wp_user(stdClass $user) {
     $post['last_name']  = $user->lastname;
 
     // Create and execute the cURL request to the WordPress API
-    $wpapi = new \local_wordpresssync\wordpress_api(true, $query, $post);
+    $wpapi = new \local_wordpresssync\wordpress_api(true, 'wp-json/wp/v2/users/', $query, $post);
     $response = $wpapi->execute();
 
     if( $wpapi->get_success() ) {
         $newwpuser = json_decode($response);
-
-        error_log("New WP User:" . print_r($newwpuser, true));
 
         if(!isset($newwpuser))
             return false;
@@ -240,12 +239,12 @@ function create_wp_user(stdClass $user) {
 
         debugging("Updating user profile.");
         update_moodle_user_profile($user->id,$newwpuser->id);
+        return true;
     } else {
         debugging("local_wordpresssync: Couldn't create WordPress user " . $user->username);
         debugging("local_wordpresssync: WordPress error: " . $response);
+        return false;
     }
-
-    return true;
 }
 
 /**
@@ -302,9 +301,23 @@ function update_moodle_user_profile(int $userid, int $wpuserid) {
  * Requires WordPress API user to have 'edit_users' and 'promote_users' capabilities
  * Assumes that the WordPress site uses 'subscriber' as the default role for active users.
  *
+ * @throws dml_exception
  */
-function enable_wp_user_profile(int $wpuserid) {
+function enable_wp_user(int $wpuserid) {
+    // Create and execute the cURL request to the WordPress API
+    $endpoint = 'wp-json/wp/v2/users/' . $wpuserid;
+    $query = array();
+    $post['roles'] = 'subscriber'; // Re-enable the WordPress user by making them a 'subscriber'
+    $wpapi = new \local_wordpresssync\wordpress_api(true, $endpoint, $query, $post);
+    $response = $wpapi->execute();
 
+    if( $wpapi->get_success() ) {
+        return true;
+    } else {
+        debugging("local_wordpresssync: Couldn't enable WordPress account: " . $wpuserid);
+        debugging("local_wordpresssync: WordPress error: " . $response);
+        return false;
+    }
 }
 
 /**
@@ -312,10 +325,26 @@ function enable_wp_user_profile(int $wpuserid) {
  * deactivated, suspended or deleted.
  *
  * Requires WordPress API user to have 'edit_users' and 'promote_users' capabilities
- *
+ * @param int $wpuserid
+ * @return bool
+ * @throws dml_exception
  */
-function disable_wp_user_profile(int $wpuserid) {
+function disable_wp_user(int $wpuserid) {
 
+    // Create and execute the cURL request to the WordPress API
+    $endpoint = 'wp-json/wp/v2/users/' . $wpuserid;
+    $query = array();
+    $post['roles'] = ''; // Disable the WordPress user by removing all roles
+    $wpapi = new \local_wordpresssync\wordpress_api(true, $endpoint, $query, $post);
+    $response = $wpapi->execute();
+
+    if( $wpapi->get_success() ) {
+        return true;
+    } else {
+        debugging("local_wordpresssync: Couldn't disable WordPress account: " . $wpuserid);
+        debugging("local_wordpresssync: WordPress error: " . $response);
+        return false;
+    }
 }
 
 /**

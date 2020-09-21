@@ -26,8 +26,6 @@ namespace local_wordpresssync;
 
 defined('MOODLE_INTERNAL') || die();
 
-define('WP_USER_ENDPOINT','wp-json/wp/v2/users/');
-
 class wordpress_api
 {
     private $ch = null;
@@ -36,11 +34,12 @@ class wordpress_api
     /** Build the cURL session
      *
      * @param bool $ispost
+     * @param string $endpoint
      * @param array $query
      * @param array $postfields
      * @throws \dml_exception
      */
-    function __construct(bool $ispost = false, array $query, array $postfields = null) {
+    function __construct(bool $ispost = false, string $endpoint, array $query, array $postfields = null) {
         global $CFG;
 
         if( !function_exists("curl_init") &&
@@ -52,7 +51,7 @@ class wordpress_api
         if (empty($wpurl))
             return false;
 
-        $wpurl.= WP_USER_ENDPOINT;
+        $wpurl.= $endpoint;
         $wpusername = get_config('local_wordpresssync', 'wpusername');
         $wppassword = get_config('local_wordpresssync', 'wppassword');
 
