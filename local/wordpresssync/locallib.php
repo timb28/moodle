@@ -22,20 +22,44 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+use core\event\user_created;
+use core\event\user_updated;
+use wordpresssync\wordpress_api;
 
-define('WP_USER_ENDPOINT','wp-json/wp/v2/users/');
-define('MAX_USERS_TO_SYNC',10);
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Handle the \core\event\user_created event.
  *
  * @param object $event The event object.
+ * @throws dml_exception
  */
-function user_created(\core\event\user_created $event) {
+function user_created(user_created $event) {
     $newuser = $event->get_record_snapshot('user', $event->objectid);
     sync_user_to_wordpress($newuser);
-    return;
+}
+
+/** Handle the \core\event\user_updated event to check if an existing user account has been disabled.
+ *
+ * @param user_updated $event
+ * @throws coding_exception
+ */
+function user_updated(user_updated $event) {
+    $updateduser = $event->get_record_snapshot('user', $event->objectid);
+
+    // Only proceed if the Moodle user has a WordPress account.
+
+
+    //error_log("User updated:" . print_r($updateduser, true));
+    /* Disable the user in Wordpress if the Moodle account is disabled, suspended or deleted.
+       Or re-enable the user in Wordpress if the Moodle account is not disabled, suspended or deleted. */
+    if ($updateduser->auth == 'nologin' || $updateduser->suspended || $updateduser->deleted) {
+        error_log("Disable WordPress user");
+    } else {
+        error_log("User is OK: " . print_r($updateduser, true));
+
+        //
+    }
 }
 
 /**
@@ -43,10 +67,9 @@ function user_created(\core\event\user_created $event) {
  *
  * @param $user stdClass User to sync
  * @return bool true if sync succeeded
+ * @throws dml_exception
  */
 function sync_user_to_wordpress($user, text_progress_trace $trace = null) {
-    global $DB, $CFG;
-
     // Don't sync incomplete users
     if (!$user->email)
         return false;
@@ -68,7 +91,7 @@ function sync_user_to_wordpress($user, text_progress_trace $trace = null) {
         $user->profile["wpuserid"] = $wpuser->id;
 
         debugging("Updating Moodle user profile.");
-        update_user_profile($user->id,$wpuser->id);
+        update_moodle_user_profile($user->id,$wpuser->id);
 
         return false;
     }
@@ -88,55 +111,18 @@ function sync_user_to_wordpress($user, text_progress_trace $trace = null) {
  * @throws dml_exception
  */
 function get_wp_user(stdClass $user = null) {
-    global $CFG;
-
     if (is_null($user))
         return false;
 
-    if( !function_exists("curl_init") &&
-        !function_exists("curl_setopt") &&
-        !function_exists("curl_exec") &&
-        !function_exists("curl_close") ) die ("cURL not installed.");
-
-
-    $wpurl = get_config('local_wordpresssync', 'wpurl');
-    if (empty($wpurl))
-        return false;
-
-    $wpurl.= WP_USER_ENDPOINT;
-    $wpusername = get_config('local_wordpresssync', 'wpusername');
-    $wppassword = get_config('local_wordpresssync', 'wppassword');
-
-    if (empty($wpusername) || empty($wppassword)) {
-        debugging('local_wordpresssync: WordPress settings not yet configured.');
-        return false;
-    }
-
-    if (!preg_match('|^https://|i', $wpurl)) {
-        debugging('local_wordpresssync: WordPress URL must use HTTPS.');
-        return false;
-    }
 
     $query['search']   = $user->username;
     $query['context']  = 'edit'; // required to receive the WordPress username
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $wpurl . "?"
-        . http_build_query($query, null, '&'));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 4);
-    if ($CFG->debugdeveloper) {
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    }
-    curl_setopt($ch, CURLOPT_USERPWD, $wpusername . ":" . $wppassword);
+    // Create and execute the cURL request to the WordPress API
+    $wpapi = new wordpress_api(false, $query);
+    $response = $wpapi->execute();
 
-    // Execute the request
-    $response = curl_exec($ch);
-
-    // Get the HTTP status from the response header.
-    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-    if( $httpcode>=200 && $httpcode<300 ) {
+    if( $wpapi->get_success() ) {
         $wpuserarray = json_decode($response);
 
         if(!isset($wpuserarray) || !is_array($wpuserarray) || count($wpuserarray) == 0)
@@ -156,10 +142,6 @@ function get_wp_user(stdClass $user = null) {
         return false;
     }
 
-    // close cURL resource, and free up system resources
-    curl_close($ch);
-
-    return $user;
 }
 
 /**
@@ -170,55 +152,17 @@ function get_wp_user(stdClass $user = null) {
  * @throws dml_exception
  */
 function get_wp_user_by_email(string $emailaddress = null) {
-    global $CFG;
-
     if (is_null($emailaddress))
         return false;
-
-    if( !function_exists("curl_init") &&
-        !function_exists("curl_setopt") &&
-        !function_exists("curl_exec") &&
-        !function_exists("curl_close") ) die ("cURL not installed.");
-
-
-    $wpurl = get_config('local_wordpresssync', 'wpurl');
-    if (empty($wpurl))
-        return false;
-
-    $wpurl.= WP_USER_ENDPOINT;
-    $wpusername = get_config('local_wordpresssync', 'wpusername');
-    $wppassword = get_config('local_wordpresssync', 'wppassword');
-
-    if (empty($wpusername) || empty($wppassword)) {
-        debugging('local_wordpresssync: WordPress settings not yet configured.');
-        return false;
-    }
-
-    if (!preg_match('|^https://|i', $wpurl)) {
-        debugging('local_wordpresssync: WordPress URL must use HTTPS.');
-        return false;
-    }
 
     $query['search']   = $emailaddress;
     $query['context']  = 'edit'; // required to receive the WordPress username
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $wpurl . "?"
-        . http_build_query($query, null, '&'));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 4);
-    if ($CFG->debugdeveloper) {
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    }
-    curl_setopt($ch, CURLOPT_USERPWD, $wpusername . ":" . $wppassword);
+    // Create and execute the cURL request to the WordPress API
+    $wpapi = new wordpress_api(false, $query);
+    $response = $wpapi->execute();
 
-    // Execute the request
-    $response = curl_exec($ch);
-
-    // Get the HTTP status from the response header.
-    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-    if( $httpcode>=200 && $httpcode<300 ) {
+    if( $wpapi->get_success() ) {
         $wpuserarray = json_decode($response);
 
         if(!isset($wpuserarray) || !is_array($wpuserarray) || count($wpuserarray) == 0)
@@ -231,10 +175,6 @@ function get_wp_user_by_email(string $emailaddress = null) {
         return false;
     }
 
-    // close cURL resource, and free up system resources
-    curl_close($ch);
-
-    return $user;
 }
 
 /**
@@ -250,43 +190,16 @@ function get_wp_user_by_email(string $emailaddress = null) {
  *       that doesn't match their Moodle account
  *
  * @param stdClass $user Moodle User to create in WordPress
- * @return true if user was created
- * @return false if user was not created
+ * @return false|true if user was created
  * @throws dml_exception
  */
-function create_wp_user($user) {
-    global $CFG, $ADMIN;
-
+function create_wp_user(stdClass $user) {
     // Don't create incomplete users
     if (!$user->email)
         return true;
 
-    if( !function_exists("curl_init") &&
-        !function_exists("curl_setopt") &&
-        !function_exists("curl_exec") &&
-        !function_exists("curl_close") ) die ("cURL not installed.");
-
-
-    $wpurl = get_config('local_wordpresssync', 'wpurl');
-    if (empty($wpurl))
-        return false;
-
-    $wpurl.= WP_USER_ENDPOINT;
-    $wpusername = get_config('local_wordpresssync', 'wpusername');
-    $wppassword = get_config('local_wordpresssync', 'wppassword');
     $tempemaildomain = str_replace('@','',
-                            get_config('local_wordpresssync', 'tempemaildomain')); // @ added later
-
-
-    if (empty($wpusername) || empty($wppassword)) {
-        debugging('local_wordpresssync: WordPress settings not yet configured.');
-        return false;
-    }
-
-    if (!preg_match('|^https://|i', $wpurl)) {
-        debugging('local_wordpresssync: WordPress URL must use HTTPS.');
-        return false;
-    }
+        get_config('local_wordpresssync', 'tempemaildomain')); // @ added later
 
     if (!isset($tempemaildomain)) {
         debugging('local_wordpresssync: A temporary email address domain must be configured.');
@@ -312,25 +225,11 @@ function create_wp_user($user) {
     $post['first_name']  = $user->firstname;
     $post['last_name']   = $user->lastname;
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $wpurl);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 4);
-    if ($CFG->debugdeveloper) {
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    }
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: multipart/form-data"));
-    curl_setopt($ch, CURLOPT_USERPWD, $wpusername . ":" . $wppassword);
+    // Create and execute the cURL request to the WordPress API
+    $wpapi = new wordpress_api(true, null, $post);
+    $response = $wpapi->execute();
 
-    // Execute the request
-    $response = curl_exec($ch);
-
-    // Get the HTTP status from the response header.
-    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-    if( $httpcode>=200 && $httpcode<300 ) {
+    if( $wpapi->get_success() ) {
         $newwpuser = json_decode($response);
         if(!isset($newwpuser))
             return false;
@@ -340,14 +239,11 @@ function create_wp_user($user) {
         $user->profile["wpuserid"] = $newwpuser->id;
 
         debugging("Updating user profile.");
-        update_user_profile($user->id,$newwpuser->id);
+        update_moodle_user_profile($user->id,$newwpuser->id);
     } else {
         debugging("local_wordpresssync: Couldn't create WordPress user " . $user->username);
         debugging("local_wordpresssync: WordPress error: " . $response);
     }
-
-    // close cURL resource, and free up system resources
-    curl_close($ch);
 
     return true;
 }
@@ -391,12 +287,35 @@ function get_users_to_sync(int $limitmin = 0, int $limitmax = MAX_USERS_TO_SYNC)
  * @param int $userid ID of user to update
  * @param int $wpuserid WordPress user ID
  */
-function update_user_profile(int $userid, int $wpuserid) {
+function update_moodle_user_profile(int $userid, int $wpuserid) {
     global $CFG;
 
     require_once($CFG->dirroot.'/user/profile/lib.php');
 
     profile_save_data((object)['id' => $userid, 'profile_field_wpuserid' => $wpuserid]);
+}
+
+/**
+ * Enable a WordPress user account. Usually performed when a Moodle user account is
+ * re-activated, unsuspended or undeleted.
+ *
+ * Requires WordPress API user to have 'edit_users' and 'promote_users' capabilities
+ * Assumes that the WordPress site uses 'subscriber' as the default role for active users.
+ *
+ */
+function enable_wp_user_profile(int $wpuserid) {
+
+}
+
+/**
+ * Disable a WordPress user account. Usually performed when a Moodle user account is
+ * deactivated, suspended or deleted.
+ *
+ * Requires WordPress API user to have 'edit_users' and 'promote_users' capabilities
+ *
+ */
+function disable_wp_user_profile(int $wpuserid) {
+
 }
 
 /**

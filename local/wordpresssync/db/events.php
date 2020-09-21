@@ -37,4 +37,11 @@ $observers = array(
         'internal' => false,
         'priority' => 9999,
     ),
+    array(
+        'eventname' => '\core\event\user_updated',
+        'callback' => 'user_updated',
+        'includefile' => '/local/wordpresssync/locallib.php',
+        'internal' => false,
+        'priority' => 9999,
+    ),
 );
