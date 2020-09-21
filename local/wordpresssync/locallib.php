@@ -51,10 +51,8 @@ function user_updated(\core\event\user_updated $event) {
     /* Disable the user in Wordpress if the Moodle account is disabled, suspended or deleted.
        Or re-enable the user in Wordpress if the Moodle account is not disabled, suspended or deleted. */
     if ($updateduser->auth == 'nologin' || $updateduser->suspended || $updateduser->deleted) {
-        debugging("---- Disable WordPress user for Moodle user: " . $updateduser->username);
         disable_wp_user($updateduser->profile['wpuserid']);
     } else {
-        debugging("++++ Reenable WordPress user: " . $updateduser->username);
         enable_wp_user($updateduser->profile['wpuserid']);
     }
 }
