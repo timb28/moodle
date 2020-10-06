@@ -46,7 +46,8 @@ function user_updated(\core\event\user_updated $event) {
 
     // Only proceed if the Moodle user has a WordPress account.
     $updateduser->profile = (array)profile_user_record($updateduser->id);
-    if (!isset($updateduser->profile['wpuserid'])) return;
+    if (!isset($updateduser->profile['wpuserid']) ||
+        empty($updateduser->profile['wpuserid'])) return;
 
     /* Disable the user in Wordpress if the Moodle account is disabled, suspended or deleted.
        Or re-enable the user in Wordpress if the Moodle account is not disabled, suspended or deleted. */
