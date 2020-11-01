@@ -193,7 +193,7 @@ class behat_navigation extends behat_base {
             // We just want to expand the node, we don't want to follow it.
             $node = $node->getParent();
         }
-        $node->click();
+        $this->execute('behat_general::i_click_on', [$node, 'NodeElement']);
     }
 
     /**
@@ -217,7 +217,7 @@ class behat_navigation extends behat_base {
             // We just want to expand the node, we don't want to follow it.
             $node = $node->getParent();
         }
-        $node->click();
+        $this->execute('behat_general::i_click_on', [$node, 'NodeElement']);
     }
 
     /**
@@ -267,7 +267,7 @@ class behat_navigation extends behat_base {
                 // don't wait, it is non-JS and we already waited for the DOM.
                 $siteadminlink = $this->getSession()->getPage()->find('named_exact', array('link', "'" . $siteadminstr . "'"));
                 if ($siteadminlink) {
-                    $siteadminlink->click();
+                    $this->execute('behat_general::i_click_on', [$siteadminlink, 'NodeElement']);
                 }
             }
         }
@@ -325,7 +325,7 @@ class behat_navigation extends behat_base {
                 implode($parentnodes, ' > ') . '"', $this->getSession());
         }
 
-        $nodetoclick->click();
+        $this->execute('behat_general::i_click_on', [$nodetoclick, 'NodeElement']);
     }
 
     /**
@@ -426,7 +426,7 @@ class behat_navigation extends behat_base {
         )";
 
         // Adding an extra click we need to show the 'Log in' link.
-        if (!$this->getSession()->getDriver()->evaluateScript($navbuttonjs)) {
+        if (!$this->evaluate_script($navbuttonjs)) {
             return false;
         }
 
@@ -567,7 +567,7 @@ class behat_navigation extends behat_base {
 
                 }
             }
-            $this->getSession()->visit($this->locate_path($url->out_as_local_url()));
+            $this->execute('behat_general::i_visit', [$url]);
         }
 
         // Restore global user variable.
@@ -590,8 +590,7 @@ class behat_navigation extends behat_base {
      * @throws Exception if the specified page cannot be determined.
      */
     public function i_am_on_page(string $page) {
-        $this->getSession()->visit($this->locate_path(
-                $this->resolve_page_helper($page)->out_as_local_url()));
+        $this->execute('behat_general::i_visit', [$this->resolve_page_helper($page)]);
     }
 
     /**
@@ -670,8 +669,7 @@ class behat_navigation extends behat_base {
      * @throws Exception if the specified page cannot be determined.
      */
     public function i_am_on_page_instance(string $identifier, string $type) {
-        $this->getSession()->visit($this->locate_path(
-                $this->resolve_page_instance_helper($identifier, $type)->out_as_local_url()));
+        $this->execute('behat_general::i_visit', [$this->resolve_page_instance_helper($identifier, $type)]);
     }
 
     /**
@@ -776,11 +774,11 @@ class behat_navigation extends behat_base {
         global $DB;
         $course = $DB->get_record("course", array("fullname" => $coursefullname), 'id', MUST_EXIST);
         $url = new moodle_url('/course/view.php', ['id' => $course->id]);
-        $this->getSession()->visit($this->locate_path($url->out_as_local_url(false)));
+        $this->execute('behat_general::i_visit', [$url]);
     }
 
     /**
-     * Opens the course homepage with editing mode on.
+     * Open the course homepage with editing mode enabled.
      *
      * @Given /^I am on "(?P<coursefullname_string>(?:[^"]|\\")*)" course homepage with editing mode on$/
      * @throws coding_exception
@@ -789,9 +787,22 @@ class behat_navigation extends behat_base {
      */
     public function i_am_on_course_homepage_with_editing_mode_on($coursefullname) {
         global $DB;
+
         $course = $DB->get_record("course", array("fullname" => $coursefullname), 'id', MUST_EXIST);
         $url = new moodle_url('/course/view.php', ['id' => $course->id]);
-        $this->getSession()->visit($this->locate_path($url->out_as_local_url(false)));
+
+        if ($this->running_javascript() && $sesskey = $this->get_sesskey()) {
+            // Javascript is running so it is possible to grab the session ket and jump straight to editing mode.
+            $url->param('edit', 1);
+            $url->param('sesskey', $sesskey);
+            $this->execute('behat_general::i_visit', [$url]);
+
+            return;
+        }
+
+        // Visit the course page.
+        $this->execute('behat_general::i_visit', [$url]);
+
         try {
             $this->execute("behat_forms::press_button", get_string('turneditingon'));
         } catch (Exception $e) {
