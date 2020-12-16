@@ -928,16 +928,20 @@ class mod_assign_renderer extends plugin_renderer_base {
                     $o .= $this->output->box_end();
                     $o .= $this->output->box_end();
                 } else if ($submission->status == ASSIGN_SUBMISSION_STATUS_REOPENED) {
+                    /** START Academy Patch HA#008 Hide confusing second 'Add new attempt' option in assignment resubmission form
                     $o .= $this->output->box_start('generalbox submissionaction');
+                     END HA#008 */
                     $urlparams = array('id' => $status->coursemoduleid,
                                        'action' => 'editprevioussubmission',
                                        'sesskey'=>sesskey());
+                    /** START Academy Patch HA#008 Hide confusing second 'Add new attempt' option in assignment resubmission form
                     $o .= $this->output->single_button(new moodle_url('/mod/assign/view.php', $urlparams),
                                                        get_string('addnewattemptfromprevious', 'assign'), 'get');
                     $o .= $this->output->box_start('boxaligncenter submithelp');
                     $o .= get_string('addnewattemptfromprevious_help', 'assign');
                     $o .= $this->output->box_end();
                     $o .= $this->output->box_end();
+                     END HA#008 */
                     $o .= $this->output->box_start('generalbox submissionaction');
                     $urlparams = array('id' => $status->coursemoduleid, 'action' => 'editsubmission');
                     $o .= $this->output->single_button(new moodle_url('/mod/assign/view.php', $urlparams),
