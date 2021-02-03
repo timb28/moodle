@@ -244,10 +244,6 @@ class core_user_external extends external_api {
                 setnew_password_and_mail($userobject);
                 unset_user_preference('create_password', $userobject);
                 set_user_preference('auth_forcepasswordchange', 1, $userobject);
-            } else {
-                // START HA001 Patch to force password change on first login.
-                set_user_preference('auth_forcepasswordchange', 1, $user['id']);
-                // END HA001 Patch
             }
 
             // Trigger event.
