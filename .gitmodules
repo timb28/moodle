@@ -11,28 +11,10 @@
 [submodule "blocks/configurable_reports"]
 	path = blocks/configurable_reports
 	url = https://github.com/HarcourtsAcademy/moodle-block_configurablereports.git
-[submodule "blocks/fn_marking"]
-	path = blocks/fn_marking
-	url=https://github.com/HarcourtsAcademy/moodle-block_marking_manager.git
-[submodule "blocks/forum_aggregator"]
-	path = blocks/forum_aggregator
-	url = https://github.com/HarcourtsAcademy/moodle-block_forum_aggregator.git
-	branch = HA-Moodle33
-[submodule "blocks/forum_post"]
-	path = blocks/forum_post
-	url = https://github.com/HarcourtsAcademy/moodle-block_forum_post.git
-	branch = HA-Moodle33
-[submodule "enrol/metamnet"]
-	path = enrol/metamnet
-	url = https://github.com/HarcourtsAcademy/moodle-enrol_metamnet.git
 [submodule "mod/certificate"]
 	path = mod/certificate
 	url = https://github.com/HarcourtsAcademy/moodle-mod_certificate.git
 	branch = HA-Moodle33
-[submodule "mod/game"]
-	path = mod/game
-url=https://github.com/bdaloukas/moodle-mod_game.git
-	branch = MOODLE_20_STABLE
 [submodule "mod/hvp"]
 	path = mod/hvp
 	url = https://github.com/h5p/h5p-moodle-plugin.git
@@ -65,15 +47,6 @@ url=https://github.com/bdaloukas/moodle-mod_game.git
 	path = theme/snap
 	url = https://github.com/HarcourtsAcademy/moodle-theme_snap.git
 	branch = HA-Moodle33
-[submodule "blocks/advnotifications"]
-	path = blocks/advnotifications
-	url = https://github.com/learningworks/moodle-block_advnotifications.git
-[submodule "mod/book/tool/wordimport"]
-	path = mod/book/tool/wordimport
-	url = https://github.com/HarcourtsAcademy/moodle-booktool_wordimport.git
-[submodule "mod/lightboxgallery"]
-	path = mod/lightboxgallery
-	url = https://github.com/netspotau/moodle-mod_lightboxgallery.git
 [submodule "availability/condition/days"]
 	path = availability/condition/days
 	url = https://github.com/vfremaux/moodle-availability_days.git
