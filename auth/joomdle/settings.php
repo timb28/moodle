@@ -36,12 +36,8 @@ if ($ADMIN->fulltree) {
 		get_string('auth_joomla_connection_method', 'auth_joomdle'),
 		get_string('auth_joomla_connection_method_description', 'auth_joomdle'), 'fgc', joomdle_get_connection_methods ()));
 
-    $settings->add(new admin_setting_configselect('auth_joomdle/sync_to_joomla',
-		get_string('auth_joomla_sync_to_joomla', 'auth_joomdle'),
-		get_string('auth_joomla_sync_to_joomla_description', 'auth_joomdle'), 'fgc', joomdle_get_connection_methods ()));
-
     $settings->add(new admin_setting_configcheckbox('auth_joomdle/sync_to_joomla', get_string('auth_joomla_sync_to_joomla', 'auth_joomdle'),
-                       get_string('auth_joomla_sync_to_joomla_description', 'auth_joomdle'), 1));
+                       get_string('auth_joomla_sync_to_joomla_description', 'auth_joomdle'), 0));
 
     $settings->add(new admin_setting_configtext('auth_joomdle/joomla_lang', get_string('auth_joomla_joomla_lang', 'auth_joomdle'),
                        get_string('auth_joomla_joomla_lang_description', 'auth_joomdle'), '', PARAM_TEXT));
@@ -81,9 +77,15 @@ if ($ADMIN->fulltree) {
 		get_string('auth_joomla_enrol_parents', 'auth_joomdle'),
 		get_string('auth_joomla_enrol_parents_description', 'auth_joomdle'), 0));
 
-    $settings->add(new admin_setting_configcheckbox('auth_joomdle/parent_role_id',
+    $roles = role_fix_names(get_all_roles(), null, ROLENAME_ORIGINALANDSHORT);
+    $r = array ();
+	foreach ($roles as $role) {
+		$rolename = $role->localname;
+        $r[$role->id] = $rolename;
+	}
+    $settings->add(new admin_setting_configselect('auth_joomdle/parent_role_id',
 		get_string('auth_joomla_parent_role_id', 'auth_joomdle'),
-		get_string('auth_joomla_parent_role_id_description', 'auth_joomdle'), 0));
+		get_string('auth_joomla_parent_role_id_description', 'auth_joomdle'), 0, $r));
 
     $settings->add(new admin_setting_configcheckbox('auth_joomdle/give_points',
 		get_string('auth_joomla_give_points', 'auth_joomdle'),

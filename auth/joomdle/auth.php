@@ -67,7 +67,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
     }
 
     public function user_signup($user, $notify=true) {
-        global $CFG, $DB;
+        global $CFG, $DB, $PAGE, $OUTPUT;
         require_once($CFG->dirroot.'/user/profile/lib.php');
 
         $password_clear = $user->password;
@@ -321,6 +321,9 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 
         // Add auth token.
         $joomla_xmlrpc_server_url .= "&token=" . $joomla_auth_token;
+
+        // Disable pagespeed mod for web service calls
+        $joomla_xmlrpc_server_url .= '&PageSpeed=Off';
 
         return $joomla_xmlrpc_server_url;
     }
@@ -1580,6 +1583,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
             co.idnumber,
             co.summary,
             co.startdate,
+            co.enddate,
             co.lang
             FROM
             {$CFG->prefix}course_categories ca
@@ -2344,21 +2348,25 @@ class auth_plugin_joomdle extends auth_plugin_manual {
                     {$CFG->prefix}grade_items.grademax, {$CFG->prefix}grade_categories.id
                     from {$CFG->prefix}grade_categories, {$CFG->prefix}grade_items
                     where {$CFG->prefix}grade_categories.id = {$CFG->prefix}grade_items.iteminstance
-                    and {$CFG->prefix}grade_items.courseid = ? and itemtype='category';";
+                    and {$CFG->prefix}grade_items.courseid = ? and (itemtype='category' or itemtype='course')";
+
+                 //   and {$CFG->prefix}grade_items.courseid = ? and itemtype='category'";
 
         $params = array ($id);
         $cats = $DB->get_records_sql($query, $params);
 
+        /*
         if (count ($cats) == 0) {
             // No cats, get items  in "main".
             $query = "select {$CFG->prefix}grade_categories.fullname, {$CFG->prefix}grade_items.id,
                 {$CFG->prefix}grade_items.grademax, {$CFG->prefix}grade_categories.id
                 from {$CFG->prefix}grade_categories, {$CFG->prefix}grade_items
                 where {$CFG->prefix}grade_categories.id = {$CFG->prefix}grade_items.iteminstance
-                and {$CFG->prefix}grade_items.courseid = ? and itemtype='course';";
+                and {$CFG->prefix}grade_items.courseid = ? and itemtype='course'";
             $params = array ($id);
             $cats = $DB->get_records_sql($query, $params);
         }
+        */
 
         foreach ($cats as $r) {
             if ($r->fullname != '?')
@@ -2400,6 +2408,8 @@ class auth_plugin_joomdle extends auth_plugin_manual {
             $query = "select *
                 from  {$CFG->prefix}grade_items
                 where categoryId = ?";
+            $query .= ' AND hidden = 0';
+            $query .= " order by sortorder";
 
             $params = array ($cat_id);
             $items = $DB->get_records_sql($query, $params);
@@ -2411,6 +2421,17 @@ class auth_plugin_joomdle extends auth_plugin_manual {
             foreach ($items as $item) {
                 $category_item['name'] = $item->itemname;
                 $category_item['grademax'] = $item->grademax;
+
+                $category_item['module'] = $item->itemmodule;
+                $category_item['iteminstance'] = $item->iteminstance;
+
+                $conditions = array ('name' => $item->itemmodule);
+                $module = $DB->get_record('modules', $conditions);
+
+                $conditions = array ('course' => $item->courseid, 'module' => $module->id, 'instance' => $item->iteminstance);
+                $cm = $DB->get_record('course_modules', $conditions);
+
+                $category_item['course_module_id'] = $cm->id;
 
                 switch ($item->itemmodule) {
                     case 'quiz':
@@ -2543,7 +2564,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         // Get grade items.
         $sql = "SELECT id, itemname, grademax
                       FROM {$CFG->prefix}grade_items gi" .
-                " WHERE courseid = ? and categoryid is not NULL";
+                " WHERE courseid = ? and categoryid is not NULL ORDER by sortorder";
         $params = array ($id);
         $items = $DB->get_records_sql($sql, $params);
 
@@ -2604,7 +2625,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         // Get grade items.
         $sql = "SELECT id, itemname, grademax
                       FROM {$CFG->prefix}grade_items gi" .
-                " WHERE courseid = ? and categoryid is not NULL";
+                " WHERE courseid = ? and categoryid is not NULL ORDER by sortorder";
         $params = array ($id);
         $items = $DB->get_records_sql($sql, $params);
 
@@ -3307,6 +3328,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 
             // Update user info.
             if ($newinfo = $this->get_userinfo($username)) {
+
                 $newinfo = truncate_userinfo($newinfo);
 
                 $updatekeys = array_keys($newinfo);
@@ -3319,6 +3341,11 @@ class auth_plugin_joomdle extends auth_plugin_manual {
                     }
 
                     if (isset($user->{$key}) and $user->{$key} != $value) { // Only update if it's changed.
+                        // Update password manually.
+                        if ($key == 'password') {
+                            $this->change_user_password ($user->id, $value);
+                            continue;
+                        }
                         $needsupdate = true;
                         $updateuser->$key = $value;
                     }
@@ -3356,7 +3383,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         /* Custom fields */
         if ($fields = $DB->get_records('user_info_field')) {
             foreach ($fields as $field) {
-                if ((array_key_exists ('cf_'.$field->id, $newinfo)) && ($newinfo['cf_'.$field->id])) {
+                if ((array_key_exists ('cf_'.$field->id, $newinfo)) ) {
                     $data = new stdClass();
                     $data->fieldid = $field->id;
                     $data->data = $newinfo['cf_'.$field->id];
@@ -3373,6 +3400,17 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         }
 
         return 1;
+    }
+
+    // Sets user password as it comes from Joomla (hashed).
+    // We need this because user_update_user expects password to be clear.
+    private function change_user_password ($user_id, $password) {
+        global $CFG, $DB;
+
+        $data = new stdClass();
+        $data->id = $user_id;
+        $data->password = $password;
+        $DB->update_record('user', $data);
     }
 
     public function create_moodle_only_user ($user_data) {
@@ -4421,10 +4459,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         global $DB;
 
         $username = strtolower ($username);
-        /* START Academy Patch M#048 Ignore MNet users in Joomdle webservice function */
-        $conditions = array("username" => $username, "mnethostid" => 1);
-        /* END Academy Patch M#048 */
-
+        $conditions = array("username" => $username);
         $user = $DB->get_record("user", $conditions);
 
         if (!$user)
@@ -5480,8 +5515,8 @@ class auth_plugin_joomdle extends auth_plugin_manual {
                             continue;
 
                         $resource['available'] = 0;
-                        $ci = new condition_info($mod);
-                        $resource['completion_info'] = $ci->get_full_information ();
+						$cm2 = $modinfo->get_cm ($mod->id);
+                        $resource['completion_info'] = $cm2->availableinfo;
                     }
                     else
                         $resource['available'] = 1;
@@ -5560,7 +5595,6 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 
         return $display;
     }
-
 
     public function my_certificates ($username, $type = 'normal') {
         switch ($type) {
@@ -5710,6 +5744,34 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         return $c;
     }
 
+	public function get_mentees_certificates ($username, $type) {
+        global $CFG, $DB;
+
+        $mentees = $this->get_mentees ($username);
+        $users = array ();
+        foreach ($mentees as $mentee)
+        {
+            $u = array ();
+            $u['username'] = $mentee['username'];
+            $u['name'] = $mentee['name'];
+            $users[] = $u;
+        }
+
+        return $this->get_users_certificates ($users, $type);
+	}
+
+	public function get_users_certificates ($users, $type = 'normal') {
+        global $CFG, $DB;
+
+		$certs = array ();
+		foreach ($users as $user) {
+			$c = $this->my_certificates ($user['username'], $type);
+			$user['certificates'] = $c;
+			$certs[] = $user;
+		}
+		return $certs;
+	}
+
 
     public function get_page ($id) {
         global $DB;
@@ -5828,6 +5890,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         global $CFG, $DB;
 
         require_once($CFG->dirroot.'/mod/questionnaire/questionnaire.class.php');
+        require_once($CFG->dirroot.'/mod/questionnaire/classes/question/base.php');
 
         $params = array ($id);
         $select = 'survey_id = ? AND deleted = \'n\' AND type_id != 99';
@@ -5993,7 +6056,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         global $CFG, $DB;
 
         // Set defaults.
-        $course = new object();
+        $course = new stdClass();
         $course->student  = get_string('defaultcoursestudent');
         $course->students = get_string('defaultcoursestudents');
         $course->teacher  = get_string('defaultcourseteacher');
@@ -6017,7 +6080,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         $course->enrollable     = 0;
 
         if ($newcourseid = $DB->insert_record("course", $course)) {  // Set up new course.
-            $section = new object();
+            $section = new stdClass();
             $section->course = $newcourseid;   // Create a default section.
             $section->section = 0;
             $section->id = $DB->insert_record("course_sections", $section);
@@ -6055,7 +6118,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         $lang = $course_ext['course_lang'];
         $startdate = $course_ext['startdate'];
 
-        $course = new object();
+        $course = new stdClass();
         $course->id = $course_ext['id'];
         $course->fullname = utf8_decode ($course_ext['fullname']);
         $course->shortname = utf8_decode ( $course_ext['shortname']);
@@ -6102,8 +6165,9 @@ class auth_plugin_joomdle extends auth_plugin_manual {
 
         $logout_redirect_to_joomla = get_config('auth_joomdle', 'logout_redirect_to_joomla');
 
-        if ($logout_redirect_to_joomla)
+        if ($logout_redirect_to_joomla) {
             $redirect = get_config ('auth_joomdle', 'joomla_url').'/components/com_joomdle/views/wrapper/getout.php';
+        }
     }
 
     public function get_scorm_item_track_data ($id, $username, $item) {
@@ -6245,7 +6309,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
     public function set_course_visible ($course_id, $active) {
         global $CFG, $DB;
 
-        $course = new object();
+        $course = new stdClass();
         $course->id = $course_id;
         $course->visible = $active;
 
@@ -6574,6 +6638,11 @@ class auth_plugin_joomdle extends auth_plugin_manual {
         if ($user->auth != 'joomdle')
             return;
 
+        // We pass an empty password when login started in Joomla.
+        // As Joomla user is already logged, nothing to do here.
+        if ($password == '')
+            return;
+
         /* Login from password change, don't log in to Joomla */
         if ( (array_key_exists ('password', $_POST))  && (array_key_exists ('newpassword1', $_POST))
                 && (array_key_exists ('newpassword2', $_POST)) )
@@ -6666,10 +6735,7 @@ class auth_plugin_joomdle extends auth_plugin_manual {
     }
 
     public function cron() {
-        /* Start Academy Patch M#057 Disable auth/joomla cron task
- 		$this->update_joomla_sessions();
- 		END Academy Patch M#057 */
-
+        $this->update_joomla_sessions();
     }
 
 }

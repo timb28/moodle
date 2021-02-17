@@ -1,4 +1,19 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * @package    auth_joomdle
  * @copyright  2009 Qontori Pte Ltd
@@ -7,7 +22,7 @@
 
 $string['pluginname'] = 'Joomdle';
 $string['auth_joomdletitle'] = 'Joomdle';
-$string['auth_joomdledescription'] = 'Este método utiliza servicios web para saber si un usuario tiene una sesión válida en Joomla, version 1.1.4';
+$string['auth_joomdledescription'] = 'Este método utiliza servicios web para saber si un usuario tiene una sesión válida en Joomla, version 1.2.1';
 $string['joomla_sp_name'] = 'Joomdle';
 $string['joomla_sp_description'] = 'Servicios para la integración con Joomla<br>';
 $string['auth_joomla_url'] = 'URL de Joomla<br>';
@@ -46,4 +61,5 @@ $string['auth_joomla_logout_redirect_to_joomla'] = 'Redirigir a Joomla al salir'
 $string['auth_joomla_logout_redirect_to_joomla_description'] = 'Redirigir a Joomla al cerrar sesión en Moodle';
 $string['auth_joomla_forward_events'] = 'Reenviar eventos a Joomla';
 $string['auth_joomla_forward_events_description'] = 'Reenviar eventos para que los plugins de Joomla puedan usarlos';
-
+$string['auth_joomla_logout_with_redirect'] = 'Usar logout con redirección';
+$string['auth_joomla_logout_with_redirect_description'] = 'Sólo necesario con múltiples dominios y "Recuérdame" activado';

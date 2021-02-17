@@ -19,11 +19,11 @@
 [submodule "mod/questionnaire"]
 	path = mod/questionnaire
 	url = https://github.com/PoetOS/moodle-mod_questionnaire.git
-	branch = MOODLE_33_STABLE
+	branch = MOODLE_35_STABLE
 [submodule "mod/subcourse"]
 	path = mod/subcourse
 	url = https://github.com/HarcourtsAcademy/moodle-mod_subcourse.git
-	branch = HA-Moodle33
+	branch = MOODLE_35_STABLE
 [submodule "mod/videofile"]
 	path = mod/videofile
 	url = https://github.com/HarcourtsAcademy/moodle-mod_videofile.git

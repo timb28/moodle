@@ -24,8 +24,10 @@
 
 require_once('../../config.php');
 
+$login = optional_param('login', '', PARAM_TEXT);
+
 // Normal login to Moodle.
-if ($_GET['login'] == 'moodle') {
+if ($login == 'moodle') {
 ?>
 <html>
 <head>

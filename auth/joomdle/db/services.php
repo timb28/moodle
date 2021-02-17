@@ -975,5 +975,12 @@ $functions = array(
         'description' => 'Get courses completion progress',
         'type'        => 'read',
     ),
+    'joomdle_get_mentees_certificates' => array(
+        'classname'   => 'joomdle_helpers_external',
+        'methodname'  => 'get_mentees_certificates',
+        'classpath'   => 'auth/joomdle/helpers/externallib.php',
+        'description' => 'Get mentees certificates',
+        'type'        => 'read',
+    ),
 
 );

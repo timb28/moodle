@@ -48,10 +48,6 @@ class joomdle_helpers_external extends external_api {
 
         $auth = new  auth_plugin_joomdle ();
         $id = $auth->user_id ($username);
-        
-        /* START Academy Patch M#028 joomdle_user_id web service function should return null when a student doesn't exist */
-        $id = ($id === 0 ? null : $id);
-        /* END Academy Patch M#028 */
 
         return $id;
     }
@@ -205,6 +201,7 @@ class joomdle_helpers_external extends external_api {
                     'idnumber' => new external_value(PARAM_RAW, 'category name'),
                     'summary' => new external_value(PARAM_RAW, 'summary'),
                     'startdate' => new external_value(PARAM_INT, 'start date'),
+                    'enddate' => new external_value(PARAM_INT, 'end date'),
                     'numsections' => new external_value(PARAM_INT, 'number of sections'),
                     'lang' => new external_value(PARAM_RAW, 'lang'),
                     'cost' => new external_value(PARAM_FLOAT, 'cost', VALUE_OPTIONAL),
@@ -2177,14 +2174,8 @@ class joomdle_helpers_external extends external_api {
         $params = self::validate_parameters(self::multiple_suspend_enrolment_parameters(),
                 array('username' => $username, 'courses' => $courses));
 
-        /* START M#023 Prevent Harcourts One from suspending student enrolments until tracker HO-117895 is fixed
         $auth = new  auth_plugin_joomdle ();
         $id = $auth->multiple_suspend_enrolment ($username, $courses);
-         */
-        error_log('Ignored webservice suspending student: '.$username);
-        $id = null;
-        /* END Academy Patch M#23 */
-
 
         return $id;
     }
@@ -2209,13 +2200,8 @@ class joomdle_helpers_external extends external_api {
         $params = self::validate_parameters(self::suspend_enrolment_parameters(),
                 array('username' => $username, 'id' => $id));
 
-        /* START M#023 Prevent Harcourts One from suspending student enrolments until tracker HO-117895 is fixed
         $auth = new  auth_plugin_joomdle ();
         $id = $auth->suspend_enrolment ($username, $id);
-         */
-        error_log('Ignored webservice suspending student: '.$username);
-        $id = null;
-        /* END Academy Patch M#23 */
 
         return $id;
     }
@@ -2871,6 +2857,9 @@ class joomdle_helpers_external extends external_api {
                                              'finalgrade' => new external_value(PARAM_FLOAT, 'final grade'),
                                              'feedback' => new external_value(PARAM_RAW, 'feedback'),
                                              'letter' => new external_value(PARAM_TEXT, 'grade letter'),
+                                             'module' => new external_value(PARAM_TEXT, 'module'),
+                                             'iteminstance' => new external_value(PARAM_INT, 'item instance'),
+                                             'course_module_id' => new external_value(PARAM_INT, 'course module id'),
                                           )
                                        )
                                     )
@@ -2932,6 +2921,9 @@ class joomdle_helpers_external extends external_api {
                                                 'finalgrade' => new external_value(PARAM_FLOAT, 'final grade'),
                                                 'feedback' => new external_value(PARAM_RAW, 'feedback'),
                                                 'letter' => new external_value(PARAM_TEXT, 'grade letter'),
+                                                'module' => new external_value(PARAM_TEXT, 'module'),
+                                                'iteminstance' => new external_value(PARAM_INT, 'item instance'),
+                                                'course_module_id' => new external_value(PARAM_INT, 'course module id'),
                                              )
                                           )
                                        )
@@ -4976,5 +4968,47 @@ class joomdle_helpers_external extends external_api {
 
         return $return;
     }
+
+    /* get_mentees_certificates */
+    public static function get_mentees_certificates_parameters() {
+        return new external_function_parameters(
+                        array(
+                            'username' => new external_value(PARAM_TEXT, 'username'),
+                            'type' => new external_value(PARAM_TEXT, 'type')
+                        )
+        );
+    }
+
+    public static function get_mentees_certificates_returns() {
+        return new external_multiple_structure(
+            new external_single_structure(
+               array(
+                  'username' => new external_value(PARAM_TEXT, 'username'),
+                  'name' => new external_value(PARAM_TEXT, 'name'),
+                  'certificates' => new external_multiple_structure(
+                           new external_single_structure(
+                              array(
+								'name' => new external_value(PARAM_TEXT, 'name'),
+								'id' => new external_value(PARAM_INT, 'id')
+                              )
+                           )
+                        )
+               )
+            )
+        );
+    }
+
+    public static function get_mentees_certificates($username, $type) {
+        global $CFG, $DB;
+
+        $params = self::validate_parameters(self::get_mentees_certificates_parameters(), array('username' => $username,
+                    'type' => $type));
+
+        $auth = new  auth_plugin_joomdle ();
+        $return = $auth->get_mentees_certificates ($username, $type);
+
+        return $return;
+    }
+
 
 }

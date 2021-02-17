@@ -525,6 +525,7 @@ class auth_joomdle_handler {
                 $data['course_id'] = $courseid;
                 $data['username'] = $user->username;
                 $data['course_name'] = $course->fullname;
+                $data['roleid'] = $roleid;
                 $auth_joomdle->call_method ('moodleEvent', 'RoleAssigned',  $data);
             }
         }
