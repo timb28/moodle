@@ -1,7 +1,7 @@
 [submodule "lib/editor/atto/plugins/fullscreen"]
 	path = lib/editor/atto/plugins/fullscreen
 	url = https://github.com/HarcourtsAcademy/moodle-atto_fullscreen.git
-	branch = HA-Moodle33
+	branch = master
 [submodule "lib/editor/atto/plugins/htmlplus"]
 	path = lib/editor/atto/plugins/htmlplus
 	url = https://github.com/andrewnicols/moodle-atto_htmlplus.git
@@ -12,10 +12,6 @@
 	path = blocks/configurable_reports
 	url = https://github.com/HarcourtsAcademy/moodle-block_configurablereports.git
 	branch = MOODLE_36_STABLE
-[submodule "mod/certificate"]
-	path = mod/certificate
-	url = https://github.com/HarcourtsAcademy/moodle-mod_certificate.git
-	branch = HA-Moodle33
 [submodule "mod/hvp"]
 	path = mod/hvp
 	url = https://github.com/h5p/h5p-moodle-plugin.git
