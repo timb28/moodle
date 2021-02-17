@@ -11,6 +11,7 @@
 [submodule "blocks/configurable_reports"]
 	path = blocks/configurable_reports
 	url = https://github.com/HarcourtsAcademy/moodle-block_configurablereports.git
+	branch = MOODLE_36_STABLE
 [submodule "mod/certificate"]
 	path = mod/certificate
 	url = https://github.com/HarcourtsAcademy/moodle-mod_certificate.git
@@ -42,7 +43,7 @@
 [submodule "enrol/auto"]
 	path = enrol/auto
 	url = https://github.com/eugeneventer/moodle-enrol_auto.git
-	branch = MOODLE_32_STABLE
+	branch = MOODLE_36_STABLE
 [submodule "theme/snap"]
 	path = theme/snap
 	url = https://github.com/HarcourtsAcademy/moodle-theme_snap.git
@@ -50,7 +51,7 @@
 [submodule "availability/condition/days"]
 	path = availability/condition/days
 	url = https://github.com/vfremaux/moodle-availability_days.git
-	branch = MOODLE_33_STABLE
+	branch = MOODLE_35_STABLE
 [submodule "question/type/essayautograde"]
 	path = question/type/essayautograde
 	url = https://github.com/gbateson/moodle-qtype_essayautograde
