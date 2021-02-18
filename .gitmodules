@@ -24,10 +24,6 @@
 	path = mod/subcourse
 	url = https://github.com/HarcourtsAcademy/moodle-mod_subcourse.git
 	branch = MOODLE_35_STABLE
-[submodule "mod/videofile"]
-	path = mod/videofile
-	url = https://github.com/HarcourtsAcademy/moodle-mod_videofile.git
-	branch = HA-Moodle33
 [submodule "question/type/pmatch"]
 	path = question/type/pmatch
 	url = https://github.com/moodleou/moodle-qtype_pmatch.git
