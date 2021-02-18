@@ -27,11 +27,11 @@
 [submodule "question/type/pmatch"]
 	path = question/type/pmatch
 	url = https://github.com/moodleou/moodle-qtype_pmatch.git
-	branch = master
+	branch = main
 [submodule "question/type/oumultiresponse"]
 	path = question/type/oumultiresponse
 	url = https://github.com/moodleou/moodle-qtype_oumultiresponse.git
-	branch = master
+	branch = main
 [submodule "enrol/auto"]
 	path = enrol/auto
 	url = https://github.com/eugeneventer/moodle-enrol_auto.git
