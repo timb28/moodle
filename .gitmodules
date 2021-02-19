@@ -1,83 +1,10 @@
-[submodule "lib/editor/atto/plugins/fullscreen"]
-	path = lib/editor/atto/plugins/fullscreen
-	url = https://github.com/HarcourtsAcademy/moodle-atto_fullscreen.git
-	branch = HA-Moodle33
-[submodule "lib/editor/atto/plugins/htmlplus"]
-	path = lib/editor/atto/plugins/htmlplus
-	url = https://github.com/andrewnicols/moodle-atto_htmlplus.git
-[submodule "lib/editor/atto/plugins/styles"]
-	path = lib/editor/atto/plugins/styles
-	url = https://github.com/moodleuulm/moodle-atto_styles.git
-[submodule "blocks/configurable_reports"]
-	path = blocks/configurable_reports
-	url = https://github.com/HarcourtsAcademy/moodle-block_configurablereports.git
-[submodule "blocks/fn_marking"]
-	path = blocks/fn_marking
-	url=https://github.com/HarcourtsAcademy/moodle-block_marking_manager.git
-[submodule "blocks/forum_aggregator"]
-	path = blocks/forum_aggregator
-	url = https://github.com/HarcourtsAcademy/moodle-block_forum_aggregator.git
-	branch = HA-Moodle33
-[submodule "blocks/forum_post"]
-	path = blocks/forum_post
-	url = https://github.com/HarcourtsAcademy/moodle-block_forum_post.git
-	branch = HA-Moodle33
-[submodule "enrol/metamnet"]
-	path = enrol/metamnet
-	url = https://github.com/HarcourtsAcademy/moodle-enrol_metamnet.git
-[submodule "mod/certificate"]
-	path = mod/certificate
-	url = https://github.com/HarcourtsAcademy/moodle-mod_certificate.git
-	branch = HA-Moodle33
-[submodule "mod/game"]
-	path = mod/game
-url=https://github.com/bdaloukas/moodle-mod_game.git
-	branch = MOODLE_20_STABLE
-[submodule "mod/hvp"]
-	path = mod/hvp
-	url = https://github.com/h5p/h5p-moodle-plugin.git
-	branch = master
-[submodule "mod/questionnaire"]
-	path = mod/questionnaire
-	url = https://github.com/PoetOS/moodle-mod_questionnaire.git
-	branch = MOODLE_33_STABLE
-[submodule "mod/subcourse"]
-	path = mod/subcourse
-	url = https://github.com/HarcourtsAcademy/moodle-mod_subcourse.git
-	branch = HA-Moodle33
-[submodule "mod/videofile"]
-	path = mod/videofile
-	url = https://github.com/HarcourtsAcademy/moodle-mod_videofile.git
-	branch = HA-Moodle33
-[submodule "question/type/pmatch"]
-	path = question/type/pmatch
-	url = https://github.com/moodleou/moodle-qtype_pmatch.git
-	branch = master
-[submodule "question/type/oumultiresponse"]
-	path = question/type/oumultiresponse
-	url = https://github.com/moodleou/moodle-qtype_oumultiresponse.git
-	branch = master
-[submodule "enrol/auto"]
-	path = enrol/auto
-	url = https://github.com/eugeneventer/moodle-enrol_auto.git
-	branch = MOODLE_32_STABLE
-[submodule "theme/snap"]
-	path = theme/snap
-	url = https://github.com/HarcourtsAcademy/moodle-theme_snap.git
-	branch = HA-Moodle33
-[submodule "blocks/advnotifications"]
-	path = blocks/advnotifications
-	url = https://github.com/learningworks/moodle-block_advnotifications.git
-[submodule "mod/book/tool/wordimport"]
-	path = mod/book/tool/wordimport
-	url = https://github.com/HarcourtsAcademy/moodle-booktool_wordimport.git
-[submodule "mod/lightboxgallery"]
-	path = mod/lightboxgallery
-	url = https://github.com/netspotau/moodle-mod_lightboxgallery.git
 [submodule "availability/condition/days"]
 	path = availability/condition/days
 	url = https://github.com/vfremaux/moodle-availability_days.git
-	branch = MOODLE_33_STABLE
-[submodule "question/type/essayautograde"]
-	path = question/type/essayautograde
-	url = https://github.com/gbateson/moodle-qtype_essayautograde
+	branch = MOODLE_36_STABLE
+
+[submodule "theme/snap"]
+	path = theme/snap
+	url = https://github.com/HarcourtsAcademy/moodle-theme_snap.git
+	branch = MOODLE_39_STABLE
+	
