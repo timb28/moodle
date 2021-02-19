@@ -17,3 +17,7 @@
 	path = blocks/configurable_reports
 	url = https://github.com/HarcourtsAcademy/moodle-block_configurablereports.git
 	branch = MOODLE_36_STABLE
+[submodule "auth/joomdle"]
+	path = auth/joomdle
+	url = https://github.com/aduranterres/auth_joomdle.git
+	branch = master
