@@ -25,3 +25,6 @@
 [submodule "mod/hvp"]
 	path = mod/hvp
 	url = https://github.com/h5p/moodle-mod_hvp.git
+[submodule "enrol/auto"]
+	path = enrol/auto
+	url = https://github.com/catalyst/moodle-enrol_auto.git
