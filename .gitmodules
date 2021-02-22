@@ -22,3 +22,6 @@
 	path = blocks/configurable_reports
 	url = https://github.com/HarcourtsAcademy/moodle-block_configurablereports.git
 	branch = MOODLE_36_STABLE
+[submodule "mod/hvp"]
+	path = mod/hvp
+	url = https://github.com/h5p/moodle-mod_hvp.git
