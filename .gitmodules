@@ -22,10 +22,6 @@
 	url = https://github.com/moodleuulm/moodle-atto_styles.git
 	branch = master
 
-[submodule "mod/hvp"]
-	path = mod/hvp
-	url = https://github.com/h5p/moodle-mod_hvp.git
-
 [submodule "mod/questionnaire"]
 	path = mod/questionnaire
 	url = https://github.com/PoetOS/moodle-mod_questionnaire.git
