@@ -39,9 +39,12 @@
 [submodule "question/type/essayautograde"]
 	path = question/type/essayautograde
 	url = https://github.com/gbateson/moodle-qtype_essayautograde.git
+
 [submodule "question/type/oumultiresponse"]
 	path = question/type/oumultiresponse
 	url = https://github.com/moodleou/moodle-qtype_oumultiresponse.git
+	branch = main
+
 [submodule "question/type/pmatch"]
 	path = question/type/pmatch
 	url = https://github.com/HarcourtsAcademy/moodle-qtype_pmatch.git
