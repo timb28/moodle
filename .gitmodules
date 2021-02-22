@@ -28,3 +28,10 @@
 [submodule "enrol/auto"]
 	path = enrol/auto
 	url = https://github.com/catalyst/moodle-enrol_auto.git
+[submodule "mod/questionnaire"]
+	path = mod/questionnaire
+	url = https://github.com/PoetOS/moodle-mod_questionnaire.git
+	branch = MOODLE_39_STABLE
+[submodule "mod/subcourse"]
+	path = mod/subcourse
+	url = https://github.com/mudrd8mz/moodle-mod_subcourse.git
