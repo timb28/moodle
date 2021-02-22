@@ -42,7 +42,7 @@
 
 [submodule "question/type/oumultiresponse"]
 	path = question/type/oumultiresponse
-url=https://github.com/HarcourtsAcademy/moodle-qtype_oumultiresponse.git
+	url=https://github.com/HarcourtsAcademy/moodle-qtype_oumultiresponse.git
 	branch = main
 
 [submodule "question/type/pmatch"]
