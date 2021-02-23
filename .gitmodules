@@ -1,7 +1,7 @@
 [submodule "auth/joomdle"]
 	path = auth/joomdle
-	url = https://github.com/aduranterres/auth_joomdle.git
-	branch = master
+	url = https://github.com/HarcourtsAcademy/auth_joomdle.git
+	branch = HA-Moodle39
 
 [submodule "availability/condition/days"]
 	path = availability/condition/days
