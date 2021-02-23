@@ -1339,14 +1339,23 @@ class PHPMailer
                  *
                  * @see http://www.whatwg.org/specs/web-apps/current-work/#e-mail-state-(type=email)
                  */
+                /* START Academy Patch M#024 Enable comments in email addresses */
                 return (bool) preg_match(
-                    '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}' .
+                    '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}()~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}' .
                     '[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD',
                     $address
                 );
+                /* END Academy Patch M#024 */
             case 'php':
             default:
-                return (bool) filter_var($address, FILTER_VALIDATE_EMAIL);
+                /* START Academy Patch M#024 Enable comments in email addresses */
+                // return (bool) filter_var($address, FILTER_VALIDATE_EMAIL);
+                return (bool) preg_match(
+                    '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}()~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}' .
+                    '[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD',
+                    $address
+                );
+                /* END Academy Patch M#024 */
         }
     }
 
