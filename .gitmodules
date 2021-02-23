@@ -30,11 +30,12 @@
 [submodule "theme/snap"]
 	path = theme/snap
 	url = https://github.com/HarcourtsAcademy/moodle-theme_snap.git
-	branch = MOODLE_39_STABLE
+	branch = HA-Moodle39
 
 [submodule "mod/subcourse"]
 	path = mod/subcourse
 	url = https://github.com/mudrd8mz/moodle-mod_subcourse.git
+	branch = HA-Moodle39
 
 [submodule "question/type/essayautograde"]
 	path = question/type/essayautograde
