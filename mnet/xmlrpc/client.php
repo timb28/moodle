@@ -149,6 +149,13 @@ class mnet_xmlrpc_client {
         $httprequest = $this->prepare_http_request($mnet_peer);
         curl_setopt($httprequest, CURLOPT_POSTFIELDS, $this->encryptedrequest);
 
+        /** START Academy Patch M#075 Enable Mnet to use curl.cainfo PHP.ini setting */
+        $cacert = ini_get('curl.cainfo');
+        if (!empty($cacert) and is_readable($cacert)) {
+            curl_setopt ($httprequest, CURLOPT_CAINFO, realpath($cacert));
+        }
+        /** END Academy Patch M#075 */
+
         $timestamp_send    = time();
         mnet_debug("about to send the curl request");
         $this->rawresponse = curl_exec($httprequest);
