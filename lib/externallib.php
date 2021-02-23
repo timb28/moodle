@@ -335,6 +335,19 @@ class external_api {
             }
             $debuginfo = 'Invalid external api parameter: the value is "' . $params .
                     '", the server was expecting "' . $description->type . '" type';
+            /* START Academy Patch M#022 Clean tags from H1 web service calls */
+            if ($description->type == PARAM_NOTAGS || $description->type == PARAM_TEXT) {
+                if (!is_null($params) and !is_array($params) and !is_object($params)) {
+                    $params = clean_param($params, $description->type);
+                }
+            }
+            /* END Academy Patch M#022 Clean tags from H1 web service calls */
+            /* START Academy Patch M#041 Convert uppercase letters in username to lowercase when creating users via the webservice */
+            global $CFG;
+            if ($description->type == PARAM_USERNAME && $CFG->extendedusernamechars) {
+                $params = core_text::strtolower($params);
+            }
+            /* END Academy Patch M#041 Convert uppercase letters in username to lowercase when creating users via the webservice */
             return validate_param($params, $description->type, $description->allownull, $debuginfo);
 
         } else if ($description instanceof external_single_structure) {
