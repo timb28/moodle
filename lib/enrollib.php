@@ -765,6 +765,29 @@ function enrol_get_my_courses($fields = null, $sort = null, $limit = 0, $coursei
 
     //wow! Is that really all? :-D
 
+    /* TODO: 2021-02-24: Fix remote courses being processed and displayed like local courses. */
+    return $courses; // Remove. Only used to skip following code to keep dashboard working.
+
+    if (!is_mnet_remote_user($USER)) {
+        return $courses;
+    }
+
+    $remotecourses = get_my_remotemnetcourses();
+
+    // Other Remote courses will have -ve remoteid as key, so it can be differentiated from normal courses
+    foreach ($remotecourses as $id => $remotecourse) {
+        //$remoteid = $remotecourse->remoteid * -1;
+        $remoteid = $remotecourse->remoteid + 1000000;
+        $remotecourse->id = $remoteid;
+        $remotecourse->startdate = null;
+        $remotecourse->enddate = null;
+        $courses[$remoteid] = $remotecourse;
+
+//        error_log("Remote course: " . print_r($remotecourse, true));
+    }
+
+
+
     return $courses;
 }
 

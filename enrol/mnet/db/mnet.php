@@ -40,6 +40,7 @@ $publishes = array(
             'unenrol_user',
             'course_enrolments',    // Academy Patch M#052
             'course_grades',        // Academy Patch M#052
+            'course_progress',      // Academy Patch M#066
         ),
     ),
 );
@@ -51,5 +52,6 @@ $subscribes = array(
         'unenrol_user'      => 'enrol/mnet/enrol.php/unenrol_user',
         'course_enrolments' => 'enrol/mnet/enrol.php/course_enrolments',
         'course_grades'     => 'enrol/mnet/enrol.php/course_grades',    // Academy Patch M#052
+        'course_progress'   => 'enrol/mnet/enrol.php/course_progress',  // Academy Patch M#066
     ),
 );

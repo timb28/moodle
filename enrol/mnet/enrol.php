@@ -97,20 +97,118 @@ class enrol_mnet_mnetservice_enrol {
         return array_values($courses); // can not use keys for backward compatibility
     }
 
+    /* START Academy Patch M#045 Display remote MNet courses on a student's Dashboard */
     /**
      * This method has never been implemented in Moodle MNet API
      *
      * @uses mnet_remote_client Callable via XML-RPC only
      * @return array empty array
      */
-    public function user_enrolments() {
+    /*public function user_enrolments() {
         global $CFG, $DB;
 
         if (!$client = get_mnet_remote_client()) {
             die('Callable via XML-RPC only');
         }
         return array();
+    }*/
+
+
+    /**
+     * Returns list of courses that user is enrolled in.
+     * Doesn't include meta course enrolments
+     *
+     * @uses mnet_remote_client Callable via XML-RPC only
+     * @param String $username of our user
+     * @return array of courses
+     */
+    public function user_enrolments($username) {
+        global $CFG;
+
+        require_once($CFG->dirroot.'/enrol/externallib.php');
+
+        if (!$client = get_mnet_remote_client()) {
+            die('Callable via XML-RPC only');
+        }
+
+        if (empty($username)) {
+            throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
+        }
+
+        $user = core_user::get_user_by_username($username, 'id');
+
+        if (empty($user)) {
+            throw new mnet_server_exception(5014, 'usernotfound', 'enrol_mnet');
+        }
+
+        $courses = enrol_get_users_courses($user->id, true, 'id, shortname, fullname, idnumber, visible,
+                   summary, summaryformat, format, showgrades, lang, enablecompletion');
+
+        // Get meta course enrolments so they won't be included in returned courses
+        $metacourses = $this->meta_courses($user->id);
+
+        $cleanedcourses = array();
+        foreach ($courses as $id=>$course) {
+            if (!array_key_exists($id, $metacourses)) {
+                $cleanedcourses[$id] = $course;
+                $cleanedcourses[$id]->remoteid = $id;
+                $cleanedcourses[$id]->complete = $this->is_course_complete($course, $user->id);
+                /* START Academy Patch M#061 My Overview block customisations */
+                if ($courseimageurl = \theme_snap\local::course_coverimage_url($id)) {
+                    $cleanedcourses[$id]->courseimageurl = $courseimageurl->out();
+                }
+                /* END Academy Patch M#061 */
+            }
+        }
+
+        return $cleanedcourses;
     }
+
+    /**
+     * Returns list of course ids for courses user is enrolled in via
+     * meta enrolment plugin
+     *
+     * @param int $userid of our user
+     * @return array of courses ids
+     */
+    private function meta_courses($userid) {
+        global $DB;
+
+        // Get meta course enrolments so they won't be included in returned courses
+        $sql = "SELECT e.courseid
+                FROM {user_enrolments} ue
+                JOIN {enrol} e ON ue.enrolid = e.id
+               WHERE enrol = 'meta' AND ue.userid = :userid";
+        $params['userid']  = $userid;
+        return $DB->get_records_sql($sql, $params);
+    }
+
+    /**
+     * Returns list of course ids for courses user is enrolled in via
+     * meta enrolment plugin
+     *
+     * @param stdClass $course Moodle course object.
+     * @param int $userid of the user
+     * @return bool true if the user has completed the course
+     */
+    private function is_course_complete($course, $userid) {
+        global $CFG;
+
+        require_once($CFG->libdir.'/completionlib.php');
+
+        if ($CFG->enablecompletion != COMPLETION_ENABLED) {
+            return false;
+        }
+
+        $coursecompletion = new completion_info($course);
+
+        if ($coursecompletion->is_course_complete($userid)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    /* END Academy Patch M#045 */
 
     /**
      * Enrol remote user to our course
@@ -429,6 +527,71 @@ class enrol_mnet_mnetservice_enrol {
             $return->grade->feedbackformat = $grade->feedbackformat;
         }
 
+        return $return;
+    }
+
+    /**
+     * Returns the course progress for the given user.
+     *
+     * Academy Patch M#066 Add MNet function to get remote course progress.
+     *
+     * @global type $CFG
+     * @global type $DB
+     * @param type $courseid ID of our course
+     * @param type $username username of the student
+     * @return stdClass containing course progress information
+     * @throws coding_exception
+     */
+    public function course_progress($courseid, $username) {
+        global $CFG, $DB;
+
+        require_once($CFG->libdir . '/completionlib.php');
+
+        if (!$client = get_mnet_remote_client()) {
+            die('Callable via XML-RPC only');
+        }
+
+        if (empty($courseid)) {
+            throw new coding_exception('Empty referenced course id');
+        }
+
+        if (empty($username)) {
+            throw new coding_exception('Empty referenced username');
+        }
+
+        $return = new stdClass();
+
+        $course = $DB->get_record('course', array('id'=>$courseid));
+        $user = $DB->get_record('user', array('username'=>$username, 'mnethostid'=>'1'));
+
+        $completion = new \completion_info($course);
+
+        // First, let's make sure completion is enabled.
+        if (!$completion->is_enabled()) {
+            return null;
+        }
+
+        // Before we check how many modules have been completed see if the course has.
+        if ($completion->is_course_complete($user->id)) {
+            $return->progress = 100;
+            return $return;
+        }
+
+        // Get the number of modules that support completion.
+        $modules = $completion->get_activities();
+        $count = count($modules);
+        if (!$count) {
+            return null;
+        }
+
+        // Get the number of modules that have been completed.
+        $completed = 0;
+        foreach ($modules as $module) {
+            $data = $completion->get_data($module, false, $user->id);
+            $completed += $data->completionstate == COMPLETION_INCOMPLETE ? 0 : 1;
+        }
+
+        $return->progress = ($completed / $count) * 100;
         return $return;
     }
 }

@@ -1068,6 +1068,83 @@ function get_my_remotecourses($userid=0) {
     return $DB->get_records_sql($sql, array($userid));
 }
 
+/* START Academy Patch M#045 Display remote MNet courses on a student's Dashboard. */
+/* START Academy Patch M#066 Add MNet function to get remote course progress. */
+/**
+ * List of remote courses that the current user is enrolled in by means other than MNet.
+ * @return array Array of {@link $COURSE} of course objects
+ */
+function get_my_remotemnetcourses() {
+    global $CFG, $DB, $USER;
+
+    require_once($CFG->dirroot.'/mnet/service/enrol/locallib.php');
+
+    $courses = array();
+
+    $username = $USER->username;
+    $mnethostid = $USER->mnethostid;
+    $mnethost = $DB->get_record('mnet_host', array('id' => $mnethostid));
+    $mnethostname = $mnethost->name;
+    $mnetwwwroot = $mnethost->wwwroot;
+
+    $service = mnetservice_enrol::get_instance();
+
+    if ($service->is_available()) {
+        $otherremotecourses = $service->req_user_enrolments($mnethostid, $username);
+    }
+
+    if (!is_array($otherremotecourses)) {
+        return array();
+    }
+
+    foreach ($otherremotecourses as $id => $course) {
+        $course = (object) $course; // is returned from MNet XML-RPC call as an array
+        $course->hostid = $mnethostid;
+        $course->hostname = $mnethostname;
+        $course->wwwroot = $mnetwwwroot;
+        $courses[$id] = $course;
+
+        if ($course->enablecompletion == 1) {
+            if (!empty($course->complete)) {
+                $course->progress = 100;
+            } else {
+                $course->progress = get_remote_course_progress($service, $mnethostid, $course->id, $username);
+            }
+        }
+    }
+
+    return $courses;
+}
+
+/**
+ * Get progress percentage of remote MNet course.
+ *
+ * @param mnetservice_enrol $service
+ * @param int $mnethostid
+ * @param int $courseid
+ * @param string $username
+ * @return null|float The percentage, or null if completion is not supported in the course,
+ *         or there are no activities that support completion.
+ */
+function get_remote_course_progress($service, $mnethostid, $courseid, $username) {
+    $remotecourseprogress = array();
+
+    if (!$service instanceof \mnetservice_enrol) {
+        return;
+    }
+
+    if ($service->is_available()) {
+        $remotecourseprogress = $service->req_course_progress($mnethostid, $courseid, $username);
+    }
+
+    if (!is_array($remotecourseprogress)) {
+        return null;
+    }
+
+    return $remotecourseprogress['progress'];
+}
+/* END Academy Patch M#045 and M#066 */
+
 /**
  * List of remote hosts that a user has access to via MNET.
  * Works on the SP
