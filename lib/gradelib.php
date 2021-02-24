@@ -64,7 +64,10 @@ function grade_update($source, $courseid, $itemtype, $itemmodule, $iteminstance,
     global $USER, $CFG, $DB;
 
     // only following grade_item properties can be changed in this function
-    $allowed = array('itemname', 'idnumber', 'gradetype', 'grademax', 'grademin', 'scaleid', 'multfactor', 'plusfactor', 'deleted', 'hidden');
+    /* START Academy Patch M#032 mod_subcourse icon changes to show subcourse progress */
+    //$allowed = array('itemname', 'idnumber', 'gradetype', 'grademax', 'grademin', 'scaleid', 'multfactor', 'plusfactor', 'deleted', 'hidden');
+    $allowed = array('itemname', 'idnumber', 'gradetype', 'grademax', 'grademin', 'gradepass', 'scaleid', 'multfactor', 'plusfactor', 'deleted', 'hidden');
+    /* END Academy Patch M#032 */
     // list of 10,5 numeric fields
     $floats  = array('grademin', 'grademax', 'multfactor', 'plusfactor');
 
