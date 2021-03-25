@@ -81,3 +81,7 @@ url=https://github.com/bdaloukas/moodle-mod_game.git
 [submodule "question/type/essayautograde"]
 	path = question/type/essayautograde
 	url = https://github.com/gbateson/moodle-qtype_essayautograde
+[submodule "mod/customcert"]
+	path = mod/customcert
+	url = https://github.com/mdjnelson/moodle-mod_customcert.git
+	branch = MOODLE_33_STABLE
