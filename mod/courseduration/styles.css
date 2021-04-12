@@ -1,0 +1,59 @@
+.countdowncoursetimer:before {
+  font-family: "FontAwesome";
+  content: "\f017";
+  display: inline-block;
+  padding-right: 3px;
+  vertical-align: middle;
+  font-weight: 300;
+}
+
+.countdowncoursetimer {
+  float: left;
+  padding-top: 3%;
+  color: white;
+}
+
+.container-fluid.navbar-nav .countdowncoursetimer {
+  float: right;
+  display: inline-block;
+  padding: 0;
+  margin-right: 14px;
+  padding-top: 5px;
+}
+
+.countdowncoursetimer.zero-element:before {
+  font-family: "FontAwesome";
+  content: "\f04c";
+}
+
+/*Animation*/
+.countdowncoursetimer.zero-element {
+  animation: pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.75;
+    color: white;
+  }
+  100% {
+    opacity: 0.25;
+    color: white;
+  }
+}
+
+.completed-element {
+  color: #25be25;
+  animation: completedpulse 2s ease-in-out;
+}
+
+@keyframes completedpulse {
+  0% {
+    font-size: 100%;
+    color: #25be25;
+  }
+  100% {
+    color: #25be25;
+    font-size: 125%;
+  }
+}

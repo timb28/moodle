@@ -1,0 +1,113 @@
+require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
+    console.log(mdlcfg.wwwroot); // outputs the wwwroot of moodle to console
+    setInterval(function () {
+        var autopaused = $('#autopaused').val();
+        if (autopaused == "false") {
+            runCourseTimerScript()
+        }
+    }, 2000);
+    var coursetimlength = 0
+    var runCourseTimerScript = () => {
+        coursetimlength++;
+        ajaxload(coursetimlength);
+    }
+    var ajaxload = (coursetimlength) => {
+        var form_data = new FormData();
+        form_data.append('action', 'coursetimer_countdown');
+        form_data.append('coursetimlength', coursetimlength);
+        $.ajax({
+            url: mdlcfg.wwwroot + '/mod/courseduration/ajax.php',
+            method: "POST",
+            data: form_data,
+            contentType: false,
+            cache: false,
+            processData: false,
+            beforeSend: function () {},
+            success: function (data) {}
+        });
+    }
+});
+require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
+    $(document).ready(function () {
+        var availabletime = $('#availabletime').val();
+        var currentthemeused = $('#currentthemeused').val();
+        var moodleversion = $('#moodleversion').val();
+        console.log(moodleversion);
+        if (moodleversion > '2020110500') {
+            if (currentthemeused == 'snap') {
+                $('.pull-right.js-only').append('<div class="countdowncoursetimer" style="display:none;">' + availabletime + '</div>');
+            } else {
+                $('.ml-auto').eq(0).append('<div class="countdowncoursetimer" style="display:none;">' + availabletime + '</div>');
+            }
+        } else if (moodleversion > '2017051400') {
+            if (currentthemeused == 'snap') {
+                $('.pull-right.js-only').append('<div class="countdowncoursetimer" style="display:none;">' + availabletime + '</div>');
+            } else {
+                $('#nav-notification-popover-container').before('<div class="countdowncoursetimer" style="display:none;">' + availabletime + '</div>');
+            }
+        } else {
+            if (currentthemeused == 'snap') {
+                $('.pull-right.js-only').append('<div class="countdowncoursetimer" style="display:none;">' + availabletime + '</div>');
+            } else {
+                $('.d-none.d-lg-block').append('<div class="countdowncoursetimer" style="display:none;">' + availabletime + '</div>');
+            }
+        }
+        var countdowncoursetimer = parseInt($('.countdowncoursetimer').html());
+        console.log(countdowncoursetimer);
+        if (countdowncoursetimer > 0) {
+
+            setInterval(function () {
+                var autopaused = $('#autopaused').val();
+                var hours = Math.floor(countdowncoursetimer / 60 / 60);
+                var minutes = Math.floor(countdowncoursetimer / 60) - (hours * 60);
+                var seconds = countdowncoursetimer % 60;
+
+                var hhours = hours >= 10 ? hours : '0' + hours;
+                var mminutes = minutes >= 10 ? minutes : '0' + minutes;
+                var sseconds = seconds >= 10 ? seconds : '0' + seconds;
+
+                var formatted = hhours + ':' + mminutes + ':' + sseconds;
+
+                $('.countdowncoursetimer').html(formatted);
+
+
+                if (autopaused == "false") {
+                    if (countdowncoursetimer > 0) {
+                        countdowncoursetimer = countdowncoursetimer - 1;
+                    } else {
+                        $('.countdowncoursetimer').html('00:00:00');
+                        $('.countdowncoursetimer').removeClass('zero-element');
+                        $('.countdowncoursetimer').addClass('completed-element');
+                    }
+                }
+                $('.countdowncoursetimer').show();
+            }, 1000);
+
+        } else {
+            $('.countdowncoursetimer').hide();
+        }
+    });
+
+    $(document).ready(function () {
+        var inactiveTime;
+        var actionscalls = 'mousemove click mouseup mousedown keydown keypress keyup submit change mouseenter scroll resize dblclick';
+        $('*').bind(actionscalls, function () {
+            function stopwatchandrequest() {
+                console.log('inactive');
+                $('#autopaused').val('true');
+                $('.countdowncoursetimer').addClass('zero-element');
+            }
+            var autopausedtime = $('#autopausedtime').val();
+            var countdowncoursetimer = parseInt($('.countdowncoursetimer').html());
+            if (autopausedtime > 0) {
+                clearTimeout(inactiveTime);
+                var convertimetoseconds = autopausedtime * 1000;
+                inactiveTime = setTimeout(stopwatchandrequest, convertimetoseconds); // 10 seconds
+                $('#autopaused').val('false');
+                $('.countdowncoursetimer').removeClass('zero-element');
+                console.log('active');
+            }
+        });
+        $("body").trigger("mousemove");
+    });
+});
