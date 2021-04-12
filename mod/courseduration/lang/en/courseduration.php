@@ -22,11 +22,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['indicator:socialbreadth'] = 'courseduration social';
-$string['indicator:socialbreadth_help'] = 'This indicator is based on the social breadth reached by the student in a courseduration resource.';
-$string['indicator:socialbreadthdef'] = 'courseduration social';
-$string['indicator:socialbreadthdef_help'] = 'The participant has reached this percentage of the social engagement offered by the courseduration resources during this analysis interval (Levels = No participation, Participant alone)';
-$string['indicator:socialbreadthdef_link'] = 'Learning_analytics_indicators#Social_breadth';
+$string['courseduration:timerlabel'] = 'Course Timer (in minutes)';
+$string['courseduration:timeractivelabel'] = 'Enable timer';
+$string['courseduration:autopauselabel'] = 'Automatically pause course timer during inactivity (in seconds)';
+$string['courseduration:completioncriteria'] = 'Timer must reach zero';
+$string['courseduration:completioncriteria_help'] = 'If enabled, this activity will be marked as complete when the timer reaches zero.';
 $string['courseduration:addinstance'] = 'Add a new courseduration';
 $string['courseduration:view'] = 'View courseduration';
 $string['coursedurationtext'] = 'courseduration text';

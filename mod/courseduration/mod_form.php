@@ -44,12 +44,12 @@ class mod_courseduration_mod_form extends moodleform_mod {
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $this->standard_intro_elements();
 
-        $mform->addElement('text', 'completiontimer', 'Completion Timer');
+        $mform->addElement('text', 'completiontimer', get_string('courseduration:timerlabel','mod_courseduration'));
         $mform->setDefault('completiontimer', 0);
         $mform->setType('completiontimer', PARAM_INT);
-        $mform->addElement('advcheckbox', 'status', '', 'Enable', array('group' => 1), array(0, 1));
+        $mform->addElement('advcheckbox', 'status', '', get_string('courseduration:timeractivelabel','mod_courseduration'), array('group' => 1), array(0, 1));
 
-        $mform->addElement('text', 'autopaused', 'Auto Paused');
+        $mform->addElement('text', 'autopaused', get_string('courseduration:autopauselabel','mod_courseduration'));
         $mform->setDefault('autopaused', 0);
         $mform->setType('autopaused', PARAM_INT);
 
@@ -69,12 +69,28 @@ class mod_courseduration_mod_form extends moodleform_mod {
         $items = array();
 
         $group = array();
-        $group[] = $mform->createElement('advcheckbox', 'completionpass', null, 'Require to spent full time to get completion',
+        $group[] = $mform->createElement('advcheckbox', 'completionpass', null, get_string('courseduration:completioncriteria','mod_courseduration'),
                 array('group' => 'cpass'));
         $mform->addGroup($group, 'completionpassgroup', 'Complete Time', ' &nbsp; ', false);
-        $mform->addHelpButton('completionpassgroup', 'completionpass', 'quiz');
+        $mform->addHelpButton('completionpassgroup', 'courseduration:completioncriteria', 'mod_courseduration');
         $items[] = 'completionpassgroup';
         return $items;
     }
 
+    /**
+     * Called during validation to see whether some module-specific completion rules are selected.
+     *
+     * @param array $data Input data not yet validated.
+     * @return bool True if one or more rules is enabled, false if none are.
+     */
+    public function completion_rule_enabled($data) {
+        return (!empty($data['completionpass']));
+    }
+
+    public function data_preprocessing(&$default_values){
+        // Set up the completion checkbox which aren't part of standard data.
+        // We also make the default value (if you turn on the checkbox) for those
+        // numbers to be 1, this will not apply unless checkbox is ticked.
+        $default_values['completionpass'] = 1;
+    }
 }
