@@ -313,7 +313,7 @@ function loadscript() {
     $availabletime = $_SESSION['checkCourseTimerAvailabletime'];
     $autopausedtime = $_SESSION['forautopaused'];
     $PAGE->requires->js(new moodle_url('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'), true);
-    $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/mod/courseduration/js/custom.js') );
+    $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/mod/courseduration/js/courseduration.js') );
     $cssurl = new moodle_url($CFG->wwwroot . '/mod/courseduration/styles.css');
     echo "<link rel='stylesheet' href=".$cssurl.">";
     echo "<input type='hidden' id='availabletime' value='".$availabletime."'>";

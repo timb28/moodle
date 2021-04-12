@@ -32,7 +32,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
         var availabletime = $('#availabletime').val();
         var currentthemeused = $('#currentthemeused').val();
         var moodleversion = $('#moodleversion').val();
-        console.log(moodleversion);
+        // console.log(moodleversion);
         if (moodleversion > '2020110500') {
             if (currentthemeused == 'snap') {
                 $('.pull-right.js-only').append('<div class="countdowncoursetimer" style="display:none;">' + availabletime + '</div>');
@@ -53,7 +53,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
             }
         }
         var countdowncoursetimer = parseInt($('.countdowncoursetimer').html());
-        console.log(countdowncoursetimer);
+        // console.log(countdowncoursetimer);
         if (countdowncoursetimer > 0) {
 
             setInterval(function () {
@@ -93,7 +93,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
         var actionscalls = 'mousemove click mouseup mousedown keydown keypress keyup submit change mouseenter scroll resize dblclick';
         $('*').bind(actionscalls, function () {
             function stopwatchandrequest() {
-                console.log('inactive');
+                // console.log('inactive');
                 $('#autopaused').val('true');
                 $('.countdowncoursetimer').addClass('zero-element');
             }
@@ -105,7 +105,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
                 inactiveTime = setTimeout(stopwatchandrequest, convertimetoseconds); // 10 seconds
                 $('#autopaused').val('false');
                 $('.countdowncoursetimer').removeClass('zero-element');
-                console.log('active');
+                // console.log('active');
             }
         });
         $("body").trigger("mousemove");
