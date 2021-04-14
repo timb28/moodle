@@ -1,6 +1,6 @@
 require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
     // console.log(mdlcfg.wwwroot); // outputs the wwwroot of moodle to console
-    var coursetimerstart = Date.now();
+    var coursetimerstart = Date.now() / 1000;
     var coursetimerinstance = $('#coursetimerinstance').val();
 
     setInterval(function () {
@@ -9,7 +9,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
             runCourseTimerScript()
         } else {
             // reset timer while paused.
-            coursetimerstart = Date.now();
+            coursetimerstart = Date.now() / 1000;
             console.log('Reset timer start while paused: ' + coursetimerstart);
         }
     }, 2000);
@@ -19,7 +19,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
     }
     var ajaxload = () => {
         var form_data = new FormData();
-        var coursertimerupdated = Date.now();
+        var coursertimerupdated = Date.now() / 1000;
         var coursetimerlength = coursertimerupdated - coursetimerstart;
         form_data.append('action', 'coursetimer_countdown');
         form_data.append('coursetimerinstance', coursetimerinstance);
@@ -34,9 +34,12 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
             processData: false,
             beforeSend: function () {},
             success: function (data) {
-                console.log( coursetimerlength + ' - ' + coursertimerupdated );
+                console.log( 'before' + coursetimerlength + ' - ' + coursertimerupdated );
                 coursetimerstart = coursertimerupdated;
-                console.log( coursetimerlength + ' - ' + coursertimerupdated );
+                console.log( 'after' + coursetimerlength + ' - ' + coursertimerupdated );
+            },
+            error: function (xhr, text, error) {
+                console.log('AJAX error:' + text + ' - ' + error);
             }
         });
     }
