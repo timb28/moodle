@@ -309,7 +309,7 @@ function checkcoursemodule ($manage) {
  * @throws moodle_exception
  */
 function loadscript() {
-    global $PAGE, $CFG;
+    global $COURSE, $PAGE, $CFG, $USER;
     $availabletime = $_SESSION['checkCourseTimerAvailabletime'];
     $autopausedtime = $_SESSION['forautopaused'];
     $PAGE->requires->js(new moodle_url('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'), true);
@@ -321,4 +321,10 @@ function loadscript() {
     echo "<input type='hidden' id='currentthemeused' value='".$CFG->theme."'>";
     echo "<input type='hidden' id='autopausedtime' value='".$autopausedtime."'>";
     echo "<input type='hidden' id='moodleversion' value='".$CFG->version."'>";
+
+    $manage = new \mod_courseduration\manage();
+    $coursetimerinstance = $manage->getcoursetimerinstance($COURSE->id, $USER->id);
+    if ($coursetimerinstance) {
+        echo "<input type='hidden' id='coursetimerinstance' value='".$coursetimerinstance->id."'>";
+    }
 }

@@ -129,6 +129,17 @@ class manage {
     }
 
     /**
+     * @param $courseid
+     * @param $userid
+     * @return false|mixed|stdClass
+     * @throws \dml_exception
+     */
+    public function getcoursetimerinstance($courseid, $userid) {
+        GLOBAL $DB;
+        return $DB->get_record('coursetimer_instance', array('courseid' => $courseid, 'userid' => $userid, 'status' => 1));
+    }
+
+    /**
      * @param $id
      * @return false|mixed|stdClass
      * @throws \dml_exception
@@ -239,103 +250,163 @@ class manage {
     }
 
     /**
+     * @param int $coursetimerinstance
+     * @param int $coursetimerlength
+     * @param int $coursetimerupdated
+     * @return bool
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public function coursetimercountdown(int $coursetimerinstanceid, int $coursetimerlength, int $coursetimerupdated): bool {
+        global $COURSE, $DB, $USER;
+
+        $userid = $USER->id;
+        $courseid = $_SESSION['checkcoursemodulecourseid'];
+
+        // Confirm course timer belongs to user
+        $coursetimerinstance = $this->getcoursetimerinstance($courseid, $userid);
+
+        if ($coursetimerinstanceid != $coursetimerinstance->id) {
+            throw new \coding_exception('Invalid course timer instance.');
+        }
+
+        if ($coursetimerinstance->updatedtime < $coursetimerupdated) {
+            $coursetimerlengthinseconds = ceil($coursetimerlength / 1000);
+            $coursetimerinstance->availabletime = $coursetimerinstance->availabletime - $coursetimerlengthinseconds;
+            $coursetimerinstance->updatedtime = $coursetimerupdated;
+            $DB->update_record('coursetimer_instance', $coursetimerinstance);
+
+            if ($coursetimerinstance->availabletime <= 0) {
+                // TODO: rebuild completion code
+                //$this->setcoursecompletedbyuser($courseid);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * @return bool|stdclass
      * @throws \dml_exception
      * @throws \coding_exception
      */
-    public function coursetimercountdown() {
+    /*public function coursetimercountdown() {
         global $DB, $USER;
         if (isset($_SESSION['checkcoursemodulecourseid'])) {
             $userid = $USER->id;
             $courseid = $_SESSION['checkcoursemodulecourseid'];
             if ($this->checkactivityisenable($courseid)) {
                 $sqlt1 = "SELECT * FROM {courseduration} WHERE (course = :courseid) AND (status = 1) ORDER BY ID DESC LIMIT 0, 1";
-                $params1 = ['courseid'=>$courseid];
-                $coursetim = $DB->get_record_sql($sqlt1, $params1);
-                $arrprm = array('courseid' => $courseid, 'userid' => $userid, 'ctimerinstanceid' => $coursetim->id);
-                $currenttimer = $DB->get_record('coursetimer_instance', $arrprm);
-                if ($currenttimer->availabletime > 0) {
-                    $currenttimer->availabletime = $currenttimer->availabletime - 2;
-                    $DB->update_record('coursetimer_instance',$currenttimer);
-                    return $currenttimer;
+                $params1 = ['courseid' => $courseid];
+                $courseduration = $DB->get_record_sql($sqlt1, $params1);
+                $arrprm = array('courseid' => $courseid, 'userid' => $userid, 'ctimerinstanceid' => $courseduration->id);
+                $coursedurationinstance = $DB->get_record('coursetimer_instance', $arrprm);
+                if ($coursedurationinstance->availabletime > 0) {
+                    $coursedurationinstance->availabletime = $coursedurationinstance->availabletime - 2;
+                    $DB->update_record('coursetimer_instance', $coursedurationinstance);
+                    return $coursedurationinstance;
                 } else {
                     $this->setcoursecompletedbyuser($courseid);
                     return false;
                 }
-            } else if ($this->checkactivityisinmodule($courseid)) {
-                $courseid = $this->checkactivityisinmodule($courseid)->course;
-                $sqlt1 = "SELECT * FROM {courseduration} WHERE (course = :courseid) AND (status = 1) ORDER BY ID DESC LIMIT 0, 1";
-                $params1 = ['courseid'=>$courseid];
-                $coursetim = $DB->get_record_sql($sqlt1, $params1);
-                $arrprm = array('courseid' => $courseid, 'userid' => $userid, 'ctimerinstanceid' => $coursetim->id);
-                $currenttimer = $DB->get_record('coursetimer_instance', $arrprm);
-                if ($currenttimer->availabletime > 0) {
-                    $currenttimer->availabletime = $currenttimer->availabletime - 2;
-                    $currenttimer->availabletime = $currenttimer->availabletime - 2;
-                    $DB->update_record('coursetimer_instance',$currenttimer);
-                    return $currenttimer;
-                } else {
-                    $this->setcoursecompletedbyuser($courseid);
-                    return false;
-                }
-            }
-        }
-    }
+            }*/
+//            } else if ($this->checkactivityisinmodule($courseid)) {
+//                $courseid = $this->checkactivityisinmodule($courseid)->course;
+//                $sqlt1 = "SELECT * FROM {courseduration} WHERE (course = :courseid) AND (status = 1) ORDER BY ID DESC LIMIT 0, 1";
+//                $params1 = ['courseid'=>$courseid];
+//                $coursetim = $DB->get_record_sql($sqlt1, $params1);
+//                $arrprm = array('courseid' => $courseid, 'userid' => $userid, 'ctimerinstanceid' => $coursetim->id);
+//                $currenttimer = $DB->get_record('coursetimer_instance', $arrprm);
+//                if ($currenttimer->availabletime > 0) {
+//                    $currenttimer->availabletime = $currenttimer->availabletime - 2;
+//                    $currenttimer->availabletime = $currenttimer->availabletime - 2;
+//                    $DB->update_record('coursetimer_instance',$currenttimer);
+//                    return $currenttimer;
+//                } else {
+//                    $this->setcoursecompletedbyuser($courseid);
+//                    return false;
+//                }
+//            }
+/*        }
+    }*/
 
     /**
-     * @param $id
+     * @param $courseid
      * @return stdClass
      * @throws \coding_exception
+     * @throws \dml_exception
      */
-    public function checkactivityisenable($id): stdClass {
+    public function checkactivityisenable($courseid): stdClass {
         GLOBAL $DB;
 
         $instanceforthiscourse = new stdclass();
-        $allcoursemodules = $DB->get_records('course_modules', array('course' => $id));
+        $allcoursemodules = $DB->get_records('course_modules', array('course' => $courseid, 'deletioninprogress' => 0));
         foreach ($allcoursemodules as $key => $value) {
             $timeridx = $DB->get_record('modules', array('name' => get_string('pluginname', 'mod_courseduration')));
             if ($value->module == $timeridx->id) {
-                if ($value->deletioninprogress == 0) {
-                    $instanceforthiscourse = $value;
-                }
+                $instanceforthiscourse = $value;
             }
         }
         return $instanceforthiscourse;
     }
 
     /**
-     * @param $id
+     * @param $cmid
      * @return mixed|string
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function checkactivityisinmodule($id):string {
-        GLOBAL $DB;
-
-        $instanceforthiscourse = '';
-        $modulecourse = $DB->get_record('course_modules', array('id' => $id));
-        $allcoursemodules = $DB->get_records('course_modules', array('course' => $modulecourse->course));
-        foreach ($allcoursemodules as $key => $value) {
-            $timeridx = $DB->get_record('modules', array('name' => get_string('pluginname', 'mod_courseduration')));
-            if ($value->module == $timeridx->id) {
-                if ($value->deletioninprogress == 0) {
-                    $instanceforthiscourse = $value;
-                }
-            }
-        }
-        return $instanceforthiscourse;
-    }
+//    public function checkactivityisinmodule($cmid):string {
+//        GLOBAL $DB;
+//
+//        $instanceforthiscourse = '';
+//        $modulecourse = $DB->get_record('course_modules', array('id' => $cmid));
+//        $allcoursemodules = $DB->get_records('course_modules', array('course' => $modulecourse->course, 'deletioninprogress' => 0));
+//        foreach ($allcoursemodules as $key => $value) {
+//            $timeridx = $DB->get_record('modules', array('name' => get_string('pluginname', 'mod_courseduration')));
+//            if ($value->module == $timeridx->id) {
+//                $instanceforthiscourse = $value;
+//            }
+//        }
+//        return $instanceforthiscourse;
+//    }
 
     /**
-     * @param $id
+     * @param $courseid
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function setcoursecompletedbyuser($id) {
+    public function setcoursecompletedbyuser($courseid) {
         global $DB, $USER;
 
-        $instanceforthiscourse = '';
-        $allcoursemodules = $DB->get_records('course_modules', array('course' => $id));
+        $timeridx = $DB->get_record('modules', array('name' => get_string('pluginname', 'mod_courseduration')));
+        $timercoursemodule = $DB->get_record('course_modules', array('course' => $courseid, 'module' => $timeridx, 'deletioninprogress' => 0));
+
+        if ($timercoursemodule) {
+            $prm = array('coursemoduleid' => $timercoursemodule->id, 'userid' => $USER->id);
+            $moduleexisted = $DB->get_record('course_modules_completion', $prm);
+            $mdl = new stdclass();
+
+            if ($moduleexisted && $moduleexisted->completionstate == 0) {
+                $mdl->completionstate = 1;
+                $mdl->viewed = 1;
+                $mdl->timemodified = time();
+                $mdl->id = $moduleexisted->id;
+                $DB->update_record("course_modules_completion", $mdl);
+            } else {
+                $mdl->coursemoduleid = $timercoursemodule->id;
+                $mdl->userid = $USER->id;
+                $mdl->completionstate = 1;
+                $mdl->viewed = 1;
+                $mdl->timemodified = time();
+                $DB->insert_record("course_modules_completion", $mdl);
+            }
+        }
+
+
+        /*$instanceforthiscourse = '';
+        $allcoursemodules = $DB->get_records('course_modules', array('course' => $courseid));
         foreach ($allcoursemodules as $key => $value) {
             $timeridx = $DB->get_record('modules', array('name' => get_string('pluginname', 'mod_courseduration')));
             if ($value->module == $timeridx->id) {
@@ -364,7 +435,7 @@ class manage {
                 $mdl->timemodified = time();
                 $DB->insert_record("course_modules_completion", $mdl);
             }
-        }
+        }*/
     }
 
     /**

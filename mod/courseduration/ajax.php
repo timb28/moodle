@@ -23,18 +23,33 @@ define('AJAX_SCRIPT', true);
 require_once(__DIR__ . '/../../config.php');
 require_once('lib.php');
 
-global $DB, $PAGE, $USER, $CFG;
-$manage = new \mod_courseduration\manage($DB);
+global $PAGE, $USER, $CFG;
+$manage = new \mod_courseduration\manage();
 
 if (isset($_POST['action']) && $_POST['action'] == 'coursetimer_countdown') {
-    $coursetimlength = $_POST['coursetimlength'];
-    $result = coursetimercountdown($manage);
+    $coursetimerinstance = (int) $_POST['coursetimerinstance'];
+    $coursetimerlength = (int) $_POST['coursetimerlength'];
+    $coursetimerupdated = (int) $_POST['coursetimerupdated'];
+    try {
+        $result = $manage->coursetimercountdown($coursetimerinstance, $coursetimerlength, $coursetimerupdated);
+        $status = 'success';
+        $code = 200;
+        $msg = 'Course Timer Decreased';
+    } catch (coding_exception $e) {
+        $status = 'error';
+        $code = 500;
+        $msg = 'Course Timer Unchanged';
+    } catch (dml_exception $e) {
+        $status = 'error';
+        $code = 500;
+        $msg = 'Course Timer Unchanged';
+    }
     $status = 'success';
-    $msg = 'Course Timer Decrease Successfully';
+    $msg = 'Course Timer Decreased';
     echo json_encode(array(
                         'status' => $status,
-                        'code' => 200,
-                        'msg' => $result->availabletime
+                        'code' => $code,
+                        'msg' => $msg
                         ));
         exit;
 }
