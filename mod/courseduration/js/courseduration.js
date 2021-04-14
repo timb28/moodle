@@ -1,13 +1,19 @@
 require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
     // console.log(mdlcfg.wwwroot); // outputs the wwwroot of moodle to console
+    var coursetimerstart = Date.now();
+    var coursetimerinstance = $('#coursetimerinstance').val();
+
     setInterval(function () {
         var autopaused = $('#autopaused').val();
         if (autopaused == "false") {
             runCourseTimerScript()
+        } else {
+            // reset timer while paused.
+            coursetimerstart = Date.now();
+            console.log('Reset timer start while paused: ' + coursetimerstart);
         }
     }, 2000);
-    var coursetimerstart = Date.now();
-    var coursetimerinstance = $('#coursetimerinstance').val();
+
     var runCourseTimerScript = () => {
         ajaxload();
     }
@@ -85,7 +91,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
 
 
                 if (autopaused == "false") {
-                    if (countdowncoursetimer > 0) {
+                    if (countdowncoursetimer >= 0) {
                         countdowncoursetimer = countdowncoursetimer - 1;
                     } else {
                         $('.countdowncoursetimer').html('00:00:00');
@@ -101,27 +107,35 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
         }
     });
 
+    var inactiveTime;
+    function stopwatchandrequest() {
+        // console.log('inactive');
+        $('#autopaused').val('true');
+        $('.countdowncoursetimer').addClass('zero-element');
+        // TODO remove autopaused time from counter
+    }
+
+    function autopausecheck() {
+        var autopausedtime = $('#autopausedtime').val();
+        var countdowncoursetimer = parseInt($('.countdowncoursetimer').html());
+        if (autopausedtime > 0) {
+            clearTimeout(inactiveTime);
+            var convertimetoseconds = autopausedtime * 1000;
+            inactiveTime = setTimeout(stopwatchandrequest, convertimetoseconds); // 10 seconds
+            $('#autopaused').val('false');
+            $('.countdowncoursetimer').removeClass('zero-element');
+            // console.log('active');
+        }
+    }
+
     $(document).ready(function () {
-        var inactiveTime;
-        var actionscalls = 'mousemove click mouseup mousedown keydown keypress keyup submit change mouseenter scroll resize dblclick';
+        var actionscalls = 'focus mousemove click mouseup mousedown keydown keypress keyup submit change mouseenter scroll resize dblclick';
         $('*').bind(actionscalls, function () {
-            function stopwatchandrequest() {
-                // console.log('inactive');
-                $('#autopaused').val('true');
-                $('.countdowncoursetimer').addClass('zero-element');
-                // TODO remove autopaused time from counter
-            }
-            var autopausedtime = $('#autopausedtime').val();
-            var countdowncoursetimer = parseInt($('.countdowncoursetimer').html());
-            if (autopausedtime > 0) {
-                clearTimeout(inactiveTime);
-                var convertimetoseconds = autopausedtime * 1000;
-                inactiveTime = setTimeout(stopwatchandrequest, convertimetoseconds); // 10 seconds
-                $('#autopaused').val('false');
-                $('.countdowncoursetimer').removeClass('zero-element');
-                // console.log('active');
-            }
+            autopausecheck();
         });
         $("body").trigger("mousemove");
+    });
+    $(window).bind('blur', function () {
+        stopwatchandrequest();
     });
 });
