@@ -262,11 +262,11 @@ class manage {
      * @param int $coursetimerinstance
      * @param int $coursetimerlength
      * @param int $coursetimerupdated
-     * @return bool
+     * @return int
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function updatecoursetimer(int $coursetimerinstanceid, int $coursetimerlength, int $coursetimerupdated): bool {
+    public function updatecoursetimer(int $coursetimerinstanceid, int $coursetimerlength, int $coursetimerupdated): int {
         global $COURSE, $DB, $USER;
 
         $userid = $USER->id;
@@ -303,10 +303,9 @@ class manage {
                 // TODO: rebuild completion code
                 //$this->setcoursecompletedbyuser($courseid);
             }
-            return true;
-        } else {
-            return false;
         }
+
+        return $coursetimerinstance->availabletime;
     }
 
     /**

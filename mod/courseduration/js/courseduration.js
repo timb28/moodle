@@ -1,3 +1,5 @@
+let countdowncoursetimer = 0;
+
 require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
     // console.log(mdlcfg.wwwroot); // outputs the wwwroot of moodle to console
     var coursetimerstart = Date.now() / 1000;
@@ -34,6 +36,12 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
             processData: false,
             beforeSend: function () {},
             success: function (data) {
+                if (data.result > 0) {
+                    var completiontime = $('#completiontime').val();
+                    countdowncoursetimer = completiontime - data.result;
+                }
+                console.log( '- result: ' + data.result);
+                console.log( '- countdowncoursetimer: ' + countdowncoursetimer);
                 console.log( 'before' + coursetimerlength + ' - ' + coursertimerupdated );
                 coursetimerstart = coursertimerupdated;
                 console.log( 'after' + coursetimerlength + ' - ' + coursertimerupdated );
@@ -73,7 +81,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
                 $('.d-none.d-lg-block').append('<div class="countdowncoursetimer" style="display:none;">' + remainingtime + '</div>');
             }
         }
-        var countdowncoursetimer = parseInt($('.countdowncoursetimer').html());
+        countdowncoursetimer = parseInt($('.countdowncoursetimer').html());
         if (countdowncoursetimer < 0) { countdowncoursetimer = 0; }
         // console.log(countdowncoursetimer);
         if (countdowncoursetimer => 0) {

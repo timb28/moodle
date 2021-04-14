@@ -32,19 +32,23 @@ if (isset($_POST['action']) && $_POST['action'] == 'coursetimer_countdown') {
     $coursetimerupdated = (int) $_POST['coursetimerupdated'];
     try {
         $result = $manage->updatecoursetimer($coursetimerinstance, $coursetimerlength, $coursetimerupdated);
+        // TODO: Send updated available time value back to browser
         $status = 'success';
         $code = 200;
         $msg = 'Course Timer Updated';
     } catch (coding_exception $e) {
+        $result = 0;
         $status = 'error';
         $code = 500;
         $msg = 'Course Timer Unchanged';
     } catch (dml_exception $e) {
+        $result = 0;
         $status = 'error';
         $code = 500;
         $msg = 'Course Timer Unchanged';
     }
     echo json_encode(array(
+                        'result' => $result,
                         'status' => $status,
                         'code' => $code,
                         'msg' => $msg
