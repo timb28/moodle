@@ -38,26 +38,30 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
 require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
     $(document).ready(function () {
         var availabletime = $('#availabletime').val();
+        var completiontime = $('#completiontime').val();
         var currentthemeused = $('#currentthemeused').val();
         var moodleversion = $('#moodleversion').val();
         // console.log(moodleversion);
+
+        var remainingtime = completiontime - availabletime;
+
         if (moodleversion > '2020110500') {
             if (currentthemeused == 'snap') {
-                $('.pull-right.js-only').append('<div class="countdowncoursetimer" style="display:none;">' + availabletime + '</div>');
+                $('.pull-right.js-only').append('<div class="countdowncoursetimer" style="display:none;">' + remainingtime + '</div>');
             } else {
-                $('.ml-auto').eq(0).append('<div class="countdowncoursetimer" style="display:none;">' + availabletime + '</div>');
+                $('.ml-auto').eq(0).append('<div class="countdowncoursetimer" style="display:none;">' + remainingtime + '</div>');
             }
         } else if (moodleversion > '2017051400') {
             if (currentthemeused == 'snap') {
-                $('.pull-right.js-only').append('<div class="countdowncoursetimer" style="display:none;">' + availabletime + '</div>');
+                $('.pull-right.js-only').append('<div class="countdowncoursetimer" style="display:none;">' + remainingtime + '</div>');
             } else {
-                $('#nav-notification-popover-container').before('<div class="countdowncoursetimer" style="display:none;">' + availabletime + '</div>');
+                $('#nav-notification-popover-container').before('<div class="countdowncoursetimer" style="display:none;">' + remainingtime + '</div>');
             }
         } else {
             if (currentthemeused == 'snap') {
-                $('.pull-right.js-only').append('<div class="countdowncoursetimer" style="display:none;">' + availabletime + '</div>');
+                $('.pull-right.js-only').append('<div class="countdowncoursetimer" style="display:none;">' + remainingtime + '</div>');
             } else {
-                $('.d-none.d-lg-block').append('<div class="countdowncoursetimer" style="display:none;">' + availabletime + '</div>');
+                $('.d-none.d-lg-block').append('<div class="countdowncoursetimer" style="display:none;">' + remainingtime + '</div>');
             }
         }
         var countdowncoursetimer = parseInt($('.countdowncoursetimer').html());

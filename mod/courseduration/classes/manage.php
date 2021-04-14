@@ -33,7 +33,16 @@ use \stdclass;
  */
 class manage {
 
+    public $moduleid;
+
     public function __construct() {
+        global $DB;
+        $module = $DB->get_record('modules', array('name' => get_string('pluginname', 'mod_courseduration')));
+        if ($module) {
+            $this->moduleid = $module->id;
+        } else {
+            throw new \moodle_exception('mod_courseduration not correctly installed.');
+        }
     }
 
     /**
@@ -155,13 +164,13 @@ class manage {
      * @return boolean true, false.
      * @throws \dml_exception
      */
-    public function createcoursetimerinstance($data): bool {
+    public function createcoursetimerinstance(stdClass $new_coursetimerinstance): bool {
         global $DB;
         $insert = new stdclass();
-        $insert->availabletime = $data->availabletime;
-        $insert->ctimerinstanceid = $data->ctimerinstanceid;
-        $insert->courseid = $data->courseid;
-        $insert->userid = $data->userid;
+        $insert->availabletime = $new_coursetimerinstance->availabletime;
+        $insert->ctimerinstanceid = $new_coursetimerinstance->ctimerinstanceid;
+        $insert->courseid = $new_coursetimerinstance->courseid;
+        $insert->userid = $new_coursetimerinstance->userid;
         $insert->status = 1;
         $insert->createdtime = time();
         $insert->updatedtime = time();
@@ -199,7 +208,7 @@ class manage {
      * @return boolean true, false.
      * @throws \dml_exception
      */
-    public function updatecoursetimer($data): bool {
+    public function Replaced_updatecoursetimer($data): bool {
         global $DB;
 
         $update = new stdclass();
@@ -257,7 +266,7 @@ class manage {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function coursetimercountdown(int $coursetimerinstanceid, int $coursetimerlength, int $coursetimerupdated): bool {
+    public function updatecoursetimer(int $coursetimerinstanceid, int $coursetimerlength, int $coursetimerupdated): bool {
         global $COURSE, $DB, $USER;
 
         $userid = $USER->id;
@@ -272,7 +281,7 @@ class manage {
 
         if ($coursetimerinstance->updatedtime < $coursetimerupdated) {
             $coursetimerlengthinseconds = ceil($coursetimerlength / 1000);
-            $coursetimerinstance->availabletime = $coursetimerinstance->availabletime - $coursetimerlengthinseconds;
+            $coursetimerinstance->availabletime = $coursetimerinstance->availabletime + $coursetimerlengthinseconds;
             $coursetimerinstance->updatedtime = $coursetimerupdated;
             $DB->update_record('coursetimer_instance', $coursetimerinstance);
 
@@ -333,22 +342,43 @@ class manage {
 
     /**
      * @param $courseid
-     * @return stdClass
+     * @return bool
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function checkactivityisenable($courseid): stdClass {
+    public function checkactivityisenable($courseid): bool {
         GLOBAL $DB;
 
-        $instanceforthiscourse = new stdclass();
-        $allcoursemodules = $DB->get_records('course_modules', array('course' => $courseid, 'deletioninprogress' => 0));
-        foreach ($allcoursemodules as $key => $value) {
-            $timeridx = $DB->get_record('modules', array('name' => get_string('pluginname', 'mod_courseduration')));
-            if ($value->module == $timeridx->id) {
-                $instanceforthiscourse = $value;
+        $courseinstance = $DB->get_record('course_modules', array('course' => $courseid, 'module' => $this->moduleid, 'deletioninprogress' => 0));
+        return $courseinstance ? true : false;
+    }
+
+    /**
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    function preparepage () {
+        global $USER, $COURSE;
+
+        $coursetimerinstance = $this->prepareuser($COURSE, $USER);
+        if ($coursetimerinstance) {
+            $forautopaused = $this->getautopaused($coursetimerinstance->ctimerinstanceid);
+            unset($_SESSION['coursetimercompletiontime']);
+            unset($_SESSION['checkcoursemodulecourseid']);
+            unset($_SESSION['checkCourseTimerAvailabletime']);
+            unset($_SESSION['forautopaused']);
+            $_SESSION['coursetimercompletiontime'] = $coursetimerinstance->completiontime;
+            $_SESSION['checkcoursemodulecourseid'] = $COURSE->id;
+            $_SESSION['checkCourseTimerAvailabletime'] = $coursetimerinstance->availabletime;
+            $_SESSION['forautopaused'] = $forautopaused->autopaused;
+            loadscript();
+            if (!is_siteadmin()) {
+                echo "<style>";
+                echo "li.activity.courseduration.modtype_courseduration{display:none;}";
+                echo "</style>";
             }
         }
-        return $instanceforthiscourse;
     }
 
     /**
@@ -380,8 +410,7 @@ class manage {
     public function setcoursecompletedbyuser($courseid) {
         global $DB, $USER;
 
-        $timeridx = $DB->get_record('modules', array('name' => get_string('pluginname', 'mod_courseduration')));
-        $timercoursemodule = $DB->get_record('course_modules', array('course' => $courseid, 'module' => $timeridx, 'deletioninprogress' => 0));
+        $timercoursemodule = $DB->get_record('course_modules', array('course' => $courseid, 'module' => $this->moduleid, 'deletioninprogress' => 0));
 
         if ($timercoursemodule) {
             $prm = array('coursemoduleid' => $timercoursemodule->id, 'userid' => $USER->id);
@@ -445,54 +474,32 @@ class manage {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function verifyuser(stdClass $user, stdClass $course) {
+    public function prepareuser(stdClass $course, stdClass $user) {
         GLOBAL $DB;
-
-        /*
-        $sqlt = "
-                    SELECT u.*
-                    FROM
-                        {user_enrolments} ue
-                    JOIN
-                        {enrol} e ON e.id = ue.enrolid
-                    JOIN
-                        {course} c ON c.id = e.courseid
-                    JOIN
-                        {user} u ON u.id = ue.userid
-                    JOIN
-                        {role_assignments} r ON r.userid = u.id
-                    WHERE
-                        (u.id = :userid)
-                    AND
-                        (c.id = :courseid)
-                ";
-        $params = ['courseid'=>$course->id,'userid'=>$userid];
-        $checkenroll = $DB->get_records_sql($sqlt, $params);
-        if (!$checkenroll) {
-            return false;
-        }*/
 
         if (!is_enrolled(\context_course::instance($course->id), $user, false, true)) {
             return false;
         }
 
         if ($this->checkactivityisenable($course->id)) {
-            $sqlt1 = "SELECT * FROM {courseduration} WHERE (course = :courseid) AND (status = 1) ORDER BY ID DESC LIMIT 0, 1";
+            $sql = "SELECT * FROM {courseduration} WHERE (course = :courseid) AND (status = 1) ORDER BY ID DESC LIMIT 0, 1";
             $params = ['courseid'=>$course->id];
-            $coursetim = $DB->get_record_sql($sqlt1, $params);
+            $courseduration = $DB->get_record_sql($sql, $params);
 
-            if ($coursetim) {
-                $coursetiminstance = $DB->get_record('coursetimer_instance', array('ctimerinstanceid' => $coursetim->id));
-                if ($coursetiminstance) {
-                    return $coursetiminstance;
+            if ($courseduration) {
+                $coursetimerinstance = $DB->get_record('coursetimer_instance', array('ctimerinstanceid' => $courseduration->id, 'userid' => $user->id));
+                if ($coursetimerinstance) {
+                    $coursetimerinstance->completiontime = $courseduration->completiontimer * 60;
+                    return $coursetimerinstance;
                 } else {
-                    $datatimerinstance = new stdclass();
-                    $datatimerinstance->availabletime = $coursetim->completiontimer * 60;
-                    $datatimerinstance->courseid = $course->id;
-                    $datatimerinstance->ctimerinstanceid = $coursetim->id;
-                    $datatimerinstance->userid = $user->id;
-                    $ctid = $this->createcoursetimerinstance($datatimerinstance);
-                    return $DB->get_record('coursetimer_instance', array('ctimerinstanceid' => $ctid));
+                    $new_coursetimerinstance = new stdclass();
+                    $new_coursetimerinstance->availabletime = 0;
+                    $new_coursetimerinstance->completiontime = $courseduration->completiontimer * 60;
+                    $new_coursetimerinstance->courseid = $course->id;
+                    $new_coursetimerinstance->ctimerinstanceid = $courseduration->id;
+                    $new_coursetimerinstance->userid = $user->id;
+                    $newctid = $this->createcoursetimerinstance($new_coursetimerinstance);
+                    return $DB->get_record('coursetimer_instance', array('ctimerinstanceid' => $newctid));
                 }
             }
         }
@@ -509,11 +516,16 @@ class manage {
         return $DB->get_record('courseduration', array('id' => $id, 'status' => 1));
     }
 }
+
+/**
+ * Class observer
+ * @package mod_courseduration
+ */
 class observer {
     public static function viewoverride($event) {
         global $CFG;
         require_once($CFG->dirroot . '/mod/courseduration/lib.php');
         $manage = new \mod_courseduration\manage();
-        checkcoursemodule($manage);
+        $manage->preparepage();
     }
 }

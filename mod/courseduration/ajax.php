@@ -31,10 +31,10 @@ if (isset($_POST['action']) && $_POST['action'] == 'coursetimer_countdown') {
     $coursetimerlength = (int) $_POST['coursetimerlength'];
     $coursetimerupdated = (int) $_POST['coursetimerupdated'];
     try {
-        $result = $manage->coursetimercountdown($coursetimerinstance, $coursetimerlength, $coursetimerupdated);
+        $result = $manage->updatecoursetimer($coursetimerinstance, $coursetimerlength, $coursetimerupdated);
         $status = 'success';
         $code = 200;
-        $msg = 'Course Timer Decreased';
+        $msg = 'Course Timer Updated';
     } catch (coding_exception $e) {
         $status = 'error';
         $code = 500;
@@ -44,8 +44,6 @@ if (isset($_POST['action']) && $_POST['action'] == 'coursetimer_countdown') {
         $code = 500;
         $msg = 'Course Timer Unchanged';
     }
-    $status = 'success';
-    $msg = 'Course Timer Decreased';
     echo json_encode(array(
                         'status' => $status,
                         'code' => $code,

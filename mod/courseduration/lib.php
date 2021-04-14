@@ -34,9 +34,9 @@ require_once($CFG->dirroot . '/course/lib.php');
 global $DB, $PAGE, $USER, $CFG;
 $manage = new \mod_courseduration\manage();
 
-function updatecoursetimer ($manage, $data) {
-    return $manage->updatecoursetimer($data);
-}
+//function updatecoursetimer ($manage, $data) {
+//    return $manage->updatecoursetimer($data);
+//}
 
 function getcoursetimerbyid ($manage, $id) {
     return $manage->getcoursetimerbyid($id);
@@ -283,27 +283,27 @@ function mod_courseduration_core_calendar_provide_event_action(calendar_event $e
     );
 }
 
-function checkcoursemodule ($manage) {
-    global $USER, $COURSE;
-    if ($manage->checkactivityisenable($COURSE->id)) {
-        $cmresult = $manage->verifyuser($USER, $COURSE);
-        if ($cmresult) {
-            $forautopaused = $manage->getautopaused($cmresult->ctimerinstanceid);
-            unset($_SESSION['checkcoursemodulecourseid']);
-            unset($_SESSION['checkCourseTimerAvailabletime']);
-            unset($_SESSION['forautopaused']);
-            $_SESSION['checkcoursemodulecourseid'] = $COURSE->id;
-            $_SESSION['checkCourseTimerAvailabletime'] = $cmresult->availabletime;
-            $_SESSION['forautopaused'] = $forautopaused->autopaused;
-            loadscript();
-            if (!is_siteadmin()) {
-                echo "<style>";
-                echo "li.activity.courseduration.modtype_courseduration{display:none;}";
-                echo "</style>";
-            }
-        }
-    }
-}
+//function checkcoursemodule (\mod_courseduration\manage $manage) {
+//    global $USER, $COURSE;
+//    if ($manage->checkactivityisenable($COURSE->id)) {
+//        $cmresult = $manage->verifyuser($USER, $COURSE);
+//        if ($cmresult) {
+//            $forautopaused = $manage->getautopaused($cmresult->ctimerinstanceid);
+//            unset($_SESSION['checkcoursemodulecourseid']);
+//            unset($_SESSION['checkCourseTimerAvailabletime']);
+//            unset($_SESSION['forautopaused']);
+//            $_SESSION['checkcoursemodulecourseid'] = $COURSE->id;
+//            $_SESSION['checkCourseTimerAvailabletime'] = $cmresult->availabletime;
+//            $_SESSION['forautopaused'] = $forautopaused->autopaused;
+//            loadscript();
+//            if (!is_siteadmin()) {
+//                echo "<style>";
+//                echo "li.activity.courseduration.modtype_courseduration{display:none;}";
+//                echo "</style>";
+//            }
+//        }
+//    }
+//}
 
 /**
  * @throws moodle_exception
@@ -311,12 +311,14 @@ function checkcoursemodule ($manage) {
 function loadscript() {
     global $COURSE, $PAGE, $CFG, $USER;
     $availabletime = $_SESSION['checkCourseTimerAvailabletime'];
+    $completiontime = $_SESSION['coursetimercompletiontime'];
     $autopausedtime = $_SESSION['forautopaused'];
     $PAGE->requires->js(new moodle_url('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'), true);
     $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/mod/courseduration/js/courseduration.js') );
     $cssurl = new moodle_url($CFG->wwwroot . '/mod/courseduration/styles.css');
     echo "<link rel='stylesheet' href=".$cssurl.">";
     echo "<input type='hidden' id='availabletime' value='".$availabletime."'>";
+    echo "<input type='hidden' id='completiontime' value='".$completiontime."'>";
     echo "<input type='hidden' id='autopaused' value='false'>";
     echo "<input type='hidden' id='currentthemeused' value='".$CFG->theme."'>";
     echo "<input type='hidden' id='autopausedtime' value='".$autopausedtime."'>";
