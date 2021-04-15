@@ -106,9 +106,16 @@ class manage {
             $coursetimer->updatedtime = $coursetimerupdated;
             $DB->update_record('courseduration_timers', $coursetimer);
 
-            if ($coursetimer->coursetime <= 0) {
+            error_log("=== Checking for timer completion ===");
+            error_log(" session coursetimercompletionduration: " . print_r($_SESSION['coursetimercompletionduration'], true));
+            error_log(" coursetime: " . print_r($coursetimer->coursetime, true));
+
+            if ($coursetimer->coursetime >= $_SESSION['coursetimercompletionduration']) {
                 // TODO: rebuild completion code
-                //$this->setcoursecompletedbyuser($courseid);
+                error_log(" = Timer is complete!");
+                $this->setmodulecompleted($coursetimer);
+            } else {
+                error_log(" x Timer is not complete");
             }
         }
 
@@ -161,30 +168,48 @@ class manage {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function setcoursecompletedbyuser($courseid) {
-        global $DB, $USER;
+    public function setmodulecompleted(stdClass $coursetimer): bool {
+        global $COURSE, $DB, $USER;
 
-        $timercoursemodule = $DB->get_record('course_modules', array('course' => $courseid, 'module' => $this->moduleid, 'deletioninprogress' => 0));
+        if (!$coursetimer) { return false; }
 
+        $timercoursemodule = $DB->get_record('course_modules', array('course' => $coursetimer->courseid, 'module' => $this->moduleid, 'deletioninprogress' => 0));
+
+        $completioninfo = new \completion_info(get_course($coursetimer->courseid));
+
+        // Confirm completion is enabled on the course module
         if ($timercoursemodule) {
-            $prm = array('coursemoduleid' => $timercoursemodule->id, 'userid' => $USER->id);
-            $moduleexisted = $DB->get_record('course_modules_completion', $prm);
-            $mdl = new stdclass();
 
-            if ($moduleexisted && $moduleexisted->completionstate == 0) {
-                $mdl->completionstate = 1;
-                $mdl->viewed = 1;
-                $mdl->timemodified = time();
-                $mdl->id = $moduleexisted->id;
-                $DB->update_record("course_modules_completion", $mdl);
-            } else {
-                $mdl->coursemoduleid = $timercoursemodule->id;
-                $mdl->userid = $USER->id;
-                $mdl->completionstate = 1;
-                $mdl->viewed = 1;
-                $mdl->timemodified = time();
-                $DB->insert_record("course_modules_completion", $mdl);
+            $cmc = $completioninfo->get_data($timercoursemodule, false, $coursetimer->userid);
+            if ($cmc->completionstate === COMPLETION_COMPLETE) {
+                error_log(" == Ignoring existing module completion.");
+                return true;
             }
+
+            error_log(" == Updating module completion.");
+            $completioninfo->update_state($timercoursemodule, COMPLETION_COMPLETE, $USER->id);
+            return true;
+
+//            $prm = array('coursemoduleid' => $timercoursemodule->id, 'userid' => $USER->id);
+//            $moduleexisted = $DB->get_record('course_modules_completion', $prm);
+//            $mdl = new stdclass();
+//
+//            if ($moduleexisted && $moduleexisted->completionstate == 0) {
+//                $mdl->completionstate = 1;
+//                $mdl->viewed = 1;
+//                $mdl->timemodified = time();
+//                $mdl->id = $moduleexisted->id;
+//                $DB->update_record("course_modules_completion", $mdl);
+//            } else {
+//                $mdl->coursemoduleid = $timercoursemodule->id;
+//                $mdl->userid = $USER->id;
+//                $mdl->completionstate = 1;
+//                $mdl->viewed = 1;
+//                $mdl->timemodified = time();
+//                $DB->insert_record("course_modules_completion", $mdl);
+//            }
+        } else {
+            return false;
         }
 
 

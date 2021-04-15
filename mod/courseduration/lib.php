@@ -67,7 +67,7 @@ function courseduration_add_instance($courseduration) {
     global $DB;
 
     $courseduration->name = $courseduration->name;
-    $courseduration->intro = $courseduration->name;
+    $courseduration->intro = $courseduration->intro;
     $courseduration->introformat = 1;
     $courseduration->timemodified = time();
 
