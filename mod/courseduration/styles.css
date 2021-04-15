@@ -8,18 +8,24 @@
 }
 
 .countdowncoursetimer {
-  float: left;
-  padding-top: 3%;
   color: white;
+  padding-top: 1.2em;
+  padding-bottom: 1.16em;
+  display: inline;
 }
 
-.container-fluid.navbar-nav .countdowncoursetimer {
-  float: right;
-  display: inline-block;
-  padding: 0;
-  margin-right: 14px;
-  padding-top: 5px;
+.countdowncoursetimer.fadein {
+  animation: fadeIn 1s ease-in-out;
 }
+
+
+/*.container-fluid.navbar-nav .countdowncoursetimer {*/
+/*  float: right;*/
+/*  display: inline-block;*/
+/*  padding: 0;*/
+/*  margin-right: 14px;*/
+/*  padding-top: 5px;*/
+/*}*/
 
 .countdowncoursetimer.zero-element:before {
   font-family: "FontAwesome";
@@ -29,6 +35,11 @@
 /*Animation*/
 .countdowncoursetimer.zero-element {
   animation: pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
 }
 
 @keyframes pulse {

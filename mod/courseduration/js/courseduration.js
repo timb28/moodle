@@ -59,23 +59,24 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
 
         if (moodleversion > '2020110500') {
             if (currentthemeused == 'snap') {
-                $('.pull-right.js-only').append('<div class="countdowncoursetimer" style="display:none;">' + remainingtime + '</div>');
+                $('.pull-right.js-only').prepend('<div class="countdowncoursetimer fadein" style="display:none;">' + remainingtime + '</div>');
             } else {
-                $('.ml-auto').eq(0).append('<div class="countdowncoursetimer" style="display:none;">' + remainingtime + '</div>');
+                $('.ml-auto').eq(0).prepend('<div class="countdowncoursetimer fadein" style="display:none;">' + remainingtime + '</div>');
             }
         } else if (moodleversion > '2017051400') {
             if (currentthemeused == 'snap') {
-                $('.pull-right.js-only').append('<div class="countdowncoursetimer" style="display:none;">' + remainingtime + '</div>');
+                $('.pull-right.js-only').prepend('<div class="countdowncoursetimer fadein" style="display:none;">' + remainingtime + '</div>');
             } else {
-                $('#nav-notification-popover-container').before('<div class="countdowncoursetimer" style="display:none;">' + remainingtime + '</div>');
+                $('#nav-notification-popover-container').before('<div class="countdowncoursetimer fadein" style="display:none;">' + remainingtime + '</div>');
             }
         } else {
             if (currentthemeused == 'snap') {
-                $('.pull-right.js-only').append('<div class="countdowncoursetimer" style="display:none;">' + remainingtime + '</div>');
+                $('.pull-right.js-only').prepend('<div class="countdowncoursetimer fadein" style="display:none;">' + remainingtime + '</div>');
             } else {
-                $('.d-none.d-lg-block').append('<div class="countdowncoursetimer" style="display:none;">' + remainingtime + '</div>');
+                $('.d-none.d-lg-block').prepend('<div class="countdowncoursetimer fadein" style="display:none;">' + remainingtime + '</div>');
             }
         }
+
         countdowncoursetimer = parseInt($('.countdowncoursetimer').html());
         if (countdowncoursetimer < 0) { countdowncoursetimer = 0; }
         // console.log(countdowncoursetimer);
@@ -126,8 +127,10 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
     function stopwatchandrequest() {
         // console.log('inactive');
         $('#autopaused').val('true');
-        $('.countdowncoursetimer').addClass('zero-element');
-        // TODO remove autopaused time from counter
+        if (countdowncoursetimer > 0) {
+            $('.countdowncoursetimer').addClass('zero-element');
+        }
+        $('.countdowncoursetimer').removeClass('fadein');
     }
 
     function autopausecheck() {
