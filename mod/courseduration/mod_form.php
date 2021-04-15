@@ -44,14 +44,14 @@ class mod_courseduration_mod_form extends moodleform_mod {
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $this->standard_intro_elements();
 
-        $mform->addElement('text', 'completiontimer', get_string('courseduration:timerlabel','mod_courseduration'));
-        $mform->setDefault('completiontimer', 0);
-        $mform->setType('completiontimer', PARAM_INT);
+        $mform->addElement('text', 'completionduration', get_string('courseduration:timerlabel','mod_courseduration'));
+        $mform->setDefault('completionduration', 0);
+        $mform->setType('completionduration', PARAM_INT);
         $mform->addElement('advcheckbox', 'status', '', get_string('courseduration:timeractivelabel','mod_courseduration'), array('group' => 1), array(0, 1));
 
-        $mform->addElement('text', 'autopaused', get_string('courseduration:autopauselabel','mod_courseduration'));
-        $mform->setDefault('autopaused', 0);
-        $mform->setType('autopaused', PARAM_INT);
+        $mform->addElement('text', 'autopauseduration', get_string('courseduration:autopauselabel','mod_courseduration'));
+        $mform->setDefault('autopauseduration', 0);
+        $mform->setType('autopauseduration', PARAM_INT);
 
         $mform->addElement('hidden', 'showdescription', 1);
         $mform->setType('showdescription', PARAM_INT);

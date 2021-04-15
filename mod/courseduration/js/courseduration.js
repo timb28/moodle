@@ -36,8 +36,8 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
             beforeSend: function () {},
             success: function (data) {
                 if (data.result > 0) {
-                    var completiontime = $('#completiontime').val();
-                    countdowncoursetimer = completiontime - data.result;
+                    var completionduration = $('#completionduration').val();
+                    countdowncoursetimer = completionduration - data.result;
                 }
                 coursetimerstart = coursertimerupdated;
             },
@@ -49,13 +49,13 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
 });
 require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
     $(document).ready(function () {
-        var availabletime = $('#availabletime').val();
-        var completiontime = $('#completiontime').val();
+        var coursetime = $('#coursetime').val();
+        var completionduration = $('#completionduration').val();
         var currentthemeused = $('#currentthemeused').val();
         var moodleversion = $('#moodleversion').val();
         // console.log(moodleversion);
 
-        var remainingtime = completiontime - availabletime;
+        var remainingtime = completionduration - coursetime;
 
         if (moodleversion > '2020110500') {
             if (currentthemeused == 'snap') {

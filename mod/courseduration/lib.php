@@ -288,12 +288,12 @@ function mod_courseduration_core_calendar_provide_event_action(calendar_event $e
 //    if ($manage->checkactivityisenable($COURSE->id)) {
 //        $cmresult = $manage->verifyuser($USER, $COURSE);
 //        if ($cmresult) {
-//            $forautopaused = $manage->getautopaused($cmresult->ctimerinstanceid);
+//            $forautopaused = $manage->getautopaused($cmresult->coursedurationid);
 //            unset($_SESSION['checkcoursemodulecourseid']);
-//            unset($_SESSION['checkCourseTimerAvailabletime']);
+//            unset($_SESSION['checkcoursetime']);
 //            unset($_SESSION['forautopaused']);
 //            $_SESSION['checkcoursemodulecourseid'] = $COURSE->id;
-//            $_SESSION['checkCourseTimerAvailabletime'] = $cmresult->availabletime;
+//            $_SESSION['checkcoursetime'] = $cmresult->coursetime;
 //            $_SESSION['forautopaused'] = $forautopaused->autopaused;
 //            loadscript();
 //            if (!is_siteadmin()) {
@@ -310,15 +310,15 @@ function mod_courseduration_core_calendar_provide_event_action(calendar_event $e
  */
 function loadscript() {
     global $COURSE, $PAGE, $CFG, $USER;
-    $availabletime = $_SESSION['checkCourseTimerAvailabletime'];
-    $completiontime = $_SESSION['coursetimercompletiontime'];
+    $coursetime = $_SESSION['checkcoursetime'];
+    $completionduration = $_SESSION['coursetimercompletionduration'];
     $autopausedtime = $_SESSION['forautopaused'];
     $PAGE->requires->js(new moodle_url('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'), true);
     $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/mod/courseduration/js/courseduration.js') );
     $cssurl = new moodle_url($CFG->wwwroot . '/mod/courseduration/styles.css');
     echo "<link rel='stylesheet' href=".$cssurl.">";
-    echo "<input type='hidden' id='availabletime' value='".$availabletime."'>";
-    echo "<input type='hidden' id='completiontime' value='".$completiontime."'>";
+    echo "<input type='hidden' id='coursetime' value='".$coursetime."'>";
+    echo "<input type='hidden' id='completionduration' value='".$completionduration."'>";
     echo "<input type='hidden' id='autopaused' value='false'>";
     echo "<input type='hidden' id='currentthemeused' value='".$CFG->theme."'>";
     echo "<input type='hidden' id='autopausedtime' value='".$autopausedtime."'>";

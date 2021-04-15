@@ -40,8 +40,6 @@ class manage {
         $module = $DB->get_record('modules', array('name' => get_string('pluginname', 'mod_courseduration')));
         if ($module) {
             $this->moduleid = $module->id;
-        } else {
-            throw new \moodle_exception('mod_courseduration not correctly installed.');
         }
     }
 
@@ -145,7 +143,7 @@ class manage {
      */
     public function getcoursetimerinstance($courseid, $userid) {
         GLOBAL $DB;
-        return $DB->get_record('coursetimer_instance', array('courseid' => $courseid, 'userid' => $userid, 'status' => 1));
+        return $DB->get_record('courseduration_timers', array('courseid' => $courseid, 'userid' => $userid, 'status' => 1));
     }
 
     /**
@@ -167,14 +165,14 @@ class manage {
     public function createcoursetimerinstance(stdClass $new_coursetimerinstance): bool {
         global $DB;
         $insert = new stdclass();
-        $insert->availabletime = $new_coursetimerinstance->availabletime;
-        $insert->ctimerinstanceid = $new_coursetimerinstance->ctimerinstanceid;
+        $insert->coursetime = $new_coursetimerinstance->coursetime;
+        $insert->coursedurationid = $new_coursetimerinstance->coursedurationid;
         $insert->courseid = $new_coursetimerinstance->courseid;
         $insert->userid = $new_coursetimerinstance->userid;
         $insert->status = 1;
         $insert->createdtime = time();
         $insert->updatedtime = time();
-        return $DB->insert_record('coursetimer_instance', $insert);
+        return $DB->insert_record('courseduration_timers', $insert);
     }
 
     /**
@@ -188,10 +186,10 @@ class manage {
         global $DB;
         foreach ($data->course as $val) {
             $insert = new stdclass();
-            $insert->completiontimer = $data->completiontimer;
+            $insert->completionduration = $data->completionduration;
             $insert->courseid = $val;
             $insert->coursename = $this->coursebyid($val)->fullname;
-            $insert->autopaused = $data->autopaused;
+            $insert->autopauseduration = $data->autopauseduration;
             $insert->status = $data->status;
             $insert->createdtime = time();
             $insert->updatedtime = time();
@@ -213,33 +211,33 @@ class manage {
 
         $update = new stdclass();
         $update->id = $data->id;
-        $update->completiontimer = $data->completiontimer;
+        $update->completionduration = $data->completionduration;
         $update->courseid = $data->course;
         $update->coursename = $this->coursebyid($data->course)->fullname;
         $update->status = $data->status;
-        $update->autopaused = $data->autopaused;
+        $update->autopauseduration = $data->autopauseduration;
         $update->updatedtime = time();
-        if ($data->oldtimer != $data->completiontimer) {
-            $prm = array('ctimerinstanceid' => $data->id, 'status' => 1 );
-            $existing = $DB->get_records('coursetimer_instance', $prm);
+        if ($data->oldtimer != $data->completionduration) {
+            $prm = array('coursedurationid' => $data->id, 'status' => 1 );
+            $existing = $DB->get_records('courseduration_timers', $prm);
             if (count($existing) > 0) {
                 foreach ($existing as $vl) {
-                    if ($data->completiontimer == 0) {
+                    if ($data->completionduration == 0) {
                         $newtimer = 0;
-                    } else if ($data->oldtimer > $data->completiontimer) {
-                        $newtimer = $vl->availabletime - ( $data->completiontimer * 60 );
-                    } else if ($data->oldtimer < $data->completiontimer) {
-                        $newtimer = $vl->availabletime + ( $data->completiontimer * 60 );
+                    } else if ($data->oldtimer > $data->completionduration) {
+                        $newtimer = $vl->coursetime - ( $data->completionduration * 60 );
+                    } else if ($data->oldtimer < $data->completionduration) {
+                        $newtimer = $vl->coursetime + ( $data->completionduration * 60 );
                     } else {
-                        $newtimer = $vl->availabletime;
+                        $newtimer = $vl->coursetime;
                     }
                     $change = new stdclass();
                     $change->id = $vl->id;
-                    $change->availabletime = $newtimer;
-                    if ($data->completiontimer == 0) {
+                    $change->coursetime = $newtimer;
+                    if ($data->completionduration == 0) {
                         $change->status = 0;
                     }
-                    $DB->update_record('coursetimer_instance', $change);
+                    $DB->update_record('courseduration_timers', $change);
                 }
             }
         }
@@ -287,17 +285,17 @@ class manage {
                 $coursetimerlengthinseconds = $coursetimerlength;
             }
 
-            $coursetimerinstance->availabletime = $coursetimerinstance->availabletime + $coursetimerlengthinseconds;
+            $coursetimerinstance->coursetime = $coursetimerinstance->coursetime + $coursetimerlengthinseconds;
             $coursetimerinstance->updatedtime = $coursetimerupdated;
-            $DB->update_record('coursetimer_instance', $coursetimerinstance);
+            $DB->update_record('courseduration_timers', $coursetimerinstance);
 
-            if ($coursetimerinstance->availabletime <= 0) {
+            if ($coursetimerinstance->coursetime <= 0) {
                 // TODO: rebuild completion code
                 //$this->setcoursecompletedbyuser($courseid);
             }
         }
 
-        return $coursetimerinstance->availabletime;
+        return $coursetimerinstance->coursetime;
     }
 
     /**
@@ -314,11 +312,11 @@ class manage {
                 $sqlt1 = "SELECT * FROM {courseduration} WHERE (course = :courseid) AND (status = 1) ORDER BY ID DESC LIMIT 0, 1";
                 $params1 = ['courseid' => $courseid];
                 $courseduration = $DB->get_record_sql($sqlt1, $params1);
-                $arrprm = array('courseid' => $courseid, 'userid' => $userid, 'ctimerinstanceid' => $courseduration->id);
-                $coursedurationinstance = $DB->get_record('coursetimer_instance', $arrprm);
-                if ($coursedurationinstance->availabletime > 0) {
-                    $coursedurationinstance->availabletime = $coursedurationinstance->availabletime - 2;
-                    $DB->update_record('coursetimer_instance', $coursedurationinstance);
+                $arrprm = array('courseid' => $courseid, 'userid' => $userid, 'coursedurationid' => $courseduration->id);
+                $coursedurationinstance = $DB->get_record('courseduration_timers', $arrprm);
+                if ($coursedurationinstance->coursetime > 0) {
+                    $coursedurationinstance->coursetime = $coursedurationinstance->coursetime - 2;
+                    $DB->update_record('courseduration_timers', $coursedurationinstance);
                     return $coursedurationinstance;
                 } else {
                     $this->setcoursecompletedbyuser($courseid);
@@ -330,12 +328,12 @@ class manage {
 //                $sqlt1 = "SELECT * FROM {courseduration} WHERE (course = :courseid) AND (status = 1) ORDER BY ID DESC LIMIT 0, 1";
 //                $params1 = ['courseid'=>$courseid];
 //                $coursetim = $DB->get_record_sql($sqlt1, $params1);
-//                $arrprm = array('courseid' => $courseid, 'userid' => $userid, 'ctimerinstanceid' => $coursetim->id);
-//                $currenttimer = $DB->get_record('coursetimer_instance', $arrprm);
-//                if ($currenttimer->availabletime > 0) {
-//                    $currenttimer->availabletime = $currenttimer->availabletime - 2;
-//                    $currenttimer->availabletime = $currenttimer->availabletime - 2;
-//                    $DB->update_record('coursetimer_instance',$currenttimer);
+//                $arrprm = array('courseid' => $courseid, 'userid' => $userid, 'coursedurationid' => $coursetim->id);
+//                $currenttimer = $DB->get_record('courseduration_timers', $arrprm);
+//                if ($currenttimer->coursetime > 0) {
+//                    $currenttimer->coursetime = $currenttimer->coursetime - 2;
+//                    $currenttimer->coursetime = $currenttimer->coursetime - 2;
+//                    $DB->update_record('courseduration_timers',$currenttimer);
 //                    return $currenttimer;
 //                } else {
 //                    $this->setcoursecompletedbyuser($courseid);
@@ -368,15 +366,15 @@ class manage {
 
         $coursetimerinstance = $this->prepareuser($COURSE, $USER);
         if ($coursetimerinstance) {
-            $forautopaused = $this->getautopaused($coursetimerinstance->ctimerinstanceid);
-            unset($_SESSION['coursetimercompletiontime']);
+            $forautopaused = $this->getautopaused($coursetimerinstance->coursedurationid);
+            unset($_SESSION['coursetimercompletionduration']);
             unset($_SESSION['checkcoursemodulecourseid']);
-            unset($_SESSION['checkCourseTimerAvailabletime']);
+            unset($_SESSION['checkcoursetime']);
             unset($_SESSION['forautopaused']);
-            $_SESSION['coursetimercompletiontime'] = $coursetimerinstance->completiontime;
+            $_SESSION['coursetimercompletionduration'] = $coursetimerinstance->completionduration;
             $_SESSION['checkcoursemodulecourseid'] = $COURSE->id;
-            $_SESSION['checkCourseTimerAvailabletime'] = $coursetimerinstance->availabletime;
-            $_SESSION['forautopaused'] = $forautopaused->autopaused;
+            $_SESSION['checkcoursetime'] = $coursetimerinstance->coursetime;
+            $_SESSION['forautopaused'] = $forautopaused->autopauseduration;
             loadscript();
             if (!is_siteadmin()) {
                 echo "<style>";
@@ -492,19 +490,19 @@ class manage {
             $courseduration = $DB->get_record_sql($sql, $params);
 
             if ($courseduration) {
-                $coursetimerinstance = $DB->get_record('coursetimer_instance', array('ctimerinstanceid' => $courseduration->id, 'userid' => $user->id));
+                $coursetimerinstance = $DB->get_record('courseduration_timers', array('coursedurationid' => $courseduration->id, 'userid' => $user->id));
                 if ($coursetimerinstance) {
-                    $coursetimerinstance->completiontime = $courseduration->completiontimer * 60;
+                    $coursetimerinstance->completionduration = $courseduration->completionduration * 60;
                     return $coursetimerinstance;
                 } else {
                     $new_coursetimerinstance = new stdclass();
-                    $new_coursetimerinstance->availabletime = 0;
-                    $new_coursetimerinstance->completiontime = $courseduration->completiontimer * 60;
+                    $new_coursetimerinstance->coursetime = 0;
+                    $new_coursetimerinstance->completionduration = $courseduration->completionduration * 60;
                     $new_coursetimerinstance->courseid = $course->id;
-                    $new_coursetimerinstance->ctimerinstanceid = $courseduration->id;
+                    $new_coursetimerinstance->coursedurationid = $courseduration->id;
                     $new_coursetimerinstance->userid = $user->id;
                     $newctid = $this->createcoursetimerinstance($new_coursetimerinstance);
-                    return $DB->get_record('coursetimer_instance', array('ctimerinstanceid' => $newctid));
+                    return $DB->get_record('courseduration_timers', array('coursedurationid' => $newctid));
                 }
             }
         }
