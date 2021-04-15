@@ -32,7 +32,6 @@ if (isset($_POST['action']) && $_POST['action'] == 'coursetimer_countdown') {
     $coursetimerupdated = (int) $_POST['coursetimerupdated'];
     try {
         $result = $manage->updatecoursetimer($coursetimerinstance, $coursetimerlength, $coursetimerupdated);
-        // TODO: Send updated available time value back to browser
         $status = 'success';
         $code = 200;
         $msg = 'Course Timer Updated';

@@ -279,11 +279,6 @@ class manage {
             throw new \coding_exception('Invalid course timer instance.');
         }
 
-        error_log("===== UPDATE COURSE TIMER ====");
-        error_log("coursetimerlast time:" . print_r($coursetimerinstance->updatedtime, true));
-        error_log("coursetimerlength:" . print_r($coursetimerlength, true));
-        error_log("coursetimerupdated:" . print_r($coursetimerupdated, true));
-
         if ($coursetimerinstance->updatedtime < $coursetimerupdated) {
             // Ignore extra time captured
             if ($coursetimerinstance->updatedtime > ($coursetimerupdated - $coursetimerlength)) {
@@ -291,9 +286,6 @@ class manage {
             } else {
                 $coursetimerlengthinseconds = $coursetimerlength;
             }
-
-            error_log("time since last update: " . ($coursetimerupdated - $coursetimerinstance->updatedtime));
-            error_log("coursetimerlengthinseconds:" . print_r($coursetimerlengthinseconds, true));
 
             $coursetimerinstance->availabletime = $coursetimerinstance->availabletime + $coursetimerlengthinseconds;
             $coursetimerinstance->updatedtime = $coursetimerupdated;

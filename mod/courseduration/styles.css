@@ -44,16 +44,17 @@
 
 .completed-element {
   color: #25be25;
-  animation: completedpulse 2s ease-in-out;
+}
+
+.completed-element.on-completion {
+  animation: completedpulse 0.5s ease-in-out 5 alternate;
 }
 
 @keyframes completedpulse {
   0% {
-    font-size: 100%;
     color: #25be25;
   }
   100% {
-    color: #25be25;
-    font-size: 125%;
+    color: white;
   }
 }

@@ -12,7 +12,6 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
         } else {
             // reset timer while paused.
             coursetimerstart = Date.now() / 1000;
-            console.log('Reset timer start while paused: ' + coursetimerstart);
         }
     }, 2000);
 
@@ -40,11 +39,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
                     var completiontime = $('#completiontime').val();
                     countdowncoursetimer = completiontime - data.result;
                 }
-                console.log( '- result: ' + data.result);
-                console.log( '- countdowncoursetimer: ' + countdowncoursetimer);
-                console.log( 'before' + coursetimerlength + ' - ' + coursertimerupdated );
                 coursetimerstart = coursertimerupdated;
-                console.log( 'after' + coursetimerlength + ' - ' + coursertimerupdated );
             },
             error: function (xhr, text, error) {
                 console.log('AJAX error:' + text + ' - ' + error);
@@ -87,6 +82,8 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
         if (countdowncoursetimer => 0) {
 
             setInterval(function () {
+                if (countdowncoursetimer < 0) { countdowncoursetimer = 0; }
+
                 var autopaused = $('#autopaused').val();
                 var hours = Math.floor(countdowncoursetimer / 60 / 60);
                 var minutes = Math.floor(countdowncoursetimer / 60) - (hours * 60);
@@ -102,8 +99,15 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
 
 
                 if (autopaused == "false") {
-                    if (countdowncoursetimer >= 0) {
+                    if (countdowncoursetimer > 0) {
                         countdowncoursetimer = countdowncoursetimer - 1;
+                        // activate completion animation on reaching 0
+                        if (countdowncoursetimer == 0) {
+                            $('.countdowncoursetimer').html('00:00:00');
+                            $('.countdowncoursetimer').removeClass('zero-element');
+                            $('.countdowncoursetimer').addClass('completed-element');
+                            $('.countdowncoursetimer').addClass('on-completion');
+                        }
                     } else {
                         $('.countdowncoursetimer').html('00:00:00');
                         $('.countdowncoursetimer').removeClass('zero-element');
