@@ -27,11 +27,11 @@ global $PAGE, $USER, $CFG;
 $manage = new \mod_courseduration\manage();
 
 if (isset($_POST['action']) && $_POST['action'] == 'coursetimer_countdown') {
-    $coursetimerinstance = (int) $_POST['coursetimerinstance'];
+    $coursetimer = (int) $_POST['coursetimer'];
     $coursetimerlength = (int) $_POST['coursetimerlength'];
     $coursetimerupdated = (int) $_POST['coursetimerupdated'];
     try {
-        $result = $manage->updatecoursetimer($coursetimerinstance, $coursetimerlength, $coursetimerupdated);
+        $result = $manage->updatecoursetimer($coursetimer, $coursetimerlength, $coursetimerupdated);
         $status = 'success';
         $code = 200;
         $msg = 'Course Timer Updated';
@@ -53,16 +53,5 @@ if (isset($_POST['action']) && $_POST['action'] == 'coursetimer_countdown') {
                         'msg' => $msg
                         ));
         exit;
-}
-
-function msg($type, $msg) {
-    return '
-                <div class="alert alert-' . $type . ' alert-dismissible fade show" role="alert">
-                '. $msg .'
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-            ';
 }
 

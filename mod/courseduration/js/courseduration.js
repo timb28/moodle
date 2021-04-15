@@ -3,7 +3,7 @@ let countdowncoursetimer = 0;
 require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
     // console.log(mdlcfg.wwwroot); // outputs the wwwroot of moodle to console
     var coursetimerstart = Date.now() / 1000;
-    var coursetimerinstance = $('#coursetimerinstance').val();
+    var coursetimer = $('#coursetimer').val();
 
     setInterval(function () {
         var autopaused = $('#autopaused').val();
@@ -23,7 +23,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
         var coursertimerupdated = Date.now() / 1000;
         var coursetimerlength = coursertimerupdated - coursetimerstart;
         form_data.append('action', 'coursetimer_countdown');
-        form_data.append('coursetimerinstance', coursetimerinstance);
+        form_data.append('coursetimer', coursetimer);
         form_data.append('coursetimerlength', coursetimerlength);
         form_data.append('coursetimerupdated', coursertimerupdated);
         $.ajax({

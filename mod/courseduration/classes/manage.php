@@ -44,116 +44,14 @@ class manage {
     }
 
     /**
-     * courses function will return site courses list.
-     *
-     * @return array the list of related objects.
-     * @throws \dml_exception
-     */
-    public function courses(): array {
-        GLOBAL $DB;
-            return $DB->get_records('course', array('visible' => 1, 'category' => 1));
-    }
-
-    /**
-     * courses function will return site courses list.
-     *
-     * @param $id
-     * @return array the list of related objects.
-     * @throws \dml_exception
-     */
-    public function coursebyid($id):array {
-        GLOBAL $DB;
-        return $DB->get_record('course', array('visible' => 1, 'id' => $id));
-    }
-
-    /**
-     * @return bool|StdClass
-     * @throws \coding_exception
-     */
-    public function coursetimerbyid() {
-        $id = optional_param('id', 0, PARAM_INT);
-        if ($id) {
-            return $DB->get_record('courseduration', array('id' => $id));
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * course_inform function will return site courses list for the coursetimer form.
-     *
-     * @return array the list of related objects.
-     * @throws \coding_exception
-     */
-    public function course_inform(): array {
-        $id = optional_param('id', 0, PARAM_INT);
-        $course = $this->courses();
-        $coursetimer = $this->coursetimer();
-        $courseoptions = array();
-        $courseoptions[''] = '';
-        foreach ($course as $ct) {
-            $courseoptions[$ct->id] = $ct->fullname;
-        }
-        if (count($coursetimer) > 0) {
-            foreach ($coursetimer as $ct) {
-                if ($id != $ct->id) {
-                    unset($courseoptions[$ct->id]);
-                }
-            }
-        }
-        return $courseoptions;
-    }
-
-    /**
-     * @return array course options
-     * @throws \dml_exception
-     */
-    public function updatecourse_inform(): array {
-        $course = $this->courses();
-        $coursetimer = $this->coursetimer();
-        $courseoptions = array();
-        $courseoptions[''] = '';
-        foreach ($course as $ct) {
-            $courseoptions[$ct->id] = $ct->fullname;
-        }
-        if (count($coursetimer) > 0) {
-            foreach ($coursetimer as $ct) {
-                unset($courseoptions[$ct->id]);
-            }
-        }
-        return $courseoptions;
-    }
-
-    /**
-     * courses function will return site courses list.
-     *
-     * @return array the list of related objects.
-     * @throws \dml_exception
-     */
-    public function coursetimer(): array {
-        GLOBAL $DB;
-        return $DB->get_records('courseduration', array());
-    }
-
-    /**
      * @param $courseid
      * @param $userid
      * @return false|mixed|stdClass
      * @throws \dml_exception
      */
-    public function getcoursetimerinstance($courseid, $userid) {
+    public function getcoursetimer($courseid, $userid) {
         GLOBAL $DB;
         return $DB->get_record('courseduration_timers', array('courseid' => $courseid, 'userid' => $userid, 'status' => 1));
-    }
-
-    /**
-     * @param $id
-     * @return false|mixed|stdClass
-     * @throws \dml_exception
-     */
-    public function getcoursetimerbyid($id) {
-        GLOBAL $DB;
-        return $DB->get_record('courseduration', array('id' => $id));
     }
 
     /**
@@ -162,13 +60,13 @@ class manage {
      * @return boolean true, false.
      * @throws \dml_exception
      */
-    public function createcoursetimerinstance(stdClass $new_coursetimerinstance): bool {
+    public function createcoursetimer(stdClass $new_coursetimer): bool {
         global $DB;
         $insert = new stdclass();
-        $insert->coursetime = $new_coursetimerinstance->coursetime;
-        $insert->coursedurationid = $new_coursetimerinstance->coursedurationid;
-        $insert->courseid = $new_coursetimerinstance->courseid;
-        $insert->userid = $new_coursetimerinstance->userid;
+        $insert->coursetime = $new_coursetimer->coursetime;
+        $insert->coursedurationid = $new_coursetimer->coursedurationid;
+        $insert->courseid = $new_coursetimer->courseid;
+        $insert->userid = $new_coursetimer->userid;
         $insert->status = 1;
         $insert->createdtime = time();
         $insert->updatedtime = time();
@@ -176,172 +74,46 @@ class manage {
     }
 
     /**
-     * courses function will return site courses list.
-     *
-     * @param $data
-     * @return boolean true, false.
-     * @throws \dml_exception
-     */
-    public function createcoursetimer($data): bool {
-        global $DB;
-        foreach ($data->course as $val) {
-            $insert = new stdclass();
-            $insert->completionduration = $data->completionduration;
-            $insert->courseid = $val;
-            $insert->coursename = $this->coursebyid($val)->fullname;
-            $insert->autopauseduration = $data->autopauseduration;
-            $insert->status = $data->status;
-            $insert->createdtime = time();
-            $insert->updatedtime = time();
-            $DB->insert_record('courseduration', $insert);
-        }
-        return true;
-    }
-
-    /**
-     * courses function will return site courses list.
-     * This method is used logic to manipulate timer according to the update of time
-     * if old time is greater or lower than new time
-     * then it will update the time in the current active course view.
-     * @return boolean true, false.
-     * @throws \dml_exception
-     */
-    public function Replaced_updatecoursetimer($data): bool {
-        global $DB;
-
-        $update = new stdclass();
-        $update->id = $data->id;
-        $update->completionduration = $data->completionduration;
-        $update->courseid = $data->course;
-        $update->coursename = $this->coursebyid($data->course)->fullname;
-        $update->status = $data->status;
-        $update->autopauseduration = $data->autopauseduration;
-        $update->updatedtime = time();
-        if ($data->oldtimer != $data->completionduration) {
-            $prm = array('coursedurationid' => $data->id, 'status' => 1 );
-            $existing = $DB->get_records('courseduration_timers', $prm);
-            if (count($existing) > 0) {
-                foreach ($existing as $vl) {
-                    if ($data->completionduration == 0) {
-                        $newtimer = 0;
-                    } else if ($data->oldtimer > $data->completionduration) {
-                        $newtimer = $vl->coursetime - ( $data->completionduration * 60 );
-                    } else if ($data->oldtimer < $data->completionduration) {
-                        $newtimer = $vl->coursetime + ( $data->completionduration * 60 );
-                    } else {
-                        $newtimer = $vl->coursetime;
-                    }
-                    $change = new stdclass();
-                    $change->id = $vl->id;
-                    $change->coursetime = $newtimer;
-                    if ($data->completionduration == 0) {
-                        $change->status = 0;
-                    }
-                    $DB->update_record('courseduration_timers', $change);
-                }
-            }
-        }
-        return $DB->update_record('courseduration', $update);
-    }
-
-    /**
-     * courses function will return site courses list.
-     *
-     * @param $id
-     * @return boolean true, false.
-     * @throws \dml_exception
-     */
-    public function deletecoursetimer($id): bool {
-        global $DB;
-        return $DB->delete_records('courseduration',array('id'=>$id));
-    }
-
-    /**
-     * @param int $coursetimerinstance
+     * @param int $coursetimer
      * @param int $coursetimerlength
      * @param int $coursetimerupdated
      * @return int
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function updatecoursetimer(int $coursetimerinstanceid, int $coursetimerlength, int $coursetimerupdated): int {
-        global $COURSE, $DB, $USER;
+    public function updatecoursetimer(int $coursetimerid, int $coursetimerlength, int $coursetimerupdated): int {
+        global $DB, $USER;
 
         $userid = $USER->id;
         $courseid = $_SESSION['checkcoursemodulecourseid'];
 
         // Confirm course timer belongs to user
-        $coursetimerinstance = $this->getcoursetimerinstance($courseid, $userid);
+        $coursetimer = $this->getcoursetimer($courseid, $userid);
 
-        if ($coursetimerinstanceid != $coursetimerinstance->id) {
+        if ($coursetimerid != $coursetimer->id) {
             throw new \coding_exception('Invalid course timer instance.');
         }
 
-        if ($coursetimerinstance->updatedtime < $coursetimerupdated) {
+        if ($coursetimer->updatedtime < $coursetimerupdated) {
             // Ignore extra time captured
-            if ($coursetimerinstance->updatedtime > ($coursetimerupdated - $coursetimerlength)) {
-                $coursetimerlengthinseconds = $coursetimerupdated - $coursetimerinstance->updatedtime;
+            if ($coursetimer->updatedtime > ($coursetimerupdated - $coursetimerlength)) {
+                $coursetimerlengthinseconds = $coursetimerupdated - $coursetimer->updatedtime;
             } else {
                 $coursetimerlengthinseconds = $coursetimerlength;
             }
 
-            $coursetimerinstance->coursetime = $coursetimerinstance->coursetime + $coursetimerlengthinseconds;
-            $coursetimerinstance->updatedtime = $coursetimerupdated;
-            $DB->update_record('courseduration_timers', $coursetimerinstance);
+            $coursetimer->coursetime = $coursetimer->coursetime + $coursetimerlengthinseconds;
+            $coursetimer->updatedtime = $coursetimerupdated;
+            $DB->update_record('courseduration_timers', $coursetimer);
 
-            if ($coursetimerinstance->coursetime <= 0) {
+            if ($coursetimer->coursetime <= 0) {
                 // TODO: rebuild completion code
                 //$this->setcoursecompletedbyuser($courseid);
             }
         }
 
-        return $coursetimerinstance->coursetime;
+        return $coursetimer->coursetime;
     }
-
-    /**
-     * @return bool|stdclass
-     * @throws \dml_exception
-     * @throws \coding_exception
-     */
-    /*public function coursetimercountdown() {
-        global $DB, $USER;
-        if (isset($_SESSION['checkcoursemodulecourseid'])) {
-            $userid = $USER->id;
-            $courseid = $_SESSION['checkcoursemodulecourseid'];
-            if ($this->checkactivityisenable($courseid)) {
-                $sqlt1 = "SELECT * FROM {courseduration} WHERE (course = :courseid) AND (status = 1) ORDER BY ID DESC LIMIT 0, 1";
-                $params1 = ['courseid' => $courseid];
-                $courseduration = $DB->get_record_sql($sqlt1, $params1);
-                $arrprm = array('courseid' => $courseid, 'userid' => $userid, 'coursedurationid' => $courseduration->id);
-                $coursedurationinstance = $DB->get_record('courseduration_timers', $arrprm);
-                if ($coursedurationinstance->coursetime > 0) {
-                    $coursedurationinstance->coursetime = $coursedurationinstance->coursetime - 2;
-                    $DB->update_record('courseduration_timers', $coursedurationinstance);
-                    return $coursedurationinstance;
-                } else {
-                    $this->setcoursecompletedbyuser($courseid);
-                    return false;
-                }
-            }*/
-//            } else if ($this->checkactivityisinmodule($courseid)) {
-//                $courseid = $this->checkactivityisinmodule($courseid)->course;
-//                $sqlt1 = "SELECT * FROM {courseduration} WHERE (course = :courseid) AND (status = 1) ORDER BY ID DESC LIMIT 0, 1";
-//                $params1 = ['courseid'=>$courseid];
-//                $coursetim = $DB->get_record_sql($sqlt1, $params1);
-//                $arrprm = array('courseid' => $courseid, 'userid' => $userid, 'coursedurationid' => $coursetim->id);
-//                $currenttimer = $DB->get_record('courseduration_timers', $arrprm);
-//                if ($currenttimer->coursetime > 0) {
-//                    $currenttimer->coursetime = $currenttimer->coursetime - 2;
-//                    $currenttimer->coursetime = $currenttimer->coursetime - 2;
-//                    $DB->update_record('courseduration_timers',$currenttimer);
-//                    return $currenttimer;
-//                } else {
-//                    $this->setcoursecompletedbyuser($courseid);
-//                    return false;
-//                }
-//            }
-/*        }
-    }*/
 
     /**
      * @param $courseid
@@ -353,7 +125,7 @@ class manage {
         GLOBAL $DB;
 
         $courseinstance = $DB->get_record('course_modules', array('course' => $courseid, 'module' => $this->moduleid, 'deletioninprogress' => 0));
-        return $courseinstance ? true : false;
+        return (bool)$courseinstance;
     }
 
     /**
@@ -364,16 +136,16 @@ class manage {
     function preparepage () {
         global $USER, $COURSE;
 
-        $coursetimerinstance = $this->prepareuser($COURSE, $USER);
-        if ($coursetimerinstance) {
-            $forautopaused = $this->getautopaused($coursetimerinstance->coursedurationid);
+        $coursetimer = $this->prepareuser($COURSE, $USER);
+        if ($coursetimer) {
+            $forautopaused = $this->getautopaused($coursetimer->coursedurationid);
             unset($_SESSION['coursetimercompletionduration']);
             unset($_SESSION['checkcoursemodulecourseid']);
             unset($_SESSION['checkcoursetime']);
             unset($_SESSION['forautopaused']);
-            $_SESSION['coursetimercompletionduration'] = $coursetimerinstance->completionduration;
+            $_SESSION['coursetimercompletionduration'] = $coursetimer->completionduration;
             $_SESSION['checkcoursemodulecourseid'] = $COURSE->id;
-            $_SESSION['checkcoursetime'] = $coursetimerinstance->coursetime;
+            $_SESSION['checkcoursetime'] = $coursetimer->coursetime;
             $_SESSION['forautopaused'] = $forautopaused->autopauseduration;
             loadscript();
             if (!is_siteadmin()) {
@@ -383,27 +155,6 @@ class manage {
             }
         }
     }
-
-    /**
-     * @param $cmid
-     * @return mixed|string
-     * @throws \coding_exception
-     * @throws \dml_exception
-     */
-//    public function checkactivityisinmodule($cmid):string {
-//        GLOBAL $DB;
-//
-//        $instanceforthiscourse = '';
-//        $modulecourse = $DB->get_record('course_modules', array('id' => $cmid));
-//        $allcoursemodules = $DB->get_records('course_modules', array('course' => $modulecourse->course, 'deletioninprogress' => 0));
-//        foreach ($allcoursemodules as $key => $value) {
-//            $timeridx = $DB->get_record('modules', array('name' => get_string('pluginname', 'mod_courseduration')));
-//            if ($value->module == $timeridx->id) {
-//                $instanceforthiscourse = $value;
-//            }
-//        }
-//        return $instanceforthiscourse;
-//    }
 
     /**
      * @param $courseid
@@ -490,18 +241,18 @@ class manage {
             $courseduration = $DB->get_record_sql($sql, $params);
 
             if ($courseduration) {
-                $coursetimerinstance = $DB->get_record('courseduration_timers', array('coursedurationid' => $courseduration->id, 'userid' => $user->id));
-                if ($coursetimerinstance) {
-                    $coursetimerinstance->completionduration = $courseduration->completionduration * 60;
-                    return $coursetimerinstance;
+                $coursetimer = $DB->get_record('courseduration_timers', array('coursedurationid' => $courseduration->id, 'userid' => $user->id));
+                if ($coursetimer) {
+                    $coursetimer->completionduration = $courseduration->completionduration * 60;
+                    return $coursetimer;
                 } else {
-                    $new_coursetimerinstance = new stdclass();
-                    $new_coursetimerinstance->coursetime = 0;
-                    $new_coursetimerinstance->completionduration = $courseduration->completionduration * 60;
-                    $new_coursetimerinstance->courseid = $course->id;
-                    $new_coursetimerinstance->coursedurationid = $courseduration->id;
-                    $new_coursetimerinstance->userid = $user->id;
-                    $newctid = $this->createcoursetimerinstance($new_coursetimerinstance);
+                    $new_coursetimer = new stdclass();
+                    $new_coursetimer->coursetime = 0;
+                    $new_coursetimer->completionduration = $courseduration->completionduration * 60;
+                    $new_coursetimer->courseid = $course->id;
+                    $new_coursetimer->coursedurationid = $courseduration->id;
+                    $new_coursetimer->userid = $user->id;
+                    $newctid = $this->createcoursetimer($new_coursetimer);
                     return $DB->get_record('courseduration_timers', array('coursedurationid' => $newctid));
                 }
             }
@@ -514,9 +265,9 @@ class manage {
      * @return mixed
      * @throws \dml_exception
      */
-    public function getautopaused($id) {
+    public function getautopaused(int $coursedurationid) {
         GLOBAL $DB;
-        return $DB->get_record('courseduration', array('id' => $id, 'status' => 1));
+        return $DB->get_record('courseduration', array('id' => $coursedurationid, 'status' => 1));
     }
 }
 

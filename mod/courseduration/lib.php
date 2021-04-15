@@ -33,27 +33,6 @@ require_once($CFG->dirroot . '/course/lib.php');
 
 global $DB, $PAGE, $USER, $CFG;
 $manage = new \mod_courseduration\manage();
-
-//function updatecoursetimer ($manage, $data) {
-//    return $manage->updatecoursetimer($data);
-//}
-
-function getcoursetimerbyid ($manage, $id) {
-    return $manage->getcoursetimerbyid($id);
-}
-
-function createcoursetimer ($manage, $data) {
-    return $manage->createcoursetimer($data);
-}
-
-function deletecoursetimer ($manage, $id) {
-        return $manage->deletecoursetimer($id);
-}
-
-function coursetimercountdown ($manage) {
-        return $manage->coursetimercountdown();
-}
-
 /**
  * @param object $courseduration
  * @return string
@@ -92,7 +71,7 @@ function courseduration_add_instance($courseduration) {
     $courseduration->introformat = 1;
     $courseduration->timemodified = time();
 
-    $id = $DB->insert_record("courseduration", $courseduration);
+    $id = $DB->insert_record('courseduration', $courseduration);
 
     $completiontimeexpected = !empty($courseduration->completionexpected) ? $courseduration->completionexpected : null;
     \core_completion\api::update_completion_date_event($courseduration->coursemodule, 'courseduration', $id, $completiontimeexpected);
@@ -110,7 +89,7 @@ function courseduration_add_instance($courseduration) {
  * @throws dml_exception
  * @global object
  */
-function courseduration_update_instance($courseduration) {
+function courseduration_update_instance($courseduration):bool {
     global $DB;
 
     $courseduration->timemodified = time();
@@ -283,28 +262,6 @@ function mod_courseduration_core_calendar_provide_event_action(calendar_event $e
     );
 }
 
-//function checkcoursemodule (\mod_courseduration\manage $manage) {
-//    global $USER, $COURSE;
-//    if ($manage->checkactivityisenable($COURSE->id)) {
-//        $cmresult = $manage->verifyuser($USER, $COURSE);
-//        if ($cmresult) {
-//            $forautopaused = $manage->getautopaused($cmresult->coursedurationid);
-//            unset($_SESSION['checkcoursemodulecourseid']);
-//            unset($_SESSION['checkcoursetime']);
-//            unset($_SESSION['forautopaused']);
-//            $_SESSION['checkcoursemodulecourseid'] = $COURSE->id;
-//            $_SESSION['checkcoursetime'] = $cmresult->coursetime;
-//            $_SESSION['forautopaused'] = $forautopaused->autopaused;
-//            loadscript();
-//            if (!is_siteadmin()) {
-//                echo "<style>";
-//                echo "li.activity.courseduration.modtype_courseduration{display:none;}";
-//                echo "</style>";
-//            }
-//        }
-//    }
-//}
-
 /**
  * @throws moodle_exception
  */
@@ -325,8 +282,8 @@ function loadscript() {
     echo "<input type='hidden' id='moodleversion' value='".$CFG->version."'>";
 
     $manage = new \mod_courseduration\manage();
-    $coursetimerinstance = $manage->getcoursetimerinstance($COURSE->id, $USER->id);
-    if ($coursetimerinstance) {
-        echo "<input type='hidden' id='coursetimerinstance' value='".$coursetimerinstance->id."'>";
+    $coursetimer = $manage->getcoursetimer($COURSE->id, $USER->id);
+    if ($coursetimer) {
+        echo "<input type='hidden' id='coursetimer' value='".$coursetimer->id."'>";
     }
 }
