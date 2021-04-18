@@ -27,13 +27,14 @@ global $PAGE, $USER, $CFG;
 $manage = new \mod_courseduration\manage();
 
 if (isset($_POST['action']) && $_POST['action'] == 'coursetimer_countdown') {
+    $courseid = (int) $_POST['courseid'];
     $coursetimer = (int) $_POST['coursetimer'];
     $coursetimerlength = (int) $_POST['coursetimerlength']; // in millliseconds
     $coursetimerupdated = (int) $_POST['coursetimerupdated']; // in milliseconds
 
-//    error_log(" +++ POST variables:" . print_r($_POST, true));
+    error_log(" +++ AJAX CT called:" . print_r($coursetimer, true));
     try {
-        $result = $manage->updatecoursetimer($coursetimer, $coursetimerlength, $coursetimerupdated);
+        $result = $manage->updatecoursetimer($courseid, $coursetimer, $coursetimerlength, $coursetimerupdated);
         $status = 'success';
         $code = 200;
         $msg = 'Course Timer Updated';

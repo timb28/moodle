@@ -1,4 +1,5 @@
 let countdowncoursetimer = 0;
+let courseid = null;
 
 require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
     // console.log(mdlcfg.wwwroot); // outputs the wwwroot of moodle to console
@@ -23,6 +24,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
         var coursertimerupdated = Date.now();
         var coursetimerlength = coursertimerupdated - coursetimerstart;
         form_data.append('action', 'coursetimer_countdown');
+        form_data.append('courseid', courseid);
         form_data.append('coursetimer', coursetimer);
         form_data.append('coursetimerlength', coursetimerlength);
         form_data.append('coursetimerupdated', coursertimerupdated);
@@ -48,6 +50,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
     }
 
     $(document).ready(function () {
+        courseid = $('#courseid').val();
         var coursetime = $('#coursetime').val();
         var completionduration = $('#completionduration').val();
         var currentthemeused = $('#currentthemeused').val();

@@ -307,7 +307,7 @@ function mod_courseduration_core_calendar_provide_event_action(calendar_event $e
 /**
  * @throws moodle_exception
  */
-function loadscript() {
+function loadscript($manage) {
     global $COURSE, $PAGE, $CFG, $USER;
     $coursetime = $_SESSION['checkcoursetime'];
     $completionduration = $_SESSION['coursetimercompletionduration'];
@@ -317,13 +317,13 @@ function loadscript() {
     $cssurl = new moodle_url($CFG->wwwroot . '/mod/courseduration/styles.css');
     echo "<link rel='stylesheet' href=".$cssurl.">";
     echo "<input type='hidden' id='coursetime' value='".$coursetime."'>";
+    echo "<input type='hidden' id='courseid' value='".$COURSE->id."'>";
     echo "<input type='hidden' id='completionduration' value='".$completionduration."'>";
     echo "<input type='hidden' id='autopaused' value='false'>";
     echo "<input type='hidden' id='currentthemeused' value='".$CFG->theme."'>";
     echo "<input type='hidden' id='autopausedtime' value='".$autopausedtime."'>";
     echo "<input type='hidden' id='moodleversion' value='".$CFG->version."'>";
 
-    $manage = new \mod_courseduration\manage();
     $coursetimer = $manage->getcoursetimer($COURSE->id, $USER->id);
     if ($coursetimer) {
         echo "<input type='hidden' id='coursetimer' value='".$coursetimer->id."'>";
