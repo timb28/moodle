@@ -40,7 +40,7 @@ $manage = new \mod_courseduration\manage();
  * @uses COURSEDURATION_MAX_NAME_LENGTH
  */
 function get_courseduration_name($courseduration): string {
-    $name = strip_tags(format_string($courseduration->intro , true));
+    $name = strip_tags(format_string($courseduration->name , true));
     if (core_text::strlen($name) > COURSEDURATION_MAX_NAME_LENGTH) {
         $name = core_text::substr($name, 0, COURSEDURATION_MAX_NAME_LENGTH)."...";
     }
@@ -48,6 +48,8 @@ function get_courseduration_name($courseduration): string {
     if (empty($name)) {
         $name = get_string('modulename' , 'courseduration');
     }
+
+    error_log(" +++ module name:" . print_r($name, true));
 
     return $name;
 }
@@ -150,7 +152,7 @@ function courseduration_update_instance($courseduration):bool {
  * @throws dml_exception
  * @global object
  */
-function courseduration_delete_instance($id): bool {
+function courseduration_delete_instance(int $id): bool {
     global $DB;
 
     if (! $courseduration = $DB->get_record("courseduration", array("id" => $id))) {
@@ -184,13 +186,13 @@ function courseduration_get_coursemodule_info($coursemodule): cached_cm_info {
     global $DB;
 
     if ($courseduration = $DB->get_record('courseduration', array('id' => $coursemodule->instance), 'id, name, intro, introformat')) {
-        if (empty($courseduration->name)) {
-            $courseduration->name = "courseduration{$courseduration->id}";
-            $DB->set_field('courseduration', 'name', $courseduration->name, array('id' => $courseduration->id));
-        }
+//        if (empty($courseduration->name)) {
+//            $courseduration->name = "courseduration{$courseduration->id}";
+//            $DB->set_field('courseduration', 'name', $courseduration->name, array('id' => $courseduration->id));
+//        }
         $info = new cached_cm_info();
         $info->content = format_module_intro('courseduration', $courseduration, $coursemodule->id, false);
-        $info->name  = $courseduration->name;
+        $info->name  = 'TEST'; //$courseduration->name;
         return $info;
     } else {
         return;
@@ -243,6 +245,8 @@ function courseduration_supports($feature) {
         case FEATURE_BACKUP_MOODLE2:
             return true;
         case FEATURE_NO_VIEW_LINK:
+            return true;
+        case FEATURE_SHOW_DESCRIPTION:
             return true;
         default:
             return null;

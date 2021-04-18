@@ -53,9 +53,6 @@ class mod_courseduration_mod_form extends moodleform_mod {
         $mform->setDefault('autopauseduration', 0);
         $mform->setType('autopauseduration', PARAM_INT);
 
-        $mform->addElement('hidden', 'showdescription', 1);
-        $mform->setType('showdescription', PARAM_INT);
-
         $this->standard_coursemodule_elements();
 
         $this->add_action_buttons(true, false, null);
