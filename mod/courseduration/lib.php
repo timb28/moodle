@@ -172,6 +172,28 @@ function courseduration_delete_instance(int $id): bool {
 }
 
 /**
+ * Obtains the automatic completion state for this forum based on any conditions
+ * in forum settings.
+ *
+ * @param object $course Course
+ * @param object $cm Course-module
+ * @param int $userid User ID
+ * @param bool $type Type of comparison (or/and; can be used as return value if no conditions)
+ * @return bool True if completed, false if not, $type if conditions not set.
+ * @throws dml_exception
+ */
+function courseduration_get_completion_state($course,$cm,$userid,$type) {
+    global $DB;
+
+    $coursetimer = $DB->get_record('courseduration_timers', array('courseid' => $course->id, 'userid' => $userid));
+    if ($coursetimer && $coursetimer->timecompleted > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
  * Given a course_module object, this function returns any
  * "extra" information that may be needed when printing
  * this activity in a course listing.
