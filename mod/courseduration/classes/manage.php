@@ -48,7 +48,7 @@ class manage {
      */
     public function __construct() {
         global $DB;
-        $module = $DB->get_record('modules', array('name' => get_string('pluginname', 'mod_courseduration')));
+        $module = $DB->get_record('modules', array('name' => 'courseduration'));
         if ($module) {
             $this->moduleid = $module->id;
         }
@@ -136,6 +136,9 @@ class manage {
 
         // Confirm course timer belongs to user
         $coursetimer = $this->getcoursetimer($courseid, $userid);
+        if (!$coursetimer) {
+            $coursetimer = $this->prepareuser(get_course($courseid), $USER);
+        }
 
         if ($coursetimer && $coursetimer->status === 0) {
             return false; // timer exists but is not active;
