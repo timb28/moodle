@@ -84,7 +84,7 @@ function enrol_get_enrolment_start($courseid, $userid) {
     } else {
         $earlestenrolment =  reset($userenrolments);
         if ($earlestenrolment->timestart === 0) {
-            return false;
+            return $earlestenrolment->timecreated;
         } else {
             return $earlestenrolment->timestart;
         }
