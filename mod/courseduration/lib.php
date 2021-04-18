@@ -172,8 +172,7 @@ function courseduration_delete_instance(int $id): bool {
 }
 
 /**
- * Obtains the automatic completion state for this forum based on any conditions
- * in forum settings.
+ * Obtains the automatic completion state for this activity.
  *
  * @param object $course Course
  * @param object $cm Course-module
@@ -185,19 +184,37 @@ function courseduration_delete_instance(int $id): bool {
 function courseduration_get_completion_state($course,$cm,$userid,$type) {
     global $DB;
 
-    $coursetimer = $DB->get_record('courseduration_timers', array('courseid' => $course->id, 'userid' => $userid));
+    error_log(" *** Checking completion state *** ");
+
+    $coursetimer = $DB->get_record('courseduration_timers',
+        array('courseid' => $course->id, 'userid' => $userid),
+        '*',
+        MUST_EXIST);
     if ($coursetimer && $coursetimer->timecompleted > 0) {
-        return true;
+        error_log(" +++ time completed: " . print_r($coursetimer->timecompleted, true));
+        $result = true;
     } else {
         // Check if enrolled before course timer was added.
-        $courseduration = $DB->get_record('courseduration', array('course' =>$course->id ));
+        $courseduration = $DB->get_record('courseduration',
+            array('course' =>$course->id ),
+            '*',
+            MUST_EXIST);
         $userenrolmentstart = enrol_get_enrolment_start($course->id, $userid);
         if ($courseduration && $userenrolmentstart <= $courseduration->timecreated) {
-            return true;
+            error_log(" +++ early enrolment: " . print_r(array($userenrolmentstart, $courseduration->timecreated), true));
+            $result = true;
         }
-
+        error_log(" +++ NOT COMPLETE");
         return false;
     }
+
+    if ($type == COMPLETION_AND) {
+        $result = $type && $result;
+    } else {
+        $result = $type || $result;
+    }
+
+    return $result;
 }
 
 /**
@@ -214,14 +231,25 @@ function courseduration_get_completion_state($course,$cm,$userid,$type) {
 function courseduration_get_coursemodule_info($coursemodule): cached_cm_info {
     global $DB;
 
-    if ($courseduration = $DB->get_record('courseduration', array('id' => $coursemodule->instance), 'id, name, intro, introformat')) {
+//    error_log(" *** Getting CM Info *** ");
+//    error_log(" +++ cm: " . print_r($coursemodule, true));
+//
+    if ($courseduration = $DB->get_record('courseduration', array('id' => $coursemodule->instance), '*', MUST_EXIST)) {
 //        if (empty($courseduration->name)) {
 //            $courseduration->name = "courseduration{$courseduration->id}";
 //            $DB->set_field('courseduration', 'name', $courseduration->name, array('id' => $courseduration->id));
 //        }
+//        error_log(" +++ cd: " . print_r($courseduration, true));
+
         $info = new cached_cm_info();
         $info->content = format_module_intro('courseduration', $courseduration, $coursemodule->id, false);
         $info->name  = $courseduration->name;
+
+        // Populate the custom completion rules as key => value pairs, but only if the completion mode is 'automatic'.
+        if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {
+            $info->customdata['customcompletionrules']['completionduration'] = $courseduration->completionduration;
+        }
+
         return $info;
     } else {
         return;
@@ -271,8 +299,6 @@ function courseduration_supports($feature) {
             return false;
         case FEATURE_GRADE_OUTCOMES:
             return false;
-        case FEATURE_MOD_ARCHETYPE:
-            return MOD_ARCHETYPE_RESOURCE;
         case FEATURE_BACKUP_MOODLE2:
             return true;
         case FEATURE_NO_VIEW_LINK:
