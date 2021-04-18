@@ -36,7 +36,25 @@ $observers = array(
         'internal'      => true,
         ),
     array(
+        'eventname'     => '\mod_quiz\event\course_module_viewed',
+        'callback'      => '\mod_courseduration\observer::viewoverride',
+        'priority'      => 1000,
+        'internal'      => true,
+    ),
+    array(
+        'eventname'     => '\mod_quiz\event\attempt_started',
+        'callback'      => '\mod_courseduration\observer::viewoverride',
+        'priority'      => 1000,
+        'internal'      => true,
+    ),
+    array(
         'eventname'     => '\mod_quiz\event\attempt_viewed',
+        'callback'      => '\mod_courseduration\observer::viewoverride',
+        'priority'      => 1000,
+        'internal'      => true,
+    ),
+    array(
+        'eventname'     => '\mod_quiz\event\attempt_summary_viewed',
         'callback'      => '\mod_courseduration\observer::viewoverride',
         'priority'      => 1000,
         'internal'      => true,

@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2021041902;
+$plugin->version   = 2021041903;
 $plugin->requires  = 2017050500;
 $plugin->component = 'mod_courseduration';
 $plugin->cron      = 0;
