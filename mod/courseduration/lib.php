@@ -186,10 +186,16 @@ function courseduration_get_completion_state($course,$cm,$userid,$type) {
     global $DB;
 
     $coursetimer = $DB->get_record('courseduration_timers', array('courseid' => $course->id, 'userid' => $userid));
-    if ($coursetimer && 
-            ($coursetimer->timecompleted > 0 || $coursetimer->status == ENROLMENT_BEFORE_TIMER_ADDED)) {
+    if ($coursetimer && $coursetimer->timecompleted > 0) {
         return true;
     } else {
+        // Check if enrolled before course timer was added.
+        $courseduration = $DB->get_record('courseduration', array('course' =>$course->id ));
+        $userenrolmentstart = enrol_get_enrolment_start($course->id, $userid);
+        if ($courseduration && $userenrolmentstart <= $courseduration->timecreated) {
+            return true;
+        }
+
         return false;
     }
 }
