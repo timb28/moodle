@@ -50,8 +50,6 @@ function get_courseduration_name($courseduration): string {
         $name = get_string('modulename' , 'courseduration');
     }
 
-    error_log(" +++ module name:" . print_r($name, true));
-
     return $name;
 }
 
@@ -78,18 +76,12 @@ function enrol_get_enrolment_start(int $courseid, int $userid) {
              LIMIT 0,1";
     $params = array('enabled'=>ENROL_INSTANCE_ENABLED, 'active'=>ENROL_USER_ACTIVE, 'userid'=>$userid, 'courseid'=>$courseid);
     $userenrolments = $DB->get_records_sql($sql, $params);
-//    error_log("++++ User enrolments:" . print_r($userenrolments, true));
 
     foreach ($userenrolments as $enrolment) {
-//        error_log(" +++ checking enrolment: " . print_r($enrolment, true));
-//        error_log("   + timestart: " . print_r($enrolment->timestart, true));
-//        error_log("   + timecreated: " . print_r($enrolment->timecreated, true));
 
         if ($enrolment->timestart == 0) {
-//            error_log(" +++ No time start using time created: " . print_r($enrolment->timecreated));
             return $enrolment->timecreated;
         } else {
-//            error_log(" +++ Using time start: " . print_r($enrolment->timestart));
             return $enrolment->timestart;
         }
     }
@@ -188,12 +180,9 @@ function courseduration_delete_instance(int $id): bool {
 function courseduration_get_completion_state($course,$cm,$userid,$type) {
     global $DB;
 
-    error_log(" *** Checking completion state *** ");
-
     $coursetimer = $DB->get_record('courseduration_timers',
         array('courseid' => $course->id, 'userid' => $userid),'*');
     if ($coursetimer && $coursetimer->timecompleted > 0) {
-        error_log(" +++ time completed: " . print_r($coursetimer->timecompleted, true));
         $result = true;
     } else {
         // Check if enrolled before course timer was added.
@@ -203,10 +192,8 @@ function courseduration_get_completion_state($course,$cm,$userid,$type) {
             MUST_EXIST);
         $userenrolmentstart = enrol_get_enrolment_start($course->id, $userid);
         if ($courseduration && $userenrolmentstart <= $courseduration->timecreated) {
-            error_log(" +++ early enrolment: " . print_r(array($userenrolmentstart, $courseduration->timecreated), true));
             $result = true;
         } else {
-            error_log(" +++ NOT COMPLETE");
             return false;
         }
     }
@@ -234,15 +221,11 @@ function courseduration_get_completion_state($course,$cm,$userid,$type) {
 function courseduration_get_coursemodule_info($coursemodule): cached_cm_info {
     global $DB;
 
-//    error_log(" *** Getting CM Info *** ");
-//    error_log(" +++ cm: " . print_r($coursemodule, true));
-//
     if ($courseduration = $DB->get_record('courseduration', array('id' => $coursemodule->instance), '*', MUST_EXIST)) {
         if (empty($courseduration->name)) {
             $courseduration->name = "courseduration{$courseduration->id}";
             $DB->set_field('courseduration', 'name', $courseduration->name, array('id' => $courseduration->id));
         }
-//        error_log(" +++ cd: " . print_r($courseduration, true));
 
         $info = new cached_cm_info();
         // $info->content = format_module_intro('courseduration', $courseduration, $coursemodule->id, false);
