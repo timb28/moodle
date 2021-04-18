@@ -187,9 +187,7 @@ function courseduration_get_completion_state($course,$cm,$userid,$type) {
     error_log(" *** Checking completion state *** ");
 
     $coursetimer = $DB->get_record('courseduration_timers',
-        array('courseid' => $course->id, 'userid' => $userid),
-        '*',
-        MUST_EXIST);
+        array('courseid' => $course->id, 'userid' => $userid),'*');
     if ($coursetimer && $coursetimer->timecompleted > 0) {
         error_log(" +++ time completed: " . print_r($coursetimer->timecompleted, true));
         $result = true;
