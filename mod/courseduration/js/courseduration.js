@@ -147,7 +147,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
     }
 
     $(document).ready(function () {
-        var actionscalls = 'focus mousemove click mouseup mousedown keydown keypress keyup submit change mouseenter scroll resize dblclick';
+        var actionscalls = 'focus mousemove click mouseup mousedown keydown keypress keyup submit change mouseenter scroll onscroll resize dblclick touchmove ontouchmove touchstart ontouchstart';
         $('*').bind(actionscalls, function () {
             autopausecheck();
         });
