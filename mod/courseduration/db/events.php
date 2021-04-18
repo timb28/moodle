@@ -23,14 +23,20 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/course/renderer.php');
 
 $observers = array(
-array(
+    array(
         'eventname'     => '\core\event\course_viewed',
         'callback'      => '\mod_courseduration\observer::viewoverride',
         'priority'      => 1000,
         'internal'      => true,
-    ),
-array(
-        'eventname'     => 'core\event\course_module_viewed',
+        ),
+    array(
+        'eventname'     => '\core\event\course_module_viewed',
+        'callback'      => '\mod_courseduration\observer::viewoverride',
+        'priority'      => 1000,
+        'internal'      => true,
+        ),
+    array(
+        'eventname'     => '\mod_quiz\event\attempt_viewed',
         'callback'      => '\mod_courseduration\observer::viewoverride',
         'priority'      => 1000,
         'internal'      => true,
