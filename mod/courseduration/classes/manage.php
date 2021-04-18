@@ -99,15 +99,15 @@ class manage {
         $insert->userid = $new_coursetimer->userid;
 
         $insert->timecreated = time();
-        $insert->timemodified = time();
+        $insert->timemodified = 0; // in milliseconds
         $insert->timecompleted = null;
         return $DB->insert_record('courseduration_timers', $insert);
     }
 
     /**
      * @param int $coursetimer
-     * @param int $coursetimerlength
-     * @param int $coursetimerupdated
+     * @param int $coursetimerlength in milliseconds
+     * @param int $coursetimerupdated in milliseconds
      * @return int
      * @throws \coding_exception
      * @throws \dml_exception
@@ -133,33 +133,30 @@ class manage {
             throw new \coding_exception('Invalid course timer instance.');
         }
 
-        // TODO: Force module completion for users enrolled before timer was added to course.
-
         if ($coursetimer->timemodified < $coursetimerupdated) {
             // Ignore extra time captured
-            if ($coursetimer->timemodified > ($coursetimerupdated - $coursetimerlength)) {
-                $coursetimerlengthinseconds = $coursetimerupdated - $coursetimer->timemodified;
-            } else {
-                $coursetimerlengthinseconds = $coursetimerlength;
+            if ($coursetimer->timemodified > 0 && $coursetimer->timemodified > ($coursetimerupdated - $coursetimerlength)) {
+                $coursetimerlength = $coursetimerupdated - $coursetimer->timemodified;
+                error_log(" ### Skipping time ###");
+                error_log("     ct timemodified:" . print_r($coursetimer->timemodified, true));
+                error_log("     ct updated:" . print_r($coursetimerupdated, true));
+                error_log("     ct length:" . print_r($coursetimerlength, true));
             }
 
-            $coursetimer->coursetime = $coursetimer->coursetime + $coursetimerlengthinseconds;
+            $coursetimer->coursetime = $coursetimer->coursetime + $coursetimerlength;
             $coursetimer->timemodified = $coursetimerupdated;
             $DB->update_record('courseduration_timers', $coursetimer);
 
             if ($coursetimer->timecompleted === null) {
                 error_log("=== Checking for timer completion ===");
                 error_log(" session coursetimercompletionduration: " . print_r($_SESSION['coursetimercompletionduration'], true));
-                error_log(" coursetimer: " . print_r($coursetimer, true));
 
                 // Force module completion for users enrolled before timer was added to course as they
                 // have spent uncounted for time in the course
                 if ($coursetimer->status == ENROLMENT_BEFORE_TIMER_ADDED) {
                     error_log(" = User enroled BEFORE time added: set complete");
                     $this->setmodulecompleted($coursetimer);
-                }
-
-                if ($coursetimer->coursetime >= $_SESSION['coursetimercompletionduration']) {
+                } else if (round($coursetimer->coursetime / 1000) >= $_SESSION['coursetimercompletionduration']) {
                     error_log(" = Timer is complete!");
                     $this->setmodulecompleted($coursetimer);
                 } else {
@@ -244,60 +241,9 @@ class manage {
             $coursetimer->timecompleted = time();
             return $DB->update_record('courseduration_timers',$coursetimer);
 
-//            $prm = array('coursemoduleid' => $timercoursemodule->id, 'userid' => $USER->id);
-//            $moduleexisted = $DB->get_record('course_modules_completion', $prm);
-//            $mdl = new stdclass();
-//
-//            if ($moduleexisted && $moduleexisted->completionstate == 0) {
-//                $mdl->completionstate = 1;
-//                $mdl->viewed = 1;
-//                $mdl->timemodified = time();
-//                $mdl->id = $moduleexisted->id;
-//                $DB->update_record("course_modules_completion", $mdl);
-//            } else {
-//                $mdl->coursemoduleid = $timercoursemodule->id;
-//                $mdl->userid = $USER->id;
-//                $mdl->completionstate = 1;
-//                $mdl->viewed = 1;
-//                $mdl->timemodified = time();
-//                $DB->insert_record("course_modules_completion", $mdl);
-//            }
         } else {
             return false;
         }
-
-
-        /*$instanceforthiscourse = '';
-        $allcoursemodules = $DB->get_records('course_modules', array('course' => $courseid));
-        foreach ($allcoursemodules as $key => $value) {
-            $timeridx = $DB->get_record('modules', array('name' => get_string('pluginname', 'mod_courseduration')));
-            if ($value->module == $timeridx->id) {
-                if ($value->deletioninprogress == 0) {
-                    $instanceforthiscourse = $value;
-                }
-            }
-        }
-
-        if ($instanceforthiscourse) {
-            $prm = array('coursemoduleid' => $instanceforthiscourse->id, 'userid' => $USER->id);
-            $moduleexisted = $DB->get_record('course_modules_completion', $prm);
-            $mdl = new stdclass();
-            if ($moduleexisted && $moduleexisted->completionstate == 0) {
-                $mdl->completionstate = 1;
-                $mdl->viewed = 1;
-                $mdl->timemodified = time();
-                $mdl->id = $moduleexisted->id;
-                $DB->update_record("course_modules_completion", $mdl);
-            } else {
-                $mdl->coursemoduleid = $instanceforthiscourse->id;
-                $mdl->userid = $USER->id;
-                $mdl->completionstate = 1;
-                $mdl->viewed = 1;
-                $mdl->overrideby = 0;
-                $mdl->timemodified = time();
-                $DB->insert_record("course_modules_completion", $mdl);
-            }
-        }*/
     }
 
     /**

@@ -28,8 +28,10 @@ $manage = new \mod_courseduration\manage();
 
 if (isset($_POST['action']) && $_POST['action'] == 'coursetimer_countdown') {
     $coursetimer = (int) $_POST['coursetimer'];
-    $coursetimerlength = (int) $_POST['coursetimerlength'];
-    $coursetimerupdated = (int) $_POST['coursetimerupdated'];
+    $coursetimerlength = (int) $_POST['coursetimerlength']; // in millliseconds
+    $coursetimerupdated = (int) $_POST['coursetimerupdated']; // in milliseconds
+
+//    error_log(" +++ POST variables:" . print_r($_POST, true));
     try {
         $result = $manage->updatecoursetimer($coursetimer, $coursetimerlength, $coursetimerupdated);
         $status = 'success';

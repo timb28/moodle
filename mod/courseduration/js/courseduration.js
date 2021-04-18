@@ -2,7 +2,7 @@ let countdowncoursetimer = 0;
 
 require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
     // console.log(mdlcfg.wwwroot); // outputs the wwwroot of moodle to console
-    var coursetimerstart = Date.now() / 1000;
+    var coursetimerstart = Date.now();
     var coursetimer = $('#coursetimer').val();
 
     setInterval(function () {
@@ -11,16 +11,16 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
             runCourseTimerScript()
         } else {
             // reset timer while paused.
-            coursetimerstart = Date.now() / 1000;
+            coursetimerstart = Date.now();
         }
-    }, 2000);
+    }, 5000);
 
     var runCourseTimerScript = () => {
         ajaxload();
     }
     var ajaxload = () => {
         var form_data = new FormData();
-        var coursertimerupdated = Date.now() / 1000;
+        var coursertimerupdated = Date.now();
         var coursetimerlength = coursertimerupdated - coursetimerstart;
         form_data.append('action', 'coursetimer_countdown');
         form_data.append('coursetimer', coursetimer);
@@ -37,7 +37,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
             success: function (data) {
                 if (data.result > 0) {
                     var completionduration = $('#completionduration').val();
-                    countdowncoursetimer = completionduration - data.result;
+                    countdowncoursetimer = completionduration - Math.round(data.result / 1000);
                 }
                 coursetimerstart = coursertimerupdated;
             },
@@ -55,7 +55,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
         var moodleversion = $('#moodleversion').val();
         // console.log(moodleversion);
 
-        var remainingtime = completionduration - coursetime;
+        var remainingtime = completionduration - Math.round(coursetime / 1000);
 
         if (moodleversion > '2020110500') {
             if (currentthemeused == 'snap') {
