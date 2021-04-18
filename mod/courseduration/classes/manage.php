@@ -204,6 +204,13 @@ class manage {
             $_SESSION['checkcoursetime'] = $coursetimer->coursetime;
             $_SESSION['forautopaused'] = $forautopaused->autopauseduration;
             loadscript();
+
+            if ($coursetimer->status == ENROLMENT_BEFORE_TIMER_ADDED) {
+                echo "<style>";
+                echo ".countdowncoursetimer{display:none !important;}";
+                echo "</style>";
+            }
+
             if (!is_siteadmin()) {
                 echo "<style>";
                 echo "li.activity.courseduration.modtype_courseduration{display:none;}";
