@@ -17,15 +17,6 @@
   animation: fadeIn 1s ease-in-out;
 }
 
-
-/*.container-fluid.navbar-nav .countdowncoursetimer {*/
-/*  float: right;*/
-/*  display: inline-block;*/
-/*  padding: 0;*/
-/*  margin-right: 14px;*/
-/*  padding-top: 5px;*/
-/*}*/
-
 .countdowncoursetimer.zero-element:before {
   font-family: "FontAwesome";
   content: "\f04c";
@@ -53,7 +44,7 @@
 }
 
 .completed-element {
-  color: #25be25;
+  color: lightgreen;
 }
 
 .completed-element.on-completion {
