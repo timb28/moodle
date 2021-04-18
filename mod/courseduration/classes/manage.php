@@ -246,12 +246,6 @@ class manage {
                 echo ".countdowncoursetimer{display:none !important;}";
                 echo "</style>";
             }
-
-            if (!is_siteadmin()) {
-                echo "<style>";
-                echo "li.activity.courseduration.modtype_courseduration{display:none;}";
-                echo "</style>";
-            }
         }
     }
 

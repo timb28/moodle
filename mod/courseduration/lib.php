@@ -28,6 +28,7 @@ define("COURSEDURATION_MAX_NAME_LENGTH", 50);
 
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->libdir . '/filelib.php');
+require_once($CFG->libdir . '/completionlib.php');
 require_once($CFG->dirroot . '/course/modlib.php');
 require_once($CFG->dirroot . '/course/lib.php');
 
@@ -237,14 +238,14 @@ function courseduration_get_coursemodule_info($coursemodule): cached_cm_info {
 //    error_log(" +++ cm: " . print_r($coursemodule, true));
 //
     if ($courseduration = $DB->get_record('courseduration', array('id' => $coursemodule->instance), '*', MUST_EXIST)) {
-//        if (empty($courseduration->name)) {
-//            $courseduration->name = "courseduration{$courseduration->id}";
-//            $DB->set_field('courseduration', 'name', $courseduration->name, array('id' => $courseduration->id));
-//        }
+        if (empty($courseduration->name)) {
+            $courseduration->name = "courseduration{$courseduration->id}";
+            $DB->set_field('courseduration', 'name', $courseduration->name, array('id' => $courseduration->id));
+        }
 //        error_log(" +++ cd: " . print_r($courseduration, true));
 
         $info = new cached_cm_info();
-        $info->content = format_module_intro('courseduration', $courseduration, $coursemodule->id, false);
+        // $info->content = format_module_intro('courseduration', $courseduration, $coursemodule->id, false);
         $info->name  = $courseduration->name;
 
         // Populate the custom completion rules as key => value pairs, but only if the completion mode is 'automatic'.
@@ -361,6 +362,28 @@ function mod_courseduration_core_calendar_provide_event_action(calendar_event $e
         1,
         true
     );
+}
+
+/**
+ * @throws coding_exception
+ * @throws dml_exception
+ */
+function mod_courseduration_cm_info_view(cm_info $cm) {
+    $completion = new completion_info($cm->get_course());
+    $completionstate = $completion->get_data($cm, false, 0);
+    $iscomplete = ($completionstate->completionstate == COMPLETION_COMPLETE);
+
+    $manage = new \mod_courseduration\manage();
+    $courseduration = $manage->getcourseduration($cm->instance);
+    $completionduration = $courseduration->completionduration;
+    $autopauseduration = round($courseduration->autopauseduration / 60,1);
+
+    $writer = new html_writer();
+    $message = $writer->tag('h5',$courseduration->name);
+
+    $stringname = $iscomplete ? 'courseduration:complete' : 'courseduration:incomplete';
+    $message.= $writer->tag('p',get_string($stringname, 'mod_courseduration', ['completionduration' => $completionduration, 'autopauseduration' => $autopauseduration]));
+    $cm->set_after_link($message);
 }
 
 /**
