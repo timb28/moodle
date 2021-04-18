@@ -21,6 +21,10 @@
  */
 namespace mod_courseduration;
 use \stdclass;
+
+define('ENROLMENT_BEFORE_TIMER_ADDED', 1);
+define('ENROLMENT_AFTER_TIMER_ADDED',2);
+
 /**
  * Custom MOD_COURSEDURATION\Runner for mod_courseduration.
  *
@@ -35,6 +39,11 @@ class manage {
 
     public $moduleid;
 
+    /**
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
     public function __construct() {
         global $DB;
         $module = $DB->get_record('modules', array('name' => get_string('pluginname', 'mod_courseduration')));
@@ -51,7 +60,7 @@ class manage {
      */
     public function getcoursetimer($courseid, $userid) {
         GLOBAL $DB;
-        return $DB->get_record('courseduration_timers', array('courseid' => $courseid, 'userid' => $userid, 'status' => 1));
+        return $DB->get_record('courseduration_timers', array('courseid' => $courseid, 'userid' => $userid));
     }
 
     /**
@@ -62,14 +71,36 @@ class manage {
      */
     public function createcoursetimer(stdClass $new_coursetimer): bool {
         global $DB;
+
         $insert = new stdclass();
+        
+        // Check if user was enrolled in the course before the course timer was added.
+        $courseduration = $DB->get_record('courseduration', array('course' =>$new_coursetimer->courseid ));
+        $userenrolmentstart = enrol_get_enrolment_start($new_coursetimer->courseid, $new_coursetimer->userid);
+
+        error_log("==== User enrolment check ===");
+        if ($userenrolmentstart <= $courseduration->timecreated) {
+            error_log(" = Enrolment started before course duration added");
+            error_log("   Course duration created: " . print_r($courseduration->timecreated, true));
+            error_log("   Enrolment created: " . print_r($userenrolmentstart, true));
+            $insert->status = ENROLMENT_BEFORE_TIMER_ADDED;
+
+        } else {
+            error_log(" - Enrolment started after course duration added");
+            error_log("   Course duration created: " . print_r($courseduration->timecreated, true));
+            error_log("   Enrolment created: " . print_r($userenrolmentstart, true));
+
+            $insert->status = ENROLMENT_AFTER_TIMER_ADDED;
+        }
+
         $insert->coursetime = $new_coursetimer->coursetime;
         $insert->coursedurationid = $new_coursetimer->coursedurationid;
         $insert->courseid = $new_coursetimer->courseid;
         $insert->userid = $new_coursetimer->userid;
-        $insert->status = 1;
-        $insert->createdtime = time();
-        $insert->updatedtime = time();
+
+        $insert->timecreated = time();
+        $insert->timemodified = time();
+        $insert->timecompleted = null;
         return $DB->insert_record('courseduration_timers', $insert);
     }
 
@@ -89,34 +120,55 @@ class manage {
 
         // Confirm course timer belongs to user
         $coursetimer = $this->getcoursetimer($courseid, $userid);
+        if (!$coursetimer) {
+            $coursetimer = $this->prepareuser(get_course($courseid), $USER);
+            error_log(" +++ coursetimer created by updatecoursetimer:" . print_r($coursetimer, true));
+        }
+
+        if ($coursetimer && $coursetimer->status === 0) {
+            return false; // timer exists but is not active;
+        }
 
         if ($coursetimerid != $coursetimer->id) {
             throw new \coding_exception('Invalid course timer instance.');
         }
 
-        if ($coursetimer->updatedtime < $coursetimerupdated) {
+        // TODO: Force module completion for users enrolled before timer was added to course.
+
+        if ($coursetimer->timemodified < $coursetimerupdated) {
             // Ignore extra time captured
-            if ($coursetimer->updatedtime > ($coursetimerupdated - $coursetimerlength)) {
-                $coursetimerlengthinseconds = $coursetimerupdated - $coursetimer->updatedtime;
+            if ($coursetimer->timemodified > ($coursetimerupdated - $coursetimerlength)) {
+                $coursetimerlengthinseconds = $coursetimerupdated - $coursetimer->timemodified;
             } else {
                 $coursetimerlengthinseconds = $coursetimerlength;
             }
 
             $coursetimer->coursetime = $coursetimer->coursetime + $coursetimerlengthinseconds;
-            $coursetimer->updatedtime = $coursetimerupdated;
+            $coursetimer->timemodified = $coursetimerupdated;
             $DB->update_record('courseduration_timers', $coursetimer);
 
-            error_log("=== Checking for timer completion ===");
-            error_log(" session coursetimercompletionduration: " . print_r($_SESSION['coursetimercompletionduration'], true));
-            error_log(" coursetime: " . print_r($coursetimer->coursetime, true));
+            if ($coursetimer->timecompleted === null) {
+                error_log("=== Checking for timer completion ===");
+                error_log(" session coursetimercompletionduration: " . print_r($_SESSION['coursetimercompletionduration'], true));
+                error_log(" coursetimer: " . print_r($coursetimer, true));
 
-            if ($coursetimer->coursetime >= $_SESSION['coursetimercompletionduration']) {
-                // TODO: rebuild completion code
-                error_log(" = Timer is complete!");
-                $this->setmodulecompleted($coursetimer);
+                // Force module completion for users enrolled before timer was added to course as they
+                // have spent uncounted for time in the course
+                if ($coursetimer->status == ENROLMENT_BEFORE_TIMER_ADDED) {
+                    error_log(" = User enroled BEFORE time added: set complete");
+                    $this->setmodulecompleted($coursetimer);
+                }
+
+                if ($coursetimer->coursetime >= $_SESSION['coursetimercompletionduration']) {
+                    error_log(" = Timer is complete!");
+                    $this->setmodulecompleted($coursetimer);
+                } else {
+                    error_log(" x Timer is not complete");
+                }
             } else {
-                error_log(" x Timer is not complete");
+                error_log(" >>> Skipping as timer is complete");
             }
+
         }
 
         return $coursetimer->coursetime;
@@ -169,7 +221,7 @@ class manage {
      * @throws \dml_exception
      */
     public function setmodulecompleted(stdClass $coursetimer): bool {
-        global $COURSE, $DB, $USER;
+        global $DB, $USER;
 
         if (!$coursetimer) { return false; }
 
@@ -183,12 +235,14 @@ class manage {
             $cmc = $completioninfo->get_data($timercoursemodule, false, $coursetimer->userid);
             if ($cmc->completionstate === COMPLETION_COMPLETE) {
                 error_log(" == Ignoring existing module completion.");
-                return true;
+                $coursetimer->timecompleted = $cmc->timemodified;
+                return $DB->update_record('courseduration_timers',$coursetimer);
             }
 
             error_log(" == Updating module completion.");
             $completioninfo->update_state($timercoursemodule, COMPLETION_COMPLETE, $USER->id);
-            return true;
+            $coursetimer->timecompleted = time();
+            return $DB->update_record('courseduration_timers',$coursetimer);
 
 //            $prm = array('coursemoduleid' => $timercoursemodule->id, 'userid' => $USER->id);
 //            $moduleexisted = $DB->get_record('course_modules_completion', $prm);
@@ -269,17 +323,19 @@ class manage {
                 $coursetimer = $DB->get_record('courseduration_timers', array('coursedurationid' => $courseduration->id, 'userid' => $user->id));
                 if ($coursetimer) {
                     $coursetimer->completionduration = $courseduration->completionduration * 60;
-                    return $coursetimer;
                 } else {
                     $new_coursetimer = new stdclass();
                     $new_coursetimer->coursetime = 0;
-                    $new_coursetimer->completionduration = $courseduration->completionduration * 60;
+
                     $new_coursetimer->courseid = $course->id;
                     $new_coursetimer->coursedurationid = $courseduration->id;
                     $new_coursetimer->userid = $user->id;
                     $newctid = $this->createcoursetimer($new_coursetimer);
-                    return $DB->get_record('courseduration_timers', array('coursedurationid' => $newctid));
+
+                    $coursetimer = $DB->get_record('courseduration_timers', array('id' => $newctid));
+                    $coursetimer->completionduration = $courseduration->completionduration * 60;
                 }
+                return $coursetimer;
             }
         }
         return false;
@@ -301,6 +357,11 @@ class manage {
  * @package mod_courseduration
  */
 class observer {
+    /**
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     * @throws \dml_exception
+     */
     public static function viewoverride($event) {
         global $CFG;
         require_once($CFG->dirroot . '/mod/courseduration/lib.php');

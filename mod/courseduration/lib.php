@@ -53,6 +53,43 @@ function get_courseduration_name($courseduration): string {
 }
 
 /**
+ * This function returns the start of current active user enrolment.
+ * Based on enrollib\enrol_get_enrolment_end($courseid, $userid)
+ *
+ * It deals correctly with multiple overlapping user enrolments.
+ *
+ * @param int $courseid
+ * @param int $userid
+ * @return int|bool timestamp when active enrolment ends, false means no active enrolment now, 0 means never
+ * @throws dml_exception
+ */
+function enrol_get_enrolment_start($courseid, $userid) {
+    global $DB;
+
+    $sql = "SELECT ue.*
+              FROM {user_enrolments} ue
+              JOIN {enrol} e ON (e.id = ue.enrolid AND e.courseid = :courseid)
+              JOIN {user} u ON u.id = ue.userid
+             WHERE ue.userid = :userid AND ue.status = :active AND e.status = :enabled AND u.deleted = 0
+          ORDER BY ue.timestart DESC
+             LIMIT 0,1";
+    $params = array('enabled'=>ENROL_INSTANCE_ENABLED, 'active'=>ENROL_USER_ACTIVE, 'userid'=>$userid, 'courseid'=>$courseid);
+    $userenrolments = $DB->get_records_sql($sql, $params);
+    error_log("++++ User enrolments:" . print_r($userenrolments, true));
+
+    if (!$userenrolments) {
+        return false;
+    } else {
+        $earlestenrolment =  reset($userenrolments);
+        if ($earlestenrolment->timestart === 0) {
+            return false;
+        } else {
+            return $earlestenrolment->timestart;
+        }
+    }
+}
+
+/**
  * Given an object containing all the necessary data,
  * (defined by the form in mod_form.php) this function
  * will create a new instance and return the id number
@@ -69,6 +106,7 @@ function courseduration_add_instance($courseduration) {
     $courseduration->name = $courseduration->name;
     $courseduration->intro = $courseduration->intro;
     $courseduration->introformat = 1;
+    $courseduration->timecreated = time();
     $courseduration->timemodified = time();
 
     $id = $DB->insert_record('courseduration', $courseduration);
