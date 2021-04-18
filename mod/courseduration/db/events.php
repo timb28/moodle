@@ -58,5 +58,11 @@ $observers = array(
         'callback'      => '\mod_courseduration\observer::viewoverride',
         'priority'      => 1000,
         'internal'      => true,
+    ),
+    array(
+        'eventname'     => '\mod_quiz\event\attempt_reviewed',
+        'callback'      => '\mod_courseduration\observer::viewoverride',
+        'priority'      => 1000,
+        'internal'      => true,
     )
 );
