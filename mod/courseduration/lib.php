@@ -65,7 +65,7 @@ function get_courseduration_name($courseduration): string {
  * @return int|bool timestamp when active enrolment ends, false means no active enrolment now, 0 means never
  * @throws dml_exception
  */
-function enrol_get_enrolment_start($courseid, $userid) {
+function enrol_get_enrolment_start(int $courseid, int $userid) {
     global $DB;
 
     $sql = "SELECT ue.*
@@ -77,16 +77,19 @@ function enrol_get_enrolment_start($courseid, $userid) {
              LIMIT 0,1";
     $params = array('enabled'=>ENROL_INSTANCE_ENABLED, 'active'=>ENROL_USER_ACTIVE, 'userid'=>$userid, 'courseid'=>$courseid);
     $userenrolments = $DB->get_records_sql($sql, $params);
-    error_log("++++ User enrolments:" . print_r($userenrolments, true));
+//    error_log("++++ User enrolments:" . print_r($userenrolments, true));
 
-    if (!$userenrolments) {
-        return false;
-    } else {
-        $earlestenrolment =  reset($userenrolments);
-        if ($earlestenrolment->timestart === 0) {
-            return $earlestenrolment->timecreated;
+    foreach ($userenrolments as $enrolment) {
+//        error_log(" +++ checking enrolment: " . print_r($enrolment, true));
+//        error_log("   + timestart: " . print_r($enrolment->timestart, true));
+//        error_log("   + timecreated: " . print_r($enrolment->timecreated, true));
+
+        if ($enrolment->timestart == 0) {
+//            error_log(" +++ No time start using time created: " . print_r($enrolment->timecreated));
+            return $enrolment->timecreated;
         } else {
-            return $earlestenrolment->timestart;
+//            error_log(" +++ Using time start: " . print_r($enrolment->timestart));
+            return $enrolment->timestart;
         }
     }
 }
@@ -201,9 +204,10 @@ function courseduration_get_completion_state($course,$cm,$userid,$type) {
         if ($courseduration && $userenrolmentstart <= $courseduration->timecreated) {
             error_log(" +++ early enrolment: " . print_r(array($userenrolmentstart, $courseduration->timecreated), true));
             $result = true;
+        } else {
+            error_log(" +++ NOT COMPLETE");
+            return false;
         }
-        error_log(" +++ NOT COMPLETE");
-        return false;
     }
 
     if ($type == COMPLETION_AND) {
