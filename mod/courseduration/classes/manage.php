@@ -234,18 +234,19 @@ class manage {
         if ($timercoursemodule) {
 
             $cmc = $completioninfo->get_data($timercoursemodule, false, $coursetimer->userid);
-            if ($cmc->completionstate === COMPLETION_COMPLETE) {
+            if ($cmc->completionstate == COMPLETION_COMPLETE) {
                 $coursetimer->timecompleted = $cmc->timemodified;
-                return $DB->update_record('courseduration_timers',$coursetimer);
+            } else {
+                $coursetimer->timecompleted = time();
             }
 
-            $completioninfo->update_state($timercoursemodule, COMPLETION_COMPLETE, $USER->id);
-            $coursetimer->timecompleted = time();
-            return $DB->update_record('courseduration_timers',$coursetimer);
-
-        } else {
-            return false;
+            if ($DB->update_record('courseduration_timers',$coursetimer)) {
+                $this->coursetimer = $coursetimer;
+                $completioninfo->update_state($timercoursemodule, COMPLETION_COMPLETE, $USER->id);
+                return true;
+            }
         }
+        return false;
     }
 
     /**
