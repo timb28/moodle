@@ -37,5 +37,5 @@ $string['modulename_link'] = 'mod/courseduration/view';
 $string['modulenameplural'] = 'Course Durations';
 $string['privacy:metadata'] = 'The Course Duration resource plugin does not store any personal data.';
 $string['pluginadministration'] = 'Course Duration administration';
-$string['pluginname'] = 'courseduration';
+$string['pluginname'] = 'Course Duration';
 $string['search:activity'] = 'courseduration';
