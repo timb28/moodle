@@ -192,7 +192,7 @@ function courseduration_get_coursemodule_info($coursemodule): cached_cm_info {
 //        }
         $info = new cached_cm_info();
         $info->content = format_module_intro('courseduration', $courseduration, $coursemodule->id, false);
-        $info->name  = 'TEST'; //$courseduration->name;
+        $info->name  = $courseduration->name;
         return $info;
     } else {
         return;
