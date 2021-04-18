@@ -8,7 +8,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
     setInterval(function () {
         var autopaused = $('#autopaused').val();
         if (autopaused == "false") {
-            runCourseTimerScript()
+            runCourseTimerScript();
         } else {
             // reset timer while paused.
             coursetimerstart = Date.now();
@@ -46,8 +46,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
             }
         });
     }
-});
-require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
+
     $(document).ready(function () {
         var coursetime = $('#coursetime').val();
         var completionduration = $('#completionduration').val();
@@ -108,6 +107,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
                             $('.countdowncoursetimer').removeClass('zero-element');
                             $('.countdowncoursetimer').addClass('completed-element');
                             $('.countdowncoursetimer').addClass('on-completion');
+                            runCourseTimerScript(); // record the completion
                         }
                     } else {
                         $('.countdowncoursetimer').html('00:00:00');
