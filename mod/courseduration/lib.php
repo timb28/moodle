@@ -186,7 +186,8 @@ function courseduration_get_completion_state($course,$cm,$userid,$type) {
     global $DB;
 
     $coursetimer = $DB->get_record('courseduration_timers', array('courseid' => $course->id, 'userid' => $userid));
-    if ($coursetimer && $coursetimer->timecompleted > 0) {
+    if ($coursetimer && 
+            ($coursetimer->timecompleted > 0 || $coursetimer->status == ENROLMENT_BEFORE_TIMER_ADDED)) {
         return true;
     } else {
         return false;
