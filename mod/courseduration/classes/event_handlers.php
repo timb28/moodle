@@ -39,6 +39,10 @@ class event_handlers {
      * @return void
      */
     public static function all_events(base $event) {
+        global $CFG;
+        require_once($CFG->dirroot . '/mod/courseduration/lib.php');
+
         $manage = new \mod_courseduration\manage();
+        $manage->preparepage();
     }
 }

@@ -54,8 +54,6 @@ class manage {
         if ($module) {
             $this->moduleid = $module->id;
         }
-
-        $this->preparepage();
     }
 
     /**
