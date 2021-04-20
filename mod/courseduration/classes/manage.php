@@ -22,6 +22,8 @@
 namespace mod_courseduration;
 use \stdclass;
 
+require_once($CFG->dirroot . '/mod/courseduration/lib.php');
+
 define('ENROLMENT_BEFORE_TIMER_ADDED', 1);
 define('ENROLMENT_AFTER_TIMER_ADDED',2);
 
@@ -52,6 +54,8 @@ class manage {
         if ($module) {
             $this->moduleid = $module->id;
         }
+
+        $this->preparepage();
     }
 
     /**
@@ -300,23 +304,5 @@ class manage {
     public function getautopaused(int $coursedurationid) {
         GLOBAL $DB;
         return $DB->get_record('courseduration', array('id' => $coursedurationid, 'status' => 1));
-    }
-}
-
-/**
- * Class observer
- * @package mod_courseduration
- */
-class observer {
-    /**
-     * @throws \coding_exception
-     * @throws \moodle_exception
-     * @throws \dml_exception
-     */
-    public static function viewoverride($event) {
-        global $CFG;
-        require_once($CFG->dirroot . '/mod/courseduration/lib.php');
-        $manage = new \mod_courseduration\manage();
-        $manage->preparepage();
     }
 }

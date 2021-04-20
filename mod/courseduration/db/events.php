@@ -15,54 +15,53 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Custom MOD_COURSEDURATION Runner for mod_courseduration.
+ * mod_courseduration event handlers used to display course timers.
  *
  * @package    mod_courseduration
  */
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->dirroot.'/course/renderer.php');
 
 $observers = array(
     array(
         'eventname'     => '\core\event\course_viewed',
-        'callback'      => '\mod_courseduration\observer::viewoverride',
+        'callback'      => '\mod_courseduration\event_handlers::all_events',
         'priority'      => 1000,
-        'internal'      => true,
+        'internal'      => false,
         ),
     array(
         'eventname'     => '\core\event\course_module_viewed',
-        'callback'      => '\mod_courseduration\observer::viewoverride',
+        'callback'      => '\mod_courseduration\event_handlers::all_events',
         'priority'      => 1000,
-        'internal'      => true,
+        'internal'      => false,
         ),
     array(
         'eventname'     => '\mod_quiz\event\course_module_viewed',
-        'callback'      => '\mod_courseduration\observer::viewoverride',
+        'callback'      => '\mod_courseduration\event_handlers::all_events',
         'priority'      => 1000,
-        'internal'      => true,
+        'internal'      => false,
     ),
     array(
         'eventname'     => '\mod_quiz\event\attempt_started',
-        'callback'      => '\mod_courseduration\observer::viewoverride',
+        'callback'      => '\mod_courseduration\event_handlers::all_events',
         'priority'      => 1000,
-        'internal'      => true,
+        'internal'      => false,
     ),
     array(
         'eventname'     => '\mod_quiz\event\attempt_viewed',
-        'callback'      => '\mod_courseduration\observer::viewoverride',
+        'callback'      => '\mod_courseduration\event_handlers::all_events',
         'priority'      => 1000,
-        'internal'      => true,
+        'internal'      => false,
     ),
     array(
         'eventname'     => '\mod_quiz\event\attempt_summary_viewed',
-        'callback'      => '\mod_courseduration\observer::viewoverride',
-        'priority'      => 1000,
-        'internal'      => true,
+        'callback'      => '\mod_courseduration\event_handlers::all_events',
+        'priority'      => 10000,
+        'internal'      => false,
     ),
     array(
         'eventname'     => '\mod_quiz\event\attempt_reviewed',
-        'callback'      => '\mod_courseduration\observer::viewoverride',
-        'priority'      => 1000,
-        'internal'      => true,
+        'callback'      => '\mod_courseduration\event_handlers::all_events',
+        'priority'      => 10000,
+        'internal'      => false,
     )
 );

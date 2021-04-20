@@ -35,6 +35,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
             contentType: false,
             cache: false,
             processData: false,
+            async: false,
             beforeSend: function () {},
             success: function (data) {
                 if (data.result > 0) {
@@ -158,5 +159,8 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
     });
     $(window).bind('blur', function () {
         stopwatchandrequest();
+    });
+    $(window).bind('beforeunload', function() {
+        runCourseTimerScript();
     });
 });
