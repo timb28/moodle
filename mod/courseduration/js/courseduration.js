@@ -157,9 +157,7 @@ require(['jquery', 'core/config', 'core/ajax'], function ($, mdlcfg, Ajax) {
         });
         $("body").trigger("mousemove");
     });
-    $(window).bind('blur', function () {
-        stopwatchandrequest();
-    });
+
     $(window).bind('beforeunload', function() {
         runCourseTimerScript();
     });
