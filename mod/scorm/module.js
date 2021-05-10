@@ -301,9 +301,11 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
             var newheight = Y.one('body').get('winHeight') - 5
                 - Y.one('#scorm_layout').getY()
                 - window.pageYOffset;
-            if (newheight < 680 || isNaN(newheight)) {
-                newheight = 680;
+            /** START Academy Patch M#078 Remove scrollbars from embedded Articulate SCORM packages */
+            if (newheight < 780 || isNaN(newheight)) { //
+                newheight = 780;
             }
+            /** END Academy Patch M#078 */
             Y.one('#scorm_layout').setStyle('height', newheight);
 
         };
